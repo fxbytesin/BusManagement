@@ -40,6 +40,7 @@ model Bus {
   tickets   Ticket[]
   packages  Package[]
   dailyReports DailyReport[]
+  posMachines    POSMachine[]    
 }
 
 enum BusStatus {
@@ -111,6 +112,25 @@ enum PackageStatus {
   cancelled
 }
 
+model POSMachine {
+  id          Int       @id @default(autoincrement())
+  serial_no   String    @unique
+  assigned    Boolean   @default(false)
+  assigned_at DateTime?
+  status      POSStatus @default(active)
+  bus_id      Int?      // Nullable in case POS is unassigned
+  bus         Bus?      @relation(fields: [bus_id], references: [id], onDelete: SetNull)
+  tickets     Ticket[]  // Tickets issued via this POS machine
+
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+}
+
+enum POSStatus {
+  active
+  maintenance
+  inactive
+}
 model DailyReport {
   id                Int      @id @default(autoincrement())
   bus_id            Int
@@ -159,9 +179,14 @@ model Ticket {
   issue_time      DateTime      @default(now())
   journey_date    DateTime
   status          TicketStatus  @default(booked)
+  seat_no         Int?          // optional seat number
 
-  // Relations
-  bus Bus @relation(fields: [bus_id], references: [id], onDelete: Cascade)
+  pos_machine_id  Int?       
+  payment_mode    PaymentMode   @default(cash)
+
+ // Relations
+  bus         Bus         @relation(fields: [bus_id], references: [id], onDelete: Cascade)
+  posMachine  POSMachine? @relation(fields: [pos_machine_id], references: [id])
 }
 
 enum PassengerType {
@@ -175,6 +200,11 @@ enum TicketStatus {
   booked
   used
   cancelled
+}
+
+enum PaymentMode {
+  cash
+  online
 }
 
 model User {

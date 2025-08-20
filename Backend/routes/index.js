@@ -10,4 +10,5 @@ router.use('/ticket',require('./tickets'))
 router.use('/dashboard',require('./dashboardRoutes'))
 router.use('/package',require('./packageRoutes'))
 router.use('/tracking',require('./trackingRoutes'))
+router.use('/pos',require('./posRoutes'))
 module.exports = router;

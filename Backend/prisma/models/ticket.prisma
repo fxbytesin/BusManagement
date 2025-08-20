@@ -11,9 +11,14 @@ model Ticket {
   issue_time      DateTime      @default(now())
   journey_date    DateTime
   status          TicketStatus  @default(booked)
+  seat_no         Int?          // optional seat number
 
-  // Relations
-  bus Bus @relation(fields: [bus_id], references: [id], onDelete: Cascade)
+  pos_machine_id  Int?       
+  payment_mode    PaymentMode   @default(cash)
+
+ // Relations
+  bus         Bus         @relation(fields: [bus_id], references: [id], onDelete: Cascade)
+  posMachine  POSMachine? @relation(fields: [pos_machine_id], references: [id])
 }
 
 enum PassengerType {
@@ -27,4 +32,9 @@ enum TicketStatus {
   booked
   used
   cancelled
+}
+
+enum PaymentMode {
+  cash
+  online
 }
