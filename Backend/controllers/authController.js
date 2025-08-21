@@ -26,9 +26,9 @@ async function sendOTP(phone, otp) {
       from: process.env.TWILIO_PHONE_NUMBER,
       to: phone,
     });
-    console.log(`✅ OTP sent to ${phone}`);
+    console.log(` OTP sent to ${phone}`);
   } catch (err) {
-    console.error("❌ Failed to send OTP:", err);
+    console.error(" Failed to send OTP:", err);
   }
 }
 

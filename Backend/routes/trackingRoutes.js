@@ -5,7 +5,6 @@ const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
 // Update bus location and optionally update today's passengers
-// Update bus location and optionally update today's passengers
 router.put('/buses/:id/location', authenticateToken, async (req, res) => {
   try {
     const { current_location, passengers, fuel_level } = req.body;
