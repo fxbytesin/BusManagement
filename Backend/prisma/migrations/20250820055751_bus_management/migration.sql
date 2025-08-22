@@ -77,6 +77,21 @@ CREATE TABLE `Package` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `POSMachine` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `serial_no` VARCHAR(191) NOT NULL,
+    `assigned` BOOLEAN NOT NULL DEFAULT false,
+    `assigned_at` DATETIME(3) NULL,
+    `status` ENUM('active', 'maintenance', 'inactive') NOT NULL DEFAULT 'active',
+    `bus_id` INTEGER NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `POSMachine_serial_no_key`(`serial_no`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `DailyReport` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `bus_id` INTEGER NOT NULL,
@@ -125,6 +140,9 @@ CREATE TABLE `Ticket` (
     `issue_time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `journey_date` DATETIME(3) NOT NULL,
     `status` ENUM('booked', 'used', 'cancelled') NOT NULL DEFAULT 'booked',
+    `seat_no` INTEGER NULL,
+    `pos_machine_id` INTEGER NULL,
+    `payment_mode` ENUM('cash', 'online') NOT NULL DEFAULT 'cash',
 
     UNIQUE INDEX `Ticket_ticket_number_key`(`ticket_number`),
     PRIMARY KEY (`id`)
@@ -183,6 +201,9 @@ ALTER TABLE `Driver` ADD CONSTRAINT `Driver_user_id_fkey` FOREIGN KEY (`user_id`
 ALTER TABLE `Package` ADD CONSTRAINT `Package_bus_id_fkey` FOREIGN KEY (`bus_id`) REFERENCES `Bus`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `POSMachine` ADD CONSTRAINT `POSMachine_bus_id_fkey` FOREIGN KEY (`bus_id`) REFERENCES `Bus`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `DailyReport` ADD CONSTRAINT `DailyReport_bus_id_fkey` FOREIGN KEY (`bus_id`) REFERENCES `Bus`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -190,6 +211,9 @@ ALTER TABLE `Route` ADD CONSTRAINT `Route_user_id_fkey` FOREIGN KEY (`user_id`) 
 
 -- AddForeignKey
 ALTER TABLE `Ticket` ADD CONSTRAINT `Ticket_bus_id_fkey` FOREIGN KEY (`bus_id`) REFERENCES `Bus`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Ticket` ADD CONSTRAINT `Ticket_pos_machine_id_fkey` FOREIGN KEY (`pos_machine_id`) REFERENCES `POSMachine`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `OTP` ADD CONSTRAINT `OTP_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
