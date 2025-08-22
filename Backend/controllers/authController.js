@@ -23,12 +23,12 @@ async function sendOTP(phone, otp) {
   try {
     await twilioClient.messages.create({
       body: `Your Bus Management OTP is ${otp}. It expires in ${OTP_EXPIRY_MINUTES} minutes.`,
-      from: process.env.TWILIO_PHONE_NUMBER, // must be a Twilio verified number
-      to: phone, // e.g. "+919876543210"
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: phone,
     });
-    console.log(`✅ OTP sent to ${phone}`);
+    console.log(` OTP sent to ${phone}`);
   } catch (err) {
-    console.error("❌ Failed to send OTP:", err);
+    console.error(" Failed to send OTP:", err);
   }
 }
 
@@ -44,14 +44,19 @@ async function saveOTP(userId, otpCode, otpType) {
   });
 }
 
-// --- Controllers ---
+const allowedRoles = ["admin", "conductor"];
 
 // 1. Request Registration OTP
 module.exports.requestRegistrationOTP = async (req, res) => {
   try {
-    const { phone, name, company_name } = req.body;
+    const { phone, name, company_name, role } = req.body;
     if (!phone) {
       return res.status(400).json({ error: "Phone number is required" });
+    }
+    if (!role || !allowedRoles.includes(role)) {
+      return res
+        .status(400)
+        .json({ error: "Role must be 'admin' or 'conductor'" });
     }
 
     let user = await prisma.user.findUnique({ where: { phone } });
@@ -67,15 +72,24 @@ module.exports.requestRegistrationOTP = async (req, res) => {
           phone,
           company_name: company_name || null,
           is_verified: false,
+          role,
         },
       });
+    } else {
+      // Allow update of role in case of incomplete registration
+      if (user.role !== role) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { role },
+        });
+      }
     }
 
     const otp = generateOTP();
     await saveOTP(user.id, otp, "REGISTRATION");
     await sendOTP(phone, otp);
 
-    res.json({ message: "OTP sent for registration" ,phone});
+    res.json({ message: "OTP sent for registration", phone });
   } catch (error) {
     console.error("Request Registration OTP error:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -87,11 +101,18 @@ module.exports.verifyRegistrationOTP = async (req, res) => {
   try {
     const { phone, otp } = req.body;
     if (!phone || !otp) {
-      return res.status(400).json({ error: "Phone number and OTP are required" });
+      return res
+        .status(400)
+        .json({ error: "Phone number and OTP are required" });
     }
 
     const user = await prisma.user.findUnique({ where: { phone } });
     if (!user) return res.status(404).json({ error: "User not found" });
+    if (!allowedRoles.includes(user.role)) {
+      return res
+        .status(403)
+        .json({ error: "Registration only allowed for admin or conductor" });
+    }
 
     const otpRecord = await prisma.oTP.findFirst({
       where: {
@@ -104,7 +125,8 @@ module.exports.verifyRegistrationOTP = async (req, res) => {
       orderBy: { created_at: "desc" },
     });
 
-    if (!otpRecord) return res.status(400).json({ error: "Invalid or expired OTP" });
+    if (!otpRecord)
+      return res.status(400).json({ error: "Invalid or expired OTP" });
 
     await prisma.$transaction([
       prisma.oTP.update({
@@ -117,7 +139,9 @@ module.exports.verifyRegistrationOTP = async (req, res) => {
       }),
     ]);
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
     res.json({
       message: "Registration successful",
@@ -142,12 +166,17 @@ module.exports.requestLoginOTP = async (req, res) => {
     if (!user || !user.is_verified) {
       return res.status(404).json({ error: "User not found or not verified" });
     }
+    if (!allowedRoles.includes(user.role)) {
+      return res
+        .status(403)
+        .json({ error: "Login only allowed for admin or conductor" });
+    }
 
     const otp = generateOTP();
     await saveOTP(user.id, otp, "LOGIN");
     await sendOTP(phone, otp);
 
-    res.json({ message: "OTP sent for login" });
+    res.json({ message: "OTP sent for login", phone });
   } catch (error) {
     console.error("Request Login OTP error:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -159,12 +188,19 @@ module.exports.verifyLoginOTP = async (req, res) => {
   try {
     const { phone, otp } = req.body;
     if (!phone || !otp) {
-      return res.status(400).json({ error: "Phone number and OTP are required" });
+      return res
+        .status(400)
+        .json({ error: "Phone number and OTP are required" });
     }
 
     const user = await prisma.user.findUnique({ where: { phone } });
     if (!user || !user.is_verified) {
       return res.status(404).json({ error: "User not found or not verified" });
+    }
+    if (!allowedRoles.includes(user.role)) {
+      return res
+        .status(403)
+        .json({ error: "Login only allowed for admin or conductor" });
     }
 
     const otpRecord = await prisma.oTP.findFirst({
@@ -178,14 +214,17 @@ module.exports.verifyLoginOTP = async (req, res) => {
       orderBy: { created_at: "desc" },
     });
 
-    if (!otpRecord) return res.status(400).json({ error: "Invalid or expired OTP" });
+    if (!otpRecord)
+      return res.status(400).json({ error: "Invalid or expired OTP" });
 
     await prisma.oTP.update({
       where: { id: otpRecord.id },
       data: { is_used: true },
     });
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
     res.json({
       message: "Login successful",

@@ -21,6 +21,8 @@ import Login from './components/Login';
 import ApiService from './services/api'
 import TicketSystem from './components/pages/TicketSystem';
 import Registration from './components/Registration';
+import PosMachine from './components/pages/PosMachine';
+import TicketView from './components/pages/TicketView';
 const BusManagementSoftware = () => {
   // Language State
   const [currentLanguage, setCurrentLanguage] = useState("hi");
@@ -50,6 +52,7 @@ const BusManagementSoftware = () => {
     status: "stopped",
     current_location:""
   });
+  console.log("buses",buses);
 
   const [routeForm, setRouteForm] = useState({
     name: "",
@@ -79,7 +82,8 @@ const BusManagementSoftware = () => {
     emergency_contact:""
   });
 
-  const[isLogin,setIsLogin] = useState(true)
+  const [isLogin, setIsLogin] = useState(true)
+    const [showModalPos, setShowModalPos] = useState(false);
 
   // CRUD Operations for Buses
   const handleAddBus = async() => {
@@ -92,7 +96,8 @@ const BusManagementSoftware = () => {
     const response = await ApiService.addBus({
       ...busForm,
       route_id: parseInt(busForm.route_id, 10) || null,
-      driver_id: parseInt(busForm.driver_id, 10) || null
+      driver_id: parseInt(busForm.driver_id, 10) || null,
+      conductor_id: parseInt(busForm.conductor_id, 10) || null
     });
     
     if (response.success === true) {
@@ -252,6 +257,11 @@ const BusManagementSoftware = () => {
       return;
     }
 
+    if (!/^\d{10}$/.test(driverForm.phone || driverForm.emergency_contact)) {
+      alert(t("phoneMustBe10Digits"));
+      return;
+    }
+
 
 const response = await ApiService.addDriver({
   ...driverForm,
@@ -299,22 +309,46 @@ const response = await ApiService.addDriver({
   }
 
   // CRUD Operations for Conductors
-  const handleAddConductor = async() => {
+  const handleAddConductor = async () => {
     if (!conductorForm.name || !conductorForm.phone) {
       alert(t("fillAllFields"));
       return;
     }
-
-    const response = await ApiService.addConductor({
-      ...conductorForm,
-      experience_years: parseInt(conductorForm.experience_years,10)
-    })
-    if (response.success === true) {      
-      setConductors([...conductors,response.data])
+    if (!/^\d{10}$/.test(conductorForm.phone || conductorForm.emergency_contact)) {
+      alert(t("phoneMustBe10Digits"));
+      return;
     }
-    setConductorForm({ name: "", phone: "", experience_years: "" });
-    setShowModal(false);
+  
+    // Build payload with correct data types
+    const payload = {
+      ...conductorForm,
+      experience_years: conductorForm.experience_years
+        ? parseInt(conductorForm.experience_years, 10) // ✅ convert string → number
+        : 0, // fallback if empty
+    };
+  
+    try {
+      const response = await ApiService.addConductor(payload);
+  
+      if (response.success === true) {
+        setConductors((prev) => [...prev, response.data]);
+          setConductorForm({
+          name: "",
+          phone: "",
+          experience_years: "",
+          address: "",
+          emergency_contact: "",
+        });
+        setShowModal(false);
+      } else {
+        alert(t("somethingWentWrong"));
+      }
+    } catch (error) {
+      console.error("Error adding conductor:", error);
+      alert(t("apiError"));
+    }
   };
+  
 
   const handleEditConstructor = (conductors) => {
     setConductorForm(conductors);
@@ -1030,6 +1064,27 @@ const response = await ApiService.addDriver({
             </div>
           </div>
         );
+        case "PosMachine":
+          return (
+            <div className="p-6">
+              <div className='mb-6'>
+              <h3 className="text-xl font-semibold">{t("Pos Machine")}</h3>
+               <button
+                 onClick={() => setShowModalPos(true)}
+                 className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
+                  >
+                    Add POS Machine
+               </button>
+              </div>
+         
+              <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+                <PosMachine
+                  showModalPos={showModalPos}
+                  setShowModalPos={setShowModalPos}
+                />
+                </div>
+            </div>
+          );
       default:
         return <DashboardPage
         buses={buses}
@@ -1116,7 +1171,8 @@ const response = await ApiService.addDriver({
         )
       }
           />
-          <CustomRoute path='/registration' element={<Registration/>} />
+          <CustomRoute path='/registration' element={<Registration />} />
+          <CustomRoute path='/ticketview' element={<TicketView/>} />
   </Routes>
 </BrowserRouter>
     </>

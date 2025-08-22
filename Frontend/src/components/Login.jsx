@@ -26,7 +26,7 @@ const Login = ({
 
       try {
         const response = await ApiService.loginData(data);      
-        if (response?.success === true) {
+        if (response?.success === true) {          
           alert('Login successful!');
           setVerifyLogin(false)
           setNumber(response?.data?.phone);

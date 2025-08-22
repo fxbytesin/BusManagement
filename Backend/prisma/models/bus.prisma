@@ -23,6 +23,7 @@ model Bus {
   tickets   Ticket[]
   packages  Package[]
   dailyReports DailyReport[]
+  posMachines    POSMachine[]    
 }
 
 enum BusStatus {

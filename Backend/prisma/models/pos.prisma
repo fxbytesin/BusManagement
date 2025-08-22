@@ -1,0 +1,19 @@
+model POSMachine {
+  id          Int       @id @default(autoincrement())
+  serial_no   String    @unique
+  assigned    Boolean   @default(false)
+  assigned_at DateTime?
+  status      POSStatus @default(active)
+  bus_id      Int?      // Nullable in case POS is unassigned
+  bus         Bus?      @relation(fields: [bus_id], references: [id], onDelete: SetNull)
+  tickets     Ticket[]  // Tickets issued via this POS machine
+
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+}
+
+enum POSStatus {
+  active
+  maintenance
+  inactive
+}

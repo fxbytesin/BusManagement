@@ -27,7 +27,6 @@ const RouteManagement = (
     }
     getData()
   }, [setRoutes])
-  console.log("routes",routes);
   
   return loader ? (
     <div>Loading</div> // You can put a spinner here

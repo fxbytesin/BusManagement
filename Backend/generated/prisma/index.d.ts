@@ -34,6 +34,11 @@ export type Driver = $Result.DefaultSelection<Prisma.$DriverPayload>
  */
 export type Package = $Result.DefaultSelection<Prisma.$PackagePayload>
 /**
+ * Model POSMachine
+ * 
+ */
+export type POSMachine = $Result.DefaultSelection<Prisma.$POSMachinePayload>
+/**
  * Model DailyReport
  * 
  */
@@ -82,6 +87,15 @@ export const PackageStatus: {
 export type PackageStatus = (typeof PackageStatus)[keyof typeof PackageStatus]
 
 
+export const POSStatus: {
+  active: 'active',
+  maintenance: 'maintenance',
+  inactive: 'inactive'
+};
+
+export type POSStatus = (typeof POSStatus)[keyof typeof POSStatus]
+
+
 export const PassengerType: {
   general: 'general',
   student: 'student',
@@ -99,6 +113,14 @@ export const TicketStatus: {
 };
 
 export type TicketStatus = (typeof TicketStatus)[keyof typeof TicketStatus]
+
+
+export const PaymentMode: {
+  cash: 'cash',
+  online: 'online'
+};
+
+export type PaymentMode = (typeof PaymentMode)[keyof typeof PaymentMode]
 
 
 export const OTPType: {
@@ -129,6 +151,10 @@ export type PackageStatus = $Enums.PackageStatus
 
 export const PackageStatus: typeof $Enums.PackageStatus
 
+export type POSStatus = $Enums.POSStatus
+
+export const POSStatus: typeof $Enums.POSStatus
+
 export type PassengerType = $Enums.PassengerType
 
 export const PassengerType: typeof $Enums.PassengerType
@@ -136,6 +162,10 @@ export const PassengerType: typeof $Enums.PassengerType
 export type TicketStatus = $Enums.TicketStatus
 
 export const TicketStatus: typeof $Enums.TicketStatus
+
+export type PaymentMode = $Enums.PaymentMode
+
+export const PaymentMode: typeof $Enums.PaymentMode
 
 export type OTPType = $Enums.OTPType
 
@@ -309,6 +339,16 @@ export class PrismaClient<
     * ```
     */
   get package(): Prisma.PackageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.pOSMachine`: Exposes CRUD operations for the **POSMachine** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more POSMachines
+    * const pOSMachines = await prisma.pOSMachine.findMany()
+    * ```
+    */
+  get pOSMachine(): Prisma.POSMachineDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.dailyReport`: Exposes CRUD operations for the **DailyReport** model.
@@ -803,6 +843,7 @@ export namespace Prisma {
     Conductor: 'Conductor',
     Driver: 'Driver',
     Package: 'Package',
+    POSMachine: 'POSMachine',
     DailyReport: 'DailyReport',
     Route: 'Route',
     Ticket: 'Ticket',
@@ -826,7 +867,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "bus" | "conductor" | "driver" | "package" | "dailyReport" | "route" | "ticket" | "user" | "oTP"
+      modelProps: "bus" | "conductor" | "driver" | "package" | "pOSMachine" | "dailyReport" | "route" | "ticket" | "user" | "oTP"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1091,6 +1132,72 @@ export namespace Prisma {
           count: {
             args: Prisma.PackageCountArgs<ExtArgs>
             result: $Utils.Optional<PackageCountAggregateOutputType> | number
+          }
+        }
+      }
+      POSMachine: {
+        payload: Prisma.$POSMachinePayload<ExtArgs>
+        fields: Prisma.POSMachineFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.POSMachineFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$POSMachinePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.POSMachineFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$POSMachinePayload>
+          }
+          findFirst: {
+            args: Prisma.POSMachineFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$POSMachinePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.POSMachineFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$POSMachinePayload>
+          }
+          findMany: {
+            args: Prisma.POSMachineFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$POSMachinePayload>[]
+          }
+          create: {
+            args: Prisma.POSMachineCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$POSMachinePayload>
+          }
+          createMany: {
+            args: Prisma.POSMachineCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.POSMachineDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$POSMachinePayload>
+          }
+          update: {
+            args: Prisma.POSMachineUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$POSMachinePayload>
+          }
+          deleteMany: {
+            args: Prisma.POSMachineDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.POSMachineUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.POSMachineUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$POSMachinePayload>
+          }
+          aggregate: {
+            args: Prisma.POSMachineAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePOSMachine>
+          }
+          groupBy: {
+            args: Prisma.POSMachineGroupByArgs<ExtArgs>
+            result: $Utils.Optional<POSMachineGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.POSMachineCountArgs<ExtArgs>
+            result: $Utils.Optional<POSMachineCountAggregateOutputType> | number
           }
         }
       }
@@ -1520,6 +1627,7 @@ export namespace Prisma {
     conductor?: ConductorOmit
     driver?: DriverOmit
     package?: PackageOmit
+    pOSMachine?: POSMachineOmit
     dailyReport?: DailyReportOmit
     route?: RouteOmit
     ticket?: TicketOmit
@@ -1627,12 +1735,14 @@ export namespace Prisma {
     tickets: number
     packages: number
     dailyReports: number
+    posMachines: number
   }
 
   export type BusCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tickets?: boolean | BusCountOutputTypeCountTicketsArgs
     packages?: boolean | BusCountOutputTypeCountPackagesArgs
     dailyReports?: boolean | BusCountOutputTypeCountDailyReportsArgs
+    posMachines?: boolean | BusCountOutputTypeCountPosMachinesArgs
   }
 
   // Custom InputTypes
@@ -1665,6 +1775,13 @@ export namespace Prisma {
    */
   export type BusCountOutputTypeCountDailyReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DailyReportWhereInput
+  }
+
+  /**
+   * BusCountOutputType without action
+   */
+  export type BusCountOutputTypeCountPosMachinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: POSMachineWhereInput
   }
 
 
@@ -1727,6 +1844,37 @@ export namespace Prisma {
    */
   export type DriverCountOutputTypeCountBusesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BusWhereInput
+  }
+
+
+  /**
+   * Count Type POSMachineCountOutputType
+   */
+
+  export type POSMachineCountOutputType = {
+    tickets: number
+  }
+
+  export type POSMachineCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tickets?: boolean | POSMachineCountOutputTypeCountTicketsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * POSMachineCountOutputType without action
+   */
+  export type POSMachineCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachineCountOutputType
+     */
+    select?: POSMachineCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * POSMachineCountOutputType without action
+   */
+  export type POSMachineCountOutputTypeCountTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TicketWhereInput
   }
 
 
@@ -2141,6 +2289,7 @@ export namespace Prisma {
     tickets?: boolean | Bus$ticketsArgs<ExtArgs>
     packages?: boolean | Bus$packagesArgs<ExtArgs>
     dailyReports?: boolean | Bus$dailyReportsArgs<ExtArgs>
+    posMachines?: boolean | Bus$posMachinesArgs<ExtArgs>
     _count?: boolean | BusCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["bus"]>
 
@@ -2173,6 +2322,7 @@ export namespace Prisma {
     tickets?: boolean | Bus$ticketsArgs<ExtArgs>
     packages?: boolean | Bus$packagesArgs<ExtArgs>
     dailyReports?: boolean | Bus$dailyReportsArgs<ExtArgs>
+    posMachines?: boolean | Bus$posMachinesArgs<ExtArgs>
     _count?: boolean | BusCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2186,6 +2336,7 @@ export namespace Prisma {
       tickets: Prisma.$TicketPayload<ExtArgs>[]
       packages: Prisma.$PackagePayload<ExtArgs>[]
       dailyReports: Prisma.$DailyReportPayload<ExtArgs>[]
+      posMachines: Prisma.$POSMachinePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2550,6 +2701,7 @@ export namespace Prisma {
     tickets<T extends Bus$ticketsArgs<ExtArgs> = {}>(args?: Subset<T, Bus$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     packages<T extends Bus$packagesArgs<ExtArgs> = {}>(args?: Subset<T, Bus$packagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dailyReports<T extends Bus$dailyReportsArgs<ExtArgs> = {}>(args?: Subset<T, Bus$dailyReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    posMachines<T extends Bus$posMachinesArgs<ExtArgs> = {}>(args?: Subset<T, Bus$posMachinesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3063,6 +3215,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DailyReportScalarFieldEnum | DailyReportScalarFieldEnum[]
+  }
+
+  /**
+   * Bus.posMachines
+   */
+  export type Bus$posMachinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+    where?: POSMachineWhereInput
+    orderBy?: POSMachineOrderByWithRelationInput | POSMachineOrderByWithRelationInput[]
+    cursor?: POSMachineWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: POSMachineScalarFieldEnum | POSMachineScalarFieldEnum[]
   }
 
   /**
@@ -6304,6 +6480,1055 @@ export namespace Prisma {
 
 
   /**
+   * Model POSMachine
+   */
+
+  export type AggregatePOSMachine = {
+    _count: POSMachineCountAggregateOutputType | null
+    _avg: POSMachineAvgAggregateOutputType | null
+    _sum: POSMachineSumAggregateOutputType | null
+    _min: POSMachineMinAggregateOutputType | null
+    _max: POSMachineMaxAggregateOutputType | null
+  }
+
+  export type POSMachineAvgAggregateOutputType = {
+    id: number | null
+    bus_id: number | null
+  }
+
+  export type POSMachineSumAggregateOutputType = {
+    id: number | null
+    bus_id: number | null
+  }
+
+  export type POSMachineMinAggregateOutputType = {
+    id: number | null
+    serial_no: string | null
+    assigned: boolean | null
+    assigned_at: Date | null
+    status: $Enums.POSStatus | null
+    bus_id: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type POSMachineMaxAggregateOutputType = {
+    id: number | null
+    serial_no: string | null
+    assigned: boolean | null
+    assigned_at: Date | null
+    status: $Enums.POSStatus | null
+    bus_id: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type POSMachineCountAggregateOutputType = {
+    id: number
+    serial_no: number
+    assigned: number
+    assigned_at: number
+    status: number
+    bus_id: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type POSMachineAvgAggregateInputType = {
+    id?: true
+    bus_id?: true
+  }
+
+  export type POSMachineSumAggregateInputType = {
+    id?: true
+    bus_id?: true
+  }
+
+  export type POSMachineMinAggregateInputType = {
+    id?: true
+    serial_no?: true
+    assigned?: true
+    assigned_at?: true
+    status?: true
+    bus_id?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type POSMachineMaxAggregateInputType = {
+    id?: true
+    serial_no?: true
+    assigned?: true
+    assigned_at?: true
+    status?: true
+    bus_id?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type POSMachineCountAggregateInputType = {
+    id?: true
+    serial_no?: true
+    assigned?: true
+    assigned_at?: true
+    status?: true
+    bus_id?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type POSMachineAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which POSMachine to aggregate.
+     */
+    where?: POSMachineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of POSMachines to fetch.
+     */
+    orderBy?: POSMachineOrderByWithRelationInput | POSMachineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: POSMachineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` POSMachines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` POSMachines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned POSMachines
+    **/
+    _count?: true | POSMachineCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: POSMachineAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: POSMachineSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: POSMachineMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: POSMachineMaxAggregateInputType
+  }
+
+  export type GetPOSMachineAggregateType<T extends POSMachineAggregateArgs> = {
+        [P in keyof T & keyof AggregatePOSMachine]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePOSMachine[P]>
+      : GetScalarType<T[P], AggregatePOSMachine[P]>
+  }
+
+
+
+
+  export type POSMachineGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: POSMachineWhereInput
+    orderBy?: POSMachineOrderByWithAggregationInput | POSMachineOrderByWithAggregationInput[]
+    by: POSMachineScalarFieldEnum[] | POSMachineScalarFieldEnum
+    having?: POSMachineScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: POSMachineCountAggregateInputType | true
+    _avg?: POSMachineAvgAggregateInputType
+    _sum?: POSMachineSumAggregateInputType
+    _min?: POSMachineMinAggregateInputType
+    _max?: POSMachineMaxAggregateInputType
+  }
+
+  export type POSMachineGroupByOutputType = {
+    id: number
+    serial_no: string
+    assigned: boolean
+    assigned_at: Date | null
+    status: $Enums.POSStatus
+    bus_id: number | null
+    created_at: Date
+    updated_at: Date
+    _count: POSMachineCountAggregateOutputType | null
+    _avg: POSMachineAvgAggregateOutputType | null
+    _sum: POSMachineSumAggregateOutputType | null
+    _min: POSMachineMinAggregateOutputType | null
+    _max: POSMachineMaxAggregateOutputType | null
+  }
+
+  type GetPOSMachineGroupByPayload<T extends POSMachineGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<POSMachineGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof POSMachineGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], POSMachineGroupByOutputType[P]>
+            : GetScalarType<T[P], POSMachineGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type POSMachineSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    serial_no?: boolean
+    assigned?: boolean
+    assigned_at?: boolean
+    status?: boolean
+    bus_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    bus?: boolean | POSMachine$busArgs<ExtArgs>
+    tickets?: boolean | POSMachine$ticketsArgs<ExtArgs>
+    _count?: boolean | POSMachineCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pOSMachine"]>
+
+
+
+  export type POSMachineSelectScalar = {
+    id?: boolean
+    serial_no?: boolean
+    assigned?: boolean
+    assigned_at?: boolean
+    status?: boolean
+    bus_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type POSMachineOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "serial_no" | "assigned" | "assigned_at" | "status" | "bus_id" | "created_at" | "updated_at", ExtArgs["result"]["pOSMachine"]>
+  export type POSMachineInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bus?: boolean | POSMachine$busArgs<ExtArgs>
+    tickets?: boolean | POSMachine$ticketsArgs<ExtArgs>
+    _count?: boolean | POSMachineCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $POSMachinePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "POSMachine"
+    objects: {
+      bus: Prisma.$BusPayload<ExtArgs> | null
+      tickets: Prisma.$TicketPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      serial_no: string
+      assigned: boolean
+      assigned_at: Date | null
+      status: $Enums.POSStatus
+      bus_id: number | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["pOSMachine"]>
+    composites: {}
+  }
+
+  type POSMachineGetPayload<S extends boolean | null | undefined | POSMachineDefaultArgs> = $Result.GetResult<Prisma.$POSMachinePayload, S>
+
+  type POSMachineCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<POSMachineFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: POSMachineCountAggregateInputType | true
+    }
+
+  export interface POSMachineDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['POSMachine'], meta: { name: 'POSMachine' } }
+    /**
+     * Find zero or one POSMachine that matches the filter.
+     * @param {POSMachineFindUniqueArgs} args - Arguments to find a POSMachine
+     * @example
+     * // Get one POSMachine
+     * const pOSMachine = await prisma.pOSMachine.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends POSMachineFindUniqueArgs>(args: SelectSubset<T, POSMachineFindUniqueArgs<ExtArgs>>): Prisma__POSMachineClient<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one POSMachine that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {POSMachineFindUniqueOrThrowArgs} args - Arguments to find a POSMachine
+     * @example
+     * // Get one POSMachine
+     * const pOSMachine = await prisma.pOSMachine.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends POSMachineFindUniqueOrThrowArgs>(args: SelectSubset<T, POSMachineFindUniqueOrThrowArgs<ExtArgs>>): Prisma__POSMachineClient<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first POSMachine that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {POSMachineFindFirstArgs} args - Arguments to find a POSMachine
+     * @example
+     * // Get one POSMachine
+     * const pOSMachine = await prisma.pOSMachine.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends POSMachineFindFirstArgs>(args?: SelectSubset<T, POSMachineFindFirstArgs<ExtArgs>>): Prisma__POSMachineClient<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first POSMachine that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {POSMachineFindFirstOrThrowArgs} args - Arguments to find a POSMachine
+     * @example
+     * // Get one POSMachine
+     * const pOSMachine = await prisma.pOSMachine.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends POSMachineFindFirstOrThrowArgs>(args?: SelectSubset<T, POSMachineFindFirstOrThrowArgs<ExtArgs>>): Prisma__POSMachineClient<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more POSMachines that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {POSMachineFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all POSMachines
+     * const pOSMachines = await prisma.pOSMachine.findMany()
+     * 
+     * // Get first 10 POSMachines
+     * const pOSMachines = await prisma.pOSMachine.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pOSMachineWithIdOnly = await prisma.pOSMachine.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends POSMachineFindManyArgs>(args?: SelectSubset<T, POSMachineFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a POSMachine.
+     * @param {POSMachineCreateArgs} args - Arguments to create a POSMachine.
+     * @example
+     * // Create one POSMachine
+     * const POSMachine = await prisma.pOSMachine.create({
+     *   data: {
+     *     // ... data to create a POSMachine
+     *   }
+     * })
+     * 
+     */
+    create<T extends POSMachineCreateArgs>(args: SelectSubset<T, POSMachineCreateArgs<ExtArgs>>): Prisma__POSMachineClient<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many POSMachines.
+     * @param {POSMachineCreateManyArgs} args - Arguments to create many POSMachines.
+     * @example
+     * // Create many POSMachines
+     * const pOSMachine = await prisma.pOSMachine.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends POSMachineCreateManyArgs>(args?: SelectSubset<T, POSMachineCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a POSMachine.
+     * @param {POSMachineDeleteArgs} args - Arguments to delete one POSMachine.
+     * @example
+     * // Delete one POSMachine
+     * const POSMachine = await prisma.pOSMachine.delete({
+     *   where: {
+     *     // ... filter to delete one POSMachine
+     *   }
+     * })
+     * 
+     */
+    delete<T extends POSMachineDeleteArgs>(args: SelectSubset<T, POSMachineDeleteArgs<ExtArgs>>): Prisma__POSMachineClient<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one POSMachine.
+     * @param {POSMachineUpdateArgs} args - Arguments to update one POSMachine.
+     * @example
+     * // Update one POSMachine
+     * const pOSMachine = await prisma.pOSMachine.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends POSMachineUpdateArgs>(args: SelectSubset<T, POSMachineUpdateArgs<ExtArgs>>): Prisma__POSMachineClient<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more POSMachines.
+     * @param {POSMachineDeleteManyArgs} args - Arguments to filter POSMachines to delete.
+     * @example
+     * // Delete a few POSMachines
+     * const { count } = await prisma.pOSMachine.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends POSMachineDeleteManyArgs>(args?: SelectSubset<T, POSMachineDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more POSMachines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {POSMachineUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many POSMachines
+     * const pOSMachine = await prisma.pOSMachine.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends POSMachineUpdateManyArgs>(args: SelectSubset<T, POSMachineUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one POSMachine.
+     * @param {POSMachineUpsertArgs} args - Arguments to update or create a POSMachine.
+     * @example
+     * // Update or create a POSMachine
+     * const pOSMachine = await prisma.pOSMachine.upsert({
+     *   create: {
+     *     // ... data to create a POSMachine
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the POSMachine we want to update
+     *   }
+     * })
+     */
+    upsert<T extends POSMachineUpsertArgs>(args: SelectSubset<T, POSMachineUpsertArgs<ExtArgs>>): Prisma__POSMachineClient<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of POSMachines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {POSMachineCountArgs} args - Arguments to filter POSMachines to count.
+     * @example
+     * // Count the number of POSMachines
+     * const count = await prisma.pOSMachine.count({
+     *   where: {
+     *     // ... the filter for the POSMachines we want to count
+     *   }
+     * })
+    **/
+    count<T extends POSMachineCountArgs>(
+      args?: Subset<T, POSMachineCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], POSMachineCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a POSMachine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {POSMachineAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends POSMachineAggregateArgs>(args: Subset<T, POSMachineAggregateArgs>): Prisma.PrismaPromise<GetPOSMachineAggregateType<T>>
+
+    /**
+     * Group by POSMachine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {POSMachineGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends POSMachineGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: POSMachineGroupByArgs['orderBy'] }
+        : { orderBy?: POSMachineGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, POSMachineGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPOSMachineGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the POSMachine model
+   */
+  readonly fields: POSMachineFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for POSMachine.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__POSMachineClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    bus<T extends POSMachine$busArgs<ExtArgs> = {}>(args?: Subset<T, POSMachine$busArgs<ExtArgs>>): Prisma__BusClient<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    tickets<T extends POSMachine$ticketsArgs<ExtArgs> = {}>(args?: Subset<T, POSMachine$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the POSMachine model
+   */
+  interface POSMachineFieldRefs {
+    readonly id: FieldRef<"POSMachine", 'Int'>
+    readonly serial_no: FieldRef<"POSMachine", 'String'>
+    readonly assigned: FieldRef<"POSMachine", 'Boolean'>
+    readonly assigned_at: FieldRef<"POSMachine", 'DateTime'>
+    readonly status: FieldRef<"POSMachine", 'POSStatus'>
+    readonly bus_id: FieldRef<"POSMachine", 'Int'>
+    readonly created_at: FieldRef<"POSMachine", 'DateTime'>
+    readonly updated_at: FieldRef<"POSMachine", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * POSMachine findUnique
+   */
+  export type POSMachineFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+    /**
+     * Filter, which POSMachine to fetch.
+     */
+    where: POSMachineWhereUniqueInput
+  }
+
+  /**
+   * POSMachine findUniqueOrThrow
+   */
+  export type POSMachineFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+    /**
+     * Filter, which POSMachine to fetch.
+     */
+    where: POSMachineWhereUniqueInput
+  }
+
+  /**
+   * POSMachine findFirst
+   */
+  export type POSMachineFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+    /**
+     * Filter, which POSMachine to fetch.
+     */
+    where?: POSMachineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of POSMachines to fetch.
+     */
+    orderBy?: POSMachineOrderByWithRelationInput | POSMachineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for POSMachines.
+     */
+    cursor?: POSMachineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` POSMachines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` POSMachines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of POSMachines.
+     */
+    distinct?: POSMachineScalarFieldEnum | POSMachineScalarFieldEnum[]
+  }
+
+  /**
+   * POSMachine findFirstOrThrow
+   */
+  export type POSMachineFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+    /**
+     * Filter, which POSMachine to fetch.
+     */
+    where?: POSMachineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of POSMachines to fetch.
+     */
+    orderBy?: POSMachineOrderByWithRelationInput | POSMachineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for POSMachines.
+     */
+    cursor?: POSMachineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` POSMachines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` POSMachines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of POSMachines.
+     */
+    distinct?: POSMachineScalarFieldEnum | POSMachineScalarFieldEnum[]
+  }
+
+  /**
+   * POSMachine findMany
+   */
+  export type POSMachineFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+    /**
+     * Filter, which POSMachines to fetch.
+     */
+    where?: POSMachineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of POSMachines to fetch.
+     */
+    orderBy?: POSMachineOrderByWithRelationInput | POSMachineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing POSMachines.
+     */
+    cursor?: POSMachineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` POSMachines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` POSMachines.
+     */
+    skip?: number
+    distinct?: POSMachineScalarFieldEnum | POSMachineScalarFieldEnum[]
+  }
+
+  /**
+   * POSMachine create
+   */
+  export type POSMachineCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+    /**
+     * The data needed to create a POSMachine.
+     */
+    data: XOR<POSMachineCreateInput, POSMachineUncheckedCreateInput>
+  }
+
+  /**
+   * POSMachine createMany
+   */
+  export type POSMachineCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many POSMachines.
+     */
+    data: POSMachineCreateManyInput | POSMachineCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * POSMachine update
+   */
+  export type POSMachineUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+    /**
+     * The data needed to update a POSMachine.
+     */
+    data: XOR<POSMachineUpdateInput, POSMachineUncheckedUpdateInput>
+    /**
+     * Choose, which POSMachine to update.
+     */
+    where: POSMachineWhereUniqueInput
+  }
+
+  /**
+   * POSMachine updateMany
+   */
+  export type POSMachineUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update POSMachines.
+     */
+    data: XOR<POSMachineUpdateManyMutationInput, POSMachineUncheckedUpdateManyInput>
+    /**
+     * Filter which POSMachines to update
+     */
+    where?: POSMachineWhereInput
+    /**
+     * Limit how many POSMachines to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * POSMachine upsert
+   */
+  export type POSMachineUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+    /**
+     * The filter to search for the POSMachine to update in case it exists.
+     */
+    where: POSMachineWhereUniqueInput
+    /**
+     * In case the POSMachine found by the `where` argument doesn't exist, create a new POSMachine with this data.
+     */
+    create: XOR<POSMachineCreateInput, POSMachineUncheckedCreateInput>
+    /**
+     * In case the POSMachine was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<POSMachineUpdateInput, POSMachineUncheckedUpdateInput>
+  }
+
+  /**
+   * POSMachine delete
+   */
+  export type POSMachineDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+    /**
+     * Filter which POSMachine to delete.
+     */
+    where: POSMachineWhereUniqueInput
+  }
+
+  /**
+   * POSMachine deleteMany
+   */
+  export type POSMachineDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which POSMachines to delete
+     */
+    where?: POSMachineWhereInput
+    /**
+     * Limit how many POSMachines to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * POSMachine.bus
+   */
+  export type POSMachine$busArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bus
+     */
+    select?: BusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bus
+     */
+    omit?: BusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BusInclude<ExtArgs> | null
+    where?: BusWhereInput
+  }
+
+  /**
+   * POSMachine.tickets
+   */
+  export type POSMachine$ticketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ticket
+     */
+    select?: TicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ticket
+     */
+    omit?: TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
+    where?: TicketWhereInput
+    orderBy?: TicketOrderByWithRelationInput | TicketOrderByWithRelationInput[]
+    cursor?: TicketWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TicketScalarFieldEnum | TicketScalarFieldEnum[]
+  }
+
+  /**
+   * POSMachine without action
+   */
+  export type POSMachineDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model DailyReport
    */
 
@@ -8436,12 +9661,16 @@ export namespace Prisma {
     id: number | null
     bus_id: number | null
     fare: Decimal | null
+    seat_no: number | null
+    pos_machine_id: number | null
   }
 
   export type TicketSumAggregateOutputType = {
     id: number | null
     bus_id: number | null
     fare: Decimal | null
+    seat_no: number | null
+    pos_machine_id: number | null
   }
 
   export type TicketMinAggregateOutputType = {
@@ -8457,6 +9686,9 @@ export namespace Prisma {
     issue_time: Date | null
     journey_date: Date | null
     status: $Enums.TicketStatus | null
+    seat_no: number | null
+    pos_machine_id: number | null
+    payment_mode: $Enums.PaymentMode | null
   }
 
   export type TicketMaxAggregateOutputType = {
@@ -8472,6 +9704,9 @@ export namespace Prisma {
     issue_time: Date | null
     journey_date: Date | null
     status: $Enums.TicketStatus | null
+    seat_no: number | null
+    pos_machine_id: number | null
+    payment_mode: $Enums.PaymentMode | null
   }
 
   export type TicketCountAggregateOutputType = {
@@ -8487,6 +9722,9 @@ export namespace Prisma {
     issue_time: number
     journey_date: number
     status: number
+    seat_no: number
+    pos_machine_id: number
+    payment_mode: number
     _all: number
   }
 
@@ -8495,12 +9733,16 @@ export namespace Prisma {
     id?: true
     bus_id?: true
     fare?: true
+    seat_no?: true
+    pos_machine_id?: true
   }
 
   export type TicketSumAggregateInputType = {
     id?: true
     bus_id?: true
     fare?: true
+    seat_no?: true
+    pos_machine_id?: true
   }
 
   export type TicketMinAggregateInputType = {
@@ -8516,6 +9758,9 @@ export namespace Prisma {
     issue_time?: true
     journey_date?: true
     status?: true
+    seat_no?: true
+    pos_machine_id?: true
+    payment_mode?: true
   }
 
   export type TicketMaxAggregateInputType = {
@@ -8531,6 +9776,9 @@ export namespace Prisma {
     issue_time?: true
     journey_date?: true
     status?: true
+    seat_no?: true
+    pos_machine_id?: true
+    payment_mode?: true
   }
 
   export type TicketCountAggregateInputType = {
@@ -8546,6 +9794,9 @@ export namespace Prisma {
     issue_time?: true
     journey_date?: true
     status?: true
+    seat_no?: true
+    pos_machine_id?: true
+    payment_mode?: true
     _all?: true
   }
 
@@ -8648,6 +9899,9 @@ export namespace Prisma {
     issue_time: Date
     journey_date: Date
     status: $Enums.TicketStatus
+    seat_no: number | null
+    pos_machine_id: number | null
+    payment_mode: $Enums.PaymentMode
     _count: TicketCountAggregateOutputType | null
     _avg: TicketAvgAggregateOutputType | null
     _sum: TicketSumAggregateOutputType | null
@@ -8682,7 +9936,11 @@ export namespace Prisma {
     issue_time?: boolean
     journey_date?: boolean
     status?: boolean
+    seat_no?: boolean
+    pos_machine_id?: boolean
+    payment_mode?: boolean
     bus?: boolean | BusDefaultArgs<ExtArgs>
+    posMachine?: boolean | Ticket$posMachineArgs<ExtArgs>
   }, ExtArgs["result"]["ticket"]>
 
 
@@ -8700,17 +9958,22 @@ export namespace Prisma {
     issue_time?: boolean
     journey_date?: boolean
     status?: boolean
+    seat_no?: boolean
+    pos_machine_id?: boolean
+    payment_mode?: boolean
   }
 
-  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bus_id" | "ticket_number" | "passenger_name" | "passenger_phone" | "from_stop" | "to_stop" | "passenger_type" | "fare" | "issue_time" | "journey_date" | "status", ExtArgs["result"]["ticket"]>
+  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bus_id" | "ticket_number" | "passenger_name" | "passenger_phone" | "from_stop" | "to_stop" | "passenger_type" | "fare" | "issue_time" | "journey_date" | "status" | "seat_no" | "pos_machine_id" | "payment_mode", ExtArgs["result"]["ticket"]>
   export type TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bus?: boolean | BusDefaultArgs<ExtArgs>
+    posMachine?: boolean | Ticket$posMachineArgs<ExtArgs>
   }
 
   export type $TicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Ticket"
     objects: {
       bus: Prisma.$BusPayload<ExtArgs>
+      posMachine: Prisma.$POSMachinePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -8725,6 +9988,9 @@ export namespace Prisma {
       issue_time: Date
       journey_date: Date
       status: $Enums.TicketStatus
+      seat_no: number | null
+      pos_machine_id: number | null
+      payment_mode: $Enums.PaymentMode
     }, ExtArgs["result"]["ticket"]>
     composites: {}
   }
@@ -9066,6 +10332,7 @@ export namespace Prisma {
   export interface Prisma__TicketClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     bus<T extends BusDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusDefaultArgs<ExtArgs>>): Prisma__BusClient<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    posMachine<T extends Ticket$posMachineArgs<ExtArgs> = {}>(args?: Subset<T, Ticket$posMachineArgs<ExtArgs>>): Prisma__POSMachineClient<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9107,6 +10374,9 @@ export namespace Prisma {
     readonly issue_time: FieldRef<"Ticket", 'DateTime'>
     readonly journey_date: FieldRef<"Ticket", 'DateTime'>
     readonly status: FieldRef<"Ticket", 'TicketStatus'>
+    readonly seat_no: FieldRef<"Ticket", 'Int'>
+    readonly pos_machine_id: FieldRef<"Ticket", 'Int'>
+    readonly payment_mode: FieldRef<"Ticket", 'PaymentMode'>
   }
     
 
@@ -9447,6 +10717,25 @@ export namespace Prisma {
      * Limit how many Tickets to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Ticket.posMachine
+   */
+  export type Ticket$posMachineArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the POSMachine
+     */
+    select?: POSMachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the POSMachine
+     */
+    omit?: POSMachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: POSMachineInclude<ExtArgs> | null
+    where?: POSMachineWhereInput
   }
 
   /**
@@ -11703,6 +12992,20 @@ export namespace Prisma {
   export type PackageScalarFieldEnum = (typeof PackageScalarFieldEnum)[keyof typeof PackageScalarFieldEnum]
 
 
+  export const POSMachineScalarFieldEnum: {
+    id: 'id',
+    serial_no: 'serial_no',
+    assigned: 'assigned',
+    assigned_at: 'assigned_at',
+    status: 'status',
+    bus_id: 'bus_id',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type POSMachineScalarFieldEnum = (typeof POSMachineScalarFieldEnum)[keyof typeof POSMachineScalarFieldEnum]
+
+
   export const DailyReportScalarFieldEnum: {
     id: 'id',
     bus_id: 'bus_id',
@@ -11748,7 +13051,10 @@ export namespace Prisma {
     fare: 'fare',
     issue_time: 'issue_time',
     journey_date: 'journey_date',
-    status: 'status'
+    status: 'status',
+    seat_no: 'seat_no',
+    pos_machine_id: 'pos_machine_id',
+    payment_mode: 'payment_mode'
   };
 
   export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
@@ -11847,6 +13153,13 @@ export namespace Prisma {
   };
 
   export type PackageOrderByRelevanceFieldEnum = (typeof PackageOrderByRelevanceFieldEnum)[keyof typeof PackageOrderByRelevanceFieldEnum]
+
+
+  export const POSMachineOrderByRelevanceFieldEnum: {
+    serial_no: 'serial_no'
+  };
+
+  export type POSMachineOrderByRelevanceFieldEnum = (typeof POSMachineOrderByRelevanceFieldEnum)[keyof typeof POSMachineOrderByRelevanceFieldEnum]
 
 
   export const JsonNullValueFilter: {
@@ -11958,6 +13271,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'POSStatus'
+   */
+  export type EnumPOSStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'POSStatus'>
+    
+
+
+  /**
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -11982,6 +13302,13 @@ export namespace Prisma {
    * Reference to a field of type 'TicketStatus'
    */
   export type EnumTicketStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'PaymentMode'
+   */
+  export type EnumPaymentModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentMode'>
     
 
 
@@ -12035,6 +13362,7 @@ export namespace Prisma {
     tickets?: TicketListRelationFilter
     packages?: PackageListRelationFilter
     dailyReports?: DailyReportListRelationFilter
+    posMachines?: POSMachineListRelationFilter
   }
 
   export type BusOrderByWithRelationInput = {
@@ -12060,6 +13388,7 @@ export namespace Prisma {
     tickets?: TicketOrderByRelationAggregateInput
     packages?: PackageOrderByRelationAggregateInput
     dailyReports?: DailyReportOrderByRelationAggregateInput
+    posMachines?: POSMachineOrderByRelationAggregateInput
     _relevance?: BusOrderByRelevanceInput
   }
 
@@ -12089,6 +13418,7 @@ export namespace Prisma {
     tickets?: TicketListRelationFilter
     packages?: PackageListRelationFilter
     dailyReports?: DailyReportListRelationFilter
+    posMachines?: POSMachineListRelationFilter
   }, "id" | "bus_number">
 
   export type BusOrderByWithAggregationInput = {
@@ -12425,6 +13755,82 @@ export namespace Prisma {
     delivered_at?: DateTimeNullableWithAggregatesFilter<"Package"> | Date | string | null
   }
 
+  export type POSMachineWhereInput = {
+    AND?: POSMachineWhereInput | POSMachineWhereInput[]
+    OR?: POSMachineWhereInput[]
+    NOT?: POSMachineWhereInput | POSMachineWhereInput[]
+    id?: IntFilter<"POSMachine"> | number
+    serial_no?: StringFilter<"POSMachine"> | string
+    assigned?: BoolFilter<"POSMachine"> | boolean
+    assigned_at?: DateTimeNullableFilter<"POSMachine"> | Date | string | null
+    status?: EnumPOSStatusFilter<"POSMachine"> | $Enums.POSStatus
+    bus_id?: IntNullableFilter<"POSMachine"> | number | null
+    created_at?: DateTimeFilter<"POSMachine"> | Date | string
+    updated_at?: DateTimeFilter<"POSMachine"> | Date | string
+    bus?: XOR<BusNullableScalarRelationFilter, BusWhereInput> | null
+    tickets?: TicketListRelationFilter
+  }
+
+  export type POSMachineOrderByWithRelationInput = {
+    id?: SortOrder
+    serial_no?: SortOrder
+    assigned?: SortOrder
+    assigned_at?: SortOrderInput | SortOrder
+    status?: SortOrder
+    bus_id?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    bus?: BusOrderByWithRelationInput
+    tickets?: TicketOrderByRelationAggregateInput
+    _relevance?: POSMachineOrderByRelevanceInput
+  }
+
+  export type POSMachineWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    serial_no?: string
+    AND?: POSMachineWhereInput | POSMachineWhereInput[]
+    OR?: POSMachineWhereInput[]
+    NOT?: POSMachineWhereInput | POSMachineWhereInput[]
+    assigned?: BoolFilter<"POSMachine"> | boolean
+    assigned_at?: DateTimeNullableFilter<"POSMachine"> | Date | string | null
+    status?: EnumPOSStatusFilter<"POSMachine"> | $Enums.POSStatus
+    bus_id?: IntNullableFilter<"POSMachine"> | number | null
+    created_at?: DateTimeFilter<"POSMachine"> | Date | string
+    updated_at?: DateTimeFilter<"POSMachine"> | Date | string
+    bus?: XOR<BusNullableScalarRelationFilter, BusWhereInput> | null
+    tickets?: TicketListRelationFilter
+  }, "id" | "serial_no">
+
+  export type POSMachineOrderByWithAggregationInput = {
+    id?: SortOrder
+    serial_no?: SortOrder
+    assigned?: SortOrder
+    assigned_at?: SortOrderInput | SortOrder
+    status?: SortOrder
+    bus_id?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: POSMachineCountOrderByAggregateInput
+    _avg?: POSMachineAvgOrderByAggregateInput
+    _max?: POSMachineMaxOrderByAggregateInput
+    _min?: POSMachineMinOrderByAggregateInput
+    _sum?: POSMachineSumOrderByAggregateInput
+  }
+
+  export type POSMachineScalarWhereWithAggregatesInput = {
+    AND?: POSMachineScalarWhereWithAggregatesInput | POSMachineScalarWhereWithAggregatesInput[]
+    OR?: POSMachineScalarWhereWithAggregatesInput[]
+    NOT?: POSMachineScalarWhereWithAggregatesInput | POSMachineScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"POSMachine"> | number
+    serial_no?: StringWithAggregatesFilter<"POSMachine"> | string
+    assigned?: BoolWithAggregatesFilter<"POSMachine"> | boolean
+    assigned_at?: DateTimeNullableWithAggregatesFilter<"POSMachine"> | Date | string | null
+    status?: EnumPOSStatusWithAggregatesFilter<"POSMachine"> | $Enums.POSStatus
+    bus_id?: IntNullableWithAggregatesFilter<"POSMachine"> | number | null
+    created_at?: DateTimeWithAggregatesFilter<"POSMachine"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"POSMachine"> | Date | string
+  }
+
   export type DailyReportWhereInput = {
     AND?: DailyReportWhereInput | DailyReportWhereInput[]
     OR?: DailyReportWhereInput[]
@@ -12615,7 +14021,11 @@ export namespace Prisma {
     issue_time?: DateTimeFilter<"Ticket"> | Date | string
     journey_date?: DateTimeFilter<"Ticket"> | Date | string
     status?: EnumTicketStatusFilter<"Ticket"> | $Enums.TicketStatus
+    seat_no?: IntNullableFilter<"Ticket"> | number | null
+    pos_machine_id?: IntNullableFilter<"Ticket"> | number | null
+    payment_mode?: EnumPaymentModeFilter<"Ticket"> | $Enums.PaymentMode
     bus?: XOR<BusScalarRelationFilter, BusWhereInput>
+    posMachine?: XOR<POSMachineNullableScalarRelationFilter, POSMachineWhereInput> | null
   }
 
   export type TicketOrderByWithRelationInput = {
@@ -12631,7 +14041,11 @@ export namespace Prisma {
     issue_time?: SortOrder
     journey_date?: SortOrder
     status?: SortOrder
+    seat_no?: SortOrderInput | SortOrder
+    pos_machine_id?: SortOrderInput | SortOrder
+    payment_mode?: SortOrder
     bus?: BusOrderByWithRelationInput
+    posMachine?: POSMachineOrderByWithRelationInput
     _relevance?: TicketOrderByRelevanceInput
   }
 
@@ -12651,7 +14065,11 @@ export namespace Prisma {
     issue_time?: DateTimeFilter<"Ticket"> | Date | string
     journey_date?: DateTimeFilter<"Ticket"> | Date | string
     status?: EnumTicketStatusFilter<"Ticket"> | $Enums.TicketStatus
+    seat_no?: IntNullableFilter<"Ticket"> | number | null
+    pos_machine_id?: IntNullableFilter<"Ticket"> | number | null
+    payment_mode?: EnumPaymentModeFilter<"Ticket"> | $Enums.PaymentMode
     bus?: XOR<BusScalarRelationFilter, BusWhereInput>
+    posMachine?: XOR<POSMachineNullableScalarRelationFilter, POSMachineWhereInput> | null
   }, "id" | "ticket_number">
 
   export type TicketOrderByWithAggregationInput = {
@@ -12667,6 +14085,9 @@ export namespace Prisma {
     issue_time?: SortOrder
     journey_date?: SortOrder
     status?: SortOrder
+    seat_no?: SortOrderInput | SortOrder
+    pos_machine_id?: SortOrderInput | SortOrder
+    payment_mode?: SortOrder
     _count?: TicketCountOrderByAggregateInput
     _avg?: TicketAvgOrderByAggregateInput
     _max?: TicketMaxOrderByAggregateInput
@@ -12690,6 +14111,9 @@ export namespace Prisma {
     issue_time?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
     journey_date?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
     status?: EnumTicketStatusWithAggregatesFilter<"Ticket"> | $Enums.TicketStatus
+    seat_no?: IntNullableWithAggregatesFilter<"Ticket"> | number | null
+    pos_machine_id?: IntNullableWithAggregatesFilter<"Ticket"> | number | null
+    payment_mode?: EnumPaymentModeWithAggregatesFilter<"Ticket"> | $Enums.PaymentMode
   }
 
   export type UserWhereInput = {
@@ -12873,6 +14297,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateInput = {
@@ -12894,6 +14319,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusUpdateInput = {
@@ -12914,6 +14340,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateInput = {
@@ -12935,6 +14362,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type BusCreateManyInput = {
@@ -13304,6 +14732,83 @@ export namespace Prisma {
     delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type POSMachineCreateInput = {
+    serial_no: string
+    assigned?: boolean
+    assigned_at?: Date | string | null
+    status?: $Enums.POSStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    bus?: BusCreateNestedOneWithoutPosMachinesInput
+    tickets?: TicketCreateNestedManyWithoutPosMachineInput
+  }
+
+  export type POSMachineUncheckedCreateInput = {
+    id?: number
+    serial_no: string
+    assigned?: boolean
+    assigned_at?: Date | string | null
+    status?: $Enums.POSStatus
+    bus_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutPosMachineInput
+  }
+
+  export type POSMachineUpdateInput = {
+    serial_no?: StringFieldUpdateOperationsInput | string
+    assigned?: BoolFieldUpdateOperationsInput | boolean
+    assigned_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumPOSStatusFieldUpdateOperationsInput | $Enums.POSStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bus?: BusUpdateOneWithoutPosMachinesNestedInput
+    tickets?: TicketUpdateManyWithoutPosMachineNestedInput
+  }
+
+  export type POSMachineUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serial_no?: StringFieldUpdateOperationsInput | string
+    assigned?: BoolFieldUpdateOperationsInput | boolean
+    assigned_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumPOSStatusFieldUpdateOperationsInput | $Enums.POSStatus
+    bus_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutPosMachineNestedInput
+  }
+
+  export type POSMachineCreateManyInput = {
+    id?: number
+    serial_no: string
+    assigned?: boolean
+    assigned_at?: Date | string | null
+    status?: $Enums.POSStatus
+    bus_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type POSMachineUpdateManyMutationInput = {
+    serial_no?: StringFieldUpdateOperationsInput | string
+    assigned?: BoolFieldUpdateOperationsInput | boolean
+    assigned_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumPOSStatusFieldUpdateOperationsInput | $Enums.POSStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type POSMachineUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serial_no?: StringFieldUpdateOperationsInput | string
+    assigned?: BoolFieldUpdateOperationsInput | boolean
+    assigned_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumPOSStatusFieldUpdateOperationsInput | $Enums.POSStatus
+    bus_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type DailyReportCreateInput = {
     report_date: Date | string
     total_passengers?: number
@@ -13500,7 +15005,10 @@ export namespace Prisma {
     issue_time?: Date | string
     journey_date: Date | string
     status?: $Enums.TicketStatus
+    seat_no?: number | null
+    payment_mode?: $Enums.PaymentMode
     bus: BusCreateNestedOneWithoutTicketsInput
+    posMachine?: POSMachineCreateNestedOneWithoutTicketsInput
   }
 
   export type TicketUncheckedCreateInput = {
@@ -13516,6 +15024,9 @@ export namespace Prisma {
     issue_time?: Date | string
     journey_date: Date | string
     status?: $Enums.TicketStatus
+    seat_no?: number | null
+    pos_machine_id?: number | null
+    payment_mode?: $Enums.PaymentMode
   }
 
   export type TicketUpdateInput = {
@@ -13529,7 +15040,10 @@ export namespace Prisma {
     issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
     journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
     bus?: BusUpdateOneRequiredWithoutTicketsNestedInput
+    posMachine?: POSMachineUpdateOneWithoutTicketsNestedInput
   }
 
   export type TicketUncheckedUpdateInput = {
@@ -13545,6 +15059,9 @@ export namespace Prisma {
     issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
     journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    pos_machine_id?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
   }
 
   export type TicketCreateManyInput = {
@@ -13560,6 +15077,9 @@ export namespace Prisma {
     issue_time?: Date | string
     journey_date: Date | string
     status?: $Enums.TicketStatus
+    seat_no?: number | null
+    pos_machine_id?: number | null
+    payment_mode?: $Enums.PaymentMode
   }
 
   export type TicketUpdateManyMutationInput = {
@@ -13573,6 +15093,8 @@ export namespace Prisma {
     issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
     journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
   }
 
   export type TicketUncheckedUpdateManyInput = {
@@ -13588,6 +15110,9 @@ export namespace Prisma {
     issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
     journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    pos_machine_id?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
   }
 
   export type UserCreateInput = {
@@ -13894,6 +15419,12 @@ export namespace Prisma {
     none?: DailyReportWhereInput
   }
 
+  export type POSMachineListRelationFilter = {
+    every?: POSMachineWhereInput
+    some?: POSMachineWhereInput
+    none?: POSMachineWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -13908,6 +15439,10 @@ export namespace Prisma {
   }
 
   export type DailyReportOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type POSMachineOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14379,6 +15914,77 @@ export namespace Prisma {
     _max?: NestedEnumPackageStatusFilter<$PrismaModel>
   }
 
+  export type EnumPOSStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.POSStatus | EnumPOSStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.POSStatus[]
+    notIn?: $Enums.POSStatus[]
+    not?: NestedEnumPOSStatusFilter<$PrismaModel> | $Enums.POSStatus
+  }
+
+  export type BusNullableScalarRelationFilter = {
+    is?: BusWhereInput | null
+    isNot?: BusWhereInput | null
+  }
+
+  export type POSMachineOrderByRelevanceInput = {
+    fields: POSMachineOrderByRelevanceFieldEnum | POSMachineOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type POSMachineCountOrderByAggregateInput = {
+    id?: SortOrder
+    serial_no?: SortOrder
+    assigned?: SortOrder
+    assigned_at?: SortOrder
+    status?: SortOrder
+    bus_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type POSMachineAvgOrderByAggregateInput = {
+    id?: SortOrder
+    bus_id?: SortOrder
+  }
+
+  export type POSMachineMaxOrderByAggregateInput = {
+    id?: SortOrder
+    serial_no?: SortOrder
+    assigned?: SortOrder
+    assigned_at?: SortOrder
+    status?: SortOrder
+    bus_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type POSMachineMinOrderByAggregateInput = {
+    id?: SortOrder
+    serial_no?: SortOrder
+    assigned?: SortOrder
+    assigned_at?: SortOrder
+    status?: SortOrder
+    bus_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type POSMachineSumOrderByAggregateInput = {
+    id?: SortOrder
+    bus_id?: SortOrder
+  }
+
+  export type EnumPOSStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.POSStatus | EnumPOSStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.POSStatus[]
+    notIn?: $Enums.POSStatus[]
+    not?: NestedEnumPOSStatusWithAggregatesFilter<$PrismaModel> | $Enums.POSStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPOSStatusFilter<$PrismaModel>
+    _max?: NestedEnumPOSStatusFilter<$PrismaModel>
+  }
+
   export type DailyReportUnique_bus_dateCompoundUniqueInput = {
     bus_id: number
     report_date: Date | string
@@ -14570,6 +16176,18 @@ export namespace Prisma {
     not?: NestedEnumTicketStatusFilter<$PrismaModel> | $Enums.TicketStatus
   }
 
+  export type EnumPaymentModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMode[]
+    notIn?: $Enums.PaymentMode[]
+    not?: NestedEnumPaymentModeFilter<$PrismaModel> | $Enums.PaymentMode
+  }
+
+  export type POSMachineNullableScalarRelationFilter = {
+    is?: POSMachineWhereInput | null
+    isNot?: POSMachineWhereInput | null
+  }
+
   export type TicketOrderByRelevanceInput = {
     fields: TicketOrderByRelevanceFieldEnum | TicketOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -14589,12 +16207,17 @@ export namespace Prisma {
     issue_time?: SortOrder
     journey_date?: SortOrder
     status?: SortOrder
+    seat_no?: SortOrder
+    pos_machine_id?: SortOrder
+    payment_mode?: SortOrder
   }
 
   export type TicketAvgOrderByAggregateInput = {
     id?: SortOrder
     bus_id?: SortOrder
     fare?: SortOrder
+    seat_no?: SortOrder
+    pos_machine_id?: SortOrder
   }
 
   export type TicketMaxOrderByAggregateInput = {
@@ -14610,6 +16233,9 @@ export namespace Prisma {
     issue_time?: SortOrder
     journey_date?: SortOrder
     status?: SortOrder
+    seat_no?: SortOrder
+    pos_machine_id?: SortOrder
+    payment_mode?: SortOrder
   }
 
   export type TicketMinOrderByAggregateInput = {
@@ -14625,12 +16251,17 @@ export namespace Prisma {
     issue_time?: SortOrder
     journey_date?: SortOrder
     status?: SortOrder
+    seat_no?: SortOrder
+    pos_machine_id?: SortOrder
+    payment_mode?: SortOrder
   }
 
   export type TicketSumOrderByAggregateInput = {
     id?: SortOrder
     bus_id?: SortOrder
     fare?: SortOrder
+    seat_no?: SortOrder
+    pos_machine_id?: SortOrder
   }
 
   export type EnumPassengerTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -14651,6 +16282,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTicketStatusFilter<$PrismaModel>
     _max?: NestedEnumTicketStatusFilter<$PrismaModel>
+  }
+
+  export type EnumPaymentModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMode[]
+    notIn?: $Enums.PaymentMode[]
+    not?: NestedEnumPaymentModeWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentModeFilter<$PrismaModel>
+    _max?: NestedEnumPaymentModeFilter<$PrismaModel>
   }
 
   export type EnumRoleFilter<$PrismaModel = never> = {
@@ -14871,6 +16512,13 @@ export namespace Prisma {
     connect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[]
   }
 
+  export type POSMachineCreateNestedManyWithoutBusInput = {
+    create?: XOR<POSMachineCreateWithoutBusInput, POSMachineUncheckedCreateWithoutBusInput> | POSMachineCreateWithoutBusInput[] | POSMachineUncheckedCreateWithoutBusInput[]
+    connectOrCreate?: POSMachineCreateOrConnectWithoutBusInput | POSMachineCreateOrConnectWithoutBusInput[]
+    createMany?: POSMachineCreateManyBusInputEnvelope
+    connect?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
+  }
+
   export type TicketUncheckedCreateNestedManyWithoutBusInput = {
     create?: XOR<TicketCreateWithoutBusInput, TicketUncheckedCreateWithoutBusInput> | TicketCreateWithoutBusInput[] | TicketUncheckedCreateWithoutBusInput[]
     connectOrCreate?: TicketCreateOrConnectWithoutBusInput | TicketCreateOrConnectWithoutBusInput[]
@@ -14890,6 +16538,13 @@ export namespace Prisma {
     connectOrCreate?: DailyReportCreateOrConnectWithoutBusInput | DailyReportCreateOrConnectWithoutBusInput[]
     createMany?: DailyReportCreateManyBusInputEnvelope
     connect?: DailyReportWhereUniqueInput | DailyReportWhereUniqueInput[]
+  }
+
+  export type POSMachineUncheckedCreateNestedManyWithoutBusInput = {
+    create?: XOR<POSMachineCreateWithoutBusInput, POSMachineUncheckedCreateWithoutBusInput> | POSMachineCreateWithoutBusInput[] | POSMachineUncheckedCreateWithoutBusInput[]
+    connectOrCreate?: POSMachineCreateOrConnectWithoutBusInput | POSMachineCreateOrConnectWithoutBusInput[]
+    createMany?: POSMachineCreateManyBusInputEnvelope
+    connect?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -15008,6 +16663,20 @@ export namespace Prisma {
     deleteMany?: DailyReportScalarWhereInput | DailyReportScalarWhereInput[]
   }
 
+  export type POSMachineUpdateManyWithoutBusNestedInput = {
+    create?: XOR<POSMachineCreateWithoutBusInput, POSMachineUncheckedCreateWithoutBusInput> | POSMachineCreateWithoutBusInput[] | POSMachineUncheckedCreateWithoutBusInput[]
+    connectOrCreate?: POSMachineCreateOrConnectWithoutBusInput | POSMachineCreateOrConnectWithoutBusInput[]
+    upsert?: POSMachineUpsertWithWhereUniqueWithoutBusInput | POSMachineUpsertWithWhereUniqueWithoutBusInput[]
+    createMany?: POSMachineCreateManyBusInputEnvelope
+    set?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
+    disconnect?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
+    delete?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
+    connect?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
+    update?: POSMachineUpdateWithWhereUniqueWithoutBusInput | POSMachineUpdateWithWhereUniqueWithoutBusInput[]
+    updateMany?: POSMachineUpdateManyWithWhereWithoutBusInput | POSMachineUpdateManyWithWhereWithoutBusInput[]
+    deleteMany?: POSMachineScalarWhereInput | POSMachineScalarWhereInput[]
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -15056,6 +16725,20 @@ export namespace Prisma {
     update?: DailyReportUpdateWithWhereUniqueWithoutBusInput | DailyReportUpdateWithWhereUniqueWithoutBusInput[]
     updateMany?: DailyReportUpdateManyWithWhereWithoutBusInput | DailyReportUpdateManyWithWhereWithoutBusInput[]
     deleteMany?: DailyReportScalarWhereInput | DailyReportScalarWhereInput[]
+  }
+
+  export type POSMachineUncheckedUpdateManyWithoutBusNestedInput = {
+    create?: XOR<POSMachineCreateWithoutBusInput, POSMachineUncheckedCreateWithoutBusInput> | POSMachineCreateWithoutBusInput[] | POSMachineUncheckedCreateWithoutBusInput[]
+    connectOrCreate?: POSMachineCreateOrConnectWithoutBusInput | POSMachineCreateOrConnectWithoutBusInput[]
+    upsert?: POSMachineUpsertWithWhereUniqueWithoutBusInput | POSMachineUpsertWithWhereUniqueWithoutBusInput[]
+    createMany?: POSMachineCreateManyBusInputEnvelope
+    set?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
+    disconnect?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
+    delete?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
+    connect?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
+    update?: POSMachineUpdateWithWhereUniqueWithoutBusInput | POSMachineUpdateWithWhereUniqueWithoutBusInput[]
+    updateMany?: POSMachineUpdateManyWithWhereWithoutBusInput | POSMachineUpdateManyWithWhereWithoutBusInput[]
+    deleteMany?: POSMachineScalarWhereInput | POSMachineScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutConductorsInput = {
@@ -15200,6 +16883,68 @@ export namespace Prisma {
     update?: XOR<XOR<BusUpdateToOneWithWhereWithoutPackagesInput, BusUpdateWithoutPackagesInput>, BusUncheckedUpdateWithoutPackagesInput>
   }
 
+  export type BusCreateNestedOneWithoutPosMachinesInput = {
+    create?: XOR<BusCreateWithoutPosMachinesInput, BusUncheckedCreateWithoutPosMachinesInput>
+    connectOrCreate?: BusCreateOrConnectWithoutPosMachinesInput
+    connect?: BusWhereUniqueInput
+  }
+
+  export type TicketCreateNestedManyWithoutPosMachineInput = {
+    create?: XOR<TicketCreateWithoutPosMachineInput, TicketUncheckedCreateWithoutPosMachineInput> | TicketCreateWithoutPosMachineInput[] | TicketUncheckedCreateWithoutPosMachineInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutPosMachineInput | TicketCreateOrConnectWithoutPosMachineInput[]
+    createMany?: TicketCreateManyPosMachineInputEnvelope
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+  }
+
+  export type TicketUncheckedCreateNestedManyWithoutPosMachineInput = {
+    create?: XOR<TicketCreateWithoutPosMachineInput, TicketUncheckedCreateWithoutPosMachineInput> | TicketCreateWithoutPosMachineInput[] | TicketUncheckedCreateWithoutPosMachineInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutPosMachineInput | TicketCreateOrConnectWithoutPosMachineInput[]
+    createMany?: TicketCreateManyPosMachineInputEnvelope
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+  }
+
+  export type EnumPOSStatusFieldUpdateOperationsInput = {
+    set?: $Enums.POSStatus
+  }
+
+  export type BusUpdateOneWithoutPosMachinesNestedInput = {
+    create?: XOR<BusCreateWithoutPosMachinesInput, BusUncheckedCreateWithoutPosMachinesInput>
+    connectOrCreate?: BusCreateOrConnectWithoutPosMachinesInput
+    upsert?: BusUpsertWithoutPosMachinesInput
+    disconnect?: BusWhereInput | boolean
+    delete?: BusWhereInput | boolean
+    connect?: BusWhereUniqueInput
+    update?: XOR<XOR<BusUpdateToOneWithWhereWithoutPosMachinesInput, BusUpdateWithoutPosMachinesInput>, BusUncheckedUpdateWithoutPosMachinesInput>
+  }
+
+  export type TicketUpdateManyWithoutPosMachineNestedInput = {
+    create?: XOR<TicketCreateWithoutPosMachineInput, TicketUncheckedCreateWithoutPosMachineInput> | TicketCreateWithoutPosMachineInput[] | TicketUncheckedCreateWithoutPosMachineInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutPosMachineInput | TicketCreateOrConnectWithoutPosMachineInput[]
+    upsert?: TicketUpsertWithWhereUniqueWithoutPosMachineInput | TicketUpsertWithWhereUniqueWithoutPosMachineInput[]
+    createMany?: TicketCreateManyPosMachineInputEnvelope
+    set?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    update?: TicketUpdateWithWhereUniqueWithoutPosMachineInput | TicketUpdateWithWhereUniqueWithoutPosMachineInput[]
+    updateMany?: TicketUpdateManyWithWhereWithoutPosMachineInput | TicketUpdateManyWithWhereWithoutPosMachineInput[]
+    deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
+  }
+
+  export type TicketUncheckedUpdateManyWithoutPosMachineNestedInput = {
+    create?: XOR<TicketCreateWithoutPosMachineInput, TicketUncheckedCreateWithoutPosMachineInput> | TicketCreateWithoutPosMachineInput[] | TicketUncheckedCreateWithoutPosMachineInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutPosMachineInput | TicketCreateOrConnectWithoutPosMachineInput[]
+    upsert?: TicketUpsertWithWhereUniqueWithoutPosMachineInput | TicketUpsertWithWhereUniqueWithoutPosMachineInput[]
+    createMany?: TicketCreateManyPosMachineInputEnvelope
+    set?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    update?: TicketUpdateWithWhereUniqueWithoutPosMachineInput | TicketUpdateWithWhereUniqueWithoutPosMachineInput[]
+    updateMany?: TicketUpdateManyWithWhereWithoutPosMachineInput | TicketUpdateManyWithWhereWithoutPosMachineInput[]
+    deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
+  }
+
   export type BusCreateNestedOneWithoutDailyReportsInput = {
     create?: XOR<BusCreateWithoutDailyReportsInput, BusUncheckedCreateWithoutDailyReportsInput>
     connectOrCreate?: BusCreateOrConnectWithoutDailyReportsInput
@@ -15276,6 +17021,12 @@ export namespace Prisma {
     connect?: BusWhereUniqueInput
   }
 
+  export type POSMachineCreateNestedOneWithoutTicketsInput = {
+    create?: XOR<POSMachineCreateWithoutTicketsInput, POSMachineUncheckedCreateWithoutTicketsInput>
+    connectOrCreate?: POSMachineCreateOrConnectWithoutTicketsInput
+    connect?: POSMachineWhereUniqueInput
+  }
+
   export type EnumPassengerTypeFieldUpdateOperationsInput = {
     set?: $Enums.PassengerType
   }
@@ -15284,12 +17035,26 @@ export namespace Prisma {
     set?: $Enums.TicketStatus
   }
 
+  export type EnumPaymentModeFieldUpdateOperationsInput = {
+    set?: $Enums.PaymentMode
+  }
+
   export type BusUpdateOneRequiredWithoutTicketsNestedInput = {
     create?: XOR<BusCreateWithoutTicketsInput, BusUncheckedCreateWithoutTicketsInput>
     connectOrCreate?: BusCreateOrConnectWithoutTicketsInput
     upsert?: BusUpsertWithoutTicketsInput
     connect?: BusWhereUniqueInput
     update?: XOR<XOR<BusUpdateToOneWithWhereWithoutTicketsInput, BusUpdateWithoutTicketsInput>, BusUncheckedUpdateWithoutTicketsInput>
+  }
+
+  export type POSMachineUpdateOneWithoutTicketsNestedInput = {
+    create?: XOR<POSMachineCreateWithoutTicketsInput, POSMachineUncheckedCreateWithoutTicketsInput>
+    connectOrCreate?: POSMachineCreateOrConnectWithoutTicketsInput
+    upsert?: POSMachineUpsertWithoutTicketsInput
+    disconnect?: POSMachineWhereInput | boolean
+    delete?: POSMachineWhereInput | boolean
+    connect?: POSMachineWhereUniqueInput
+    update?: XOR<XOR<POSMachineUpdateToOneWithWhereWithoutTicketsInput, POSMachineUpdateWithoutTicketsInput>, POSMachineUncheckedUpdateWithoutTicketsInput>
   }
 
   export type DriverCreateNestedManyWithoutUserInput = {
@@ -15816,6 +17581,23 @@ export namespace Prisma {
     _min?: NestedEnumPackageStatusFilter<$PrismaModel>
     _max?: NestedEnumPackageStatusFilter<$PrismaModel>
   }
+
+  export type NestedEnumPOSStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.POSStatus | EnumPOSStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.POSStatus[]
+    notIn?: $Enums.POSStatus[]
+    not?: NestedEnumPOSStatusFilter<$PrismaModel> | $Enums.POSStatus
+  }
+
+  export type NestedEnumPOSStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.POSStatus | EnumPOSStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.POSStatus[]
+    notIn?: $Enums.POSStatus[]
+    not?: NestedEnumPOSStatusWithAggregatesFilter<$PrismaModel> | $Enums.POSStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPOSStatusFilter<$PrismaModel>
+    _max?: NestedEnumPOSStatusFilter<$PrismaModel>
+  }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -15854,6 +17636,13 @@ export namespace Prisma {
     not?: NestedEnumTicketStatusFilter<$PrismaModel> | $Enums.TicketStatus
   }
 
+  export type NestedEnumPaymentModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMode[]
+    notIn?: $Enums.PaymentMode[]
+    not?: NestedEnumPaymentModeFilter<$PrismaModel> | $Enums.PaymentMode
+  }
+
   export type NestedEnumPassengerTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PassengerType | EnumPassengerTypeFieldRefInput<$PrismaModel>
     in?: $Enums.PassengerType[]
@@ -15872,6 +17661,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTicketStatusFilter<$PrismaModel>
     _max?: NestedEnumTicketStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPaymentModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMode | EnumPaymentModeFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMode[]
+    notIn?: $Enums.PaymentMode[]
+    not?: NestedEnumPaymentModeWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentModeFilter<$PrismaModel>
+    _max?: NestedEnumPaymentModeFilter<$PrismaModel>
   }
 
   export type NestedEnumRoleFilter<$PrismaModel = never> = {
@@ -16053,6 +17852,9 @@ export namespace Prisma {
     issue_time?: Date | string
     journey_date: Date | string
     status?: $Enums.TicketStatus
+    seat_no?: number | null
+    payment_mode?: $Enums.PaymentMode
+    posMachine?: POSMachineCreateNestedOneWithoutTicketsInput
   }
 
   export type TicketUncheckedCreateWithoutBusInput = {
@@ -16067,6 +17869,9 @@ export namespace Prisma {
     issue_time?: Date | string
     journey_date: Date | string
     status?: $Enums.TicketStatus
+    seat_no?: number | null
+    pos_machine_id?: number | null
+    payment_mode?: $Enums.PaymentMode
   }
 
   export type TicketCreateOrConnectWithoutBusInput = {
@@ -16152,6 +17957,37 @@ export namespace Prisma {
 
   export type DailyReportCreateManyBusInputEnvelope = {
     data: DailyReportCreateManyBusInput | DailyReportCreateManyBusInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type POSMachineCreateWithoutBusInput = {
+    serial_no: string
+    assigned?: boolean
+    assigned_at?: Date | string | null
+    status?: $Enums.POSStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketCreateNestedManyWithoutPosMachineInput
+  }
+
+  export type POSMachineUncheckedCreateWithoutBusInput = {
+    id?: number
+    serial_no: string
+    assigned?: boolean
+    assigned_at?: Date | string | null
+    status?: $Enums.POSStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutPosMachineInput
+  }
+
+  export type POSMachineCreateOrConnectWithoutBusInput = {
+    where: POSMachineWhereUniqueInput
+    create: XOR<POSMachineCreateWithoutBusInput, POSMachineUncheckedCreateWithoutBusInput>
+  }
+
+  export type POSMachineCreateManyBusInputEnvelope = {
+    data: POSMachineCreateManyBusInput | POSMachineCreateManyBusInput[]
     skipDuplicates?: boolean
   }
 
@@ -16345,6 +18181,9 @@ export namespace Prisma {
     issue_time?: DateTimeFilter<"Ticket"> | Date | string
     journey_date?: DateTimeFilter<"Ticket"> | Date | string
     status?: EnumTicketStatusFilter<"Ticket"> | $Enums.TicketStatus
+    seat_no?: IntNullableFilter<"Ticket"> | number | null
+    pos_machine_id?: IntNullableFilter<"Ticket"> | number | null
+    payment_mode?: EnumPaymentModeFilter<"Ticket"> | $Enums.PaymentMode
   }
 
   export type PackageUpsertWithWhereUniqueWithoutBusInput = {
@@ -16416,6 +18255,36 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"DailyReport"> | Date | string
   }
 
+  export type POSMachineUpsertWithWhereUniqueWithoutBusInput = {
+    where: POSMachineWhereUniqueInput
+    update: XOR<POSMachineUpdateWithoutBusInput, POSMachineUncheckedUpdateWithoutBusInput>
+    create: XOR<POSMachineCreateWithoutBusInput, POSMachineUncheckedCreateWithoutBusInput>
+  }
+
+  export type POSMachineUpdateWithWhereUniqueWithoutBusInput = {
+    where: POSMachineWhereUniqueInput
+    data: XOR<POSMachineUpdateWithoutBusInput, POSMachineUncheckedUpdateWithoutBusInput>
+  }
+
+  export type POSMachineUpdateManyWithWhereWithoutBusInput = {
+    where: POSMachineScalarWhereInput
+    data: XOR<POSMachineUpdateManyMutationInput, POSMachineUncheckedUpdateManyWithoutBusInput>
+  }
+
+  export type POSMachineScalarWhereInput = {
+    AND?: POSMachineScalarWhereInput | POSMachineScalarWhereInput[]
+    OR?: POSMachineScalarWhereInput[]
+    NOT?: POSMachineScalarWhereInput | POSMachineScalarWhereInput[]
+    id?: IntFilter<"POSMachine"> | number
+    serial_no?: StringFilter<"POSMachine"> | string
+    assigned?: BoolFilter<"POSMachine"> | boolean
+    assigned_at?: DateTimeNullableFilter<"POSMachine"> | Date | string | null
+    status?: EnumPOSStatusFilter<"POSMachine"> | $Enums.POSStatus
+    bus_id?: IntNullableFilter<"POSMachine"> | number | null
+    created_at?: DateTimeFilter<"POSMachine"> | Date | string
+    updated_at?: DateTimeFilter<"POSMachine"> | Date | string
+  }
+
   export type UserCreateWithoutConductorsInput = {
     name: string
     email?: string | null
@@ -16471,6 +18340,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutConductorInput = {
@@ -16491,6 +18361,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutConductorInput = {
@@ -16639,6 +18510,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutDriverInput = {
@@ -16659,6 +18531,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutDriverInput = {
@@ -16748,6 +18621,7 @@ export namespace Prisma {
     conductor?: ConductorCreateNestedOneWithoutBusesInput
     tickets?: TicketCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutPackagesInput = {
@@ -16768,6 +18642,7 @@ export namespace Prisma {
     updated_at?: Date | string
     tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutPackagesInput = {
@@ -16803,6 +18678,7 @@ export namespace Prisma {
     conductor?: ConductorUpdateOneWithoutBusesNestedInput
     tickets?: TicketUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutPackagesInput = {
@@ -16823,6 +18699,164 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+  }
+
+  export type BusCreateWithoutPosMachinesInput = {
+    bus_number: string
+    capacity?: number
+    status?: $Enums.BusStatus
+    current_location?: string | null
+    fuel_level?: Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: Date | string | null
+    insurance_expiry?: Date | string | null
+    permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutBusesInput
+    route?: RouteCreateNestedOneWithoutBusesInput
+    driver?: DriverCreateNestedOneWithoutBusesInput
+    conductor?: ConductorCreateNestedOneWithoutBusesInput
+    tickets?: TicketCreateNestedManyWithoutBusInput
+    packages?: PackageCreateNestedManyWithoutBusInput
+    dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+  }
+
+  export type BusUncheckedCreateWithoutPosMachinesInput = {
+    id?: number
+    user_id: number
+    bus_number: string
+    capacity?: number
+    route_id?: number | null
+    driver_id?: number | null
+    conductor_id?: number | null
+    status?: $Enums.BusStatus
+    current_location?: string | null
+    fuel_level?: Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: Date | string | null
+    insurance_expiry?: Date | string | null
+    permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
+    packages?: PackageUncheckedCreateNestedManyWithoutBusInput
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+  }
+
+  export type BusCreateOrConnectWithoutPosMachinesInput = {
+    where: BusWhereUniqueInput
+    create: XOR<BusCreateWithoutPosMachinesInput, BusUncheckedCreateWithoutPosMachinesInput>
+  }
+
+  export type TicketCreateWithoutPosMachineInput = {
+    ticket_number: string
+    passenger_name?: string | null
+    passenger_phone?: string | null
+    from_stop: string
+    to_stop: string
+    passenger_type?: $Enums.PassengerType
+    fare: Decimal | DecimalJsLike | number | string
+    issue_time?: Date | string
+    journey_date: Date | string
+    status?: $Enums.TicketStatus
+    seat_no?: number | null
+    payment_mode?: $Enums.PaymentMode
+    bus: BusCreateNestedOneWithoutTicketsInput
+  }
+
+  export type TicketUncheckedCreateWithoutPosMachineInput = {
+    id?: number
+    bus_id: number
+    ticket_number: string
+    passenger_name?: string | null
+    passenger_phone?: string | null
+    from_stop: string
+    to_stop: string
+    passenger_type?: $Enums.PassengerType
+    fare: Decimal | DecimalJsLike | number | string
+    issue_time?: Date | string
+    journey_date: Date | string
+    status?: $Enums.TicketStatus
+    seat_no?: number | null
+    payment_mode?: $Enums.PaymentMode
+  }
+
+  export type TicketCreateOrConnectWithoutPosMachineInput = {
+    where: TicketWhereUniqueInput
+    create: XOR<TicketCreateWithoutPosMachineInput, TicketUncheckedCreateWithoutPosMachineInput>
+  }
+
+  export type TicketCreateManyPosMachineInputEnvelope = {
+    data: TicketCreateManyPosMachineInput | TicketCreateManyPosMachineInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BusUpsertWithoutPosMachinesInput = {
+    update: XOR<BusUpdateWithoutPosMachinesInput, BusUncheckedUpdateWithoutPosMachinesInput>
+    create: XOR<BusCreateWithoutPosMachinesInput, BusUncheckedCreateWithoutPosMachinesInput>
+    where?: BusWhereInput
+  }
+
+  export type BusUpdateToOneWithWhereWithoutPosMachinesInput = {
+    where?: BusWhereInput
+    data: XOR<BusUpdateWithoutPosMachinesInput, BusUncheckedUpdateWithoutPosMachinesInput>
+  }
+
+  export type BusUpdateWithoutPosMachinesInput = {
+    bus_number?: StringFieldUpdateOperationsInput | string
+    capacity?: IntFieldUpdateOperationsInput | number
+    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
+    current_location?: NullableStringFieldUpdateOperationsInput | string | null
+    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBusesNestedInput
+    route?: RouteUpdateOneWithoutBusesNestedInput
+    driver?: DriverUpdateOneWithoutBusesNestedInput
+    conductor?: ConductorUpdateOneWithoutBusesNestedInput
+    tickets?: TicketUpdateManyWithoutBusNestedInput
+    packages?: PackageUpdateManyWithoutBusNestedInput
+    dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+  }
+
+  export type BusUncheckedUpdateWithoutPosMachinesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    bus_number?: StringFieldUpdateOperationsInput | string
+    capacity?: IntFieldUpdateOperationsInput | number
+    route_id?: NullableIntFieldUpdateOperationsInput | number | null
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
+    current_location?: NullableStringFieldUpdateOperationsInput | string | null
+    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
+    packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+  }
+
+  export type TicketUpsertWithWhereUniqueWithoutPosMachineInput = {
+    where: TicketWhereUniqueInput
+    update: XOR<TicketUpdateWithoutPosMachineInput, TicketUncheckedUpdateWithoutPosMachineInput>
+    create: XOR<TicketCreateWithoutPosMachineInput, TicketUncheckedCreateWithoutPosMachineInput>
+  }
+
+  export type TicketUpdateWithWhereUniqueWithoutPosMachineInput = {
+    where: TicketWhereUniqueInput
+    data: XOR<TicketUpdateWithoutPosMachineInput, TicketUncheckedUpdateWithoutPosMachineInput>
+  }
+
+  export type TicketUpdateManyWithWhereWithoutPosMachineInput = {
+    where: TicketScalarWhereInput
+    data: XOR<TicketUpdateManyMutationInput, TicketUncheckedUpdateManyWithoutPosMachineInput>
   }
 
   export type BusCreateWithoutDailyReportsInput = {
@@ -16842,6 +18876,7 @@ export namespace Prisma {
     conductor?: ConductorCreateNestedOneWithoutBusesInput
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutDailyReportsInput = {
@@ -16862,6 +18897,7 @@ export namespace Prisma {
     updated_at?: Date | string
     tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutDailyReportsInput = {
@@ -16897,6 +18933,7 @@ export namespace Prisma {
     conductor?: ConductorUpdateOneWithoutBusesNestedInput
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutDailyReportsInput = {
@@ -16917,6 +18954,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type UserCreateWithoutRoutesInput = {
@@ -16974,6 +19012,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutRouteInput = {
@@ -16994,6 +19033,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutRouteInput = {
@@ -17083,6 +19123,7 @@ export namespace Prisma {
     conductor?: ConductorCreateNestedOneWithoutBusesInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutTicketsInput = {
@@ -17103,11 +19144,38 @@ export namespace Prisma {
     updated_at?: Date | string
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutTicketsInput = {
     where: BusWhereUniqueInput
     create: XOR<BusCreateWithoutTicketsInput, BusUncheckedCreateWithoutTicketsInput>
+  }
+
+  export type POSMachineCreateWithoutTicketsInput = {
+    serial_no: string
+    assigned?: boolean
+    assigned_at?: Date | string | null
+    status?: $Enums.POSStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    bus?: BusCreateNestedOneWithoutPosMachinesInput
+  }
+
+  export type POSMachineUncheckedCreateWithoutTicketsInput = {
+    id?: number
+    serial_no: string
+    assigned?: boolean
+    assigned_at?: Date | string | null
+    status?: $Enums.POSStatus
+    bus_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type POSMachineCreateOrConnectWithoutTicketsInput = {
+    where: POSMachineWhereUniqueInput
+    create: XOR<POSMachineCreateWithoutTicketsInput, POSMachineUncheckedCreateWithoutTicketsInput>
   }
 
   export type BusUpsertWithoutTicketsInput = {
@@ -17138,6 +19206,7 @@ export namespace Prisma {
     conductor?: ConductorUpdateOneWithoutBusesNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutTicketsInput = {
@@ -17158,6 +19227,39 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+  }
+
+  export type POSMachineUpsertWithoutTicketsInput = {
+    update: XOR<POSMachineUpdateWithoutTicketsInput, POSMachineUncheckedUpdateWithoutTicketsInput>
+    create: XOR<POSMachineCreateWithoutTicketsInput, POSMachineUncheckedCreateWithoutTicketsInput>
+    where?: POSMachineWhereInput
+  }
+
+  export type POSMachineUpdateToOneWithWhereWithoutTicketsInput = {
+    where?: POSMachineWhereInput
+    data: XOR<POSMachineUpdateWithoutTicketsInput, POSMachineUncheckedUpdateWithoutTicketsInput>
+  }
+
+  export type POSMachineUpdateWithoutTicketsInput = {
+    serial_no?: StringFieldUpdateOperationsInput | string
+    assigned?: BoolFieldUpdateOperationsInput | boolean
+    assigned_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumPOSStatusFieldUpdateOperationsInput | $Enums.POSStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bus?: BusUpdateOneWithoutPosMachinesNestedInput
+  }
+
+  export type POSMachineUncheckedUpdateWithoutTicketsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serial_no?: StringFieldUpdateOperationsInput | string
+    assigned?: BoolFieldUpdateOperationsInput | boolean
+    assigned_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumPOSStatusFieldUpdateOperationsInput | $Enums.POSStatus
+    bus_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DriverCreateWithoutUserInput = {
@@ -17288,6 +19390,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutUserInput = {
@@ -17308,6 +19411,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutUserInput = {
@@ -17585,6 +19689,9 @@ export namespace Prisma {
     issue_time?: Date | string
     journey_date: Date | string
     status?: $Enums.TicketStatus
+    seat_no?: number | null
+    pos_machine_id?: number | null
+    payment_mode?: $Enums.PaymentMode
   }
 
   export type PackageCreateManyBusInput = {
@@ -17616,6 +19723,16 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
+  export type POSMachineCreateManyBusInput = {
+    id?: number
+    serial_no: string
+    assigned?: boolean
+    assigned_at?: Date | string | null
+    status?: $Enums.POSStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type TicketUpdateWithoutBusInput = {
     ticket_number?: StringFieldUpdateOperationsInput | string
     passenger_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17627,6 +19744,9 @@ export namespace Prisma {
     issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
     journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    posMachine?: POSMachineUpdateOneWithoutTicketsNestedInput
   }
 
   export type TicketUncheckedUpdateWithoutBusInput = {
@@ -17641,6 +19761,9 @@ export namespace Prisma {
     issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
     journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    pos_machine_id?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
   }
 
   export type TicketUncheckedUpdateManyWithoutBusInput = {
@@ -17655,6 +19778,9 @@ export namespace Prisma {
     issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
     journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    pos_machine_id?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
   }
 
   export type PackageUpdateWithoutBusInput = {
@@ -17742,6 +19868,37 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type POSMachineUpdateWithoutBusInput = {
+    serial_no?: StringFieldUpdateOperationsInput | string
+    assigned?: BoolFieldUpdateOperationsInput | boolean
+    assigned_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumPOSStatusFieldUpdateOperationsInput | $Enums.POSStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUpdateManyWithoutPosMachineNestedInput
+  }
+
+  export type POSMachineUncheckedUpdateWithoutBusInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serial_no?: StringFieldUpdateOperationsInput | string
+    assigned?: BoolFieldUpdateOperationsInput | boolean
+    assigned_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumPOSStatusFieldUpdateOperationsInput | $Enums.POSStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutPosMachineNestedInput
+  }
+
+  export type POSMachineUncheckedUpdateManyWithoutBusInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    serial_no?: StringFieldUpdateOperationsInput | string
+    assigned?: BoolFieldUpdateOperationsInput | boolean
+    assigned_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumPOSStatusFieldUpdateOperationsInput | $Enums.POSStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BusCreateManyConductorInput = {
     id?: number
     user_id: number
@@ -17776,6 +19933,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutConductorInput = {
@@ -17796,6 +19954,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateManyWithoutConductorInput = {
@@ -17849,6 +20008,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutDriverInput = {
@@ -17869,6 +20029,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateManyWithoutDriverInput = {
@@ -17886,6 +20047,73 @@ export namespace Prisma {
     permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TicketCreateManyPosMachineInput = {
+    id?: number
+    bus_id: number
+    ticket_number: string
+    passenger_name?: string | null
+    passenger_phone?: string | null
+    from_stop: string
+    to_stop: string
+    passenger_type?: $Enums.PassengerType
+    fare: Decimal | DecimalJsLike | number | string
+    issue_time?: Date | string
+    journey_date: Date | string
+    status?: $Enums.TicketStatus
+    seat_no?: number | null
+    payment_mode?: $Enums.PaymentMode
+  }
+
+  export type TicketUpdateWithoutPosMachineInput = {
+    ticket_number?: StringFieldUpdateOperationsInput | string
+    passenger_name?: NullableStringFieldUpdateOperationsInput | string | null
+    passenger_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    from_stop?: StringFieldUpdateOperationsInput | string
+    to_stop?: StringFieldUpdateOperationsInput | string
+    passenger_type?: EnumPassengerTypeFieldUpdateOperationsInput | $Enums.PassengerType
+    fare?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    bus?: BusUpdateOneRequiredWithoutTicketsNestedInput
+  }
+
+  export type TicketUncheckedUpdateWithoutPosMachineInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    ticket_number?: StringFieldUpdateOperationsInput | string
+    passenger_name?: NullableStringFieldUpdateOperationsInput | string | null
+    passenger_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    from_stop?: StringFieldUpdateOperationsInput | string
+    to_stop?: StringFieldUpdateOperationsInput | string
+    passenger_type?: EnumPassengerTypeFieldUpdateOperationsInput | $Enums.PassengerType
+    fare?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+  }
+
+  export type TicketUncheckedUpdateManyWithoutPosMachineInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    ticket_number?: StringFieldUpdateOperationsInput | string
+    passenger_name?: NullableStringFieldUpdateOperationsInput | string | null
+    passenger_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    from_stop?: StringFieldUpdateOperationsInput | string
+    to_stop?: StringFieldUpdateOperationsInput | string
+    passenger_type?: EnumPassengerTypeFieldUpdateOperationsInput | $Enums.PassengerType
+    fare?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
   }
 
   export type BusCreateManyRouteInput = {
@@ -17922,6 +20150,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutRouteInput = {
@@ -17942,6 +20171,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateManyWithoutRouteInput = {
@@ -18163,6 +20393,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutUserInput = {
@@ -18183,6 +20414,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateManyWithoutUserInput = {

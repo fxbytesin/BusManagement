@@ -184,6 +184,17 @@ exports.Prisma.PackageScalarFieldEnum = {
   delivered_at: 'delivered_at'
 };
 
+exports.Prisma.POSMachineScalarFieldEnum = {
+  id: 'id',
+  serial_no: 'serial_no',
+  assigned: 'assigned',
+  assigned_at: 'assigned_at',
+  status: 'status',
+  bus_id: 'bus_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.DailyReportScalarFieldEnum = {
   id: 'id',
   bus_id: 'bus_id',
@@ -223,7 +234,10 @@ exports.Prisma.TicketScalarFieldEnum = {
   fare: 'fare',
   issue_time: 'issue_time',
   journey_date: 'journey_date',
-  status: 'status'
+  status: 'status',
+  seat_no: 'seat_no',
+  pos_machine_id: 'pos_machine_id',
+  payment_mode: 'payment_mode'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -294,6 +308,10 @@ exports.Prisma.PackageOrderByRelevanceFieldEnum = {
   description: 'description'
 };
 
+exports.Prisma.POSMachineOrderByRelevanceFieldEnum = {
+  serial_no: 'serial_no'
+};
+
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
@@ -342,6 +360,12 @@ exports.PackageStatus = exports.$Enums.PackageStatus = {
   cancelled: 'cancelled'
 };
 
+exports.POSStatus = exports.$Enums.POSStatus = {
+  active: 'active',
+  maintenance: 'maintenance',
+  inactive: 'inactive'
+};
+
 exports.PassengerType = exports.$Enums.PassengerType = {
   general: 'general',
   student: 'student',
@@ -353,6 +377,11 @@ exports.TicketStatus = exports.$Enums.TicketStatus = {
   booked: 'booked',
   used: 'used',
   cancelled: 'cancelled'
+};
+
+exports.PaymentMode = exports.$Enums.PaymentMode = {
+  cash: 'cash',
+  online: 'online'
 };
 
 exports.Role = exports.$Enums.Role = {
@@ -373,6 +402,7 @@ exports.Prisma.ModelName = {
   Conductor: 'Conductor',
   Driver: 'Driver',
   Package: 'Package',
+  POSMachine: 'POSMachine',
   DailyReport: 'DailyReport',
   Route: 'Route',
   Ticket: 'Ticket',
