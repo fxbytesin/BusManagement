@@ -128,3 +128,30 @@ exports.getTicketForSpecificBus = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+exports.viewTicket = async (req, res) => {
+  try {
+    const ticketId = parseInt(req.params.id);
+    if (isNaN(ticketId)) {
+      return res.status(400).json({ error: 'Invalid ticket ID' });
+    }
+
+    const ticket = await prisma.ticket.findUnique({
+      where: { id: ticketId },
+      include: {
+        bus: { select: { bus_number: true } },
+        posMachine: { select: { serial_no: true } }
+      }
+    });
+
+    if (!ticket) {
+      return res.status(404).json({ error: 'Ticket not found' });
+    }
+
+    res.json(ticket);
+  } catch (error) {
+    console.error('Error fetching ticket:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
