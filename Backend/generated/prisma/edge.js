@@ -362,7 +362,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/fxbytes/Desktop/Bus_Management/generated/prisma",
+      "value": "/var/www/html/bus-management/BusManagement/Backend/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -371,12 +371,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-1.1.x",
+        "value": "debian-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/fxbytes/Desktop/Bus_Management/prisma/schema.prisma",
+    "sourceFilePath": "/var/www/html/bus-management/BusManagement/Backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
