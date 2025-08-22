@@ -5,7 +5,7 @@ const ticketController=require('../controllers/ticketController')
 
 // Generate a simple ticket number
 function generateTicketNumber() {
-  return 'TKT-' + Date.now().toString().slice(-6); // Example: TKT-123456
+  return 'TKT-' + Date.now().toString().slice(-6); 
 }
 
 // Create ticket
