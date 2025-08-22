@@ -165,7 +165,7 @@ module.exports.requestLoginOTP = async (req, res) => {
     await saveOTP(user.id, otp, "LOGIN");
     await sendOTP(phone, otp);
 
-    res.json({ message: "OTP sent for login" });
+    res.json({ message: "OTP sent for login",phone });
   } catch (error) {
     console.error("Request Login OTP error:", error);
     res.status(500).json({ error: "Internal server error" });
