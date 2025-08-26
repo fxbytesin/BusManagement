@@ -57,9 +57,6 @@ const LiveTracking = (
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("status")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {t("lastUpdate")}
-              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">

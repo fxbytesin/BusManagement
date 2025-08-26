@@ -73,18 +73,12 @@ const ConductorManagement = ({
                 {t("experience")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {t("assignedBus")}
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("actions")}
               </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {conductors.map((conductor) => {
-              const assignedBus = buses.find(
-                (bus) => bus.conductorId === conductor.id
-              );
+            {conductors?.map((conductor) => {
               return (
                 <tr key={conductor.id}>
                   <td className="px-6 py-4 whitespace-nowrap font-medium">
@@ -95,9 +89,6 @@ const ConductorManagement = ({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {conductor.experience_years}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {assignedBus ? assignedBus.number : t("notAssigned")}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-2">
@@ -117,7 +108,7 @@ const ConductorManagement = ({
                               conductors.filter((c) => c.id !== conductor.id)
                             );
                             setBuses(
-                              buses.map((bus) =>
+                              buses?.map((bus) =>
                                 bus.conductorId === conductor.id
                                   ? { ...bus, conductorId: "" }
                                   : bus

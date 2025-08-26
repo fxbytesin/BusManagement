@@ -36,7 +36,7 @@ const NavigationComponent = ({
         </div>
 
         <nav className="mt-4">
-          {navItems.map((item) => {
+          {navItems?.map((item) => {
             const Icon = item.icon;
             return (
               <button

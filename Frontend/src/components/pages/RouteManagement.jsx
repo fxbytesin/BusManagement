@@ -119,7 +119,7 @@ const RouteManagement = (
       Array.isArray(route.stops)
         ? route.stops
         : JSON.parse(route.stops) // parse JSON string into array
-    ).map((stop, index) => (
+    )?.map((stop, index) => (
       <span
         key={index}
         className="bg-gray-100 px-2 py-1 rounded text-sm"
