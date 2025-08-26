@@ -44,7 +44,7 @@ async function saveOTP(userId, otpCode, otpType) {
   });
 }
 
-const allowedRoles = ['admin', 'conductor'];
+const allowedRoles = ["admin", "conductor"];
 
 // 1. Request Registration OTP
 module.exports.requestRegistrationOTP = async (req, res) => {
@@ -54,7 +54,9 @@ module.exports.requestRegistrationOTP = async (req, res) => {
       return res.status(400).json({ error: "Phone number is required" });
     }
     if (!role || !allowedRoles.includes(role)) {
-      return res.status(400).json({ error: "Role must be 'admin' or 'conductor'" });
+      return res
+        .status(400)
+        .json({ error: "Role must be 'admin' or 'conductor'" });
     }
 
     let user = await prisma.user.findUnique({ where: { phone } });
@@ -99,13 +101,17 @@ module.exports.verifyRegistrationOTP = async (req, res) => {
   try {
     const { phone, otp } = req.body;
     if (!phone || !otp) {
-      return res.status(400).json({ error: "Phone number and OTP are required" });
+      return res
+        .status(400)
+        .json({ error: "Phone number and OTP are required" });
     }
 
     const user = await prisma.user.findUnique({ where: { phone } });
     if (!user) return res.status(404).json({ error: "User not found" });
     if (!allowedRoles.includes(user.role)) {
-      return res.status(403).json({ error: "Registration only allowed for admin or conductor" });
+      return res
+        .status(403)
+        .json({ error: "Registration only allowed for admin or conductor" });
     }
 
     const otpRecord = await prisma.oTP.findFirst({
@@ -119,7 +125,8 @@ module.exports.verifyRegistrationOTP = async (req, res) => {
       orderBy: { created_at: "desc" },
     });
 
-    if (!otpRecord) return res.status(400).json({ error: "Invalid or expired OTP" });
+    if (!otpRecord)
+      return res.status(400).json({ error: "Invalid or expired OTP" });
 
     await prisma.$transaction([
       prisma.oTP.update({
@@ -132,7 +139,9 @@ module.exports.verifyRegistrationOTP = async (req, res) => {
       }),
     ]);
 
-    const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
     res.json({
       message: "Registration successful",
@@ -158,14 +167,16 @@ module.exports.requestLoginOTP = async (req, res) => {
       return res.status(404).json({ error: "User not found or not verified" });
     }
     if (!allowedRoles.includes(user.role)) {
-      return res.status(403).json({ error: "Login only allowed for admin or conductor" });
+      return res
+        .status(403)
+        .json({ error: "Login only allowed for admin or conductor" });
     }
 
     const otp = generateOTP();
     await saveOTP(user.id, otp, "LOGIN");
     await sendOTP(phone, otp);
 
-    res.json({ message: "OTP sent for login" });
+    res.json({ message: "OTP sent for login", phone });
   } catch (error) {
     console.error("Request Login OTP error:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -177,7 +188,9 @@ module.exports.verifyLoginOTP = async (req, res) => {
   try {
     const { phone, otp } = req.body;
     if (!phone || !otp) {
-      return res.status(400).json({ error: "Phone number and OTP are required" });
+      return res
+        .status(400)
+        .json({ error: "Phone number and OTP are required" });
     }
 
     const user = await prisma.user.findUnique({ where: { phone } });
@@ -185,7 +198,9 @@ module.exports.verifyLoginOTP = async (req, res) => {
       return res.status(404).json({ error: "User not found or not verified" });
     }
     if (!allowedRoles.includes(user.role)) {
-      return res.status(403).json({ error: "Login only allowed for admin or conductor" });
+      return res
+        .status(403)
+        .json({ error: "Login only allowed for admin or conductor" });
     }
 
     const otpRecord = await prisma.oTP.findFirst({
@@ -199,14 +214,17 @@ module.exports.verifyLoginOTP = async (req, res) => {
       orderBy: { created_at: "desc" },
     });
 
-    if (!otpRecord) return res.status(400).json({ error: "Invalid or expired OTP" });
+    if (!otpRecord)
+      return res.status(400).json({ error: "Invalid or expired OTP" });
 
     await prisma.oTP.update({
       where: { id: otpRecord.id },
       data: { is_used: true },
     });
 
-    const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
     res.json({
       message: "Login successful",

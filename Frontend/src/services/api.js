@@ -491,6 +491,121 @@ const ApiService = {
       };
     }
   },
+
+  addPos: async (data) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.post(`${API_URL}/pos/create`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  getPos: async () => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.get(`${API_URL}/pos/all`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  deletePos: async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.delete(`${API_URL}/pos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  createTicket: async (data) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.post(`${API_URL}/ticket`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  ticketDetails: async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.get(`${API_URL}/ticket/bus/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
 };
 
 export default ApiService;
