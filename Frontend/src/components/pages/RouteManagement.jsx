@@ -46,7 +46,7 @@ const RouteManagement = (
         </button>
       </div>
   
-      {routes.length === 0 ? (
+      {routes?.length === 0 ? (
         <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
           <Route className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">
