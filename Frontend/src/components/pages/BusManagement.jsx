@@ -152,7 +152,7 @@ const BusManagementPage = (
                     <td className="px-6 py-4 whitespace-nowrap font-medium">
                       {bus.current_location}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium" onClick={()=>functionClick(bus?.id)}>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium cursor-pointer" onClick={()=>functionClick(bus?.id)}>
                         Ticket Details
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

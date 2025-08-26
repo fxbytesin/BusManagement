@@ -40,7 +40,7 @@ const DriverManagement = ({
       </button>
     </div>
 
-    {drivers.length === 0 ? (
+    {drivers?.length === 0 ? (
       <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
         <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">
