@@ -15,4 +15,7 @@ router.post('/', authenticateToken,ticketController.createTicket );
 // Get tickets for a specific bus
 router.get('/bus/:busId', authenticateToken,ticketController.getTicketForSpecificBus );
 
+//get specific ticket
+router.get('/:id', authenticateToken, ticketController.viewTicket);
+
 module.exports = router;
