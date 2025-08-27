@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const rateLimit = require('express-rate-limit');
 const authenticateToken = require('./middlewares/authMiddleware');
+const { swaggerUi, specs } = require('./swagger');
 
 // Load environment variables
 dotenv.config();
@@ -17,14 +18,18 @@ app.use(express.urlencoded({ extended: true }));
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000, 
+  max: 10000
 });
-app.use('/api', limiter, require('./routes')); // Apply rate limiting to API routes
+app.use('/api', limiter, require('./routes')); 
 
 
 // JWT Secret
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET || 'my-super-secret-jwt-key';
+
+// Swagger docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

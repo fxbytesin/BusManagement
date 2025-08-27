@@ -18,3 +18,4 @@ module.exports = {
   generateTicketNumber,
   generatePackageNumber,
 };
+ 
