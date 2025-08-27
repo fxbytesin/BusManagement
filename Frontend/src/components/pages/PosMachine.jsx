@@ -146,7 +146,7 @@ const PosMachine = ({
     {/* Table Body */}
     <tbody className="divide-y divide-gray-200">
       {posData?.length > 0 ? (
-        posData.map((pos) => (
+        posData?.map((pos) => (
           <tr
             key={pos.id}
             className="hover:bg-gray-50 transition-colors duration-150"

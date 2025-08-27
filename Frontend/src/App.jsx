@@ -422,7 +422,7 @@ const response = await ApiService.addDriver({
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">{t("selectRoute")}</option>
-                {routes.map((route) => (
+                {routes?.map((route) => (
                   <option key={route.id} value={route.id}>
                     {route.name}
                   </option>
@@ -442,7 +442,7 @@ const response = await ApiService.addDriver({
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">{t("selectDriver")}</option>
-                {drivers.map((driver) => (
+                {drivers?.map((driver) => (
                   <option key={driver.id} value={driver.id}>
                     {driver.name}
                   </option>
@@ -462,7 +462,7 @@ const response = await ApiService.addDriver({
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">{t("selectConductor")}</option>
-                {conductors.map((conductor) => (
+                {conductors?.map((conductor) => (
                   <option key={conductor.id} value={conductor.id}>
                     {conductor.name}
                   </option>
@@ -618,7 +618,7 @@ const response = await ApiService.addDriver({
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 {t("stops")} *
               </label>
-              {routeForm.stops.map((stop, index) => (
+              {routeForm?.stops.map((stop, index) => (
                 <div key={index} className="flex items-center space-x-2 mb-2">
                   <input
                     type="text"

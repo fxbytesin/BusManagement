@@ -75,18 +75,12 @@ const DriverManagement = ({
                 {t("experience")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {t("assignedBus")}
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("actions")}
               </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {drivers.map((driver) => {
-              const assignedBus = buses.find(
-                (bus) => bus.driverId === driver.id
-              );
+            {drivers?.map((driver) => {
               return (
                 <tr key={driver.id}>
                   <td className="px-6 py-4 whitespace-nowrap font-medium">
@@ -100,9 +94,6 @@ const DriverManagement = ({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {driver.experience_years}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {assignedBus ? assignedBus.number : t("notAssigned")}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-2">
@@ -122,7 +113,7 @@ const DriverManagement = ({
                               drivers.filter((d) => d.id !== driver.id)
                             );
                             setBuses(
-                              buses.map((bus) =>
+                              buses?.map((bus) =>
                                 bus.driverId === driver.id
                                   ? { ...bus, driverId: "" }
                                   : bus
