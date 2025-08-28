@@ -13,7 +13,17 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
-app.use(express.json({ limit: '10mb' }));
+// app.use(express.json({ limit: '10mb' }));
+
+// Custom middleware to run express.json() only for applicable methods
+app.use((req, res, next) => {
+  if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
+    express.json({ limit: '10mb' })(req, res, next);
+  } else {
+    next();
+  }
+});
+
 app.use(express.urlencoded({ extended: true }));
 
 // Rate limiting

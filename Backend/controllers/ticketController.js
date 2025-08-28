@@ -131,6 +131,7 @@ exports.getTicketForSpecificBus = async (req, res) => {
 
 exports.viewTicket = async (req, res) => {
   try {
+    console.log('<><><><><>')
     const ticketId = parseInt(req.params.id);
     if (isNaN(ticketId)) {
       return res.status(400).json({ error: 'Invalid ticket ID' });
@@ -154,4 +155,110 @@ exports.viewTicket = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+// Get currently allocated seats for a bus on a specific journey date
+exports.getAllocatedSeats = async (req, res) => {
+  try {
+    const busId = parseInt(req.params.busId);
+    const { date } = req.query;
+
+    if (isNaN(busId)) {
+      return res.status(400).json({ error: 'Invalid bus ID' });
+    }
+
+    if (!date) {
+      return res.status(400).json({ error: 'Journey date is required' });
+    }
+
+    const journeyDate = new Date(date);
+    if (isNaN(journeyDate.getTime())) {
+      return res.status(400).json({ error: 'Invalid date format' });
+    }
+
+    // Find all tickets for the bus and date, which have seat_no and are not cancelled
+    const tickets = await prisma.ticket.findMany({
+      where: {
+        bus_id: busId,
+        journey_date: journeyDate,
+        status: { not: 'cancelled' },
+        seat_no: { not: null }
+      },
+      select: {
+        seat_no: true
+      }
+    });
+
+    // Prepare allocated seats array
+    const allocatedSeats = tickets.map(t => t.seat_no);
+
+    res.json({ allocatedSeats });
+  } catch (error) {
+    console.error('Error fetching allocated seats:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+exports.getAllocatedSeatsAndTicketCountPerBus = async (req, res) => {
+  try {
+    const { date } = req.query;
+    if (!date) {
+      return res.status(400).json({ error: 'Please provide the date query parameter in YYYY-MM-DD format' });
+    }
+
+    const journeyDate = new Date(date);
+    if (isNaN(journeyDate.getTime())) {
+      return res.status(400).json({ error: 'Invalid date format' });
+    }
+
+    // Get ticket counts per bus
+    const ticketsCount = await prisma.ticket.groupBy({
+      by: ['bus_id'],
+      _count: { id: true },
+      where: {
+        journey_date: journeyDate,
+        status: { not: 'cancelled' }
+      }
+    });
+
+    // Get allocated seat numbers per bus
+    const allocatedSeatsRaw = await prisma.ticket.findMany({
+      where: {
+        journey_date: journeyDate,
+        status: { not: 'cancelled' },
+        seat_no: { not: null }
+      },
+      select: {
+        bus_id: true,
+        seat_no: true
+      },
+      orderBy: { seat_no: 'asc' }
+    });
+
+    // Group allocated seats by bus_id
+    const allocatedSeats = {};
+    allocatedSeatsRaw.forEach(({ bus_id, seat_no }) => {
+      if (!allocatedSeats[bus_id]) {
+        allocatedSeats[bus_id] = [];
+      }
+      allocatedSeats[bus_id].push(seat_no);
+    });
+
+    // Combine counts and seat allocations in single response array
+    const result = ticketsCount.map(tc => ({
+      bus_id: tc.bus_id,
+      tickets_issued: tc._count.id,
+      allocated_seats: allocatedSeats[tc.bus_id] || []
+    }));
+
+    res.json(result);
+
+  } catch (error) {
+    console.error('Error fetching allocated seats and ticket counts per bus:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
 
