@@ -12,7 +12,7 @@ const dashboardController=require('../controllers/dashboardController')
 
 /**
  * @swagger
- * /dashboard/stats:
+ * /api/dashboard/stats:
  *   get:
  *     summary: Get today's dashboard overview and bus-specific stats
  *     tags: [Dashboard]
@@ -65,7 +65,7 @@ router.get('/stats', authenticateToken, dashboardController.getdashboardStatisti
 
 /**
  * @swagger
- * /dashboard/revenue:
+ * /api/dashboard/revenue:
  *   get:
  *     summary: Get revenue report between dates, optionally filtered by bus
  *     tags: [Dashboard]

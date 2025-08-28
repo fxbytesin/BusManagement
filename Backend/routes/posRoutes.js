@@ -12,7 +12,7 @@ const posController = require("../controllers/posController");
 
 /**
  * @swagger
- * /pos/create:
+ * /api/pos/create:
  *   post:
  *     summary: Create a POS machine
  *     tags: [POSMachine]
@@ -45,7 +45,7 @@ router.post("/create", authenticateToken, posController.createPOSMachine);
 
 /**
  * @swagger
- * /pos/all:
+ * /api/pos/all:
  *   get:
  *     summary: Get all POS machines including their assigned bus
  *     tags: [POSMachine]
@@ -65,7 +65,7 @@ router.get("/all", authenticateToken, posController.getAllPOSMachines);
 
 /**
  * @swagger
- * /pos/{id}:
+ * /api/pos/{id}:
  *   get:
  *     summary: Get a POS machine by ID with bus info
  *     tags: [POSMachine]
@@ -88,7 +88,7 @@ router.get("/:id", authenticateToken, posController.getPOSMachineById);
 
 /**
  * @swagger
- * /pos/{id}:
+ * /api/pos/{id}:
  *   put:
  *     summary: Update POS machine details
  *     tags: [POSMachine]
@@ -130,7 +130,7 @@ router.put("/:id", authenticateToken, posController.updatePOSMachine);
 
 /**
  * @swagger
- * /pos/{id}:
+ * /api/pos/{id}:
  *   delete:
  *     summary: Delete POS machine by ID
  *     tags: [POSMachine]

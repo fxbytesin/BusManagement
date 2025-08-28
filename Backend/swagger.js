@@ -1,7 +1,6 @@
-// swagger.js
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-
+const PORT = process.env.PORT || 5000;
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -10,11 +9,21 @@ const options = {
       version: '1.0.0',
       description: 'API documentation for the Bus Management system'
     },
+    
     servers: [
-      { url: `http://localhost:5000` } // Change if you use other PORT
+      { url: `http://localhost:${PORT}` } 
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    }
   },
-  apis: ['./routes/**/*.js'],  // <-- Point to your routes for annotations
+  apis: ['./routes/**/*.js'],
 };
 
 const specs = swaggerJsdoc(options);

@@ -13,7 +13,7 @@ const routeController=require('../controllers/routeController')
 
 /**
  * @swagger
- * /route:
+ * /api/routes:
  *   get:
  *     summary: Get all routes belonging to authenticated user
  *     tags: [Route]
@@ -32,7 +32,7 @@ router.get('/', authenticateToken, routeController.getAllRoutes);
 
 /**
  * @swagger
- * /route:
+ * /api/routes:
  *   post:
  *     summary: Create a new route
  *     tags: [Route]
@@ -79,7 +79,7 @@ router.post('/', authenticateToken, routeController.createRoute);
 
 /**
  * @swagger
- * /route/{id}:
+ * /api/routes/{id}:
  *   put:
  *     summary: Update a route by ID
  *     tags: [Route]
@@ -126,7 +126,7 @@ router.put('/:id', authenticateToken, routeController.updateRoute);
 
 /**
  * @swagger
- * /route/{id}:
+ * /api/routes/{id}:
  *   delete:
  *     summary: Delete a route by ID
  *     tags: [Route]

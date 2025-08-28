@@ -12,7 +12,7 @@ const driverController=require('../controllers/driverController')
 
 /**
  * @swagger
- * /driver:
+ * /api/drivers:
  *   get:
  *     summary: Get all drivers for the authenticated user
  *     tags: [Driver]
@@ -55,7 +55,7 @@ router.get('/', authenticateToken, driverController.getAllDriver);
 
 /**
  * @swagger
- * /driver:
+ * /api/drivers:
  *   post:
  *     summary: Create a new driver
  *     tags: [Driver]
@@ -100,7 +100,7 @@ router.post('/', authenticateToken, driverController.createDriver);
 
 /**
  * @swagger
- * /driver/{id}:
+ * /api/drivers/{id}:
  *   put:
  *     summary: Update existing driver by ID
  *     tags: [Driver]
@@ -152,7 +152,7 @@ router.put('/:id', authenticateToken, driverController.updateDriver);
 
 /**
  * @swagger
- * /driver/{id}:
+ * /api/drivers/{id}:
  *   delete:
  *     summary: Delete a driver by ID
  *     tags: [Driver]

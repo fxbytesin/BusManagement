@@ -11,7 +11,7 @@ const auth = require("../controllers/authController");
 
 /**
  * @swagger
- * /register/request:
+ * /api/auth/register/request:
  *   post:
  *     summary: Request OTP for user registration
  *     tags: [Auth]
@@ -49,7 +49,7 @@ router.post("/register/request", auth.requestRegistrationOTP);
 
 /**
  * @swagger
- * /register/verify:
+ * /api/auth/register/verify:
  *   post:
  *     summary: Verify registration OTP
  *     tags: [Auth]
@@ -82,7 +82,7 @@ router.post("/register/verify", auth.verifyRegistrationOTP);
 
 /**
  * @swagger
- * /login/request:
+ * /api/auth/login/request:
  *   post:
  *     summary: Request OTP for user login
  *     tags: [Auth]
@@ -111,7 +111,7 @@ router.post("/login/request", auth.requestLoginOTP);
 
 /**
  * @swagger
- * /login/verify:
+ * /api/auth/login/verify:
  *   post:
  *     summary: Verify login OTP and get token
  *     tags: [Auth]

@@ -12,7 +12,7 @@ const busController=require('../controllers/busController')
 
 /**
  * @swagger
- * /bus:
+ * /api/bus:
  *   get:
  *     summary: Get all buses
  *     tags: [Bus]
@@ -32,7 +32,7 @@ router.get('/', authenticateToken, busController.getAllBuses);
 
 /**
  * @swagger
- * /bus:
+ * /api/bus:
  *   post:
  *     summary: Create a new bus
  *     tags: [Bus]
@@ -74,7 +74,7 @@ router.post('/', authenticateToken, busController.createBus);
 
 /**
  * @swagger
- * /bus/{id}:
+ * /api/bus/{id}:
  *   put:
  *     summary: Update a bus
  *     tags: [Bus]
@@ -120,7 +120,7 @@ router.put('/:id', authenticateToken, busController.updateBus);
 
 /**
  * @swagger
- * /bus/{id}:
+ * /api/bus/{id}:
  *   delete:
  *     summary: Delete a bus
  *     tags: [Bus]
