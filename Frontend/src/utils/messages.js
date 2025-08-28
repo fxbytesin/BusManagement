@@ -130,7 +130,19 @@ export const messages = {
     routeUpdated: "रूट सफलतापूर्वक अपडेट किया गया",
     driverAdded: "ड्राइवर सफलतापूर्वक जोड़ा गया",
     conductorAdded: "कंडक्टर सफलतापूर्वक जोड़ा गया",
+
+     // Dashboard Graph Labels
+    ticketsIssuedPerDay: "प्रतिदिन जारी टिकट",
+    revenueCollectedPerDay: "प्रतिदिन आय",
+    occupancyRate: "ओक्युपेंसी रेट",
+    tripsCompletedPerDay: "प्रतिदिन पूरी हुई यात्राएं",
+    paymentModeBreakdown: "पेमेंट मोड विवरण",
+    Daily: "दैनिक",
+    Weekly: "साप्ताहिक",
+    Monthly: "मासिक",
+    Yearly: "वार्षिक",
   },
+ 
 
   en: {
     // Navigation & Headers
@@ -260,5 +272,17 @@ export const messages = {
     routeUpdated: "Route updated successfully",
     driverAdded: "Driver added successfully",
     conductorAdded: "Conductor added successfully",
+
+    // Dashboard Graph Labels
+    Daily: "Daily",
+    Weekly: "Weekly",
+    Monthly: "Monthly",
+    Yearly: "Yearly",
+    ticketsIssuedPerDay: "Tickets Issued Per Day",
+    revenueCollectedPerDay: "Revenue Collected Per Day",
+    occupancyRate: "Occupancy Rate",
+    tripsCompletedPerDay: "Trips Completed Per Day",
+    paymentModeBreakdown: "Payment Mode Breakdown",
   },
+
 };

@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useEffect } from 'react';
 import ApiService from '../../services/api';
+import DashboardGraphs from "./DashboardGraph";
 
 const DashboardPage = ({buses,setModalType,setShowModal,routes,t,dashboard,setDashboard}) => {
   useEffect(() => {
@@ -159,7 +160,11 @@ const DashboardPage = ({buses,setModalType,setShowModal,routes,t,dashboard,setDa
                 ))}
               </div>
           </div>
+       
         </div>
+        {/* Graphs Section */}
+        <DashboardGraphs t={t} />
+
       </div>
     );
 };
