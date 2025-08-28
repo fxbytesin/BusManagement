@@ -14,10 +14,10 @@ function generateTicketNumber() {
  *   name: Ticket
  *   description: Ticket booking and management APIs
  */
-
+ 
 /**
  * @swagger
- * /ticket:
+ * /api/ticket::
  *   post:
  *     summary: Create a new ticket
  *     tags: [Ticket]
@@ -70,7 +70,7 @@ router.post('/', authenticateToken,ticketController.createTicket );
 
 /**
  * @swagger
- * /ticket/bus/{busId}:
+ * /api/ticket/bus/{busId}:
  *   get:
  *     summary: Get tickets for a specific bus, optionally filter by journey_date
  *     tags: [Ticket]
@@ -102,7 +102,7 @@ router.get('/bus/:busId', authenticateToken,ticketController.getTicketForSpecifi
 
 /**
  * @swagger
- * /ticket/{id}:
+ * /api/ticket/{id}:
  *   get:
  *     summary: Get a single ticket by ID
  *     tags: [Ticket]

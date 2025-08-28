@@ -12,7 +12,7 @@ const packageController=require('../controllers/packageController')
 
 /**
  * @swagger
- * /package:
+ * /api/package:
  *   post:
  *     summary: Create a new package booking
  *     tags: [Package]
@@ -69,7 +69,7 @@ router.post('/', authenticateToken, packageController.createPackage);
 
 /**
  * @swagger
- * /package/bus/{busId}:
+ * /api/package/bus/{busId}:
  *   get:
  *     summary: Get packages booked for a specific bus, optionally filtered by status
  *     tags: [Package]
@@ -103,7 +103,7 @@ router.get('/bus/:busId', authenticateToken, packageController.getPackage);
 
 /**
  * @swagger
- * /package/{id}/status:
+ * /api/package/{id}/status:
  *   put:
  *     summary: Update status of a package booking
  *     tags: [Package]

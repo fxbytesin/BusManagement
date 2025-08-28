@@ -11,7 +11,7 @@ const conductorController=require("../controllers/conductorController");
 
 /**
  * @swagger
- * /conductor:
+ * /api/conductor:
  *   get:
  *     summary: Get all conductors for the logged-in user
  *     tags: [Conductor]
@@ -48,7 +48,7 @@ router.get('/', authenticateToken, conductorController.getAllConductor);
 
 /**
  * @swagger
- * /conductor:
+ * /api/conductor:
  *   post:
  *     summary: Create a new conductor
  *     tags: [Conductor]
@@ -87,7 +87,7 @@ router.post('/', authenticateToken, conductorController.createConductor);
 
 /**
  * @swagger
- * /conductor/{id}:
+ * /api/conductor/{id}:
  *   put:
  *     summary: Update a conductor by ID
  *     tags: [Conductor]
@@ -134,7 +134,7 @@ router.put('/:id', authenticateToken, conductorController.updateConductor );
 
 /**
  * @swagger
- * /conductor/{id}:
+ * /api/conductor/{id}:
  *   delete:
  *     summary: Delete a conductor by ID
  *     tags: [Conductor]
