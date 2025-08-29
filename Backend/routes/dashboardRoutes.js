@@ -14,13 +14,22 @@ const dashboardController=require('../controllers/dashboardController')
  * @swagger
  * /api/dashboard/stats:
  *   get:
- *     summary: Get today's dashboard overview and bus-specific stats
+ *     summary: Get dashboard overview and bus-specific stats for a given period
  *     tags: [Dashboard]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - name: period
+ *         in: query
+ *         description: Period to filter stats by (daily, weekly, monthly, yearly)
+ *         required: false
+ *         schema:
+ *           type: string
+ *           enum: [daily, weekly, monthly, yearly]
+ *           default: daily
  *     responses:
  *       200:
- *         description: Dashboard statistics overview
+ *         description: Dashboard statistics overview for the specified period
  *         content:
  *           application/json:
  *             schema:
@@ -50,6 +59,8 @@ const dashboardController=require('../controllers/dashboardController')
  *                         type: string
  *                       status:
  *                         type: string
+ *                       capacity:
+ *                         type: integer
  *                       current_location:
  *                         type: string
  *                       route_name:
@@ -60,8 +71,18 @@ const dashboardController=require('../controllers/dashboardController')
  *                         type: number
  *                       today_packages:
  *                         type: integer
+ *                       occupancy_rate:
+ *                         type: number
+ *                         description: Percentage of seat occupancy (0-100)
+ *       400:
+ *         description: Invalid period parameter
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
  */
-router.get('/stats', authenticateToken, dashboardController.getdashboardStatistics );
+router.get('/stats', authenticateToken, dashboardController.getdashboardStatistics);
+
 
 /**
  * @swagger
