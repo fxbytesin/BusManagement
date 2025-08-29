@@ -181,7 +181,8 @@ exports.Prisma.PackageScalarFieldEnum = {
   fare: 'fare',
   status: 'status',
   booked_at: 'booked_at',
-  delivered_at: 'delivered_at'
+  delivered_at: 'delivered_at',
+  trip_id: 'trip_id'
 };
 
 exports.Prisma.POSMachineScalarFieldEnum = {
@@ -237,7 +238,21 @@ exports.Prisma.TicketScalarFieldEnum = {
   status: 'status',
   seat_no: 'seat_no',
   pos_machine_id: 'pos_machine_id',
-  payment_mode: 'payment_mode'
+  payment_mode: 'payment_mode',
+  trip_id: 'trip_id'
+};
+
+exports.Prisma.TripScalarFieldEnum = {
+  id: 'id',
+  bus_id: 'bus_id',
+  route_id: 'route_id',
+  start_time: 'start_time',
+  end_time: 'end_time',
+  status: 'status',
+  driver_id: 'driver_id',
+  conductor_id: 'conductor_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -384,6 +399,13 @@ exports.PaymentMode = exports.$Enums.PaymentMode = {
   online: 'online'
 };
 
+exports.TripStatus = exports.$Enums.TripStatus = {
+  SCHEDULED: 'SCHEDULED',
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.Role = exports.$Enums.Role = {
   owner: 'owner',
   admin: 'admin',
@@ -406,6 +428,7 @@ exports.Prisma.ModelName = {
   DailyReport: 'DailyReport',
   Route: 'Route',
   Ticket: 'Ticket',
+  Trip: 'Trip',
   User: 'User',
   OTP: 'OTP'
 };
