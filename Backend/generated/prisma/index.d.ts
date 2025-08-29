@@ -54,6 +54,11 @@ export type Route = $Result.DefaultSelection<Prisma.$RoutePayload>
  */
 export type Ticket = $Result.DefaultSelection<Prisma.$TicketPayload>
 /**
+ * Model Trip
+ * 
+ */
+export type Trip = $Result.DefaultSelection<Prisma.$TripPayload>
+/**
  * Model User
  * 
  */
@@ -123,6 +128,16 @@ export const PaymentMode: {
 export type PaymentMode = (typeof PaymentMode)[keyof typeof PaymentMode]
 
 
+export const TripStatus: {
+  SCHEDULED: 'SCHEDULED',
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type TripStatus = (typeof TripStatus)[keyof typeof TripStatus]
+
+
 export const OTPType: {
   REGISTRATION: 'REGISTRATION',
   LOGIN: 'LOGIN',
@@ -166,6 +181,10 @@ export const TicketStatus: typeof $Enums.TicketStatus
 export type PaymentMode = $Enums.PaymentMode
 
 export const PaymentMode: typeof $Enums.PaymentMode
+
+export type TripStatus = $Enums.TripStatus
+
+export const TripStatus: typeof $Enums.TripStatus
 
 export type OTPType = $Enums.OTPType
 
@@ -379,6 +398,16 @@ export class PrismaClient<
     * ```
     */
   get ticket(): Prisma.TicketDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.trip`: Exposes CRUD operations for the **Trip** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Trips
+    * const trips = await prisma.trip.findMany()
+    * ```
+    */
+  get trip(): Prisma.TripDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
@@ -847,6 +876,7 @@ export namespace Prisma {
     DailyReport: 'DailyReport',
     Route: 'Route',
     Ticket: 'Ticket',
+    Trip: 'Trip',
     User: 'User',
     OTP: 'OTP'
   };
@@ -867,7 +897,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "bus" | "conductor" | "driver" | "package" | "pOSMachine" | "dailyReport" | "route" | "ticket" | "user" | "oTP"
+      modelProps: "bus" | "conductor" | "driver" | "package" | "pOSMachine" | "dailyReport" | "route" | "ticket" | "trip" | "user" | "oTP"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1399,6 +1429,72 @@ export namespace Prisma {
           }
         }
       }
+      Trip: {
+        payload: Prisma.$TripPayload<ExtArgs>
+        fields: Prisma.TripFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TripFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TripFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripPayload>
+          }
+          findFirst: {
+            args: Prisma.TripFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TripFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripPayload>
+          }
+          findMany: {
+            args: Prisma.TripFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripPayload>[]
+          }
+          create: {
+            args: Prisma.TripCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripPayload>
+          }
+          createMany: {
+            args: Prisma.TripCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.TripDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripPayload>
+          }
+          update: {
+            args: Prisma.TripUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripPayload>
+          }
+          deleteMany: {
+            args: Prisma.TripDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TripUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.TripUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripPayload>
+          }
+          aggregate: {
+            args: Prisma.TripAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTrip>
+          }
+          groupBy: {
+            args: Prisma.TripGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TripGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TripCountArgs<ExtArgs>
+            result: $Utils.Optional<TripCountAggregateOutputType> | number
+          }
+        }
+      }
       User: {
         payload: Prisma.$UserPayload<ExtArgs>
         fields: Prisma.UserFieldRefs
@@ -1631,6 +1727,7 @@ export namespace Prisma {
     dailyReport?: DailyReportOmit
     route?: RouteOmit
     ticket?: TicketOmit
+    trip?: TripOmit
     user?: UserOmit
     oTP?: OTPOmit
   }
@@ -1736,6 +1833,7 @@ export namespace Prisma {
     packages: number
     dailyReports: number
     posMachines: number
+    trips: number
   }
 
   export type BusCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1743,6 +1841,7 @@ export namespace Prisma {
     packages?: boolean | BusCountOutputTypeCountPackagesArgs
     dailyReports?: boolean | BusCountOutputTypeCountDailyReportsArgs
     posMachines?: boolean | BusCountOutputTypeCountPosMachinesArgs
+    trips?: boolean | BusCountOutputTypeCountTripsArgs
   }
 
   // Custom InputTypes
@@ -1784,6 +1883,13 @@ export namespace Prisma {
     where?: POSMachineWhereInput
   }
 
+  /**
+   * BusCountOutputType without action
+   */
+  export type BusCountOutputTypeCountTripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TripWhereInput
+  }
+
 
   /**
    * Count Type ConductorCountOutputType
@@ -1791,10 +1897,12 @@ export namespace Prisma {
 
   export type ConductorCountOutputType = {
     buses: number
+    trips: number
   }
 
   export type ConductorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     buses?: boolean | ConductorCountOutputTypeCountBusesArgs
+    trips?: boolean | ConductorCountOutputTypeCountTripsArgs
   }
 
   // Custom InputTypes
@@ -1815,6 +1923,13 @@ export namespace Prisma {
     where?: BusWhereInput
   }
 
+  /**
+   * ConductorCountOutputType without action
+   */
+  export type ConductorCountOutputTypeCountTripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TripWhereInput
+  }
+
 
   /**
    * Count Type DriverCountOutputType
@@ -1822,10 +1937,12 @@ export namespace Prisma {
 
   export type DriverCountOutputType = {
     buses: number
+    trips: number
   }
 
   export type DriverCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     buses?: boolean | DriverCountOutputTypeCountBusesArgs
+    trips?: boolean | DriverCountOutputTypeCountTripsArgs
   }
 
   // Custom InputTypes
@@ -1844,6 +1961,13 @@ export namespace Prisma {
    */
   export type DriverCountOutputTypeCountBusesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BusWhereInput
+  }
+
+  /**
+   * DriverCountOutputType without action
+   */
+  export type DriverCountOutputTypeCountTripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TripWhereInput
   }
 
 
@@ -1884,10 +2008,12 @@ export namespace Prisma {
 
   export type RouteCountOutputType = {
     buses: number
+    trips: number
   }
 
   export type RouteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     buses?: boolean | RouteCountOutputTypeCountBusesArgs
+    trips?: boolean | RouteCountOutputTypeCountTripsArgs
   }
 
   // Custom InputTypes
@@ -1906,6 +2032,53 @@ export namespace Prisma {
    */
   export type RouteCountOutputTypeCountBusesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BusWhereInput
+  }
+
+  /**
+   * RouteCountOutputType without action
+   */
+  export type RouteCountOutputTypeCountTripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TripWhereInput
+  }
+
+
+  /**
+   * Count Type TripCountOutputType
+   */
+
+  export type TripCountOutputType = {
+    tickets: number
+    packages: number
+  }
+
+  export type TripCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tickets?: boolean | TripCountOutputTypeCountTicketsArgs
+    packages?: boolean | TripCountOutputTypeCountPackagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TripCountOutputType without action
+   */
+  export type TripCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripCountOutputType
+     */
+    select?: TripCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TripCountOutputType without action
+   */
+  export type TripCountOutputTypeCountTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TicketWhereInput
+  }
+
+  /**
+   * TripCountOutputType without action
+   */
+  export type TripCountOutputTypeCountPackagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PackageWhereInput
   }
 
 
@@ -2290,6 +2463,7 @@ export namespace Prisma {
     packages?: boolean | Bus$packagesArgs<ExtArgs>
     dailyReports?: boolean | Bus$dailyReportsArgs<ExtArgs>
     posMachines?: boolean | Bus$posMachinesArgs<ExtArgs>
+    trips?: boolean | Bus$tripsArgs<ExtArgs>
     _count?: boolean | BusCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["bus"]>
 
@@ -2323,6 +2497,7 @@ export namespace Prisma {
     packages?: boolean | Bus$packagesArgs<ExtArgs>
     dailyReports?: boolean | Bus$dailyReportsArgs<ExtArgs>
     posMachines?: boolean | Bus$posMachinesArgs<ExtArgs>
+    trips?: boolean | Bus$tripsArgs<ExtArgs>
     _count?: boolean | BusCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2337,6 +2512,7 @@ export namespace Prisma {
       packages: Prisma.$PackagePayload<ExtArgs>[]
       dailyReports: Prisma.$DailyReportPayload<ExtArgs>[]
       posMachines: Prisma.$POSMachinePayload<ExtArgs>[]
+      trips: Prisma.$TripPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2702,6 +2878,7 @@ export namespace Prisma {
     packages<T extends Bus$packagesArgs<ExtArgs> = {}>(args?: Subset<T, Bus$packagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dailyReports<T extends Bus$dailyReportsArgs<ExtArgs> = {}>(args?: Subset<T, Bus$dailyReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     posMachines<T extends Bus$posMachinesArgs<ExtArgs> = {}>(args?: Subset<T, Bus$posMachinesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    trips<T extends Bus$tripsArgs<ExtArgs> = {}>(args?: Subset<T, Bus$tripsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3242,6 +3419,30 @@ export namespace Prisma {
   }
 
   /**
+   * Bus.trips
+   */
+  export type Bus$tripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    where?: TripWhereInput
+    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
+    cursor?: TripWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TripScalarFieldEnum | TripScalarFieldEnum[]
+  }
+
+  /**
    * Bus without action
    */
   export type BusDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3508,6 +3709,7 @@ export namespace Prisma {
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     buses?: boolean | Conductor$busesArgs<ExtArgs>
+    trips?: boolean | Conductor$tripsArgs<ExtArgs>
     _count?: boolean | ConductorCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["conductor"]>
 
@@ -3530,6 +3732,7 @@ export namespace Prisma {
   export type ConductorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     buses?: boolean | Conductor$busesArgs<ExtArgs>
+    trips?: boolean | Conductor$tripsArgs<ExtArgs>
     _count?: boolean | ConductorCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -3538,6 +3741,7 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       buses: Prisma.$BusPayload<ExtArgs>[]
+      trips: Prisma.$TripPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -3892,6 +4096,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     buses<T extends Conductor$busesArgs<ExtArgs> = {}>(args?: Subset<T, Conductor$busesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    trips<T extends Conductor$tripsArgs<ExtArgs> = {}>(args?: Subset<T, Conductor$tripsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4298,6 +4503,30 @@ export namespace Prisma {
   }
 
   /**
+   * Conductor.trips
+   */
+  export type Conductor$tripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    where?: TripWhereInput
+    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
+    cursor?: TripWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TripScalarFieldEnum | TripScalarFieldEnum[]
+  }
+
+  /**
    * Conductor without action
    */
   export type ConductorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4580,6 +4809,7 @@ export namespace Prisma {
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     buses?: boolean | Driver$busesArgs<ExtArgs>
+    trips?: boolean | Driver$tripsArgs<ExtArgs>
     _count?: boolean | DriverCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["driver"]>
 
@@ -4604,6 +4834,7 @@ export namespace Prisma {
   export type DriverInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     buses?: boolean | Driver$busesArgs<ExtArgs>
+    trips?: boolean | Driver$tripsArgs<ExtArgs>
     _count?: boolean | DriverCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -4612,6 +4843,7 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       buses: Prisma.$BusPayload<ExtArgs>[]
+      trips: Prisma.$TripPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4968,6 +5200,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     buses<T extends Driver$busesArgs<ExtArgs> = {}>(args?: Subset<T, Driver$busesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    trips<T extends Driver$tripsArgs<ExtArgs> = {}>(args?: Subset<T, Driver$tripsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5376,6 +5609,30 @@ export namespace Prisma {
   }
 
   /**
+   * Driver.trips
+   */
+  export type Driver$tripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    where?: TripWhereInput
+    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
+    cursor?: TripWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TripScalarFieldEnum | TripScalarFieldEnum[]
+  }
+
+  /**
    * Driver without action
    */
   export type DriverDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5411,6 +5668,7 @@ export namespace Prisma {
     bus_id: number | null
     weight: Decimal | null
     fare: Decimal | null
+    trip_id: number | null
   }
 
   export type PackageSumAggregateOutputType = {
@@ -5418,6 +5676,7 @@ export namespace Prisma {
     bus_id: number | null
     weight: Decimal | null
     fare: Decimal | null
+    trip_id: number | null
   }
 
   export type PackageMinAggregateOutputType = {
@@ -5436,6 +5695,7 @@ export namespace Prisma {
     status: $Enums.PackageStatus | null
     booked_at: Date | null
     delivered_at: Date | null
+    trip_id: number | null
   }
 
   export type PackageMaxAggregateOutputType = {
@@ -5454,6 +5714,7 @@ export namespace Prisma {
     status: $Enums.PackageStatus | null
     booked_at: Date | null
     delivered_at: Date | null
+    trip_id: number | null
   }
 
   export type PackageCountAggregateOutputType = {
@@ -5472,6 +5733,7 @@ export namespace Prisma {
     status: number
     booked_at: number
     delivered_at: number
+    trip_id: number
     _all: number
   }
 
@@ -5481,6 +5743,7 @@ export namespace Prisma {
     bus_id?: true
     weight?: true
     fare?: true
+    trip_id?: true
   }
 
   export type PackageSumAggregateInputType = {
@@ -5488,6 +5751,7 @@ export namespace Prisma {
     bus_id?: true
     weight?: true
     fare?: true
+    trip_id?: true
   }
 
   export type PackageMinAggregateInputType = {
@@ -5506,6 +5770,7 @@ export namespace Prisma {
     status?: true
     booked_at?: true
     delivered_at?: true
+    trip_id?: true
   }
 
   export type PackageMaxAggregateInputType = {
@@ -5524,6 +5789,7 @@ export namespace Prisma {
     status?: true
     booked_at?: true
     delivered_at?: true
+    trip_id?: true
   }
 
   export type PackageCountAggregateInputType = {
@@ -5542,6 +5808,7 @@ export namespace Prisma {
     status?: true
     booked_at?: true
     delivered_at?: true
+    trip_id?: true
     _all?: true
   }
 
@@ -5647,6 +5914,7 @@ export namespace Prisma {
     status: $Enums.PackageStatus
     booked_at: Date
     delivered_at: Date | null
+    trip_id: number | null
     _count: PackageCountAggregateOutputType | null
     _avg: PackageAvgAggregateOutputType | null
     _sum: PackageSumAggregateOutputType | null
@@ -5684,7 +5952,9 @@ export namespace Prisma {
     status?: boolean
     booked_at?: boolean
     delivered_at?: boolean
+    trip_id?: boolean
     bus?: boolean | BusDefaultArgs<ExtArgs>
+    trip?: boolean | Package$tripArgs<ExtArgs>
   }, ExtArgs["result"]["package"]>
 
 
@@ -5705,17 +5975,20 @@ export namespace Prisma {
     status?: boolean
     booked_at?: boolean
     delivered_at?: boolean
+    trip_id?: boolean
   }
 
-  export type PackageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bus_id" | "package_number" | "sender_name" | "sender_phone" | "receiver_name" | "receiver_phone" | "from_stop" | "to_stop" | "description" | "weight" | "fare" | "status" | "booked_at" | "delivered_at", ExtArgs["result"]["package"]>
+  export type PackageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bus_id" | "package_number" | "sender_name" | "sender_phone" | "receiver_name" | "receiver_phone" | "from_stop" | "to_stop" | "description" | "weight" | "fare" | "status" | "booked_at" | "delivered_at" | "trip_id", ExtArgs["result"]["package"]>
   export type PackageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bus?: boolean | BusDefaultArgs<ExtArgs>
+    trip?: boolean | Package$tripArgs<ExtArgs>
   }
 
   export type $PackagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Package"
     objects: {
       bus: Prisma.$BusPayload<ExtArgs>
+      trip: Prisma.$TripPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -5733,6 +6006,7 @@ export namespace Prisma {
       status: $Enums.PackageStatus
       booked_at: Date
       delivered_at: Date | null
+      trip_id: number | null
     }, ExtArgs["result"]["package"]>
     composites: {}
   }
@@ -6074,6 +6348,7 @@ export namespace Prisma {
   export interface Prisma__PackageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     bus<T extends BusDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusDefaultArgs<ExtArgs>>): Prisma__BusClient<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    trip<T extends Package$tripArgs<ExtArgs> = {}>(args?: Subset<T, Package$tripArgs<ExtArgs>>): Prisma__TripClient<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6118,6 +6393,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Package", 'PackageStatus'>
     readonly booked_at: FieldRef<"Package", 'DateTime'>
     readonly delivered_at: FieldRef<"Package", 'DateTime'>
+    readonly trip_id: FieldRef<"Package", 'Int'>
   }
     
 
@@ -6458,6 +6734,25 @@ export namespace Prisma {
      * Limit how many Packages to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Package.trip
+   */
+  export type Package$tripArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    where?: TripWhereInput
   }
 
   /**
@@ -8834,6 +9129,7 @@ export namespace Prisma {
     updated_at?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     buses?: boolean | Route$busesArgs<ExtArgs>
+    trips?: boolean | Route$tripsArgs<ExtArgs>
     _count?: boolean | RouteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["route"]>
 
@@ -8857,6 +9153,7 @@ export namespace Prisma {
   export type RouteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     buses?: boolean | Route$busesArgs<ExtArgs>
+    trips?: boolean | Route$tripsArgs<ExtArgs>
     _count?: boolean | RouteCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -8865,6 +9162,7 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       buses: Prisma.$BusPayload<ExtArgs>[]
+      trips: Prisma.$TripPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -9220,6 +9518,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     buses<T extends Route$busesArgs<ExtArgs> = {}>(args?: Subset<T, Route$busesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    trips<T extends Route$tripsArgs<ExtArgs> = {}>(args?: Subset<T, Route$tripsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9627,6 +9926,30 @@ export namespace Prisma {
   }
 
   /**
+   * Route.trips
+   */
+  export type Route$tripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    where?: TripWhereInput
+    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
+    cursor?: TripWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TripScalarFieldEnum | TripScalarFieldEnum[]
+  }
+
+  /**
    * Route without action
    */
   export type RouteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9663,6 +9986,7 @@ export namespace Prisma {
     fare: Decimal | null
     seat_no: number | null
     pos_machine_id: number | null
+    trip_id: number | null
   }
 
   export type TicketSumAggregateOutputType = {
@@ -9671,6 +9995,7 @@ export namespace Prisma {
     fare: Decimal | null
     seat_no: number | null
     pos_machine_id: number | null
+    trip_id: number | null
   }
 
   export type TicketMinAggregateOutputType = {
@@ -9689,6 +10014,7 @@ export namespace Prisma {
     seat_no: number | null
     pos_machine_id: number | null
     payment_mode: $Enums.PaymentMode | null
+    trip_id: number | null
   }
 
   export type TicketMaxAggregateOutputType = {
@@ -9707,6 +10033,7 @@ export namespace Prisma {
     seat_no: number | null
     pos_machine_id: number | null
     payment_mode: $Enums.PaymentMode | null
+    trip_id: number | null
   }
 
   export type TicketCountAggregateOutputType = {
@@ -9725,6 +10052,7 @@ export namespace Prisma {
     seat_no: number
     pos_machine_id: number
     payment_mode: number
+    trip_id: number
     _all: number
   }
 
@@ -9735,6 +10063,7 @@ export namespace Prisma {
     fare?: true
     seat_no?: true
     pos_machine_id?: true
+    trip_id?: true
   }
 
   export type TicketSumAggregateInputType = {
@@ -9743,6 +10072,7 @@ export namespace Prisma {
     fare?: true
     seat_no?: true
     pos_machine_id?: true
+    trip_id?: true
   }
 
   export type TicketMinAggregateInputType = {
@@ -9761,6 +10091,7 @@ export namespace Prisma {
     seat_no?: true
     pos_machine_id?: true
     payment_mode?: true
+    trip_id?: true
   }
 
   export type TicketMaxAggregateInputType = {
@@ -9779,6 +10110,7 @@ export namespace Prisma {
     seat_no?: true
     pos_machine_id?: true
     payment_mode?: true
+    trip_id?: true
   }
 
   export type TicketCountAggregateInputType = {
@@ -9797,6 +10129,7 @@ export namespace Prisma {
     seat_no?: true
     pos_machine_id?: true
     payment_mode?: true
+    trip_id?: true
     _all?: true
   }
 
@@ -9902,6 +10235,7 @@ export namespace Prisma {
     seat_no: number | null
     pos_machine_id: number | null
     payment_mode: $Enums.PaymentMode
+    trip_id: number | null
     _count: TicketCountAggregateOutputType | null
     _avg: TicketAvgAggregateOutputType | null
     _sum: TicketSumAggregateOutputType | null
@@ -9939,8 +10273,10 @@ export namespace Prisma {
     seat_no?: boolean
     pos_machine_id?: boolean
     payment_mode?: boolean
+    trip_id?: boolean
     bus?: boolean | BusDefaultArgs<ExtArgs>
     posMachine?: boolean | Ticket$posMachineArgs<ExtArgs>
+    trip?: boolean | Ticket$tripArgs<ExtArgs>
   }, ExtArgs["result"]["ticket"]>
 
 
@@ -9961,12 +10297,14 @@ export namespace Prisma {
     seat_no?: boolean
     pos_machine_id?: boolean
     payment_mode?: boolean
+    trip_id?: boolean
   }
 
-  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bus_id" | "ticket_number" | "passenger_name" | "passenger_phone" | "from_stop" | "to_stop" | "passenger_type" | "fare" | "issue_time" | "journey_date" | "status" | "seat_no" | "pos_machine_id" | "payment_mode", ExtArgs["result"]["ticket"]>
+  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bus_id" | "ticket_number" | "passenger_name" | "passenger_phone" | "from_stop" | "to_stop" | "passenger_type" | "fare" | "issue_time" | "journey_date" | "status" | "seat_no" | "pos_machine_id" | "payment_mode" | "trip_id", ExtArgs["result"]["ticket"]>
   export type TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bus?: boolean | BusDefaultArgs<ExtArgs>
     posMachine?: boolean | Ticket$posMachineArgs<ExtArgs>
+    trip?: boolean | Ticket$tripArgs<ExtArgs>
   }
 
   export type $TicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9974,6 +10312,7 @@ export namespace Prisma {
     objects: {
       bus: Prisma.$BusPayload<ExtArgs>
       posMachine: Prisma.$POSMachinePayload<ExtArgs> | null
+      trip: Prisma.$TripPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -9991,6 +10330,7 @@ export namespace Prisma {
       seat_no: number | null
       pos_machine_id: number | null
       payment_mode: $Enums.PaymentMode
+      trip_id: number | null
     }, ExtArgs["result"]["ticket"]>
     composites: {}
   }
@@ -10333,6 +10673,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     bus<T extends BusDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusDefaultArgs<ExtArgs>>): Prisma__BusClient<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     posMachine<T extends Ticket$posMachineArgs<ExtArgs> = {}>(args?: Subset<T, Ticket$posMachineArgs<ExtArgs>>): Prisma__POSMachineClient<$Result.GetResult<Prisma.$POSMachinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    trip<T extends Ticket$tripArgs<ExtArgs> = {}>(args?: Subset<T, Ticket$tripArgs<ExtArgs>>): Prisma__TripClient<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10377,6 +10718,7 @@ export namespace Prisma {
     readonly seat_no: FieldRef<"Ticket", 'Int'>
     readonly pos_machine_id: FieldRef<"Ticket", 'Int'>
     readonly payment_mode: FieldRef<"Ticket", 'PaymentMode'>
+    readonly trip_id: FieldRef<"Ticket", 'Int'>
   }
     
 
@@ -10739,6 +11081,25 @@ export namespace Prisma {
   }
 
   /**
+   * Ticket.trip
+   */
+  export type Ticket$tripArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    where?: TripWhereInput
+  }
+
+  /**
    * Ticket without action
    */
   export type TicketDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10754,6 +11115,1148 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: TicketInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Trip
+   */
+
+  export type AggregateTrip = {
+    _count: TripCountAggregateOutputType | null
+    _avg: TripAvgAggregateOutputType | null
+    _sum: TripSumAggregateOutputType | null
+    _min: TripMinAggregateOutputType | null
+    _max: TripMaxAggregateOutputType | null
+  }
+
+  export type TripAvgAggregateOutputType = {
+    id: number | null
+    bus_id: number | null
+    route_id: number | null
+    driver_id: number | null
+    conductor_id: number | null
+  }
+
+  export type TripSumAggregateOutputType = {
+    id: number | null
+    bus_id: number | null
+    route_id: number | null
+    driver_id: number | null
+    conductor_id: number | null
+  }
+
+  export type TripMinAggregateOutputType = {
+    id: number | null
+    bus_id: number | null
+    route_id: number | null
+    start_time: Date | null
+    end_time: Date | null
+    status: $Enums.TripStatus | null
+    driver_id: number | null
+    conductor_id: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type TripMaxAggregateOutputType = {
+    id: number | null
+    bus_id: number | null
+    route_id: number | null
+    start_time: Date | null
+    end_time: Date | null
+    status: $Enums.TripStatus | null
+    driver_id: number | null
+    conductor_id: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type TripCountAggregateOutputType = {
+    id: number
+    bus_id: number
+    route_id: number
+    start_time: number
+    end_time: number
+    status: number
+    driver_id: number
+    conductor_id: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type TripAvgAggregateInputType = {
+    id?: true
+    bus_id?: true
+    route_id?: true
+    driver_id?: true
+    conductor_id?: true
+  }
+
+  export type TripSumAggregateInputType = {
+    id?: true
+    bus_id?: true
+    route_id?: true
+    driver_id?: true
+    conductor_id?: true
+  }
+
+  export type TripMinAggregateInputType = {
+    id?: true
+    bus_id?: true
+    route_id?: true
+    start_time?: true
+    end_time?: true
+    status?: true
+    driver_id?: true
+    conductor_id?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type TripMaxAggregateInputType = {
+    id?: true
+    bus_id?: true
+    route_id?: true
+    start_time?: true
+    end_time?: true
+    status?: true
+    driver_id?: true
+    conductor_id?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type TripCountAggregateInputType = {
+    id?: true
+    bus_id?: true
+    route_id?: true
+    start_time?: true
+    end_time?: true
+    status?: true
+    driver_id?: true
+    conductor_id?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type TripAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Trip to aggregate.
+     */
+    where?: TripWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Trips to fetch.
+     */
+    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TripWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Trips from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Trips.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Trips
+    **/
+    _count?: true | TripCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TripAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TripSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TripMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TripMaxAggregateInputType
+  }
+
+  export type GetTripAggregateType<T extends TripAggregateArgs> = {
+        [P in keyof T & keyof AggregateTrip]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTrip[P]>
+      : GetScalarType<T[P], AggregateTrip[P]>
+  }
+
+
+
+
+  export type TripGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TripWhereInput
+    orderBy?: TripOrderByWithAggregationInput | TripOrderByWithAggregationInput[]
+    by: TripScalarFieldEnum[] | TripScalarFieldEnum
+    having?: TripScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TripCountAggregateInputType | true
+    _avg?: TripAvgAggregateInputType
+    _sum?: TripSumAggregateInputType
+    _min?: TripMinAggregateInputType
+    _max?: TripMaxAggregateInputType
+  }
+
+  export type TripGroupByOutputType = {
+    id: number
+    bus_id: number
+    route_id: number
+    start_time: Date
+    end_time: Date | null
+    status: $Enums.TripStatus
+    driver_id: number | null
+    conductor_id: number | null
+    created_at: Date
+    updated_at: Date
+    _count: TripCountAggregateOutputType | null
+    _avg: TripAvgAggregateOutputType | null
+    _sum: TripSumAggregateOutputType | null
+    _min: TripMinAggregateOutputType | null
+    _max: TripMaxAggregateOutputType | null
+  }
+
+  type GetTripGroupByPayload<T extends TripGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TripGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TripGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TripGroupByOutputType[P]>
+            : GetScalarType<T[P], TripGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TripSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bus_id?: boolean
+    route_id?: boolean
+    start_time?: boolean
+    end_time?: boolean
+    status?: boolean
+    driver_id?: boolean
+    conductor_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    bus?: boolean | BusDefaultArgs<ExtArgs>
+    route?: boolean | RouteDefaultArgs<ExtArgs>
+    driver?: boolean | Trip$driverArgs<ExtArgs>
+    conductor?: boolean | Trip$conductorArgs<ExtArgs>
+    tickets?: boolean | Trip$ticketsArgs<ExtArgs>
+    packages?: boolean | Trip$packagesArgs<ExtArgs>
+    _count?: boolean | TripCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["trip"]>
+
+
+
+  export type TripSelectScalar = {
+    id?: boolean
+    bus_id?: boolean
+    route_id?: boolean
+    start_time?: boolean
+    end_time?: boolean
+    status?: boolean
+    driver_id?: boolean
+    conductor_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type TripOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bus_id" | "route_id" | "start_time" | "end_time" | "status" | "driver_id" | "conductor_id" | "created_at" | "updated_at", ExtArgs["result"]["trip"]>
+  export type TripInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bus?: boolean | BusDefaultArgs<ExtArgs>
+    route?: boolean | RouteDefaultArgs<ExtArgs>
+    driver?: boolean | Trip$driverArgs<ExtArgs>
+    conductor?: boolean | Trip$conductorArgs<ExtArgs>
+    tickets?: boolean | Trip$ticketsArgs<ExtArgs>
+    packages?: boolean | Trip$packagesArgs<ExtArgs>
+    _count?: boolean | TripCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $TripPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Trip"
+    objects: {
+      bus: Prisma.$BusPayload<ExtArgs>
+      route: Prisma.$RoutePayload<ExtArgs>
+      driver: Prisma.$DriverPayload<ExtArgs> | null
+      conductor: Prisma.$ConductorPayload<ExtArgs> | null
+      tickets: Prisma.$TicketPayload<ExtArgs>[]
+      packages: Prisma.$PackagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      bus_id: number
+      route_id: number
+      start_time: Date
+      end_time: Date | null
+      status: $Enums.TripStatus
+      driver_id: number | null
+      conductor_id: number | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["trip"]>
+    composites: {}
+  }
+
+  type TripGetPayload<S extends boolean | null | undefined | TripDefaultArgs> = $Result.GetResult<Prisma.$TripPayload, S>
+
+  type TripCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TripFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TripCountAggregateInputType | true
+    }
+
+  export interface TripDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Trip'], meta: { name: 'Trip' } }
+    /**
+     * Find zero or one Trip that matches the filter.
+     * @param {TripFindUniqueArgs} args - Arguments to find a Trip
+     * @example
+     * // Get one Trip
+     * const trip = await prisma.trip.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TripFindUniqueArgs>(args: SelectSubset<T, TripFindUniqueArgs<ExtArgs>>): Prisma__TripClient<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Trip that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TripFindUniqueOrThrowArgs} args - Arguments to find a Trip
+     * @example
+     * // Get one Trip
+     * const trip = await prisma.trip.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TripFindUniqueOrThrowArgs>(args: SelectSubset<T, TripFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TripClient<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Trip that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripFindFirstArgs} args - Arguments to find a Trip
+     * @example
+     * // Get one Trip
+     * const trip = await prisma.trip.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TripFindFirstArgs>(args?: SelectSubset<T, TripFindFirstArgs<ExtArgs>>): Prisma__TripClient<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Trip that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripFindFirstOrThrowArgs} args - Arguments to find a Trip
+     * @example
+     * // Get one Trip
+     * const trip = await prisma.trip.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TripFindFirstOrThrowArgs>(args?: SelectSubset<T, TripFindFirstOrThrowArgs<ExtArgs>>): Prisma__TripClient<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Trips that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Trips
+     * const trips = await prisma.trip.findMany()
+     * 
+     * // Get first 10 Trips
+     * const trips = await prisma.trip.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tripWithIdOnly = await prisma.trip.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TripFindManyArgs>(args?: SelectSubset<T, TripFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Trip.
+     * @param {TripCreateArgs} args - Arguments to create a Trip.
+     * @example
+     * // Create one Trip
+     * const Trip = await prisma.trip.create({
+     *   data: {
+     *     // ... data to create a Trip
+     *   }
+     * })
+     * 
+     */
+    create<T extends TripCreateArgs>(args: SelectSubset<T, TripCreateArgs<ExtArgs>>): Prisma__TripClient<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Trips.
+     * @param {TripCreateManyArgs} args - Arguments to create many Trips.
+     * @example
+     * // Create many Trips
+     * const trip = await prisma.trip.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TripCreateManyArgs>(args?: SelectSubset<T, TripCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Trip.
+     * @param {TripDeleteArgs} args - Arguments to delete one Trip.
+     * @example
+     * // Delete one Trip
+     * const Trip = await prisma.trip.delete({
+     *   where: {
+     *     // ... filter to delete one Trip
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TripDeleteArgs>(args: SelectSubset<T, TripDeleteArgs<ExtArgs>>): Prisma__TripClient<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Trip.
+     * @param {TripUpdateArgs} args - Arguments to update one Trip.
+     * @example
+     * // Update one Trip
+     * const trip = await prisma.trip.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TripUpdateArgs>(args: SelectSubset<T, TripUpdateArgs<ExtArgs>>): Prisma__TripClient<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Trips.
+     * @param {TripDeleteManyArgs} args - Arguments to filter Trips to delete.
+     * @example
+     * // Delete a few Trips
+     * const { count } = await prisma.trip.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TripDeleteManyArgs>(args?: SelectSubset<T, TripDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Trips.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Trips
+     * const trip = await prisma.trip.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TripUpdateManyArgs>(args: SelectSubset<T, TripUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Trip.
+     * @param {TripUpsertArgs} args - Arguments to update or create a Trip.
+     * @example
+     * // Update or create a Trip
+     * const trip = await prisma.trip.upsert({
+     *   create: {
+     *     // ... data to create a Trip
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Trip we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TripUpsertArgs>(args: SelectSubset<T, TripUpsertArgs<ExtArgs>>): Prisma__TripClient<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Trips.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripCountArgs} args - Arguments to filter Trips to count.
+     * @example
+     * // Count the number of Trips
+     * const count = await prisma.trip.count({
+     *   where: {
+     *     // ... the filter for the Trips we want to count
+     *   }
+     * })
+    **/
+    count<T extends TripCountArgs>(
+      args?: Subset<T, TripCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TripCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Trip.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TripAggregateArgs>(args: Subset<T, TripAggregateArgs>): Prisma.PrismaPromise<GetTripAggregateType<T>>
+
+    /**
+     * Group by Trip.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TripGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TripGroupByArgs['orderBy'] }
+        : { orderBy?: TripGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TripGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTripGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Trip model
+   */
+  readonly fields: TripFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Trip.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TripClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    bus<T extends BusDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusDefaultArgs<ExtArgs>>): Prisma__BusClient<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    route<T extends RouteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RouteDefaultArgs<ExtArgs>>): Prisma__RouteClient<$Result.GetResult<Prisma.$RoutePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    driver<T extends Trip$driverArgs<ExtArgs> = {}>(args?: Subset<T, Trip$driverArgs<ExtArgs>>): Prisma__DriverClient<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    conductor<T extends Trip$conductorArgs<ExtArgs> = {}>(args?: Subset<T, Trip$conductorArgs<ExtArgs>>): Prisma__ConductorClient<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    tickets<T extends Trip$ticketsArgs<ExtArgs> = {}>(args?: Subset<T, Trip$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    packages<T extends Trip$packagesArgs<ExtArgs> = {}>(args?: Subset<T, Trip$packagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Trip model
+   */
+  interface TripFieldRefs {
+    readonly id: FieldRef<"Trip", 'Int'>
+    readonly bus_id: FieldRef<"Trip", 'Int'>
+    readonly route_id: FieldRef<"Trip", 'Int'>
+    readonly start_time: FieldRef<"Trip", 'DateTime'>
+    readonly end_time: FieldRef<"Trip", 'DateTime'>
+    readonly status: FieldRef<"Trip", 'TripStatus'>
+    readonly driver_id: FieldRef<"Trip", 'Int'>
+    readonly conductor_id: FieldRef<"Trip", 'Int'>
+    readonly created_at: FieldRef<"Trip", 'DateTime'>
+    readonly updated_at: FieldRef<"Trip", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Trip findUnique
+   */
+  export type TripFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    /**
+     * Filter, which Trip to fetch.
+     */
+    where: TripWhereUniqueInput
+  }
+
+  /**
+   * Trip findUniqueOrThrow
+   */
+  export type TripFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    /**
+     * Filter, which Trip to fetch.
+     */
+    where: TripWhereUniqueInput
+  }
+
+  /**
+   * Trip findFirst
+   */
+  export type TripFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    /**
+     * Filter, which Trip to fetch.
+     */
+    where?: TripWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Trips to fetch.
+     */
+    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Trips.
+     */
+    cursor?: TripWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Trips from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Trips.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Trips.
+     */
+    distinct?: TripScalarFieldEnum | TripScalarFieldEnum[]
+  }
+
+  /**
+   * Trip findFirstOrThrow
+   */
+  export type TripFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    /**
+     * Filter, which Trip to fetch.
+     */
+    where?: TripWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Trips to fetch.
+     */
+    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Trips.
+     */
+    cursor?: TripWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Trips from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Trips.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Trips.
+     */
+    distinct?: TripScalarFieldEnum | TripScalarFieldEnum[]
+  }
+
+  /**
+   * Trip findMany
+   */
+  export type TripFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    /**
+     * Filter, which Trips to fetch.
+     */
+    where?: TripWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Trips to fetch.
+     */
+    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Trips.
+     */
+    cursor?: TripWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Trips from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Trips.
+     */
+    skip?: number
+    distinct?: TripScalarFieldEnum | TripScalarFieldEnum[]
+  }
+
+  /**
+   * Trip create
+   */
+  export type TripCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Trip.
+     */
+    data: XOR<TripCreateInput, TripUncheckedCreateInput>
+  }
+
+  /**
+   * Trip createMany
+   */
+  export type TripCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Trips.
+     */
+    data: TripCreateManyInput | TripCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Trip update
+   */
+  export type TripUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Trip.
+     */
+    data: XOR<TripUpdateInput, TripUncheckedUpdateInput>
+    /**
+     * Choose, which Trip to update.
+     */
+    where: TripWhereUniqueInput
+  }
+
+  /**
+   * Trip updateMany
+   */
+  export type TripUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Trips.
+     */
+    data: XOR<TripUpdateManyMutationInput, TripUncheckedUpdateManyInput>
+    /**
+     * Filter which Trips to update
+     */
+    where?: TripWhereInput
+    /**
+     * Limit how many Trips to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Trip upsert
+   */
+  export type TripUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Trip to update in case it exists.
+     */
+    where: TripWhereUniqueInput
+    /**
+     * In case the Trip found by the `where` argument doesn't exist, create a new Trip with this data.
+     */
+    create: XOR<TripCreateInput, TripUncheckedCreateInput>
+    /**
+     * In case the Trip was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TripUpdateInput, TripUncheckedUpdateInput>
+  }
+
+  /**
+   * Trip delete
+   */
+  export type TripDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    /**
+     * Filter which Trip to delete.
+     */
+    where: TripWhereUniqueInput
+  }
+
+  /**
+   * Trip deleteMany
+   */
+  export type TripDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Trips to delete
+     */
+    where?: TripWhereInput
+    /**
+     * Limit how many Trips to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Trip.driver
+   */
+  export type Trip$driverArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Driver
+     */
+    select?: DriverSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Driver
+     */
+    omit?: DriverOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DriverInclude<ExtArgs> | null
+    where?: DriverWhereInput
+  }
+
+  /**
+   * Trip.conductor
+   */
+  export type Trip$conductorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Conductor
+     */
+    select?: ConductorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Conductor
+     */
+    omit?: ConductorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConductorInclude<ExtArgs> | null
+    where?: ConductorWhereInput
+  }
+
+  /**
+   * Trip.tickets
+   */
+  export type Trip$ticketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ticket
+     */
+    select?: TicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ticket
+     */
+    omit?: TicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketInclude<ExtArgs> | null
+    where?: TicketWhereInput
+    orderBy?: TicketOrderByWithRelationInput | TicketOrderByWithRelationInput[]
+    cursor?: TicketWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TicketScalarFieldEnum | TicketScalarFieldEnum[]
+  }
+
+  /**
+   * Trip.packages
+   */
+  export type Trip$packagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Package
+     */
+    select?: PackageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Package
+     */
+    omit?: PackageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackageInclude<ExtArgs> | null
+    where?: PackageWhereInput
+    orderBy?: PackageOrderByWithRelationInput | PackageOrderByWithRelationInput[]
+    cursor?: PackageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PackageScalarFieldEnum | PackageScalarFieldEnum[]
+  }
+
+  /**
+   * Trip without action
+   */
+  export type TripDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
   }
 
 
@@ -12986,7 +14489,8 @@ export namespace Prisma {
     fare: 'fare',
     status: 'status',
     booked_at: 'booked_at',
-    delivered_at: 'delivered_at'
+    delivered_at: 'delivered_at',
+    trip_id: 'trip_id'
   };
 
   export type PackageScalarFieldEnum = (typeof PackageScalarFieldEnum)[keyof typeof PackageScalarFieldEnum]
@@ -13054,10 +14558,27 @@ export namespace Prisma {
     status: 'status',
     seat_no: 'seat_no',
     pos_machine_id: 'pos_machine_id',
-    payment_mode: 'payment_mode'
+    payment_mode: 'payment_mode',
+    trip_id: 'trip_id'
   };
 
   export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
+
+
+  export const TripScalarFieldEnum: {
+    id: 'id',
+    bus_id: 'bus_id',
+    route_id: 'route_id',
+    start_time: 'start_time',
+    end_time: 'end_time',
+    status: 'status',
+    driver_id: 'driver_id',
+    conductor_id: 'conductor_id',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type TripScalarFieldEnum = (typeof TripScalarFieldEnum)[keyof typeof TripScalarFieldEnum]
 
 
   export const UserScalarFieldEnum: {
@@ -13313,6 +14834,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TripStatus'
+   */
+  export type EnumTripStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TripStatus'>
+    
+
+
+  /**
    * Reference to a field of type 'Role'
    */
   export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
@@ -13363,6 +14891,7 @@ export namespace Prisma {
     packages?: PackageListRelationFilter
     dailyReports?: DailyReportListRelationFilter
     posMachines?: POSMachineListRelationFilter
+    trips?: TripListRelationFilter
   }
 
   export type BusOrderByWithRelationInput = {
@@ -13389,6 +14918,7 @@ export namespace Prisma {
     packages?: PackageOrderByRelationAggregateInput
     dailyReports?: DailyReportOrderByRelationAggregateInput
     posMachines?: POSMachineOrderByRelationAggregateInput
+    trips?: TripOrderByRelationAggregateInput
     _relevance?: BusOrderByRelevanceInput
   }
 
@@ -13419,6 +14949,7 @@ export namespace Prisma {
     packages?: PackageListRelationFilter
     dailyReports?: DailyReportListRelationFilter
     posMachines?: POSMachineListRelationFilter
+    trips?: TripListRelationFilter
   }, "id" | "bus_number">
 
   export type BusOrderByWithAggregationInput = {
@@ -13481,6 +15012,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Conductor"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     buses?: BusListRelationFilter
+    trips?: TripListRelationFilter
   }
 
   export type ConductorOrderByWithRelationInput = {
@@ -13496,6 +15028,7 @@ export namespace Prisma {
     updated_at?: SortOrder
     user?: UserOrderByWithRelationInput
     buses?: BusOrderByRelationAggregateInput
+    trips?: TripOrderByRelationAggregateInput
     _relevance?: ConductorOrderByRelevanceInput
   }
 
@@ -13515,6 +15048,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Conductor"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     buses?: BusListRelationFilter
+    trips?: TripListRelationFilter
   }, "id">
 
   export type ConductorOrderByWithAggregationInput = {
@@ -13569,6 +15103,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Driver"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     buses?: BusListRelationFilter
+    trips?: TripListRelationFilter
   }
 
   export type DriverOrderByWithRelationInput = {
@@ -13586,6 +15121,7 @@ export namespace Prisma {
     updated_at?: SortOrder
     user?: UserOrderByWithRelationInput
     buses?: BusOrderByRelationAggregateInput
+    trips?: TripOrderByRelationAggregateInput
     _relevance?: DriverOrderByRelevanceInput
   }
 
@@ -13607,6 +15143,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Driver"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     buses?: BusListRelationFilter
+    trips?: TripListRelationFilter
   }, "id">
 
   export type DriverOrderByWithAggregationInput = {
@@ -13666,7 +15203,9 @@ export namespace Prisma {
     status?: EnumPackageStatusFilter<"Package"> | $Enums.PackageStatus
     booked_at?: DateTimeFilter<"Package"> | Date | string
     delivered_at?: DateTimeNullableFilter<"Package"> | Date | string | null
+    trip_id?: IntNullableFilter<"Package"> | number | null
     bus?: XOR<BusScalarRelationFilter, BusWhereInput>
+    trip?: XOR<TripNullableScalarRelationFilter, TripWhereInput> | null
   }
 
   export type PackageOrderByWithRelationInput = {
@@ -13685,7 +15224,9 @@ export namespace Prisma {
     status?: SortOrder
     booked_at?: SortOrder
     delivered_at?: SortOrderInput | SortOrder
+    trip_id?: SortOrderInput | SortOrder
     bus?: BusOrderByWithRelationInput
+    trip?: TripOrderByWithRelationInput
     _relevance?: PackageOrderByRelevanceInput
   }
 
@@ -13708,7 +15249,9 @@ export namespace Prisma {
     status?: EnumPackageStatusFilter<"Package"> | $Enums.PackageStatus
     booked_at?: DateTimeFilter<"Package"> | Date | string
     delivered_at?: DateTimeNullableFilter<"Package"> | Date | string | null
+    trip_id?: IntNullableFilter<"Package"> | number | null
     bus?: XOR<BusScalarRelationFilter, BusWhereInput>
+    trip?: XOR<TripNullableScalarRelationFilter, TripWhereInput> | null
   }, "id" | "package_number">
 
   export type PackageOrderByWithAggregationInput = {
@@ -13727,6 +15270,7 @@ export namespace Prisma {
     status?: SortOrder
     booked_at?: SortOrder
     delivered_at?: SortOrderInput | SortOrder
+    trip_id?: SortOrderInput | SortOrder
     _count?: PackageCountOrderByAggregateInput
     _avg?: PackageAvgOrderByAggregateInput
     _max?: PackageMaxOrderByAggregateInput
@@ -13753,6 +15297,7 @@ export namespace Prisma {
     status?: EnumPackageStatusWithAggregatesFilter<"Package"> | $Enums.PackageStatus
     booked_at?: DateTimeWithAggregatesFilter<"Package"> | Date | string
     delivered_at?: DateTimeNullableWithAggregatesFilter<"Package"> | Date | string | null
+    trip_id?: IntNullableWithAggregatesFilter<"Package"> | number | null
   }
 
   export type POSMachineWhereInput = {
@@ -13931,6 +15476,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Route"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     buses?: BusListRelationFilter
+    trips?: TripListRelationFilter
   }
 
   export type RouteOrderByWithRelationInput = {
@@ -13947,6 +15493,7 @@ export namespace Prisma {
     updated_at?: SortOrder
     user?: UserOrderByWithRelationInput
     buses?: BusOrderByRelationAggregateInput
+    trips?: TripOrderByRelationAggregateInput
     _relevance?: RouteOrderByRelevanceInput
   }
 
@@ -13967,6 +15514,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Route"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     buses?: BusListRelationFilter
+    trips?: TripListRelationFilter
   }, "id" | "code">
 
   export type RouteOrderByWithAggregationInput = {
@@ -14024,8 +15572,10 @@ export namespace Prisma {
     seat_no?: IntNullableFilter<"Ticket"> | number | null
     pos_machine_id?: IntNullableFilter<"Ticket"> | number | null
     payment_mode?: EnumPaymentModeFilter<"Ticket"> | $Enums.PaymentMode
+    trip_id?: IntNullableFilter<"Ticket"> | number | null
     bus?: XOR<BusScalarRelationFilter, BusWhereInput>
     posMachine?: XOR<POSMachineNullableScalarRelationFilter, POSMachineWhereInput> | null
+    trip?: XOR<TripNullableScalarRelationFilter, TripWhereInput> | null
   }
 
   export type TicketOrderByWithRelationInput = {
@@ -14044,8 +15594,10 @@ export namespace Prisma {
     seat_no?: SortOrderInput | SortOrder
     pos_machine_id?: SortOrderInput | SortOrder
     payment_mode?: SortOrder
+    trip_id?: SortOrderInput | SortOrder
     bus?: BusOrderByWithRelationInput
     posMachine?: POSMachineOrderByWithRelationInput
+    trip?: TripOrderByWithRelationInput
     _relevance?: TicketOrderByRelevanceInput
   }
 
@@ -14068,8 +15620,10 @@ export namespace Prisma {
     seat_no?: IntNullableFilter<"Ticket"> | number | null
     pos_machine_id?: IntNullableFilter<"Ticket"> | number | null
     payment_mode?: EnumPaymentModeFilter<"Ticket"> | $Enums.PaymentMode
+    trip_id?: IntNullableFilter<"Ticket"> | number | null
     bus?: XOR<BusScalarRelationFilter, BusWhereInput>
     posMachine?: XOR<POSMachineNullableScalarRelationFilter, POSMachineWhereInput> | null
+    trip?: XOR<TripNullableScalarRelationFilter, TripWhereInput> | null
   }, "id" | "ticket_number">
 
   export type TicketOrderByWithAggregationInput = {
@@ -14088,6 +15642,7 @@ export namespace Prisma {
     seat_no?: SortOrderInput | SortOrder
     pos_machine_id?: SortOrderInput | SortOrder
     payment_mode?: SortOrder
+    trip_id?: SortOrderInput | SortOrder
     _count?: TicketCountOrderByAggregateInput
     _avg?: TicketAvgOrderByAggregateInput
     _max?: TicketMaxOrderByAggregateInput
@@ -14114,6 +15669,104 @@ export namespace Prisma {
     seat_no?: IntNullableWithAggregatesFilter<"Ticket"> | number | null
     pos_machine_id?: IntNullableWithAggregatesFilter<"Ticket"> | number | null
     payment_mode?: EnumPaymentModeWithAggregatesFilter<"Ticket"> | $Enums.PaymentMode
+    trip_id?: IntNullableWithAggregatesFilter<"Ticket"> | number | null
+  }
+
+  export type TripWhereInput = {
+    AND?: TripWhereInput | TripWhereInput[]
+    OR?: TripWhereInput[]
+    NOT?: TripWhereInput | TripWhereInput[]
+    id?: IntFilter<"Trip"> | number
+    bus_id?: IntFilter<"Trip"> | number
+    route_id?: IntFilter<"Trip"> | number
+    start_time?: DateTimeFilter<"Trip"> | Date | string
+    end_time?: DateTimeNullableFilter<"Trip"> | Date | string | null
+    status?: EnumTripStatusFilter<"Trip"> | $Enums.TripStatus
+    driver_id?: IntNullableFilter<"Trip"> | number | null
+    conductor_id?: IntNullableFilter<"Trip"> | number | null
+    created_at?: DateTimeFilter<"Trip"> | Date | string
+    updated_at?: DateTimeFilter<"Trip"> | Date | string
+    bus?: XOR<BusScalarRelationFilter, BusWhereInput>
+    route?: XOR<RouteScalarRelationFilter, RouteWhereInput>
+    driver?: XOR<DriverNullableScalarRelationFilter, DriverWhereInput> | null
+    conductor?: XOR<ConductorNullableScalarRelationFilter, ConductorWhereInput> | null
+    tickets?: TicketListRelationFilter
+    packages?: PackageListRelationFilter
+  }
+
+  export type TripOrderByWithRelationInput = {
+    id?: SortOrder
+    bus_id?: SortOrder
+    route_id?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrderInput | SortOrder
+    status?: SortOrder
+    driver_id?: SortOrderInput | SortOrder
+    conductor_id?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    bus?: BusOrderByWithRelationInput
+    route?: RouteOrderByWithRelationInput
+    driver?: DriverOrderByWithRelationInput
+    conductor?: ConductorOrderByWithRelationInput
+    tickets?: TicketOrderByRelationAggregateInput
+    packages?: PackageOrderByRelationAggregateInput
+  }
+
+  export type TripWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: TripWhereInput | TripWhereInput[]
+    OR?: TripWhereInput[]
+    NOT?: TripWhereInput | TripWhereInput[]
+    bus_id?: IntFilter<"Trip"> | number
+    route_id?: IntFilter<"Trip"> | number
+    start_time?: DateTimeFilter<"Trip"> | Date | string
+    end_time?: DateTimeNullableFilter<"Trip"> | Date | string | null
+    status?: EnumTripStatusFilter<"Trip"> | $Enums.TripStatus
+    driver_id?: IntNullableFilter<"Trip"> | number | null
+    conductor_id?: IntNullableFilter<"Trip"> | number | null
+    created_at?: DateTimeFilter<"Trip"> | Date | string
+    updated_at?: DateTimeFilter<"Trip"> | Date | string
+    bus?: XOR<BusScalarRelationFilter, BusWhereInput>
+    route?: XOR<RouteScalarRelationFilter, RouteWhereInput>
+    driver?: XOR<DriverNullableScalarRelationFilter, DriverWhereInput> | null
+    conductor?: XOR<ConductorNullableScalarRelationFilter, ConductorWhereInput> | null
+    tickets?: TicketListRelationFilter
+    packages?: PackageListRelationFilter
+  }, "id">
+
+  export type TripOrderByWithAggregationInput = {
+    id?: SortOrder
+    bus_id?: SortOrder
+    route_id?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrderInput | SortOrder
+    status?: SortOrder
+    driver_id?: SortOrderInput | SortOrder
+    conductor_id?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: TripCountOrderByAggregateInput
+    _avg?: TripAvgOrderByAggregateInput
+    _max?: TripMaxOrderByAggregateInput
+    _min?: TripMinOrderByAggregateInput
+    _sum?: TripSumOrderByAggregateInput
+  }
+
+  export type TripScalarWhereWithAggregatesInput = {
+    AND?: TripScalarWhereWithAggregatesInput | TripScalarWhereWithAggregatesInput[]
+    OR?: TripScalarWhereWithAggregatesInput[]
+    NOT?: TripScalarWhereWithAggregatesInput | TripScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Trip"> | number
+    bus_id?: IntWithAggregatesFilter<"Trip"> | number
+    route_id?: IntWithAggregatesFilter<"Trip"> | number
+    start_time?: DateTimeWithAggregatesFilter<"Trip"> | Date | string
+    end_time?: DateTimeNullableWithAggregatesFilter<"Trip"> | Date | string | null
+    status?: EnumTripStatusWithAggregatesFilter<"Trip"> | $Enums.TripStatus
+    driver_id?: IntNullableWithAggregatesFilter<"Trip"> | number | null
+    conductor_id?: IntNullableWithAggregatesFilter<"Trip"> | number | null
+    created_at?: DateTimeWithAggregatesFilter<"Trip"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"Trip"> | Date | string
   }
 
   export type UserWhereInput = {
@@ -14298,6 +15951,7 @@ export namespace Prisma {
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
     posMachines?: POSMachineCreateNestedManyWithoutBusInput
+    trips?: TripCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateInput = {
@@ -14320,6 +15974,7 @@ export namespace Prisma {
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
     posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
+    trips?: TripUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusUpdateInput = {
@@ -14341,6 +15996,7 @@ export namespace Prisma {
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUpdateManyWithoutBusNestedInput
+    trips?: TripUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateInput = {
@@ -14363,6 +16019,7 @@ export namespace Prisma {
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type BusCreateManyInput = {
@@ -14425,6 +16082,7 @@ export namespace Prisma {
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutConductorsInput
     buses?: BusCreateNestedManyWithoutConductorInput
+    trips?: TripCreateNestedManyWithoutConductorInput
   }
 
   export type ConductorUncheckedCreateInput = {
@@ -14439,6 +16097,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     buses?: BusUncheckedCreateNestedManyWithoutConductorInput
+    trips?: TripUncheckedCreateNestedManyWithoutConductorInput
   }
 
   export type ConductorUpdateInput = {
@@ -14452,6 +16111,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutConductorsNestedInput
     buses?: BusUpdateManyWithoutConductorNestedInput
+    trips?: TripUpdateManyWithoutConductorNestedInput
   }
 
   export type ConductorUncheckedUpdateInput = {
@@ -14466,6 +16126,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     buses?: BusUncheckedUpdateManyWithoutConductorNestedInput
+    trips?: TripUncheckedUpdateManyWithoutConductorNestedInput
   }
 
   export type ConductorCreateManyInput = {
@@ -14518,6 +16179,7 @@ export namespace Prisma {
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutDriversInput
     buses?: BusCreateNestedManyWithoutDriverInput
+    trips?: TripCreateNestedManyWithoutDriverInput
   }
 
   export type DriverUncheckedCreateInput = {
@@ -14534,6 +16196,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     buses?: BusUncheckedCreateNestedManyWithoutDriverInput
+    trips?: TripUncheckedCreateNestedManyWithoutDriverInput
   }
 
   export type DriverUpdateInput = {
@@ -14549,6 +16212,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutDriversNestedInput
     buses?: BusUpdateManyWithoutDriverNestedInput
+    trips?: TripUpdateManyWithoutDriverNestedInput
   }
 
   export type DriverUncheckedUpdateInput = {
@@ -14565,6 +16229,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     buses?: BusUncheckedUpdateManyWithoutDriverNestedInput
+    trips?: TripUncheckedUpdateManyWithoutDriverNestedInput
   }
 
   export type DriverCreateManyInput = {
@@ -14625,6 +16290,7 @@ export namespace Prisma {
     booked_at?: Date | string
     delivered_at?: Date | string | null
     bus: BusCreateNestedOneWithoutPackagesInput
+    trip?: TripCreateNestedOneWithoutPackagesInput
   }
 
   export type PackageUncheckedCreateInput = {
@@ -14643,6 +16309,7 @@ export namespace Prisma {
     status?: $Enums.PackageStatus
     booked_at?: Date | string
     delivered_at?: Date | string | null
+    trip_id?: number | null
   }
 
   export type PackageUpdateInput = {
@@ -14660,6 +16327,7 @@ export namespace Prisma {
     booked_at?: DateTimeFieldUpdateOperationsInput | Date | string
     delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bus?: BusUpdateOneRequiredWithoutPackagesNestedInput
+    trip?: TripUpdateOneWithoutPackagesNestedInput
   }
 
   export type PackageUncheckedUpdateInput = {
@@ -14678,6 +16346,7 @@ export namespace Prisma {
     status?: EnumPackageStatusFieldUpdateOperationsInput | $Enums.PackageStatus
     booked_at?: DateTimeFieldUpdateOperationsInput | Date | string
     delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    trip_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type PackageCreateManyInput = {
@@ -14696,6 +16365,7 @@ export namespace Prisma {
     status?: $Enums.PackageStatus
     booked_at?: Date | string
     delivered_at?: Date | string | null
+    trip_id?: number | null
   }
 
   export type PackageUpdateManyMutationInput = {
@@ -14730,6 +16400,7 @@ export namespace Prisma {
     status?: EnumPackageStatusFieldUpdateOperationsInput | $Enums.PackageStatus
     booked_at?: DateTimeFieldUpdateOperationsInput | Date | string
     delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    trip_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type POSMachineCreateInput = {
@@ -14908,6 +16579,7 @@ export namespace Prisma {
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutRoutesInput
     buses?: BusCreateNestedManyWithoutRouteInput
+    trips?: TripCreateNestedManyWithoutRouteInput
   }
 
   export type RouteUncheckedCreateInput = {
@@ -14923,6 +16595,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     buses?: BusUncheckedCreateNestedManyWithoutRouteInput
+    trips?: TripUncheckedCreateNestedManyWithoutRouteInput
   }
 
   export type RouteUpdateInput = {
@@ -14937,6 +16610,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutRoutesNestedInput
     buses?: BusUpdateManyWithoutRouteNestedInput
+    trips?: TripUpdateManyWithoutRouteNestedInput
   }
 
   export type RouteUncheckedUpdateInput = {
@@ -14952,6 +16626,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     buses?: BusUncheckedUpdateManyWithoutRouteNestedInput
+    trips?: TripUncheckedUpdateManyWithoutRouteNestedInput
   }
 
   export type RouteCreateManyInput = {
@@ -15009,6 +16684,7 @@ export namespace Prisma {
     payment_mode?: $Enums.PaymentMode
     bus: BusCreateNestedOneWithoutTicketsInput
     posMachine?: POSMachineCreateNestedOneWithoutTicketsInput
+    trip?: TripCreateNestedOneWithoutTicketsInput
   }
 
   export type TicketUncheckedCreateInput = {
@@ -15027,6 +16703,7 @@ export namespace Prisma {
     seat_no?: number | null
     pos_machine_id?: number | null
     payment_mode?: $Enums.PaymentMode
+    trip_id?: number | null
   }
 
   export type TicketUpdateInput = {
@@ -15044,6 +16721,7 @@ export namespace Prisma {
     payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
     bus?: BusUpdateOneRequiredWithoutTicketsNestedInput
     posMachine?: POSMachineUpdateOneWithoutTicketsNestedInput
+    trip?: TripUpdateOneWithoutTicketsNestedInput
   }
 
   export type TicketUncheckedUpdateInput = {
@@ -15062,6 +16740,7 @@ export namespace Prisma {
     seat_no?: NullableIntFieldUpdateOperationsInput | number | null
     pos_machine_id?: NullableIntFieldUpdateOperationsInput | number | null
     payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    trip_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TicketCreateManyInput = {
@@ -15080,6 +16759,7 @@ export namespace Prisma {
     seat_no?: number | null
     pos_machine_id?: number | null
     payment_mode?: $Enums.PaymentMode
+    trip_id?: number | null
   }
 
   export type TicketUpdateManyMutationInput = {
@@ -15113,6 +16793,99 @@ export namespace Prisma {
     seat_no?: NullableIntFieldUpdateOperationsInput | number | null
     pos_machine_id?: NullableIntFieldUpdateOperationsInput | number | null
     payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    trip_id?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type TripCreateInput = {
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    bus: BusCreateNestedOneWithoutTripsInput
+    route: RouteCreateNestedOneWithoutTripsInput
+    driver?: DriverCreateNestedOneWithoutTripsInput
+    conductor?: ConductorCreateNestedOneWithoutTripsInput
+    tickets?: TicketCreateNestedManyWithoutTripInput
+    packages?: PackageCreateNestedManyWithoutTripInput
+  }
+
+  export type TripUncheckedCreateInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
+    conductor_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutTripInput
+    packages?: PackageUncheckedCreateNestedManyWithoutTripInput
+  }
+
+  export type TripUpdateInput = {
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bus?: BusUpdateOneRequiredWithoutTripsNestedInput
+    route?: RouteUpdateOneRequiredWithoutTripsNestedInput
+    driver?: DriverUpdateOneWithoutTripsNestedInput
+    conductor?: ConductorUpdateOneWithoutTripsNestedInput
+    tickets?: TicketUpdateManyWithoutTripNestedInput
+    packages?: PackageUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutTripNestedInput
+    packages?: PackageUncheckedUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripCreateManyInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
+    conductor_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type TripUpdateManyMutationInput = {
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TripUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateInput = {
@@ -15425,6 +17198,12 @@ export namespace Prisma {
     none?: POSMachineWhereInput
   }
 
+  export type TripListRelationFilter = {
+    every?: TripWhereInput
+    some?: TripWhereInput
+    none?: TripWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -15443,6 +17222,10 @@ export namespace Prisma {
   }
 
   export type POSMachineOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TripOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15814,6 +17597,11 @@ export namespace Prisma {
     isNot?: BusWhereInput
   }
 
+  export type TripNullableScalarRelationFilter = {
+    is?: TripWhereInput | null
+    isNot?: TripWhereInput | null
+  }
+
   export type PackageOrderByRelevanceInput = {
     fields: PackageOrderByRelevanceFieldEnum | PackageOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -15836,6 +17624,7 @@ export namespace Prisma {
     status?: SortOrder
     booked_at?: SortOrder
     delivered_at?: SortOrder
+    trip_id?: SortOrder
   }
 
   export type PackageAvgOrderByAggregateInput = {
@@ -15843,6 +17632,7 @@ export namespace Prisma {
     bus_id?: SortOrder
     weight?: SortOrder
     fare?: SortOrder
+    trip_id?: SortOrder
   }
 
   export type PackageMaxOrderByAggregateInput = {
@@ -15861,6 +17651,7 @@ export namespace Prisma {
     status?: SortOrder
     booked_at?: SortOrder
     delivered_at?: SortOrder
+    trip_id?: SortOrder
   }
 
   export type PackageMinOrderByAggregateInput = {
@@ -15879,6 +17670,7 @@ export namespace Prisma {
     status?: SortOrder
     booked_at?: SortOrder
     delivered_at?: SortOrder
+    trip_id?: SortOrder
   }
 
   export type PackageSumOrderByAggregateInput = {
@@ -15886,6 +17678,7 @@ export namespace Prisma {
     bus_id?: SortOrder
     weight?: SortOrder
     fare?: SortOrder
+    trip_id?: SortOrder
   }
 
   export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
@@ -16210,6 +18003,7 @@ export namespace Prisma {
     seat_no?: SortOrder
     pos_machine_id?: SortOrder
     payment_mode?: SortOrder
+    trip_id?: SortOrder
   }
 
   export type TicketAvgOrderByAggregateInput = {
@@ -16218,6 +18012,7 @@ export namespace Prisma {
     fare?: SortOrder
     seat_no?: SortOrder
     pos_machine_id?: SortOrder
+    trip_id?: SortOrder
   }
 
   export type TicketMaxOrderByAggregateInput = {
@@ -16236,6 +18031,7 @@ export namespace Prisma {
     seat_no?: SortOrder
     pos_machine_id?: SortOrder
     payment_mode?: SortOrder
+    trip_id?: SortOrder
   }
 
   export type TicketMinOrderByAggregateInput = {
@@ -16254,6 +18050,7 @@ export namespace Prisma {
     seat_no?: SortOrder
     pos_machine_id?: SortOrder
     payment_mode?: SortOrder
+    trip_id?: SortOrder
   }
 
   export type TicketSumOrderByAggregateInput = {
@@ -16262,6 +18059,7 @@ export namespace Prisma {
     fare?: SortOrder
     seat_no?: SortOrder
     pos_machine_id?: SortOrder
+    trip_id?: SortOrder
   }
 
   export type EnumPassengerTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -16292,6 +18090,83 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPaymentModeFilter<$PrismaModel>
     _max?: NestedEnumPaymentModeFilter<$PrismaModel>
+  }
+
+  export type EnumTripStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TripStatus | EnumTripStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TripStatus[]
+    notIn?: $Enums.TripStatus[]
+    not?: NestedEnumTripStatusFilter<$PrismaModel> | $Enums.TripStatus
+  }
+
+  export type RouteScalarRelationFilter = {
+    is?: RouteWhereInput
+    isNot?: RouteWhereInput
+  }
+
+  export type TripCountOrderByAggregateInput = {
+    id?: SortOrder
+    bus_id?: SortOrder
+    route_id?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrder
+    status?: SortOrder
+    driver_id?: SortOrder
+    conductor_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type TripAvgOrderByAggregateInput = {
+    id?: SortOrder
+    bus_id?: SortOrder
+    route_id?: SortOrder
+    driver_id?: SortOrder
+    conductor_id?: SortOrder
+  }
+
+  export type TripMaxOrderByAggregateInput = {
+    id?: SortOrder
+    bus_id?: SortOrder
+    route_id?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrder
+    status?: SortOrder
+    driver_id?: SortOrder
+    conductor_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type TripMinOrderByAggregateInput = {
+    id?: SortOrder
+    bus_id?: SortOrder
+    route_id?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrder
+    status?: SortOrder
+    driver_id?: SortOrder
+    conductor_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type TripSumOrderByAggregateInput = {
+    id?: SortOrder
+    bus_id?: SortOrder
+    route_id?: SortOrder
+    driver_id?: SortOrder
+    conductor_id?: SortOrder
+  }
+
+  export type EnumTripStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TripStatus | EnumTripStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TripStatus[]
+    notIn?: $Enums.TripStatus[]
+    not?: NestedEnumTripStatusWithAggregatesFilter<$PrismaModel> | $Enums.TripStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTripStatusFilter<$PrismaModel>
+    _max?: NestedEnumTripStatusFilter<$PrismaModel>
   }
 
   export type EnumRoleFilter<$PrismaModel = never> = {
@@ -16519,6 +18394,13 @@ export namespace Prisma {
     connect?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
   }
 
+  export type TripCreateNestedManyWithoutBusInput = {
+    create?: XOR<TripCreateWithoutBusInput, TripUncheckedCreateWithoutBusInput> | TripCreateWithoutBusInput[] | TripUncheckedCreateWithoutBusInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutBusInput | TripCreateOrConnectWithoutBusInput[]
+    createMany?: TripCreateManyBusInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+  }
+
   export type TicketUncheckedCreateNestedManyWithoutBusInput = {
     create?: XOR<TicketCreateWithoutBusInput, TicketUncheckedCreateWithoutBusInput> | TicketCreateWithoutBusInput[] | TicketUncheckedCreateWithoutBusInput[]
     connectOrCreate?: TicketCreateOrConnectWithoutBusInput | TicketCreateOrConnectWithoutBusInput[]
@@ -16545,6 +18427,13 @@ export namespace Prisma {
     connectOrCreate?: POSMachineCreateOrConnectWithoutBusInput | POSMachineCreateOrConnectWithoutBusInput[]
     createMany?: POSMachineCreateManyBusInputEnvelope
     connect?: POSMachineWhereUniqueInput | POSMachineWhereUniqueInput[]
+  }
+
+  export type TripUncheckedCreateNestedManyWithoutBusInput = {
+    create?: XOR<TripCreateWithoutBusInput, TripUncheckedCreateWithoutBusInput> | TripCreateWithoutBusInput[] | TripUncheckedCreateWithoutBusInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutBusInput | TripCreateOrConnectWithoutBusInput[]
+    createMany?: TripCreateManyBusInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -16677,6 +18566,20 @@ export namespace Prisma {
     deleteMany?: POSMachineScalarWhereInput | POSMachineScalarWhereInput[]
   }
 
+  export type TripUpdateManyWithoutBusNestedInput = {
+    create?: XOR<TripCreateWithoutBusInput, TripUncheckedCreateWithoutBusInput> | TripCreateWithoutBusInput[] | TripUncheckedCreateWithoutBusInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutBusInput | TripCreateOrConnectWithoutBusInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutBusInput | TripUpsertWithWhereUniqueWithoutBusInput[]
+    createMany?: TripCreateManyBusInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutBusInput | TripUpdateWithWhereUniqueWithoutBusInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutBusInput | TripUpdateManyWithWhereWithoutBusInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
+  }
+
   export type NullableIntFieldUpdateOperationsInput = {
     set?: number | null
     increment?: number
@@ -16741,6 +18644,20 @@ export namespace Prisma {
     deleteMany?: POSMachineScalarWhereInput | POSMachineScalarWhereInput[]
   }
 
+  export type TripUncheckedUpdateManyWithoutBusNestedInput = {
+    create?: XOR<TripCreateWithoutBusInput, TripUncheckedCreateWithoutBusInput> | TripCreateWithoutBusInput[] | TripUncheckedCreateWithoutBusInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutBusInput | TripCreateOrConnectWithoutBusInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutBusInput | TripUpsertWithWhereUniqueWithoutBusInput[]
+    createMany?: TripCreateManyBusInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutBusInput | TripUpdateWithWhereUniqueWithoutBusInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutBusInput | TripUpdateManyWithWhereWithoutBusInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutConductorsInput = {
     create?: XOR<UserCreateWithoutConductorsInput, UserUncheckedCreateWithoutConductorsInput>
     connectOrCreate?: UserCreateOrConnectWithoutConductorsInput
@@ -16754,11 +18671,25 @@ export namespace Prisma {
     connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
   }
 
+  export type TripCreateNestedManyWithoutConductorInput = {
+    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
+    createMany?: TripCreateManyConductorInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+  }
+
   export type BusUncheckedCreateNestedManyWithoutConductorInput = {
     create?: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput> | BusCreateWithoutConductorInput[] | BusUncheckedCreateWithoutConductorInput[]
     connectOrCreate?: BusCreateOrConnectWithoutConductorInput | BusCreateOrConnectWithoutConductorInput[]
     createMany?: BusCreateManyConductorInputEnvelope
     connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+  }
+
+  export type TripUncheckedCreateNestedManyWithoutConductorInput = {
+    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
+    createMany?: TripCreateManyConductorInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -16787,6 +18718,20 @@ export namespace Prisma {
     deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
   }
 
+  export type TripUpdateManyWithoutConductorNestedInput = {
+    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutConductorInput | TripUpsertWithWhereUniqueWithoutConductorInput[]
+    createMany?: TripCreateManyConductorInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutConductorInput | TripUpdateWithWhereUniqueWithoutConductorInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutConductorInput | TripUpdateManyWithWhereWithoutConductorInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
+  }
+
   export type BusUncheckedUpdateManyWithoutConductorNestedInput = {
     create?: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput> | BusCreateWithoutConductorInput[] | BusUncheckedCreateWithoutConductorInput[]
     connectOrCreate?: BusCreateOrConnectWithoutConductorInput | BusCreateOrConnectWithoutConductorInput[]
@@ -16799,6 +18744,20 @@ export namespace Prisma {
     update?: BusUpdateWithWhereUniqueWithoutConductorInput | BusUpdateWithWhereUniqueWithoutConductorInput[]
     updateMany?: BusUpdateManyWithWhereWithoutConductorInput | BusUpdateManyWithWhereWithoutConductorInput[]
     deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
+  }
+
+  export type TripUncheckedUpdateManyWithoutConductorNestedInput = {
+    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutConductorInput | TripUpsertWithWhereUniqueWithoutConductorInput[]
+    createMany?: TripCreateManyConductorInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutConductorInput | TripUpdateWithWhereUniqueWithoutConductorInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutConductorInput | TripUpdateManyWithWhereWithoutConductorInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutDriversInput = {
@@ -16814,11 +18773,25 @@ export namespace Prisma {
     connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
   }
 
+  export type TripCreateNestedManyWithoutDriverInput = {
+    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
+    createMany?: TripCreateManyDriverInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+  }
+
   export type BusUncheckedCreateNestedManyWithoutDriverInput = {
     create?: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput> | BusCreateWithoutDriverInput[] | BusUncheckedCreateWithoutDriverInput[]
     connectOrCreate?: BusCreateOrConnectWithoutDriverInput | BusCreateOrConnectWithoutDriverInput[]
     createMany?: BusCreateManyDriverInputEnvelope
     connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+  }
+
+  export type TripUncheckedCreateNestedManyWithoutDriverInput = {
+    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
+    createMany?: TripCreateManyDriverInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutDriversNestedInput = {
@@ -16843,6 +18816,20 @@ export namespace Prisma {
     deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
   }
 
+  export type TripUpdateManyWithoutDriverNestedInput = {
+    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutDriverInput | TripUpsertWithWhereUniqueWithoutDriverInput[]
+    createMany?: TripCreateManyDriverInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutDriverInput | TripUpdateWithWhereUniqueWithoutDriverInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutDriverInput | TripUpdateManyWithWhereWithoutDriverInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
+  }
+
   export type BusUncheckedUpdateManyWithoutDriverNestedInput = {
     create?: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput> | BusCreateWithoutDriverInput[] | BusUncheckedCreateWithoutDriverInput[]
     connectOrCreate?: BusCreateOrConnectWithoutDriverInput | BusCreateOrConnectWithoutDriverInput[]
@@ -16857,10 +18844,30 @@ export namespace Prisma {
     deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
   }
 
+  export type TripUncheckedUpdateManyWithoutDriverNestedInput = {
+    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutDriverInput | TripUpsertWithWhereUniqueWithoutDriverInput[]
+    createMany?: TripCreateManyDriverInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutDriverInput | TripUpdateWithWhereUniqueWithoutDriverInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutDriverInput | TripUpdateManyWithWhereWithoutDriverInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
+  }
+
   export type BusCreateNestedOneWithoutPackagesInput = {
     create?: XOR<BusCreateWithoutPackagesInput, BusUncheckedCreateWithoutPackagesInput>
     connectOrCreate?: BusCreateOrConnectWithoutPackagesInput
     connect?: BusWhereUniqueInput
+  }
+
+  export type TripCreateNestedOneWithoutPackagesInput = {
+    create?: XOR<TripCreateWithoutPackagesInput, TripUncheckedCreateWithoutPackagesInput>
+    connectOrCreate?: TripCreateOrConnectWithoutPackagesInput
+    connect?: TripWhereUniqueInput
   }
 
   export type DecimalFieldUpdateOperationsInput = {
@@ -16881,6 +18888,16 @@ export namespace Prisma {
     upsert?: BusUpsertWithoutPackagesInput
     connect?: BusWhereUniqueInput
     update?: XOR<XOR<BusUpdateToOneWithWhereWithoutPackagesInput, BusUpdateWithoutPackagesInput>, BusUncheckedUpdateWithoutPackagesInput>
+  }
+
+  export type TripUpdateOneWithoutPackagesNestedInput = {
+    create?: XOR<TripCreateWithoutPackagesInput, TripUncheckedCreateWithoutPackagesInput>
+    connectOrCreate?: TripCreateOrConnectWithoutPackagesInput
+    upsert?: TripUpsertWithoutPackagesInput
+    disconnect?: TripWhereInput | boolean
+    delete?: TripWhereInput | boolean
+    connect?: TripWhereUniqueInput
+    update?: XOR<XOR<TripUpdateToOneWithWhereWithoutPackagesInput, TripUpdateWithoutPackagesInput>, TripUncheckedUpdateWithoutPackagesInput>
   }
 
   export type BusCreateNestedOneWithoutPosMachinesInput = {
@@ -16972,11 +18989,25 @@ export namespace Prisma {
     connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
   }
 
+  export type TripCreateNestedManyWithoutRouteInput = {
+    create?: XOR<TripCreateWithoutRouteInput, TripUncheckedCreateWithoutRouteInput> | TripCreateWithoutRouteInput[] | TripUncheckedCreateWithoutRouteInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutRouteInput | TripCreateOrConnectWithoutRouteInput[]
+    createMany?: TripCreateManyRouteInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+  }
+
   export type BusUncheckedCreateNestedManyWithoutRouteInput = {
     create?: XOR<BusCreateWithoutRouteInput, BusUncheckedCreateWithoutRouteInput> | BusCreateWithoutRouteInput[] | BusUncheckedCreateWithoutRouteInput[]
     connectOrCreate?: BusCreateOrConnectWithoutRouteInput | BusCreateOrConnectWithoutRouteInput[]
     createMany?: BusCreateManyRouteInputEnvelope
     connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+  }
+
+  export type TripUncheckedCreateNestedManyWithoutRouteInput = {
+    create?: XOR<TripCreateWithoutRouteInput, TripUncheckedCreateWithoutRouteInput> | TripCreateWithoutRouteInput[] | TripUncheckedCreateWithoutRouteInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutRouteInput | TripCreateOrConnectWithoutRouteInput[]
+    createMany?: TripCreateManyRouteInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutRoutesNestedInput = {
@@ -17001,6 +19032,20 @@ export namespace Prisma {
     deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
   }
 
+  export type TripUpdateManyWithoutRouteNestedInput = {
+    create?: XOR<TripCreateWithoutRouteInput, TripUncheckedCreateWithoutRouteInput> | TripCreateWithoutRouteInput[] | TripUncheckedCreateWithoutRouteInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutRouteInput | TripCreateOrConnectWithoutRouteInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutRouteInput | TripUpsertWithWhereUniqueWithoutRouteInput[]
+    createMany?: TripCreateManyRouteInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutRouteInput | TripUpdateWithWhereUniqueWithoutRouteInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutRouteInput | TripUpdateManyWithWhereWithoutRouteInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
+  }
+
   export type BusUncheckedUpdateManyWithoutRouteNestedInput = {
     create?: XOR<BusCreateWithoutRouteInput, BusUncheckedCreateWithoutRouteInput> | BusCreateWithoutRouteInput[] | BusUncheckedCreateWithoutRouteInput[]
     connectOrCreate?: BusCreateOrConnectWithoutRouteInput | BusCreateOrConnectWithoutRouteInput[]
@@ -17015,6 +19060,20 @@ export namespace Prisma {
     deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
   }
 
+  export type TripUncheckedUpdateManyWithoutRouteNestedInput = {
+    create?: XOR<TripCreateWithoutRouteInput, TripUncheckedCreateWithoutRouteInput> | TripCreateWithoutRouteInput[] | TripUncheckedCreateWithoutRouteInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutRouteInput | TripCreateOrConnectWithoutRouteInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutRouteInput | TripUpsertWithWhereUniqueWithoutRouteInput[]
+    createMany?: TripCreateManyRouteInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutRouteInput | TripUpdateWithWhereUniqueWithoutRouteInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutRouteInput | TripUpdateManyWithWhereWithoutRouteInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
+  }
+
   export type BusCreateNestedOneWithoutTicketsInput = {
     create?: XOR<BusCreateWithoutTicketsInput, BusUncheckedCreateWithoutTicketsInput>
     connectOrCreate?: BusCreateOrConnectWithoutTicketsInput
@@ -17025,6 +19084,12 @@ export namespace Prisma {
     create?: XOR<POSMachineCreateWithoutTicketsInput, POSMachineUncheckedCreateWithoutTicketsInput>
     connectOrCreate?: POSMachineCreateOrConnectWithoutTicketsInput
     connect?: POSMachineWhereUniqueInput
+  }
+
+  export type TripCreateNestedOneWithoutTicketsInput = {
+    create?: XOR<TripCreateWithoutTicketsInput, TripUncheckedCreateWithoutTicketsInput>
+    connectOrCreate?: TripCreateOrConnectWithoutTicketsInput
+    connect?: TripWhereUniqueInput
   }
 
   export type EnumPassengerTypeFieldUpdateOperationsInput = {
@@ -17055,6 +19120,164 @@ export namespace Prisma {
     delete?: POSMachineWhereInput | boolean
     connect?: POSMachineWhereUniqueInput
     update?: XOR<XOR<POSMachineUpdateToOneWithWhereWithoutTicketsInput, POSMachineUpdateWithoutTicketsInput>, POSMachineUncheckedUpdateWithoutTicketsInput>
+  }
+
+  export type TripUpdateOneWithoutTicketsNestedInput = {
+    create?: XOR<TripCreateWithoutTicketsInput, TripUncheckedCreateWithoutTicketsInput>
+    connectOrCreate?: TripCreateOrConnectWithoutTicketsInput
+    upsert?: TripUpsertWithoutTicketsInput
+    disconnect?: TripWhereInput | boolean
+    delete?: TripWhereInput | boolean
+    connect?: TripWhereUniqueInput
+    update?: XOR<XOR<TripUpdateToOneWithWhereWithoutTicketsInput, TripUpdateWithoutTicketsInput>, TripUncheckedUpdateWithoutTicketsInput>
+  }
+
+  export type BusCreateNestedOneWithoutTripsInput = {
+    create?: XOR<BusCreateWithoutTripsInput, BusUncheckedCreateWithoutTripsInput>
+    connectOrCreate?: BusCreateOrConnectWithoutTripsInput
+    connect?: BusWhereUniqueInput
+  }
+
+  export type RouteCreateNestedOneWithoutTripsInput = {
+    create?: XOR<RouteCreateWithoutTripsInput, RouteUncheckedCreateWithoutTripsInput>
+    connectOrCreate?: RouteCreateOrConnectWithoutTripsInput
+    connect?: RouteWhereUniqueInput
+  }
+
+  export type DriverCreateNestedOneWithoutTripsInput = {
+    create?: XOR<DriverCreateWithoutTripsInput, DriverUncheckedCreateWithoutTripsInput>
+    connectOrCreate?: DriverCreateOrConnectWithoutTripsInput
+    connect?: DriverWhereUniqueInput
+  }
+
+  export type ConductorCreateNestedOneWithoutTripsInput = {
+    create?: XOR<ConductorCreateWithoutTripsInput, ConductorUncheckedCreateWithoutTripsInput>
+    connectOrCreate?: ConductorCreateOrConnectWithoutTripsInput
+    connect?: ConductorWhereUniqueInput
+  }
+
+  export type TicketCreateNestedManyWithoutTripInput = {
+    create?: XOR<TicketCreateWithoutTripInput, TicketUncheckedCreateWithoutTripInput> | TicketCreateWithoutTripInput[] | TicketUncheckedCreateWithoutTripInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutTripInput | TicketCreateOrConnectWithoutTripInput[]
+    createMany?: TicketCreateManyTripInputEnvelope
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+  }
+
+  export type PackageCreateNestedManyWithoutTripInput = {
+    create?: XOR<PackageCreateWithoutTripInput, PackageUncheckedCreateWithoutTripInput> | PackageCreateWithoutTripInput[] | PackageUncheckedCreateWithoutTripInput[]
+    connectOrCreate?: PackageCreateOrConnectWithoutTripInput | PackageCreateOrConnectWithoutTripInput[]
+    createMany?: PackageCreateManyTripInputEnvelope
+    connect?: PackageWhereUniqueInput | PackageWhereUniqueInput[]
+  }
+
+  export type TicketUncheckedCreateNestedManyWithoutTripInput = {
+    create?: XOR<TicketCreateWithoutTripInput, TicketUncheckedCreateWithoutTripInput> | TicketCreateWithoutTripInput[] | TicketUncheckedCreateWithoutTripInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutTripInput | TicketCreateOrConnectWithoutTripInput[]
+    createMany?: TicketCreateManyTripInputEnvelope
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+  }
+
+  export type PackageUncheckedCreateNestedManyWithoutTripInput = {
+    create?: XOR<PackageCreateWithoutTripInput, PackageUncheckedCreateWithoutTripInput> | PackageCreateWithoutTripInput[] | PackageUncheckedCreateWithoutTripInput[]
+    connectOrCreate?: PackageCreateOrConnectWithoutTripInput | PackageCreateOrConnectWithoutTripInput[]
+    createMany?: PackageCreateManyTripInputEnvelope
+    connect?: PackageWhereUniqueInput | PackageWhereUniqueInput[]
+  }
+
+  export type EnumTripStatusFieldUpdateOperationsInput = {
+    set?: $Enums.TripStatus
+  }
+
+  export type BusUpdateOneRequiredWithoutTripsNestedInput = {
+    create?: XOR<BusCreateWithoutTripsInput, BusUncheckedCreateWithoutTripsInput>
+    connectOrCreate?: BusCreateOrConnectWithoutTripsInput
+    upsert?: BusUpsertWithoutTripsInput
+    connect?: BusWhereUniqueInput
+    update?: XOR<XOR<BusUpdateToOneWithWhereWithoutTripsInput, BusUpdateWithoutTripsInput>, BusUncheckedUpdateWithoutTripsInput>
+  }
+
+  export type RouteUpdateOneRequiredWithoutTripsNestedInput = {
+    create?: XOR<RouteCreateWithoutTripsInput, RouteUncheckedCreateWithoutTripsInput>
+    connectOrCreate?: RouteCreateOrConnectWithoutTripsInput
+    upsert?: RouteUpsertWithoutTripsInput
+    connect?: RouteWhereUniqueInput
+    update?: XOR<XOR<RouteUpdateToOneWithWhereWithoutTripsInput, RouteUpdateWithoutTripsInput>, RouteUncheckedUpdateWithoutTripsInput>
+  }
+
+  export type DriverUpdateOneWithoutTripsNestedInput = {
+    create?: XOR<DriverCreateWithoutTripsInput, DriverUncheckedCreateWithoutTripsInput>
+    connectOrCreate?: DriverCreateOrConnectWithoutTripsInput
+    upsert?: DriverUpsertWithoutTripsInput
+    disconnect?: DriverWhereInput | boolean
+    delete?: DriverWhereInput | boolean
+    connect?: DriverWhereUniqueInput
+    update?: XOR<XOR<DriverUpdateToOneWithWhereWithoutTripsInput, DriverUpdateWithoutTripsInput>, DriverUncheckedUpdateWithoutTripsInput>
+  }
+
+  export type ConductorUpdateOneWithoutTripsNestedInput = {
+    create?: XOR<ConductorCreateWithoutTripsInput, ConductorUncheckedCreateWithoutTripsInput>
+    connectOrCreate?: ConductorCreateOrConnectWithoutTripsInput
+    upsert?: ConductorUpsertWithoutTripsInput
+    disconnect?: ConductorWhereInput | boolean
+    delete?: ConductorWhereInput | boolean
+    connect?: ConductorWhereUniqueInput
+    update?: XOR<XOR<ConductorUpdateToOneWithWhereWithoutTripsInput, ConductorUpdateWithoutTripsInput>, ConductorUncheckedUpdateWithoutTripsInput>
+  }
+
+  export type TicketUpdateManyWithoutTripNestedInput = {
+    create?: XOR<TicketCreateWithoutTripInput, TicketUncheckedCreateWithoutTripInput> | TicketCreateWithoutTripInput[] | TicketUncheckedCreateWithoutTripInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutTripInput | TicketCreateOrConnectWithoutTripInput[]
+    upsert?: TicketUpsertWithWhereUniqueWithoutTripInput | TicketUpsertWithWhereUniqueWithoutTripInput[]
+    createMany?: TicketCreateManyTripInputEnvelope
+    set?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    update?: TicketUpdateWithWhereUniqueWithoutTripInput | TicketUpdateWithWhereUniqueWithoutTripInput[]
+    updateMany?: TicketUpdateManyWithWhereWithoutTripInput | TicketUpdateManyWithWhereWithoutTripInput[]
+    deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
+  }
+
+  export type PackageUpdateManyWithoutTripNestedInput = {
+    create?: XOR<PackageCreateWithoutTripInput, PackageUncheckedCreateWithoutTripInput> | PackageCreateWithoutTripInput[] | PackageUncheckedCreateWithoutTripInput[]
+    connectOrCreate?: PackageCreateOrConnectWithoutTripInput | PackageCreateOrConnectWithoutTripInput[]
+    upsert?: PackageUpsertWithWhereUniqueWithoutTripInput | PackageUpsertWithWhereUniqueWithoutTripInput[]
+    createMany?: PackageCreateManyTripInputEnvelope
+    set?: PackageWhereUniqueInput | PackageWhereUniqueInput[]
+    disconnect?: PackageWhereUniqueInput | PackageWhereUniqueInput[]
+    delete?: PackageWhereUniqueInput | PackageWhereUniqueInput[]
+    connect?: PackageWhereUniqueInput | PackageWhereUniqueInput[]
+    update?: PackageUpdateWithWhereUniqueWithoutTripInput | PackageUpdateWithWhereUniqueWithoutTripInput[]
+    updateMany?: PackageUpdateManyWithWhereWithoutTripInput | PackageUpdateManyWithWhereWithoutTripInput[]
+    deleteMany?: PackageScalarWhereInput | PackageScalarWhereInput[]
+  }
+
+  export type TicketUncheckedUpdateManyWithoutTripNestedInput = {
+    create?: XOR<TicketCreateWithoutTripInput, TicketUncheckedCreateWithoutTripInput> | TicketCreateWithoutTripInput[] | TicketUncheckedCreateWithoutTripInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutTripInput | TicketCreateOrConnectWithoutTripInput[]
+    upsert?: TicketUpsertWithWhereUniqueWithoutTripInput | TicketUpsertWithWhereUniqueWithoutTripInput[]
+    createMany?: TicketCreateManyTripInputEnvelope
+    set?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+    update?: TicketUpdateWithWhereUniqueWithoutTripInput | TicketUpdateWithWhereUniqueWithoutTripInput[]
+    updateMany?: TicketUpdateManyWithWhereWithoutTripInput | TicketUpdateManyWithWhereWithoutTripInput[]
+    deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
+  }
+
+  export type PackageUncheckedUpdateManyWithoutTripNestedInput = {
+    create?: XOR<PackageCreateWithoutTripInput, PackageUncheckedCreateWithoutTripInput> | PackageCreateWithoutTripInput[] | PackageUncheckedCreateWithoutTripInput[]
+    connectOrCreate?: PackageCreateOrConnectWithoutTripInput | PackageCreateOrConnectWithoutTripInput[]
+    upsert?: PackageUpsertWithWhereUniqueWithoutTripInput | PackageUpsertWithWhereUniqueWithoutTripInput[]
+    createMany?: PackageCreateManyTripInputEnvelope
+    set?: PackageWhereUniqueInput | PackageWhereUniqueInput[]
+    disconnect?: PackageWhereUniqueInput | PackageWhereUniqueInput[]
+    delete?: PackageWhereUniqueInput | PackageWhereUniqueInput[]
+    connect?: PackageWhereUniqueInput | PackageWhereUniqueInput[]
+    update?: PackageUpdateWithWhereUniqueWithoutTripInput | PackageUpdateWithWhereUniqueWithoutTripInput[]
+    updateMany?: PackageUpdateManyWithWhereWithoutTripInput | PackageUpdateManyWithWhereWithoutTripInput[]
+    deleteMany?: PackageScalarWhereInput | PackageScalarWhereInput[]
   }
 
   export type DriverCreateNestedManyWithoutUserInput = {
@@ -17673,6 +19896,23 @@ export namespace Prisma {
     _max?: NestedEnumPaymentModeFilter<$PrismaModel>
   }
 
+  export type NestedEnumTripStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TripStatus | EnumTripStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TripStatus[]
+    notIn?: $Enums.TripStatus[]
+    not?: NestedEnumTripStatusFilter<$PrismaModel> | $Enums.TripStatus
+  }
+
+  export type NestedEnumTripStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TripStatus | EnumTripStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TripStatus[]
+    notIn?: $Enums.TripStatus[]
+    not?: NestedEnumTripStatusWithAggregatesFilter<$PrismaModel> | $Enums.TripStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTripStatusFilter<$PrismaModel>
+    _max?: NestedEnumTripStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
     in?: $Enums.Role[]
@@ -17756,6 +19996,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutRoutesInput
+    trips?: TripCreateNestedManyWithoutRouteInput
   }
 
   export type RouteUncheckedCreateWithoutBusesInput = {
@@ -17770,6 +20011,7 @@ export namespace Prisma {
     active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    trips?: TripUncheckedCreateNestedManyWithoutRouteInput
   }
 
   export type RouteCreateOrConnectWithoutBusesInput = {
@@ -17789,6 +20031,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutDriversInput
+    trips?: TripCreateNestedManyWithoutDriverInput
   }
 
   export type DriverUncheckedCreateWithoutBusesInput = {
@@ -17804,6 +20047,7 @@ export namespace Prisma {
     active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    trips?: TripUncheckedCreateNestedManyWithoutDriverInput
   }
 
   export type DriverCreateOrConnectWithoutBusesInput = {
@@ -17821,6 +20065,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutConductorsInput
+    trips?: TripCreateNestedManyWithoutConductorInput
   }
 
   export type ConductorUncheckedCreateWithoutBusesInput = {
@@ -17834,6 +20079,7 @@ export namespace Prisma {
     active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    trips?: TripUncheckedCreateNestedManyWithoutConductorInput
   }
 
   export type ConductorCreateOrConnectWithoutBusesInput = {
@@ -17855,6 +20101,7 @@ export namespace Prisma {
     seat_no?: number | null
     payment_mode?: $Enums.PaymentMode
     posMachine?: POSMachineCreateNestedOneWithoutTicketsInput
+    trip?: TripCreateNestedOneWithoutTicketsInput
   }
 
   export type TicketUncheckedCreateWithoutBusInput = {
@@ -17872,6 +20119,7 @@ export namespace Prisma {
     seat_no?: number | null
     pos_machine_id?: number | null
     payment_mode?: $Enums.PaymentMode
+    trip_id?: number | null
   }
 
   export type TicketCreateOrConnectWithoutBusInput = {
@@ -17898,6 +20146,7 @@ export namespace Prisma {
     status?: $Enums.PackageStatus
     booked_at?: Date | string
     delivered_at?: Date | string | null
+    trip?: TripCreateNestedOneWithoutPackagesInput
   }
 
   export type PackageUncheckedCreateWithoutBusInput = {
@@ -17915,6 +20164,7 @@ export namespace Prisma {
     status?: $Enums.PackageStatus
     booked_at?: Date | string
     delivered_at?: Date | string | null
+    trip_id?: number | null
   }
 
   export type PackageCreateOrConnectWithoutBusInput = {
@@ -17991,6 +20241,43 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TripCreateWithoutBusInput = {
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    route: RouteCreateNestedOneWithoutTripsInput
+    driver?: DriverCreateNestedOneWithoutTripsInput
+    conductor?: ConductorCreateNestedOneWithoutTripsInput
+    tickets?: TicketCreateNestedManyWithoutTripInput
+    packages?: PackageCreateNestedManyWithoutTripInput
+  }
+
+  export type TripUncheckedCreateWithoutBusInput = {
+    id?: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
+    conductor_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutTripInput
+    packages?: PackageUncheckedCreateNestedManyWithoutTripInput
+  }
+
+  export type TripCreateOrConnectWithoutBusInput = {
+    where: TripWhereUniqueInput
+    create: XOR<TripCreateWithoutBusInput, TripUncheckedCreateWithoutBusInput>
+  }
+
+  export type TripCreateManyBusInputEnvelope = {
+    data: TripCreateManyBusInput | TripCreateManyBusInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutBusesInput = {
     update: XOR<UserUpdateWithoutBusesInput, UserUncheckedUpdateWithoutBusesInput>
     create: XOR<UserCreateWithoutBusesInput, UserUncheckedCreateWithoutBusesInput>
@@ -18057,6 +20344,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutRoutesNestedInput
+    trips?: TripUpdateManyWithoutRouteNestedInput
   }
 
   export type RouteUncheckedUpdateWithoutBusesInput = {
@@ -18071,6 +20359,7 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    trips?: TripUncheckedUpdateManyWithoutRouteNestedInput
   }
 
   export type DriverUpsertWithoutBusesInput = {
@@ -18096,6 +20385,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutDriversNestedInput
+    trips?: TripUpdateManyWithoutDriverNestedInput
   }
 
   export type DriverUncheckedUpdateWithoutBusesInput = {
@@ -18111,6 +20401,7 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    trips?: TripUncheckedUpdateManyWithoutDriverNestedInput
   }
 
   export type ConductorUpsertWithoutBusesInput = {
@@ -18134,6 +20425,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutConductorsNestedInput
+    trips?: TripUpdateManyWithoutConductorNestedInput
   }
 
   export type ConductorUncheckedUpdateWithoutBusesInput = {
@@ -18147,6 +20439,7 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    trips?: TripUncheckedUpdateManyWithoutConductorNestedInput
   }
 
   export type TicketUpsertWithWhereUniqueWithoutBusInput = {
@@ -18184,6 +20477,7 @@ export namespace Prisma {
     seat_no?: IntNullableFilter<"Ticket"> | number | null
     pos_machine_id?: IntNullableFilter<"Ticket"> | number | null
     payment_mode?: EnumPaymentModeFilter<"Ticket"> | $Enums.PaymentMode
+    trip_id?: IntNullableFilter<"Ticket"> | number | null
   }
 
   export type PackageUpsertWithWhereUniqueWithoutBusInput = {
@@ -18221,6 +20515,7 @@ export namespace Prisma {
     status?: EnumPackageStatusFilter<"Package"> | $Enums.PackageStatus
     booked_at?: DateTimeFilter<"Package"> | Date | string
     delivered_at?: DateTimeNullableFilter<"Package"> | Date | string | null
+    trip_id?: IntNullableFilter<"Package"> | number | null
   }
 
   export type DailyReportUpsertWithWhereUniqueWithoutBusInput = {
@@ -18285,6 +20580,38 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"POSMachine"> | Date | string
   }
 
+  export type TripUpsertWithWhereUniqueWithoutBusInput = {
+    where: TripWhereUniqueInput
+    update: XOR<TripUpdateWithoutBusInput, TripUncheckedUpdateWithoutBusInput>
+    create: XOR<TripCreateWithoutBusInput, TripUncheckedCreateWithoutBusInput>
+  }
+
+  export type TripUpdateWithWhereUniqueWithoutBusInput = {
+    where: TripWhereUniqueInput
+    data: XOR<TripUpdateWithoutBusInput, TripUncheckedUpdateWithoutBusInput>
+  }
+
+  export type TripUpdateManyWithWhereWithoutBusInput = {
+    where: TripScalarWhereInput
+    data: XOR<TripUpdateManyMutationInput, TripUncheckedUpdateManyWithoutBusInput>
+  }
+
+  export type TripScalarWhereInput = {
+    AND?: TripScalarWhereInput | TripScalarWhereInput[]
+    OR?: TripScalarWhereInput[]
+    NOT?: TripScalarWhereInput | TripScalarWhereInput[]
+    id?: IntFilter<"Trip"> | number
+    bus_id?: IntFilter<"Trip"> | number
+    route_id?: IntFilter<"Trip"> | number
+    start_time?: DateTimeFilter<"Trip"> | Date | string
+    end_time?: DateTimeNullableFilter<"Trip"> | Date | string | null
+    status?: EnumTripStatusFilter<"Trip"> | $Enums.TripStatus
+    driver_id?: IntNullableFilter<"Trip"> | number | null
+    conductor_id?: IntNullableFilter<"Trip"> | number | null
+    created_at?: DateTimeFilter<"Trip"> | Date | string
+    updated_at?: DateTimeFilter<"Trip"> | Date | string
+  }
+
   export type UserCreateWithoutConductorsInput = {
     name: string
     email?: string | null
@@ -18341,6 +20668,7 @@ export namespace Prisma {
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
     posMachines?: POSMachineCreateNestedManyWithoutBusInput
+    trips?: TripCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutConductorInput = {
@@ -18362,6 +20690,7 @@ export namespace Prisma {
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
     posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
+    trips?: TripUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutConductorInput = {
@@ -18371,6 +20700,43 @@ export namespace Prisma {
 
   export type BusCreateManyConductorInputEnvelope = {
     data: BusCreateManyConductorInput | BusCreateManyConductorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TripCreateWithoutConductorInput = {
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    bus: BusCreateNestedOneWithoutTripsInput
+    route: RouteCreateNestedOneWithoutTripsInput
+    driver?: DriverCreateNestedOneWithoutTripsInput
+    tickets?: TicketCreateNestedManyWithoutTripInput
+    packages?: PackageCreateNestedManyWithoutTripInput
+  }
+
+  export type TripUncheckedCreateWithoutConductorInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutTripInput
+    packages?: PackageUncheckedCreateNestedManyWithoutTripInput
+  }
+
+  export type TripCreateOrConnectWithoutConductorInput = {
+    where: TripWhereUniqueInput
+    create: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput>
+  }
+
+  export type TripCreateManyConductorInputEnvelope = {
+    data: TripCreateManyConductorInput | TripCreateManyConductorInput[]
     skipDuplicates?: boolean
   }
 
@@ -18455,6 +20821,22 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Bus"> | Date | string
   }
 
+  export type TripUpsertWithWhereUniqueWithoutConductorInput = {
+    where: TripWhereUniqueInput
+    update: XOR<TripUpdateWithoutConductorInput, TripUncheckedUpdateWithoutConductorInput>
+    create: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput>
+  }
+
+  export type TripUpdateWithWhereUniqueWithoutConductorInput = {
+    where: TripWhereUniqueInput
+    data: XOR<TripUpdateWithoutConductorInput, TripUncheckedUpdateWithoutConductorInput>
+  }
+
+  export type TripUpdateManyWithWhereWithoutConductorInput = {
+    where: TripScalarWhereInput
+    data: XOR<TripUpdateManyMutationInput, TripUncheckedUpdateManyWithoutConductorInput>
+  }
+
   export type UserCreateWithoutDriversInput = {
     name: string
     email?: string | null
@@ -18511,6 +20893,7 @@ export namespace Prisma {
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
     posMachines?: POSMachineCreateNestedManyWithoutBusInput
+    trips?: TripCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutDriverInput = {
@@ -18532,6 +20915,7 @@ export namespace Prisma {
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
     posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
+    trips?: TripUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutDriverInput = {
@@ -18541,6 +20925,43 @@ export namespace Prisma {
 
   export type BusCreateManyDriverInputEnvelope = {
     data: BusCreateManyDriverInput | BusCreateManyDriverInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TripCreateWithoutDriverInput = {
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    bus: BusCreateNestedOneWithoutTripsInput
+    route: RouteCreateNestedOneWithoutTripsInput
+    conductor?: ConductorCreateNestedOneWithoutTripsInput
+    tickets?: TicketCreateNestedManyWithoutTripInput
+    packages?: PackageCreateNestedManyWithoutTripInput
+  }
+
+  export type TripUncheckedCreateWithoutDriverInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    conductor_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutTripInput
+    packages?: PackageUncheckedCreateNestedManyWithoutTripInput
+  }
+
+  export type TripCreateOrConnectWithoutDriverInput = {
+    where: TripWhereUniqueInput
+    create: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput>
+  }
+
+  export type TripCreateManyDriverInputEnvelope = {
+    data: TripCreateManyDriverInput | TripCreateManyDriverInput[]
     skipDuplicates?: boolean
   }
 
@@ -18604,6 +21025,22 @@ export namespace Prisma {
     data: XOR<BusUpdateManyMutationInput, BusUncheckedUpdateManyWithoutDriverInput>
   }
 
+  export type TripUpsertWithWhereUniqueWithoutDriverInput = {
+    where: TripWhereUniqueInput
+    update: XOR<TripUpdateWithoutDriverInput, TripUncheckedUpdateWithoutDriverInput>
+    create: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput>
+  }
+
+  export type TripUpdateWithWhereUniqueWithoutDriverInput = {
+    where: TripWhereUniqueInput
+    data: XOR<TripUpdateWithoutDriverInput, TripUncheckedUpdateWithoutDriverInput>
+  }
+
+  export type TripUpdateManyWithWhereWithoutDriverInput = {
+    where: TripScalarWhereInput
+    data: XOR<TripUpdateManyMutationInput, TripUncheckedUpdateManyWithoutDriverInput>
+  }
+
   export type BusCreateWithoutPackagesInput = {
     bus_number: string
     capacity?: number
@@ -18622,6 +21059,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
     posMachines?: POSMachineCreateNestedManyWithoutBusInput
+    trips?: TripCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutPackagesInput = {
@@ -18643,11 +21081,44 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
     posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
+    trips?: TripUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutPackagesInput = {
     where: BusWhereUniqueInput
     create: XOR<BusCreateWithoutPackagesInput, BusUncheckedCreateWithoutPackagesInput>
+  }
+
+  export type TripCreateWithoutPackagesInput = {
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    bus: BusCreateNestedOneWithoutTripsInput
+    route: RouteCreateNestedOneWithoutTripsInput
+    driver?: DriverCreateNestedOneWithoutTripsInput
+    conductor?: ConductorCreateNestedOneWithoutTripsInput
+    tickets?: TicketCreateNestedManyWithoutTripInput
+  }
+
+  export type TripUncheckedCreateWithoutPackagesInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
+    conductor_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutTripInput
+  }
+
+  export type TripCreateOrConnectWithoutPackagesInput = {
+    where: TripWhereUniqueInput
+    create: XOR<TripCreateWithoutPackagesInput, TripUncheckedCreateWithoutPackagesInput>
   }
 
   export type BusUpsertWithoutPackagesInput = {
@@ -18679,6 +21150,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUpdateManyWithoutBusNestedInput
+    trips?: TripUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutPackagesInput = {
@@ -18700,6 +21172,45 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
+  }
+
+  export type TripUpsertWithoutPackagesInput = {
+    update: XOR<TripUpdateWithoutPackagesInput, TripUncheckedUpdateWithoutPackagesInput>
+    create: XOR<TripCreateWithoutPackagesInput, TripUncheckedCreateWithoutPackagesInput>
+    where?: TripWhereInput
+  }
+
+  export type TripUpdateToOneWithWhereWithoutPackagesInput = {
+    where?: TripWhereInput
+    data: XOR<TripUpdateWithoutPackagesInput, TripUncheckedUpdateWithoutPackagesInput>
+  }
+
+  export type TripUpdateWithoutPackagesInput = {
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bus?: BusUpdateOneRequiredWithoutTripsNestedInput
+    route?: RouteUpdateOneRequiredWithoutTripsNestedInput
+    driver?: DriverUpdateOneWithoutTripsNestedInput
+    conductor?: ConductorUpdateOneWithoutTripsNestedInput
+    tickets?: TicketUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateWithoutPackagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutTripNestedInput
   }
 
   export type BusCreateWithoutPosMachinesInput = {
@@ -18720,6 +21231,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+    trips?: TripCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutPosMachinesInput = {
@@ -18741,6 +21253,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+    trips?: TripUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutPosMachinesInput = {
@@ -18762,6 +21275,7 @@ export namespace Prisma {
     seat_no?: number | null
     payment_mode?: $Enums.PaymentMode
     bus: BusCreateNestedOneWithoutTicketsInput
+    trip?: TripCreateNestedOneWithoutTicketsInput
   }
 
   export type TicketUncheckedCreateWithoutPosMachineInput = {
@@ -18779,6 +21293,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatus
     seat_no?: number | null
     payment_mode?: $Enums.PaymentMode
+    trip_id?: number | null
   }
 
   export type TicketCreateOrConnectWithoutPosMachineInput = {
@@ -18820,6 +21335,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+    trips?: TripUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutPosMachinesInput = {
@@ -18841,6 +21357,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type TicketUpsertWithWhereUniqueWithoutPosMachineInput = {
@@ -18877,6 +21394,7 @@ export namespace Prisma {
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     posMachines?: POSMachineCreateNestedManyWithoutBusInput
+    trips?: TripCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutDailyReportsInput = {
@@ -18898,6 +21416,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
+    trips?: TripUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutDailyReportsInput = {
@@ -18934,6 +21453,7 @@ export namespace Prisma {
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUpdateManyWithoutBusNestedInput
+    trips?: TripUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutDailyReportsInput = {
@@ -18955,6 +21475,7 @@ export namespace Prisma {
     tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type UserCreateWithoutRoutesInput = {
@@ -19013,6 +21534,7 @@ export namespace Prisma {
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
     posMachines?: POSMachineCreateNestedManyWithoutBusInput
+    trips?: TripCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutRouteInput = {
@@ -19034,6 +21556,7 @@ export namespace Prisma {
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
     posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
+    trips?: TripUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutRouteInput = {
@@ -19043,6 +21566,43 @@ export namespace Prisma {
 
   export type BusCreateManyRouteInputEnvelope = {
     data: BusCreateManyRouteInput | BusCreateManyRouteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TripCreateWithoutRouteInput = {
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    bus: BusCreateNestedOneWithoutTripsInput
+    driver?: DriverCreateNestedOneWithoutTripsInput
+    conductor?: ConductorCreateNestedOneWithoutTripsInput
+    tickets?: TicketCreateNestedManyWithoutTripInput
+    packages?: PackageCreateNestedManyWithoutTripInput
+  }
+
+  export type TripUncheckedCreateWithoutRouteInput = {
+    id?: number
+    bus_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
+    conductor_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutTripInput
+    packages?: PackageUncheckedCreateNestedManyWithoutTripInput
+  }
+
+  export type TripCreateOrConnectWithoutRouteInput = {
+    where: TripWhereUniqueInput
+    create: XOR<TripCreateWithoutRouteInput, TripUncheckedCreateWithoutRouteInput>
+  }
+
+  export type TripCreateManyRouteInputEnvelope = {
+    data: TripCreateManyRouteInput | TripCreateManyRouteInput[]
     skipDuplicates?: boolean
   }
 
@@ -19106,6 +21666,22 @@ export namespace Prisma {
     data: XOR<BusUpdateManyMutationInput, BusUncheckedUpdateManyWithoutRouteInput>
   }
 
+  export type TripUpsertWithWhereUniqueWithoutRouteInput = {
+    where: TripWhereUniqueInput
+    update: XOR<TripUpdateWithoutRouteInput, TripUncheckedUpdateWithoutRouteInput>
+    create: XOR<TripCreateWithoutRouteInput, TripUncheckedCreateWithoutRouteInput>
+  }
+
+  export type TripUpdateWithWhereUniqueWithoutRouteInput = {
+    where: TripWhereUniqueInput
+    data: XOR<TripUpdateWithoutRouteInput, TripUncheckedUpdateWithoutRouteInput>
+  }
+
+  export type TripUpdateManyWithWhereWithoutRouteInput = {
+    where: TripScalarWhereInput
+    data: XOR<TripUpdateManyMutationInput, TripUncheckedUpdateManyWithoutRouteInput>
+  }
+
   export type BusCreateWithoutTicketsInput = {
     bus_number: string
     capacity?: number
@@ -19124,6 +21700,7 @@ export namespace Prisma {
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
     posMachines?: POSMachineCreateNestedManyWithoutBusInput
+    trips?: TripCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutTicketsInput = {
@@ -19145,6 +21722,7 @@ export namespace Prisma {
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
     posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
+    trips?: TripUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutTicketsInput = {
@@ -19178,6 +21756,38 @@ export namespace Prisma {
     create: XOR<POSMachineCreateWithoutTicketsInput, POSMachineUncheckedCreateWithoutTicketsInput>
   }
 
+  export type TripCreateWithoutTicketsInput = {
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    bus: BusCreateNestedOneWithoutTripsInput
+    route: RouteCreateNestedOneWithoutTripsInput
+    driver?: DriverCreateNestedOneWithoutTripsInput
+    conductor?: ConductorCreateNestedOneWithoutTripsInput
+    packages?: PackageCreateNestedManyWithoutTripInput
+  }
+
+  export type TripUncheckedCreateWithoutTicketsInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
+    conductor_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    packages?: PackageUncheckedCreateNestedManyWithoutTripInput
+  }
+
+  export type TripCreateOrConnectWithoutTicketsInput = {
+    where: TripWhereUniqueInput
+    create: XOR<TripCreateWithoutTicketsInput, TripUncheckedCreateWithoutTicketsInput>
+  }
+
   export type BusUpsertWithoutTicketsInput = {
     update: XOR<BusUpdateWithoutTicketsInput, BusUncheckedUpdateWithoutTicketsInput>
     create: XOR<BusCreateWithoutTicketsInput, BusUncheckedCreateWithoutTicketsInput>
@@ -19207,6 +21817,7 @@ export namespace Prisma {
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUpdateManyWithoutBusNestedInput
+    trips?: TripUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutTicketsInput = {
@@ -19228,6 +21839,7 @@ export namespace Prisma {
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type POSMachineUpsertWithoutTicketsInput = {
@@ -19262,6 +21874,490 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TripUpsertWithoutTicketsInput = {
+    update: XOR<TripUpdateWithoutTicketsInput, TripUncheckedUpdateWithoutTicketsInput>
+    create: XOR<TripCreateWithoutTicketsInput, TripUncheckedCreateWithoutTicketsInput>
+    where?: TripWhereInput
+  }
+
+  export type TripUpdateToOneWithWhereWithoutTicketsInput = {
+    where?: TripWhereInput
+    data: XOR<TripUpdateWithoutTicketsInput, TripUncheckedUpdateWithoutTicketsInput>
+  }
+
+  export type TripUpdateWithoutTicketsInput = {
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bus?: BusUpdateOneRequiredWithoutTripsNestedInput
+    route?: RouteUpdateOneRequiredWithoutTripsNestedInput
+    driver?: DriverUpdateOneWithoutTripsNestedInput
+    conductor?: ConductorUpdateOneWithoutTripsNestedInput
+    packages?: PackageUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateWithoutTicketsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    packages?: PackageUncheckedUpdateManyWithoutTripNestedInput
+  }
+
+  export type BusCreateWithoutTripsInput = {
+    bus_number: string
+    capacity?: number
+    status?: $Enums.BusStatus
+    current_location?: string | null
+    fuel_level?: Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: Date | string | null
+    insurance_expiry?: Date | string | null
+    permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutBusesInput
+    route?: RouteCreateNestedOneWithoutBusesInput
+    driver?: DriverCreateNestedOneWithoutBusesInput
+    conductor?: ConductorCreateNestedOneWithoutBusesInput
+    tickets?: TicketCreateNestedManyWithoutBusInput
+    packages?: PackageCreateNestedManyWithoutBusInput
+    dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineCreateNestedManyWithoutBusInput
+  }
+
+  export type BusUncheckedCreateWithoutTripsInput = {
+    id?: number
+    user_id: number
+    bus_number: string
+    capacity?: number
+    route_id?: number | null
+    driver_id?: number | null
+    conductor_id?: number | null
+    status?: $Enums.BusStatus
+    current_location?: string | null
+    fuel_level?: Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: Date | string | null
+    insurance_expiry?: Date | string | null
+    permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
+    packages?: PackageUncheckedCreateNestedManyWithoutBusInput
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
+  }
+
+  export type BusCreateOrConnectWithoutTripsInput = {
+    where: BusWhereUniqueInput
+    create: XOR<BusCreateWithoutTripsInput, BusUncheckedCreateWithoutTripsInput>
+  }
+
+  export type RouteCreateWithoutTripsInput = {
+    name: string
+    code: string
+    distance: Decimal | DecimalJsLike | number | string
+    base_fare: Decimal | DecimalJsLike | number | string
+    per_km_rate: Decimal | DecimalJsLike | number | string
+    stops: JsonNullValueInput | InputJsonValue
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutRoutesInput
+    buses?: BusCreateNestedManyWithoutRouteInput
+  }
+
+  export type RouteUncheckedCreateWithoutTripsInput = {
+    id?: number
+    user_id: number
+    name: string
+    code: string
+    distance: Decimal | DecimalJsLike | number | string
+    base_fare: Decimal | DecimalJsLike | number | string
+    per_km_rate: Decimal | DecimalJsLike | number | string
+    stops: JsonNullValueInput | InputJsonValue
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    buses?: BusUncheckedCreateNestedManyWithoutRouteInput
+  }
+
+  export type RouteCreateOrConnectWithoutTripsInput = {
+    where: RouteWhereUniqueInput
+    create: XOR<RouteCreateWithoutTripsInput, RouteUncheckedCreateWithoutTripsInput>
+  }
+
+  export type DriverCreateWithoutTripsInput = {
+    name: string
+    phone: string
+    license_number: string
+    license_expiry?: Date | string | null
+    experience_years?: number
+    address?: string | null
+    emergency_contact?: string | null
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutDriversInput
+    buses?: BusCreateNestedManyWithoutDriverInput
+  }
+
+  export type DriverUncheckedCreateWithoutTripsInput = {
+    id?: number
+    user_id: number
+    name: string
+    phone: string
+    license_number: string
+    license_expiry?: Date | string | null
+    experience_years?: number
+    address?: string | null
+    emergency_contact?: string | null
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    buses?: BusUncheckedCreateNestedManyWithoutDriverInput
+  }
+
+  export type DriverCreateOrConnectWithoutTripsInput = {
+    where: DriverWhereUniqueInput
+    create: XOR<DriverCreateWithoutTripsInput, DriverUncheckedCreateWithoutTripsInput>
+  }
+
+  export type ConductorCreateWithoutTripsInput = {
+    name: string
+    phone: string
+    experience_years?: number
+    address?: string | null
+    emergency_contact?: string | null
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutConductorsInput
+    buses?: BusCreateNestedManyWithoutConductorInput
+  }
+
+  export type ConductorUncheckedCreateWithoutTripsInput = {
+    id?: number
+    user_id: number
+    name: string
+    phone: string
+    experience_years?: number
+    address?: string | null
+    emergency_contact?: string | null
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    buses?: BusUncheckedCreateNestedManyWithoutConductorInput
+  }
+
+  export type ConductorCreateOrConnectWithoutTripsInput = {
+    where: ConductorWhereUniqueInput
+    create: XOR<ConductorCreateWithoutTripsInput, ConductorUncheckedCreateWithoutTripsInput>
+  }
+
+  export type TicketCreateWithoutTripInput = {
+    ticket_number: string
+    passenger_name?: string | null
+    passenger_phone?: string | null
+    from_stop: string
+    to_stop: string
+    passenger_type?: $Enums.PassengerType
+    fare: Decimal | DecimalJsLike | number | string
+    issue_time?: Date | string
+    journey_date: Date | string
+    status?: $Enums.TicketStatus
+    seat_no?: number | null
+    payment_mode?: $Enums.PaymentMode
+    bus: BusCreateNestedOneWithoutTicketsInput
+    posMachine?: POSMachineCreateNestedOneWithoutTicketsInput
+  }
+
+  export type TicketUncheckedCreateWithoutTripInput = {
+    id?: number
+    bus_id: number
+    ticket_number: string
+    passenger_name?: string | null
+    passenger_phone?: string | null
+    from_stop: string
+    to_stop: string
+    passenger_type?: $Enums.PassengerType
+    fare: Decimal | DecimalJsLike | number | string
+    issue_time?: Date | string
+    journey_date: Date | string
+    status?: $Enums.TicketStatus
+    seat_no?: number | null
+    pos_machine_id?: number | null
+    payment_mode?: $Enums.PaymentMode
+  }
+
+  export type TicketCreateOrConnectWithoutTripInput = {
+    where: TicketWhereUniqueInput
+    create: XOR<TicketCreateWithoutTripInput, TicketUncheckedCreateWithoutTripInput>
+  }
+
+  export type TicketCreateManyTripInputEnvelope = {
+    data: TicketCreateManyTripInput | TicketCreateManyTripInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PackageCreateWithoutTripInput = {
+    package_number: string
+    sender_name: string
+    sender_phone: string
+    receiver_name: string
+    receiver_phone: string
+    from_stop: string
+    to_stop: string
+    description?: string | null
+    weight?: Decimal | DecimalJsLike | number | string | null
+    fare: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PackageStatus
+    booked_at?: Date | string
+    delivered_at?: Date | string | null
+    bus: BusCreateNestedOneWithoutPackagesInput
+  }
+
+  export type PackageUncheckedCreateWithoutTripInput = {
+    id?: number
+    bus_id: number
+    package_number: string
+    sender_name: string
+    sender_phone: string
+    receiver_name: string
+    receiver_phone: string
+    from_stop: string
+    to_stop: string
+    description?: string | null
+    weight?: Decimal | DecimalJsLike | number | string | null
+    fare: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PackageStatus
+    booked_at?: Date | string
+    delivered_at?: Date | string | null
+  }
+
+  export type PackageCreateOrConnectWithoutTripInput = {
+    where: PackageWhereUniqueInput
+    create: XOR<PackageCreateWithoutTripInput, PackageUncheckedCreateWithoutTripInput>
+  }
+
+  export type PackageCreateManyTripInputEnvelope = {
+    data: PackageCreateManyTripInput | PackageCreateManyTripInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BusUpsertWithoutTripsInput = {
+    update: XOR<BusUpdateWithoutTripsInput, BusUncheckedUpdateWithoutTripsInput>
+    create: XOR<BusCreateWithoutTripsInput, BusUncheckedCreateWithoutTripsInput>
+    where?: BusWhereInput
+  }
+
+  export type BusUpdateToOneWithWhereWithoutTripsInput = {
+    where?: BusWhereInput
+    data: XOR<BusUpdateWithoutTripsInput, BusUncheckedUpdateWithoutTripsInput>
+  }
+
+  export type BusUpdateWithoutTripsInput = {
+    bus_number?: StringFieldUpdateOperationsInput | string
+    capacity?: IntFieldUpdateOperationsInput | number
+    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
+    current_location?: NullableStringFieldUpdateOperationsInput | string | null
+    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBusesNestedInput
+    route?: RouteUpdateOneWithoutBusesNestedInput
+    driver?: DriverUpdateOneWithoutBusesNestedInput
+    conductor?: ConductorUpdateOneWithoutBusesNestedInput
+    tickets?: TicketUpdateManyWithoutBusNestedInput
+    packages?: PackageUpdateManyWithoutBusNestedInput
+    dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
+  }
+
+  export type BusUncheckedUpdateWithoutTripsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    bus_number?: StringFieldUpdateOperationsInput | string
+    capacity?: IntFieldUpdateOperationsInput | number
+    route_id?: NullableIntFieldUpdateOperationsInput | number | null
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
+    current_location?: NullableStringFieldUpdateOperationsInput | string | null
+    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
+    packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+  }
+
+  export type RouteUpsertWithoutTripsInput = {
+    update: XOR<RouteUpdateWithoutTripsInput, RouteUncheckedUpdateWithoutTripsInput>
+    create: XOR<RouteCreateWithoutTripsInput, RouteUncheckedCreateWithoutTripsInput>
+    where?: RouteWhereInput
+  }
+
+  export type RouteUpdateToOneWithWhereWithoutTripsInput = {
+    where?: RouteWhereInput
+    data: XOR<RouteUpdateWithoutTripsInput, RouteUncheckedUpdateWithoutTripsInput>
+  }
+
+  export type RouteUpdateWithoutTripsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    distance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    base_fare?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    per_km_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stops?: JsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutRoutesNestedInput
+    buses?: BusUpdateManyWithoutRouteNestedInput
+  }
+
+  export type RouteUncheckedUpdateWithoutTripsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    distance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    base_fare?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    per_km_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    stops?: JsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    buses?: BusUncheckedUpdateManyWithoutRouteNestedInput
+  }
+
+  export type DriverUpsertWithoutTripsInput = {
+    update: XOR<DriverUpdateWithoutTripsInput, DriverUncheckedUpdateWithoutTripsInput>
+    create: XOR<DriverCreateWithoutTripsInput, DriverUncheckedCreateWithoutTripsInput>
+    where?: DriverWhereInput
+  }
+
+  export type DriverUpdateToOneWithWhereWithoutTripsInput = {
+    where?: DriverWhereInput
+    data: XOR<DriverUpdateWithoutTripsInput, DriverUncheckedUpdateWithoutTripsInput>
+  }
+
+  export type DriverUpdateWithoutTripsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    license_number?: StringFieldUpdateOperationsInput | string
+    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    experience_years?: IntFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutDriversNestedInput
+    buses?: BusUpdateManyWithoutDriverNestedInput
+  }
+
+  export type DriverUncheckedUpdateWithoutTripsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    license_number?: StringFieldUpdateOperationsInput | string
+    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    experience_years?: IntFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    buses?: BusUncheckedUpdateManyWithoutDriverNestedInput
+  }
+
+  export type ConductorUpsertWithoutTripsInput = {
+    update: XOR<ConductorUpdateWithoutTripsInput, ConductorUncheckedUpdateWithoutTripsInput>
+    create: XOR<ConductorCreateWithoutTripsInput, ConductorUncheckedCreateWithoutTripsInput>
+    where?: ConductorWhereInput
+  }
+
+  export type ConductorUpdateToOneWithWhereWithoutTripsInput = {
+    where?: ConductorWhereInput
+    data: XOR<ConductorUpdateWithoutTripsInput, ConductorUncheckedUpdateWithoutTripsInput>
+  }
+
+  export type ConductorUpdateWithoutTripsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    experience_years?: IntFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutConductorsNestedInput
+    buses?: BusUpdateManyWithoutConductorNestedInput
+  }
+
+  export type ConductorUncheckedUpdateWithoutTripsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    experience_years?: IntFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    buses?: BusUncheckedUpdateManyWithoutConductorNestedInput
+  }
+
+  export type TicketUpsertWithWhereUniqueWithoutTripInput = {
+    where: TicketWhereUniqueInput
+    update: XOR<TicketUpdateWithoutTripInput, TicketUncheckedUpdateWithoutTripInput>
+    create: XOR<TicketCreateWithoutTripInput, TicketUncheckedCreateWithoutTripInput>
+  }
+
+  export type TicketUpdateWithWhereUniqueWithoutTripInput = {
+    where: TicketWhereUniqueInput
+    data: XOR<TicketUpdateWithoutTripInput, TicketUncheckedUpdateWithoutTripInput>
+  }
+
+  export type TicketUpdateManyWithWhereWithoutTripInput = {
+    where: TicketScalarWhereInput
+    data: XOR<TicketUpdateManyMutationInput, TicketUncheckedUpdateManyWithoutTripInput>
+  }
+
+  export type PackageUpsertWithWhereUniqueWithoutTripInput = {
+    where: PackageWhereUniqueInput
+    update: XOR<PackageUpdateWithoutTripInput, PackageUncheckedUpdateWithoutTripInput>
+    create: XOR<PackageCreateWithoutTripInput, PackageUncheckedCreateWithoutTripInput>
+  }
+
+  export type PackageUpdateWithWhereUniqueWithoutTripInput = {
+    where: PackageWhereUniqueInput
+    data: XOR<PackageUpdateWithoutTripInput, PackageUncheckedUpdateWithoutTripInput>
+  }
+
+  export type PackageUpdateManyWithWhereWithoutTripInput = {
+    where: PackageScalarWhereInput
+    data: XOR<PackageUpdateManyMutationInput, PackageUncheckedUpdateManyWithoutTripInput>
+  }
+
   export type DriverCreateWithoutUserInput = {
     name: string
     phone: string
@@ -19274,6 +22370,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     buses?: BusCreateNestedManyWithoutDriverInput
+    trips?: TripCreateNestedManyWithoutDriverInput
   }
 
   export type DriverUncheckedCreateWithoutUserInput = {
@@ -19289,6 +22386,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     buses?: BusUncheckedCreateNestedManyWithoutDriverInput
+    trips?: TripUncheckedCreateNestedManyWithoutDriverInput
   }
 
   export type DriverCreateOrConnectWithoutUserInput = {
@@ -19312,6 +22410,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     buses?: BusCreateNestedManyWithoutRouteInput
+    trips?: TripCreateNestedManyWithoutRouteInput
   }
 
   export type RouteUncheckedCreateWithoutUserInput = {
@@ -19326,6 +22425,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     buses?: BusUncheckedCreateNestedManyWithoutRouteInput
+    trips?: TripUncheckedCreateNestedManyWithoutRouteInput
   }
 
   export type RouteCreateOrConnectWithoutUserInput = {
@@ -19348,6 +22448,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     buses?: BusCreateNestedManyWithoutConductorInput
+    trips?: TripCreateNestedManyWithoutConductorInput
   }
 
   export type ConductorUncheckedCreateWithoutUserInput = {
@@ -19361,6 +22462,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     buses?: BusUncheckedCreateNestedManyWithoutConductorInput
+    trips?: TripUncheckedCreateNestedManyWithoutConductorInput
   }
 
   export type ConductorCreateOrConnectWithoutUserInput = {
@@ -19391,6 +22493,7 @@ export namespace Prisma {
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
     posMachines?: POSMachineCreateNestedManyWithoutBusInput
+    trips?: TripCreateNestedManyWithoutBusInput
   }
 
   export type BusUncheckedCreateWithoutUserInput = {
@@ -19412,6 +22515,7 @@ export namespace Prisma {
     packages?: PackageUncheckedCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
     posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
+    trips?: TripUncheckedCreateNestedManyWithoutBusInput
   }
 
   export type BusCreateOrConnectWithoutUserInput = {
@@ -19692,6 +22796,7 @@ export namespace Prisma {
     seat_no?: number | null
     pos_machine_id?: number | null
     payment_mode?: $Enums.PaymentMode
+    trip_id?: number | null
   }
 
   export type PackageCreateManyBusInput = {
@@ -19709,6 +22814,7 @@ export namespace Prisma {
     status?: $Enums.PackageStatus
     booked_at?: Date | string
     delivered_at?: Date | string | null
+    trip_id?: number | null
   }
 
   export type DailyReportCreateManyBusInput = {
@@ -19733,6 +22839,18 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type TripCreateManyBusInput = {
+    id?: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
+    conductor_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type TicketUpdateWithoutBusInput = {
     ticket_number?: StringFieldUpdateOperationsInput | string
     passenger_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19747,6 +22865,7 @@ export namespace Prisma {
     seat_no?: NullableIntFieldUpdateOperationsInput | number | null
     payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
     posMachine?: POSMachineUpdateOneWithoutTicketsNestedInput
+    trip?: TripUpdateOneWithoutTicketsNestedInput
   }
 
   export type TicketUncheckedUpdateWithoutBusInput = {
@@ -19764,6 +22883,7 @@ export namespace Prisma {
     seat_no?: NullableIntFieldUpdateOperationsInput | number | null
     pos_machine_id?: NullableIntFieldUpdateOperationsInput | number | null
     payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    trip_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TicketUncheckedUpdateManyWithoutBusInput = {
@@ -19781,6 +22901,7 @@ export namespace Prisma {
     seat_no?: NullableIntFieldUpdateOperationsInput | number | null
     pos_machine_id?: NullableIntFieldUpdateOperationsInput | number | null
     payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    trip_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type PackageUpdateWithoutBusInput = {
@@ -19797,6 +22918,7 @@ export namespace Prisma {
     status?: EnumPackageStatusFieldUpdateOperationsInput | $Enums.PackageStatus
     booked_at?: DateTimeFieldUpdateOperationsInput | Date | string
     delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    trip?: TripUpdateOneWithoutPackagesNestedInput
   }
 
   export type PackageUncheckedUpdateWithoutBusInput = {
@@ -19814,6 +22936,7 @@ export namespace Prisma {
     status?: EnumPackageStatusFieldUpdateOperationsInput | $Enums.PackageStatus
     booked_at?: DateTimeFieldUpdateOperationsInput | Date | string
     delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    trip_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type PackageUncheckedUpdateManyWithoutBusInput = {
@@ -19831,6 +22954,7 @@ export namespace Prisma {
     status?: EnumPackageStatusFieldUpdateOperationsInput | $Enums.PackageStatus
     booked_at?: DateTimeFieldUpdateOperationsInput | Date | string
     delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    trip_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type DailyReportUpdateWithoutBusInput = {
@@ -19899,6 +23023,45 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TripUpdateWithoutBusInput = {
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    route?: RouteUpdateOneRequiredWithoutTripsNestedInput
+    driver?: DriverUpdateOneWithoutTripsNestedInput
+    conductor?: ConductorUpdateOneWithoutTripsNestedInput
+    tickets?: TicketUpdateManyWithoutTripNestedInput
+    packages?: PackageUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateWithoutBusInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutTripNestedInput
+    packages?: PackageUncheckedUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateManyWithoutBusInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BusCreateManyConductorInput = {
     id?: number
     user_id: number
@@ -19912,6 +23075,18 @@ export namespace Prisma {
     last_maintenance?: Date | string | null
     insurance_expiry?: Date | string | null
     permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type TripCreateManyConductorInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -19934,6 +23109,7 @@ export namespace Prisma {
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUpdateManyWithoutBusNestedInput
+    trips?: TripUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutConductorInput = {
@@ -19955,6 +23131,7 @@ export namespace Prisma {
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateManyWithoutConductorInput = {
@@ -19974,6 +23151,45 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TripUpdateWithoutConductorInput = {
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bus?: BusUpdateOneRequiredWithoutTripsNestedInput
+    route?: RouteUpdateOneRequiredWithoutTripsNestedInput
+    driver?: DriverUpdateOneWithoutTripsNestedInput
+    tickets?: TicketUpdateManyWithoutTripNestedInput
+    packages?: PackageUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateWithoutConductorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutTripNestedInput
+    packages?: PackageUncheckedUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateManyWithoutConductorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BusCreateManyDriverInput = {
     id?: number
     user_id: number
@@ -19987,6 +23203,18 @@ export namespace Prisma {
     last_maintenance?: Date | string | null
     insurance_expiry?: Date | string | null
     permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type TripCreateManyDriverInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    conductor_id?: number | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -20009,6 +23237,7 @@ export namespace Prisma {
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUpdateManyWithoutBusNestedInput
+    trips?: TripUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutDriverInput = {
@@ -20030,6 +23259,7 @@ export namespace Prisma {
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateManyWithoutDriverInput = {
@@ -20049,6 +23279,45 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TripUpdateWithoutDriverInput = {
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bus?: BusUpdateOneRequiredWithoutTripsNestedInput
+    route?: RouteUpdateOneRequiredWithoutTripsNestedInput
+    conductor?: ConductorUpdateOneWithoutTripsNestedInput
+    tickets?: TicketUpdateManyWithoutTripNestedInput
+    packages?: PackageUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateWithoutDriverInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutTripNestedInput
+    packages?: PackageUncheckedUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateManyWithoutDriverInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TicketCreateManyPosMachineInput = {
     id?: number
     bus_id: number
@@ -20064,6 +23333,7 @@ export namespace Prisma {
     status?: $Enums.TicketStatus
     seat_no?: number | null
     payment_mode?: $Enums.PaymentMode
+    trip_id?: number | null
   }
 
   export type TicketUpdateWithoutPosMachineInput = {
@@ -20080,6 +23350,7 @@ export namespace Prisma {
     seat_no?: NullableIntFieldUpdateOperationsInput | number | null
     payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
     bus?: BusUpdateOneRequiredWithoutTicketsNestedInput
+    trip?: TripUpdateOneWithoutTicketsNestedInput
   }
 
   export type TicketUncheckedUpdateWithoutPosMachineInput = {
@@ -20097,6 +23368,7 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     seat_no?: NullableIntFieldUpdateOperationsInput | number | null
     payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    trip_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TicketUncheckedUpdateManyWithoutPosMachineInput = {
@@ -20114,6 +23386,7 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     seat_no?: NullableIntFieldUpdateOperationsInput | number | null
     payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    trip_id?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type BusCreateManyRouteInput = {
@@ -20129,6 +23402,18 @@ export namespace Prisma {
     last_maintenance?: Date | string | null
     insurance_expiry?: Date | string | null
     permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type TripCreateManyRouteInput = {
+    id?: number
+    bus_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
+    conductor_id?: number | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -20151,6 +23436,7 @@ export namespace Prisma {
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUpdateManyWithoutBusNestedInput
+    trips?: TripUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutRouteInput = {
@@ -20172,6 +23458,7 @@ export namespace Prisma {
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateManyWithoutRouteInput = {
@@ -20189,6 +23476,187 @@ export namespace Prisma {
     permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TripUpdateWithoutRouteInput = {
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bus?: BusUpdateOneRequiredWithoutTripsNestedInput
+    driver?: DriverUpdateOneWithoutTripsNestedInput
+    conductor?: ConductorUpdateOneWithoutTripsNestedInput
+    tickets?: TicketUpdateManyWithoutTripNestedInput
+    packages?: PackageUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateWithoutRouteInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutTripNestedInput
+    packages?: PackageUncheckedUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateManyWithoutRouteInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TicketCreateManyTripInput = {
+    id?: number
+    bus_id: number
+    ticket_number: string
+    passenger_name?: string | null
+    passenger_phone?: string | null
+    from_stop: string
+    to_stop: string
+    passenger_type?: $Enums.PassengerType
+    fare: Decimal | DecimalJsLike | number | string
+    issue_time?: Date | string
+    journey_date: Date | string
+    status?: $Enums.TicketStatus
+    seat_no?: number | null
+    pos_machine_id?: number | null
+    payment_mode?: $Enums.PaymentMode
+  }
+
+  export type PackageCreateManyTripInput = {
+    id?: number
+    bus_id: number
+    package_number: string
+    sender_name: string
+    sender_phone: string
+    receiver_name: string
+    receiver_phone: string
+    from_stop: string
+    to_stop: string
+    description?: string | null
+    weight?: Decimal | DecimalJsLike | number | string | null
+    fare: Decimal | DecimalJsLike | number | string
+    status?: $Enums.PackageStatus
+    booked_at?: Date | string
+    delivered_at?: Date | string | null
+  }
+
+  export type TicketUpdateWithoutTripInput = {
+    ticket_number?: StringFieldUpdateOperationsInput | string
+    passenger_name?: NullableStringFieldUpdateOperationsInput | string | null
+    passenger_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    from_stop?: StringFieldUpdateOperationsInput | string
+    to_stop?: StringFieldUpdateOperationsInput | string
+    passenger_type?: EnumPassengerTypeFieldUpdateOperationsInput | $Enums.PassengerType
+    fare?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+    bus?: BusUpdateOneRequiredWithoutTicketsNestedInput
+    posMachine?: POSMachineUpdateOneWithoutTicketsNestedInput
+  }
+
+  export type TicketUncheckedUpdateWithoutTripInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    ticket_number?: StringFieldUpdateOperationsInput | string
+    passenger_name?: NullableStringFieldUpdateOperationsInput | string | null
+    passenger_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    from_stop?: StringFieldUpdateOperationsInput | string
+    to_stop?: StringFieldUpdateOperationsInput | string
+    passenger_type?: EnumPassengerTypeFieldUpdateOperationsInput | $Enums.PassengerType
+    fare?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    pos_machine_id?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+  }
+
+  export type TicketUncheckedUpdateManyWithoutTripInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    ticket_number?: StringFieldUpdateOperationsInput | string
+    passenger_name?: NullableStringFieldUpdateOperationsInput | string | null
+    passenger_phone?: NullableStringFieldUpdateOperationsInput | string | null
+    from_stop?: StringFieldUpdateOperationsInput | string
+    to_stop?: StringFieldUpdateOperationsInput | string
+    passenger_type?: EnumPassengerTypeFieldUpdateOperationsInput | $Enums.PassengerType
+    fare?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    issue_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    journey_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
+    seat_no?: NullableIntFieldUpdateOperationsInput | number | null
+    pos_machine_id?: NullableIntFieldUpdateOperationsInput | number | null
+    payment_mode?: EnumPaymentModeFieldUpdateOperationsInput | $Enums.PaymentMode
+  }
+
+  export type PackageUpdateWithoutTripInput = {
+    package_number?: StringFieldUpdateOperationsInput | string
+    sender_name?: StringFieldUpdateOperationsInput | string
+    sender_phone?: StringFieldUpdateOperationsInput | string
+    receiver_name?: StringFieldUpdateOperationsInput | string
+    receiver_phone?: StringFieldUpdateOperationsInput | string
+    from_stop?: StringFieldUpdateOperationsInput | string
+    to_stop?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fare?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPackageStatusFieldUpdateOperationsInput | $Enums.PackageStatus
+    booked_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bus?: BusUpdateOneRequiredWithoutPackagesNestedInput
+  }
+
+  export type PackageUncheckedUpdateWithoutTripInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    package_number?: StringFieldUpdateOperationsInput | string
+    sender_name?: StringFieldUpdateOperationsInput | string
+    sender_phone?: StringFieldUpdateOperationsInput | string
+    receiver_name?: StringFieldUpdateOperationsInput | string
+    receiver_phone?: StringFieldUpdateOperationsInput | string
+    from_stop?: StringFieldUpdateOperationsInput | string
+    to_stop?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fare?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPackageStatusFieldUpdateOperationsInput | $Enums.PackageStatus
+    booked_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PackageUncheckedUpdateManyWithoutTripInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    package_number?: StringFieldUpdateOperationsInput | string
+    sender_name?: StringFieldUpdateOperationsInput | string
+    sender_phone?: StringFieldUpdateOperationsInput | string
+    receiver_name?: StringFieldUpdateOperationsInput | string
+    receiver_phone?: StringFieldUpdateOperationsInput | string
+    from_stop?: StringFieldUpdateOperationsInput | string
+    to_stop?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fare?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumPackageStatusFieldUpdateOperationsInput | $Enums.PackageStatus
+    booked_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type DriverCreateManyUserInput = {
@@ -20268,6 +23736,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     buses?: BusUpdateManyWithoutDriverNestedInput
+    trips?: TripUpdateManyWithoutDriverNestedInput
   }
 
   export type DriverUncheckedUpdateWithoutUserInput = {
@@ -20283,6 +23752,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     buses?: BusUncheckedUpdateManyWithoutDriverNestedInput
+    trips?: TripUncheckedUpdateManyWithoutDriverNestedInput
   }
 
   export type DriverUncheckedUpdateManyWithoutUserInput = {
@@ -20310,6 +23780,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     buses?: BusUpdateManyWithoutRouteNestedInput
+    trips?: TripUpdateManyWithoutRouteNestedInput
   }
 
   export type RouteUncheckedUpdateWithoutUserInput = {
@@ -20324,6 +23795,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     buses?: BusUncheckedUpdateManyWithoutRouteNestedInput
+    trips?: TripUncheckedUpdateManyWithoutRouteNestedInput
   }
 
   export type RouteUncheckedUpdateManyWithoutUserInput = {
@@ -20349,6 +23821,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     buses?: BusUpdateManyWithoutConductorNestedInput
+    trips?: TripUpdateManyWithoutConductorNestedInput
   }
 
   export type ConductorUncheckedUpdateWithoutUserInput = {
@@ -20362,6 +23835,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     buses?: BusUncheckedUpdateManyWithoutConductorNestedInput
+    trips?: TripUncheckedUpdateManyWithoutConductorNestedInput
   }
 
   export type ConductorUncheckedUpdateManyWithoutUserInput = {
@@ -20394,6 +23868,7 @@ export namespace Prisma {
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUpdateManyWithoutBusNestedInput
+    trips?: TripUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateWithoutUserInput = {
@@ -20415,6 +23890,7 @@ export namespace Prisma {
     packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
   }
 
   export type BusUncheckedUpdateManyWithoutUserInput = {

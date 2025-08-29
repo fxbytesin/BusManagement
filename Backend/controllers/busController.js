@@ -58,7 +58,6 @@ exports.createBus = async (req, res) => {
 
     // Validate route existence if given
     if (route_id) {
-      console.log('hey')
       const route = await prisma.route.findUnique({ where: { id: route_id } });
       if (!route) {
         return res.status(404).json({ error: 'Route not found' });
