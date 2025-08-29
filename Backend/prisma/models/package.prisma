@@ -17,6 +17,9 @@ model Package {
 
   // Relations
   bus Bus @relation(fields: [bus_id], references: [id], onDelete: Cascade)
+
+  trip_id      Int?
+  trip         Trip?       @relation(fields: [trip_id], references: [id])
 }
 
 enum PackageStatus {

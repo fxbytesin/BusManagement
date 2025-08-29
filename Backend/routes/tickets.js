@@ -100,6 +100,90 @@ router.post('/', authenticateToken,ticketController.createTicket );
  */
 router.get('/bus/:busId', authenticateToken,ticketController.getTicketForSpecificBus );
 
+
+
+/**
+ * @swagger
+ * /api/ticket/allocated-seats/{busId}:
+ *   get:
+ *     summary: Get allocated seat numbers for a specific bus and journey date
+ *     tags: [Ticket]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: busId
+ *         in: path
+ *         description: Bus ID to retrieve allocated seats for
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: date
+ *         in: query
+ *         description: Journey date to filter allocated seats (YYYY-MM-DD)
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of seat numbers currently allocated for the bus on the given date
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 allocatedSeats:
+ *                   type: array
+ *                   items:
+ *                     type: integer
+ *       400:
+ *         description: Validation error or missing required fields
+ */
+router.get('/allocated-seats/:busId', authenticateToken, ticketController.getAllocatedSeats);
+
+/**
+ * @swagger
+ * /api/ticket/tickets-count-per-bus:
+ *   get:
+ *     summary: Get the number of tickets issued and allocated seats per bus on a specific date
+ *     tags: [Ticket]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: date
+ *         in: query
+ *         description: |
+ *           Date to filter tickets by (format: YYYY-MM-DD)
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of buses with count of tickets issued and allocated seat numbers on the given date
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   bus_id:
+ *                     type: integer
+ *                   tickets_issued:
+ *                     type: integer
+ *                   allocated_seats:
+ *                     type: array
+ *                     items:
+ *                       type: integer
+ *       400:
+ *         description: Missing or invalid date parameter
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
+
+router.get('/tickets-count-per-bus', authenticateToken, ticketController.getAllocatedSeatsAndTicketCountPerBus);
+
 /**
  * @swagger
  * /api/ticket/{id}:
@@ -126,5 +210,4 @@ router.get('/bus/:busId', authenticateToken,ticketController.getTicketForSpecifi
  *         description: Ticket not found
  */
 router.get('/:id', authenticateToken, ticketController.viewTicket);
-
 module.exports = router;

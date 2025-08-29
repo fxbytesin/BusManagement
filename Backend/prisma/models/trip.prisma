@@ -1,0 +1,25 @@
+model Trip {
+  id            Int        @id @default(autoincrement())
+  bus_id        Int
+  route_id      Int
+  start_time    DateTime
+  end_time      DateTime?
+  status        TripStatus @default(SCHEDULED)
+  driver_id     Int?
+  conductor_id  Int?
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+  bus           Bus        @relation(fields: [bus_id], references: [id], onDelete: Cascade)
+  route         Route      @relation(fields: [route_id], references: [id], onDelete: Cascade)
+  driver        Driver?    @relation(fields: [driver_id], references: [id], onDelete: SetNull)
+  conductor     Conductor? @relation(fields: [conductor_id], references: [id], onDelete: SetNull)
+  tickets       Ticket[]
+  packages      Package[]
+}
+
+enum TripStatus {
+  SCHEDULED
+  RUNNING
+  COMPLETED
+  CANCELLED
+}
