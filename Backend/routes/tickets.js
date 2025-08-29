@@ -67,7 +67,6 @@ function generateTicketNumber() {
  */
 router.post('/', authenticateToken,ticketController.createTicket );
 
-
 /**
  * @swagger
  * /api/ticket/bus/{busId}:
