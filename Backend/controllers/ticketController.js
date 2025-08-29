@@ -6,10 +6,11 @@ function generateTicketNumber() {
   return 'TKT-' + Date.now().toString().slice(-6);
 }
 
-// Create ticket controller with full validation
+// Create ticket controller with full validation including trip
 exports.createTicket = async (req, res) => {
   try {
     const {
+      trip_id,
       bus_id,
       from_stop,
       to_stop,
@@ -21,9 +22,9 @@ exports.createTicket = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!bus_id || !from_stop || !to_stop || !fare || !journey_date || !pos_machine_id) {
+    if (!bus_id || !trip_id || !from_stop || !to_stop || !fare || !journey_date || !pos_machine_id) {
       return res.status(400).json({
-        error: 'bus_id, from_stop, to_stop, fare, journey_date, and pos_machine_id are required.'
+        error: 'bus_id, trip_id, from_stop, to_stop, fare, journey_date, and pos_machine_id are required.'
       });
     }
 
@@ -33,24 +34,37 @@ exports.createTicket = async (req, res) => {
       return res.status(404).json({ error: 'Bus not found' });
     }
 
+    // Validate trip exists & matches bus
+    const trip = await prisma.trip.findUnique({ where: { id: trip_id } });
+    if (!trip) {
+      return res.status(404).json({ error: 'Trip not found' });
+    }
+
+    if (trip.status === 'COMPLETED' || trip.status === 'CANCELLED') {
+  return res.status(400).json({ error: `Cannot create ticket: Trip is ${trip.status.toLowerCase()}` });
+  }
+
+    if (trip.bus_id !== bus_id) {
+      return res.status(400).json({ error: 'Trip does not belong to the specified bus' });
+    }
+
     // Validate seat_no if provided
     if (seat_no !== undefined && seat_no !== null) {
       if (seat_no <= 0 || seat_no > bus.capacity) {
         return res.status(400).json({ error: `Invalid seat_no. Bus capacity is ${bus.capacity}` });
       }
 
-      // Check if seat already booked (not cancelled) for same bus and journey date
+      // Check seat availability for trip and date
       const existingTicket = await prisma.ticket.findFirst({
         where: {
-          bus_id,
+          trip_id,
           journey_date: new Date(journey_date),
           seat_no,
           status: { not: 'cancelled' }
         }
       });
-
       if (existingTicket) {
-        return res.status(400).json({ error: `Seat number ${seat_no} is already booked for this bus on the selected date.` });
+        return res.status(400).json({ error: `Seat number ${seat_no} is already booked for this trip on the selected date.` });
       }
     }
 
@@ -60,7 +74,7 @@ exports.createTicket = async (req, res) => {
       return res.status(404).json({ error: 'POS machine not found' });
     }
 
-    // Validate fare (positive decimal)
+    // Validate fare (positive)
     if (fare <= 0) {
       return res.status(400).json({ error: 'Fare must be a positive number' });
     }
@@ -71,12 +85,12 @@ exports.createTicket = async (req, res) => {
       return res.status(400).json({ error: `Invalid payment_mode, must be one of: ${validPaymentModes.join(', ')}` });
     }
 
-    // Create ticket
     const ticket_number = generateTicketNumber();
 
     const newTicket = await prisma.ticket.create({
       data: {
         bus_id,
+        trip_id,
         ticket_number,
         from_stop,
         to_stop,
@@ -96,17 +110,16 @@ exports.createTicket = async (req, res) => {
   }
 };
 
-// Get tickets for a specific bus with optional journey_date filter
-exports.getTicketForSpecificBus = async (req, res) => {
+
+// Get tickets for a specific trip with optional journey_date filter
+exports.getTicketForSpecificTrip = async (req, res) => {
   try {
-    const busId = parseInt(req.params.busId);
+    const tripId = parseInt(req.params.tripId);
     const { date } = req.query;
 
-    if (isNaN(busId)) {
-      return res.status(400).json({ error: 'Invalid bus ID' });
-    }
+    if (isNaN(tripId)) return res.status(400).json({ error: 'Invalid trip ID' });
 
-    const where = { bus_id: busId };
+    const where = { trip_id: tripId };
 
     if (date) {
       const journeyDate = new Date(date);
@@ -129,9 +142,10 @@ exports.getTicketForSpecificBus = async (req, res) => {
   }
 };
 
+
+// View ticket details by ID with related bus and POS machine info
 exports.viewTicket = async (req, res) => {
   try {
-    console.log('<><><><><>')
     const ticketId = parseInt(req.params.id);
     if (isNaN(ticketId)) {
       return res.status(400).json({ error: 'Invalid ticket ID' });
@@ -141,7 +155,8 @@ exports.viewTicket = async (req, res) => {
       where: { id: ticketId },
       include: {
         bus: { select: { bus_number: true } },
-        posMachine: { select: { serial_no: true } }
+        posMachine: { select: { serial_no: true } },
+        trip: { select: { start_time: true, end_time: true, status: true } }
       }
     });
 
@@ -150,48 +165,40 @@ exports.viewTicket = async (req, res) => {
     }
 
     res.json(ticket);
+
   } catch (error) {
     console.error('Error fetching ticket:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
 
-// Get currently allocated seats for a bus on a specific journey date
-exports.getAllocatedSeats = async (req, res) => {
+
+// Get allocated seats for a trip on a specific date
+exports.getAllocatedSeatsByTrip = async (req, res) => {
   try {
-    const busId = parseInt(req.params.busId);
+    const tripId = parseInt(req.params.tripId);
     const { date } = req.query;
 
-    if (isNaN(busId)) {
-      return res.status(400).json({ error: 'Invalid bus ID' });
-    }
-
-    if (!date) {
-      return res.status(400).json({ error: 'Journey date is required' });
-    }
+    if (isNaN(tripId)) return res.status(400).json({ error: 'Invalid trip ID' });
+    if (!date) return res.status(400).json({ error: 'Journey date is required' });
 
     const journeyDate = new Date(date);
-    if (isNaN(journeyDate.getTime())) {
-      return res.status(400).json({ error: 'Invalid date format' });
-    }
+    if (isNaN(journeyDate.getTime())) return res.status(400).json({ error: 'Invalid date format' });
 
-    // Find all tickets for the bus and date, which have seat_no and are not cancelled
     const tickets = await prisma.ticket.findMany({
       where: {
-        bus_id: busId,
+        trip_id: tripId,
         journey_date: journeyDate,
         status: { not: 'cancelled' },
         seat_no: { not: null }
       },
-      select: {
-        seat_no: true
-      }
+      select: { seat_no: true }
     });
 
-    // Prepare allocated seats array
     const allocatedSeats = tickets.map(t => t.seat_no);
 
     res.json({ allocatedSeats });
+
   } catch (error) {
     console.error('Error fetching allocated seats:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -199,21 +206,19 @@ exports.getAllocatedSeats = async (req, res) => {
 };
 
 
-exports.getAllocatedSeatsAndTicketCountPerBus = async (req, res) => {
+// Get allocated seats and ticket count grouped by trip for a date
+exports.getAllocatedSeatsAndTicketCountPerTrip = async (req, res) => {
   try {
     const { date } = req.query;
-    if (!date) {
-      return res.status(400).json({ error: 'Please provide the date query parameter in YYYY-MM-DD format' });
-    }
+
+    if (!date) return res.status(400).json({ error: 'Please provide the date query parameter in YYYY-MM-DD format' });
 
     const journeyDate = new Date(date);
-    if (isNaN(journeyDate.getTime())) {
-      return res.status(400).json({ error: 'Invalid date format' });
-    }
+    if (isNaN(journeyDate.getTime())) return res.status(400).json({ error: 'Invalid date format' });
 
-    // Get ticket counts per bus
+    // Get ticket counts per trip
     const ticketsCount = await prisma.ticket.groupBy({
-      by: ['bus_id'],
+      by: ['trip_id'],
       _count: { id: true },
       where: {
         journey_date: journeyDate,
@@ -221,7 +226,7 @@ exports.getAllocatedSeatsAndTicketCountPerBus = async (req, res) => {
       }
     });
 
-    // Get allocated seat numbers per bus
+    // Get allocated seat numbers per trip
     const allocatedSeatsRaw = await prisma.ticket.findMany({
       where: {
         journey_date: journeyDate,
@@ -229,36 +234,28 @@ exports.getAllocatedSeatsAndTicketCountPerBus = async (req, res) => {
         seat_no: { not: null }
       },
       select: {
-        bus_id: true,
+        trip_id: true,
         seat_no: true
       },
       orderBy: { seat_no: 'asc' }
     });
 
-    // Group allocated seats by bus_id
     const allocatedSeats = {};
-    allocatedSeatsRaw.forEach(({ bus_id, seat_no }) => {
-      if (!allocatedSeats[bus_id]) {
-        allocatedSeats[bus_id] = [];
-      }
-      allocatedSeats[bus_id].push(seat_no);
+    allocatedSeatsRaw.forEach(({ trip_id, seat_no }) => {
+      if (!allocatedSeats[trip_id]) allocatedSeats[trip_id] = [];
+      allocatedSeats[trip_id].push(seat_no);
     });
 
-    // Combine counts and seat allocations in single response array
     const result = ticketsCount.map(tc => ({
-      bus_id: tc.bus_id,
+      trip_id: tc.trip_id,
       tickets_issued: tc._count.id,
-      allocated_seats: allocatedSeats[tc.bus_id] || []
+      allocated_seats: allocatedSeats[tc.trip_id] || []
     }));
 
     res.json(result);
 
   } catch (error) {
-    console.error('Error fetching allocated seats and ticket counts per bus:', error);
+    console.error('Error fetching allocated seats and ticket counts per trip:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
-
-
-

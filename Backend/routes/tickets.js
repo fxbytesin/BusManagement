@@ -1,12 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middlewares/authMiddleware');
-const ticketController=require('../controllers/ticketController')
-
-// Generate a simple ticket number
-function generateTicketNumber() {
-  return 'TKT-' + Date.now().toString().slice(-6); 
-}
+const ticketController = require('../controllers/ticketController');
 
 /**
  * @swagger
@@ -14,10 +9,10 @@ function generateTicketNumber() {
  *   name: Ticket
  *   description: Ticket booking and management APIs
  */
- 
+
 /**
  * @swagger
- * /api/ticket::
+ * /api/ticket:
  *   post:
  *     summary: Create a new ticket
  *     tags: [Ticket]
@@ -32,6 +27,7 @@ function generateTicketNumber() {
  *             type: object
  *             required:
  *               - bus_id
+ *               - trip_id
  *               - from_stop
  *               - to_stop
  *               - fare
@@ -39,6 +35,8 @@ function generateTicketNumber() {
  *               - pos_machine_id
  *             properties:
  *               bus_id:
+ *                 type: integer
+ *               trip_id:
  *                 type: integer
  *               from_stop:
  *                 type: string
@@ -63,34 +61,34 @@ function generateTicketNumber() {
  *       400:
  *         description: Validation error or missing required fields
  *       404:
- *         description: Bus or POS machine not found
+ *         description: Bus, trip, or POS machine not found
  */
-router.post('/', authenticateToken,ticketController.createTicket );
-
+router.post('/', authenticateToken, ticketController.createTicket);
 
 /**
  * @swagger
- * /api/ticket/bus/{busId}:
+ * /api/ticket/trip/{tripId}:
  *   get:
- *     summary: Get tickets for a specific bus, optionally filter by journey_date
+ *     summary: Get tickets for a specific trip, optionally filter by journey_date
  *     tags: [Ticket]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: busId
+ *       - name: tripId
  *         in: path
- *         description: Bus ID to retrieve tickets for
+ *         description: Trip ID to retrieve tickets for
  *         required: true
  *         schema:
  *           type: integer
  *       - name: date
  *         in: query
- *         description: Filter tickets by journey_date (YYYY-MM-DD)
+ *         description: |
+ *           Filter tickets by journey_date (YYYY-MM-DD)
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: List of tickets for bus
+ *         description: List of tickets for trip
  *         content:
  *           application/json:
  *             schema:
@@ -98,34 +96,33 @@ router.post('/', authenticateToken,ticketController.createTicket );
  *               items:
  *                 type: object
  */
-router.get('/bus/:busId', authenticateToken,ticketController.getTicketForSpecificBus );
-
-
+router.get('/trip/:tripId', authenticateToken, ticketController.getTicketForSpecificTrip);
 
 /**
  * @swagger
- * /api/ticket/allocated-seats/{busId}:
+ * /api/ticket/allocated-seats/trip/{tripId}:
  *   get:
- *     summary: Get allocated seat numbers for a specific bus and journey date
+ *     summary: Get allocated seat numbers for a specific trip and journey date
  *     tags: [Ticket]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: busId
+ *       - name: tripId
  *         in: path
- *         description: Bus ID to retrieve allocated seats for
+ *         description: Trip ID to retrieve allocated seats for
  *         required: true
  *         schema:
  *           type: integer
  *       - name: date
  *         in: query
- *         description: Journey date to filter allocated seats (YYYY-MM-DD)
+ *         description: |
+ *           Date to filter tickets by (format: YYYY-MM-DD)
  *         required: true
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: List of seat numbers currently allocated for the bus on the given date
+ *         description: List of seat numbers currently allocated for the trip on the given date
  *         content:
  *           application/json:
  *             schema:
@@ -138,13 +135,13 @@ router.get('/bus/:busId', authenticateToken,ticketController.getTicketForSpecifi
  *       400:
  *         description: Validation error or missing required fields
  */
-router.get('/allocated-seats/:busId', authenticateToken, ticketController.getAllocatedSeats);
+router.get('/allocated-seats/trip/:tripId', authenticateToken, ticketController.getAllocatedSeatsByTrip);
 
 /**
  * @swagger
- * /api/ticket/tickets-count-per-bus:
+ * /api/ticket/tickets-count-per-trip:
  *   get:
- *     summary: Get the number of tickets issued and allocated seats per bus on a specific date
+ *     summary: Get the number of tickets issued and allocated seats per trip on a specific date
  *     tags: [Ticket]
  *     security:
  *       - bearerAuth: []
@@ -158,7 +155,7 @@ router.get('/allocated-seats/:busId', authenticateToken, ticketController.getAll
  *           type: string
  *     responses:
  *       200:
- *         description: List of buses with count of tickets issued and allocated seat numbers on the given date
+ *         description: List of trips with count of tickets issued and allocated seat numbers on the given date
  *         content:
  *           application/json:
  *             schema:
@@ -166,7 +163,7 @@ router.get('/allocated-seats/:busId', authenticateToken, ticketController.getAll
  *               items:
  *                 type: object
  *                 properties:
- *                   bus_id:
+ *                   trip_id:
  *                     type: integer
  *                   tickets_issued:
  *                     type: integer
@@ -181,8 +178,7 @@ router.get('/allocated-seats/:busId', authenticateToken, ticketController.getAll
  *       500:
  *         description: Internal server error
  */
-
-router.get('/tickets-count-per-bus', authenticateToken, ticketController.getAllocatedSeatsAndTicketCountPerBus);
+router.get('/tickets-count-per-trip', authenticateToken, ticketController.getAllocatedSeatsAndTicketCountPerTrip);
 
 /**
  * @swagger
@@ -210,4 +206,5 @@ router.get('/tickets-count-per-bus', authenticateToken, ticketController.getAllo
  *         description: Ticket not found
  */
 router.get('/:id', authenticateToken, ticketController.viewTicket);
+
 module.exports = router;
