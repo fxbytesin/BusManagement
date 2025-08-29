@@ -19,7 +19,8 @@ const NavigationComponent = ({
       { id: "ticketing", label: t("ticketing"), icon: Printer },
       { id: "reports", label: t("reports"), icon: BarChart3 },
       { id: "settings", label: t("settings"), icon: Settings },
-      { id: "PosMachine", label: t("PosMachine"), icon: Settings },
+      { id: "PosMachine", label: t("PosMachine"), icon: "Pos" },
+      { id: "Graph", label: t("Graph"), icon: "Settings" },
     ];
 
     return (

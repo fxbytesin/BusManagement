@@ -23,6 +23,7 @@ import TicketSystem from './components/pages/TicketSystem';
 import Registration from './components/Registration';
 import PosMachine from './components/pages/PosMachine';
 import TicketView from './components/pages/TicketView';
+import Graph from './components/pages/Graph';
 const BusManagementSoftware = () => {
   // Language State
   const [currentLanguage, setCurrentLanguage] = useState("hi");
@@ -52,7 +53,6 @@ const BusManagementSoftware = () => {
     status: "stopped",
     current_location:""
   });
-  console.log("buses",buses);
 
   const [routeForm, setRouteForm] = useState({
     name: "",
@@ -1085,6 +1085,20 @@ const response = await ApiService.addDriver({
                 </div>
             </div>
           );
+      
+          case "Graph":
+            return (
+              <div className="p-6">
+                <div className='mb-6'>
+                <h3 className="text-xl font-semibold">{t("Graph")}</h3>
+          
+                </div>
+           
+                <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+                <Graph/>
+                  </div>
+              </div>
+            );
       default:
         return <DashboardPage
         buses={buses}
