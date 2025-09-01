@@ -133,7 +133,38 @@ exports.getTripsCompletedReport = async (req, res) => {
         typeof value === 'bigint' ? Number(value) : value));
     };
 
-    // Fetch all in parallel (trips & occupancy)
+    // Helper function: revenue per bus
+    const fetchRevenueForPeriod = async (period) => {
+      const { startDate, endDate } = getPeriodRange(period);
+      const startDateStr = toLocalDateString(startDate);
+      const endDateStr = toLocalDateString(endDate);
+      const userId = req.user.id;
+
+      const params = [startDateStr, endDateStr, userId];
+
+      const query = `
+        SELECT 
+          b.id AS bus_id,
+          b.bus_number,
+          COALESCE(SUM(tk.fare), 0) AS revenue
+        FROM Bus b
+        LEFT JOIN Ticket tk
+          ON tk.bus_id = b.id
+          AND tk.status IN ('booked', 'used')
+          AND DATE(tk.journey_date) >= ?
+          AND DATE(tk.journey_date) < ?
+        WHERE b.user_id = ?
+        GROUP BY b.id, b.bus_number
+        ORDER BY revenue DESC
+      `;
+
+      const result = await prisma.$queryRawUnsafe(query, ...params);
+
+      return JSON.parse(JSON.stringify(result, (key, value) =>
+        typeof value === 'bigint' ? Number(value) : value));
+    };
+
+    // Fetch all in parallel (trips & tickets, occupancy, revenue)
     const [dailyTrips, weeklyTrips, monthlyTrips, yearlyTrips] = await Promise.all([
       fetchTripsAndTicketsForPeriod('daily'),
       fetchTripsAndTicketsForPeriod('weekly'),
@@ -148,7 +179,14 @@ exports.getTripsCompletedReport = async (req, res) => {
       fetchOccupancyRateForPeriod('yearly')
     ]);
 
-    // Combined response
+    const [dailyRevenue, weeklyRevenue, monthlyRevenue, yearlyRevenue] = await Promise.all([
+      fetchRevenueForPeriod('daily'),
+      fetchRevenueForPeriod('weekly'),
+      fetchRevenueForPeriod('monthly'),
+      fetchRevenueForPeriod('yearly')
+    ]);
+
+    // Combine all responses
     res.json({
       tripsAndTickets: {
         daily: dailyTrips,
@@ -161,6 +199,12 @@ exports.getTripsCompletedReport = async (req, res) => {
         weekly: weeklyOcc,
         monthly: monthlyOcc,
         yearly: yearlyOcc
+      },
+      revenue: {
+        daily: dailyRevenue,
+        weekly: weeklyRevenue,
+        monthly: monthlyRevenue,
+        yearly: yearlyRevenue
       }
     });
 
@@ -169,4 +213,6 @@ exports.getTripsCompletedReport = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
 
