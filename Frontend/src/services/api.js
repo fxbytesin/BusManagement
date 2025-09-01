@@ -606,6 +606,123 @@ const ApiService = {
       };
     }
   },
+
+  createTrip: async (data) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.post(`${API_URL}/trip`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  getTrip: async () => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.get(`${API_URL}/trip`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  updateTrip: async (obj, id) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // Destructure ID from object, remove it from payload
+
+      const response = await axios.put(`${API_URL}/trip/${id}`, obj, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  deleteTrip: async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.delete(`${API_URL}/trip/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  createParcel: async (data) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.post(`${API_URL}/package`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
 };
 
 export default ApiService;

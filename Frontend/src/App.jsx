@@ -23,6 +23,8 @@ import TicketSystem from './components/pages/TicketSystem';
 import Registration from './components/Registration';
 import PosMachine from './components/pages/PosMachine';
 import TicketView from './components/pages/TicketView';
+import Trip from './components/pages/Trip';
+import Parcel from './components/pages/Parcel';
 const BusManagementSoftware = () => {
   // Language State
   const [currentLanguage, setCurrentLanguage] = useState("hi");
@@ -34,6 +36,7 @@ const BusManagementSoftware = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [editingItem, setEditingItem] = useState(null);
+  const [showParcel, setShowParcel] = useState(false);
 
   // Business Data State
   const [buses, setBuses] = useState([]);
@@ -82,7 +85,8 @@ const BusManagementSoftware = () => {
   });
 
   const [isLogin, setIsLogin] = useState(true)
-    const [showModalPos, setShowModalPos] = useState(false);
+  const [showModalPos, setShowModalPos] = useState(false);
+  const [showTrip,setShowTrip] = useState(false)
 
   // CRUD Operations for Buses
   const handleAddBus = async() => {
@@ -1084,6 +1088,62 @@ const response = await ApiService.addDriver({
                 </div>
             </div>
           );
+          case "Trip":
+            return (
+              <div className="p-6">
+                <div className='mb-6'>
+                <h3 className="text-xl font-semibold">{t("Trip")}</h3>
+                 <button
+                    className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
+                    onClick={()=>setShowTrip(true)}
+                    >
+                      Add Trip 
+                 </button>
+                </div>
+           
+                <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+                  <Trip
+                   buses={buses}
+                   routes={routes}
+                   drivers={drivers}
+                   conductors={conductors}
+                    
+                        setBuses={setBuses} 
+                        setRoutes={setRoutes}
+                        setDrivers={setDrivers}
+                    setConductors={setConductors}
+                    t={t}
+
+                    showTrip={showTrip}
+                    setShowTrip={setShowTrip}
+                  />
+                  </div>
+              </div>
+            );
+      
+            case "Parcel":
+              return (
+                <div className="p-6">
+                  <div className='mb-6'>
+                  <h3 className="text-xl font-semibold">{t("Trip")}</h3>
+                   <button
+                      className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
+                      onClick={()=>setShowParcel(true)}
+                      >
+                        Add Parcel
+                   </button>
+                  </div>
+             
+                  <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+                    <Parcel
+                      buses={buses}
+                      setBuses={setBuses} 
+                      setShowParcel={setShowParcel}
+                      showParcel={showParcel}
+                    />
+                    </div>
+                </div>
+              );
       default:
         return <DashboardPage
         buses={buses}
