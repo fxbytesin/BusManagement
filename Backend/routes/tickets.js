@@ -139,49 +139,6 @@ router.get('/allocated-seats/trip/:tripId', authenticateToken, ticketController.
 
 /**
  * @swagger
- * /api/ticket/tickets-count-per-trip:
- *   get:
- *     summary: Get the number of tickets issued and allocated seats per trip on a specific date
- *     tags: [Ticket]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - name: date
- *         in: query
- *         description: |
- *           Date to filter tickets by (format: YYYY-MM-DD)
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: List of trips with count of tickets issued and allocated seat numbers on the given date
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   trip_id:
- *                     type: integer
- *                   tickets_issued:
- *                     type: integer
- *                   allocated_seats:
- *                     type: array
- *                     items:
- *                       type: integer
- *       400:
- *         description: Missing or invalid date parameter
- *       401:
- *         description: Unauthorized - Missing or invalid token
- *       500:
- *         description: Internal server error
- */
-router.get('/tickets-count-per-trip', authenticateToken, ticketController.getAllocatedSeatsAndTicketCountPerTrip);
-
-/**
- * @swagger
  * /api/ticket/{id}:
  *   get:
  *     summary: Get a single ticket by ID

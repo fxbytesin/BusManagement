@@ -4,14 +4,42 @@ const prisma = new PrismaClient();
 exports.getAllTrips = async (req, res) => {
   try {
     const trips = await prisma.trip.findMany({
-      orderBy: { start_time: 'desc' }
+      orderBy: { start_time: 'desc' },
+      include: {
+        bus: {
+          select: {
+            id: true,
+            bus_number: true,
+          },
+        },
+        route: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        driver: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        conductor: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
+
     res.json(trips);
   } catch (error) {
     console.error('Error fetching trips:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 exports.getTripById = async (req, res) => {
   try {
