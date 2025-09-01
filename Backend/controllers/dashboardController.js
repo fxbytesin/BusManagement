@@ -111,56 +111,109 @@ exports.getdashboardStatistics = async (req, res) => {
   }
 };
 
-
-exports.getRevenueReport=async (req, res) => {
+exports.getRevenueReport = async (req, res) => {
   try {
-    const { startDate, endDate, busId } = req.query;
-    const tomorrow = new Date(endDate);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    let { startDate, endDate } = req.query;
 
-    // Base query
-    let query = `
-      SELECT 
-        dates.date as date,
-        COALESCE(SUM(t.fare), 0) as ticket_revenue,
-        COALESCE(SUM(p.fare), 0) as package_revenue,
-        COUNT(DISTINCT t.id) as total_tickets,
-        COUNT(DISTINCT p.id) as total_packages
-      FROM (
-        SELECT DISTINCT journey_date as date FROM Ticket WHERE journey_date BETWEEN ? AND ?
-        UNION
-        SELECT DISTINCT DATE(booked_at) as date FROM Package WHERE DATE(booked_at) BETWEEN ? AND ?
-      ) as dates
-      LEFT JOIN Ticket t ON DATE(t.journey_date) = dates.date
-      LEFT JOIN Package p ON DATE(p.booked_at) = dates.date
-      LEFT JOIN Bus b ON (t.bus_id = b.id OR p.bus_id = b.id)
-      WHERE b.user_id = ?
-    `;
-
-    // Add bus filter if provided
-    if (busId) {
-      query += ' AND b.id = ?';
+    // ✅ Default dates agar user ne nahi bheje
+    if (!startDate || !endDate) {
+      const today = new Date();
+      endDate = today.toISOString().split("T")[0]; // YYYY-MM-DD
+      const lastYear = new Date();
+      lastYear.setFullYear(today.getFullYear() - 1);
+      startDate = lastYear.toISOString().split("T")[0];
     }
 
-    // Add grouping and ordering
-    query += ' GROUP BY dates.date ORDER BY dates.date DESC';
+    const groupExprs = {
+      daily: "DATE(period_date)",
+      weekly: "YEARWEEK(period_date, 1)",
+      monthly: "DATE_FORMAT(period_date, '%Y-%m')",
+      yearly: "YEAR(period_date)",
+    };
 
-    // Prepare parameters
-    const params = [startDate, endDate, startDate, endDate, req.user.id];
-    if (busId) {
-      params.push(parseInt(busId));
+    const revenue = {};
+
+    for (const [range, groupExpr] of Object.entries(groupExprs)) {
+      const query = `
+        SELECT ${groupExpr} AS period, b.bus_number, SUM(total_revenue) AS revenue
+        FROM (
+          -- Tickets
+          SELECT DATE(t.journey_date) AS period_date, t.bus_id, SUM(t.fare) AS total_revenue
+          FROM Ticket t
+          JOIN Bus b ON t.bus_id = b.id
+          WHERE t.journey_date BETWEEN ? AND ? AND b.user_id = ?
+          GROUP BY DATE(t.journey_date), t.bus_id
+
+          UNION ALL
+
+          -- Packages
+          SELECT DATE(p.booked_at) AS period_date, p.bus_id, SUM(p.fare) AS total_revenue
+          FROM Package p
+          JOIN Bus b ON p.bus_id = b.id
+          WHERE p.booked_at BETWEEN ? AND ? AND b.user_id = ?
+          GROUP BY DATE(p.booked_at), p.bus_id
+        ) combined
+        JOIN Bus b ON combined.bus_id = b.id
+        GROUP BY period, b.bus_number
+        ORDER BY period ASC
+      `;
+
+      const params = [startDate, endDate, req.user.id, startDate, endDate, req.user.id];
+      let data = await prisma.$queryRawUnsafe(query, ...params);
+
+      // ✅ BigInt → Number
+      data = JSON.parse(
+        JSON.stringify(data, (key, value) =>
+          typeof value === "bigint" ? Number(value) : value
+        )
+      );
+
+      // ✅ Pivot buses → { period, bus1: value, bus2: value }
+      const pivot = {};
+      data.forEach((row) => {
+        if (!pivot[row.period]) pivot[row.period] = { period: row.period };
+        pivot[row.period][row.bus_number] = row.revenue;
+      });
+
+      let formatted = Object.values(pivot);
+
+      // ✅ Format labels
+      formatted = formatted.map((row) => {
+        let label = row.period;
+        if (range === "daily") {
+          label = new Date(row.period).toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "short",
+          });
+          return { date: label, ...row, period: undefined };
+        }
+        if (range === "weekly") {
+          const year = String(row.period).substring(0, 4);
+          const week = String(row.period).substring(4);
+          return { week: `Week ${week}`, ...row, period: undefined };
+        }
+        if (range === "monthly") {
+          const [y, m] = row.period.split("-");
+          const month = new Date(`${y}-${m}-01`).toLocaleDateString("en-US", {
+            month: "short",
+          });
+          return { month, ...row, period: undefined };
+        }
+        if (range === "yearly") {
+          return { year: row.period, ...row, period: undefined };
+        }
+        return row;
+      });
+
+      revenue[range] = formatted;
     }
 
-    // Execute query
-    const revenueData = await prisma.$queryRawUnsafe(query, ...params);
-
-    // BigInt handling
-    const bigIntReplacer = (key, value) => 
-      typeof value === 'bigint' ? Number(value) : value;
-
-    res.json(JSON.parse(JSON.stringify(revenueData, bigIntReplacer)));
+    res.json({ revenue });
   } catch (error) {
-    console.error('Error fetching revenue report:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching revenue report:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-}
+};
+
+
+
