@@ -35,7 +35,6 @@ const Trip = ({
             const response = await ApiService.getTrip(); 
             if (response?.success === true) {
                 console.log("response",response);
-                
                 setTrip(response?.data?.trips)
               }            
           } catch (err) {
@@ -392,17 +391,17 @@ const Trip = ({
                     {trip?.map((trip) => (
                       <tr key={trip.id}>
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                          {trip.bus.bus_number}
+                          {trip.bus_number}
                         </td>
                             
                         <td className="px-6 py-4 whitespace-nowrap text-left">
-                          {trip?.conductor?.name}
+                          {trip?.conductor_name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                          {trip?.driver?.name}
+                          {trip?.driver_name}
                             </td>
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                          {trip?.route?.name}
+                          {trip?.route_name}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
                             {trip?.start_time
