@@ -12,19 +12,12 @@ const ticketController = require('../controllers/ticketController');
 
 /**
  * @swagger
- * /api/ticket/trip/{tripId}:
+ * /api/ticket/create-ticket:
  *   post:
  *     summary: Create a new ticket for a specific trip
  *     tags: [Ticket]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: tripId
- *         required: true
- *         schema:
- *           type: integer
- *         description: Trip ID for which the ticket is being booked
  *     requestBody:
  *       description: Ticket data to create
  *       required: true
@@ -33,11 +26,15 @@ const ticketController = require('../controllers/ticketController');
  *           schema:
  *             type: object
  *             required:
+ *               - trip_id
  *               - from_stop
  *               - to_stop
  *               - fare
  *               - pos_machine_id
  *             properties:
+ *               trip_id:
+ *                 type: integer
+ *                 example: 10
  *               from_stop:
  *                 type: string
  *                 example: "Station A"
@@ -65,9 +62,10 @@ const ticketController = require('../controllers/ticketController');
  *         description: Validation error or missing required fields
  *       404:
  *         description: Trip or POS machine not found
+ *       500:
+ *         description: Internal server error
  */
-router.post('/trip/:tripId', authenticateToken, ticketController.createTicketForTrip);
-
+router.post('/create-ticket', authenticateToken, ticketController.createTicket);
 
 /**
  * @swagger

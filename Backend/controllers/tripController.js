@@ -3,7 +3,6 @@ const prisma = new PrismaClient();
 
 exports.getAllTrips = async (req, res) => {
   try {
-    // Extract query parameters with default values
     const {
       search = "",
       limit = 10,
@@ -12,54 +11,87 @@ exports.getAllTrips = async (req, res) => {
       orderColumn = "start_time",
     } = req.query;
 
-    // Calculate pagination values
     const pageInt = parseInt(page);
     const limitInt = parseInt(limit);
     const skip = (pageInt - 1) * limitInt;
 
-    // Build the where clause for search
+    // Build search filter (extended for joins)
     const whereClause = search
       ? {
           OR: [
-            { name: { contains: search, mode: "insensitive" } },
             { destination: { contains: search, mode: "insensitive" } },
             { description: { contains: search, mode: "insensitive" } },
+            { route: { name: { contains: search, mode: "insensitive" } } },
+            { bus: { bus_number: { contains: search, mode: "insensitive" } } },
+            { driver: { name: { contains: search, mode: "insensitive" } } },
+            { conductor: { name: { contains: search, mode: "insensitive" } } },
           ],
         }
       : {};
 
-    // Validate orderColumn to prevent SQL injection
     const allowedColumns = [
       "start_time",
       "end_time",
-      "name",
       "destination",
       "created_at",
     ];
     const validOrderColumn = allowedColumns.includes(orderColumn)
       ? orderColumn
       : "start_time";
-
-    // Validate order direction
     const validOrder = order.toLowerCase() === "asc" ? "asc" : "desc";
 
-    // Execute the query
-    const [trips, totalCount] = await Promise.all([
+    // Fetch trips with related data
+    const [tripsRaw, totalCount] = await Promise.all([
       prisma.trip.findMany({
         where: whereClause,
         orderBy: { [validOrderColumn]: validOrder },
         skip: skip,
         take: limitInt,
+        include: {
+          bus: {
+            select: {
+              id: true,
+              bus_number: true,
+              capacity: true,
+            },
+          },
+          route: {
+            select: { id: true, name: true },
+          },
+          driver: {
+            select: { id: true, name: true },
+          },
+          conductor: {
+            select: { id: true, name: true },
+          },
+        },
       }),
       prisma.trip.count({ where: whereClause }),
     ]);
 
-    // Calculate pagination metadata
+    // Flatten response
+    const trips = tripsRaw.map((trip) => ({
+      id: trip.id,
+      start_time: trip.start_time,
+      end_time: trip.end_time,
+      status: trip.status,
+      created_at: trip.created_at,
+      updated_at: trip.updated_at,
+      busId: trip.bus_id,
+      routeId: trip.route_id,
+      driverId: trip.driver_id,
+      conductorId: trip.conductor_id,
+      busNumber: trip.bus?.bus_number || null,
+      busCapacity: trip.bus?.capacity || null,
+      routeName: trip.route?.name || null,
+      driverName: trip.driver?.name || null,
+      conductorName: trip.conductor?.name || null,
+    }));
+
     const totalPages = Math.ceil(totalCount / limitInt);
     const hasNextPage = pageInt < totalPages;
     const hasPrevPage = pageInt > 1;
 
-    // Return response with pagination info
     res.json({
       trips,
       pagination: {

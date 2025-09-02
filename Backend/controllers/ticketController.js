@@ -6,14 +6,10 @@ function generateTicketNumber() {
   return 'TKT-' + Date.now().toString().slice(-6);
 }
 
-exports.createTicketForTrip = async (req, res) => {
+exports.createTicket = async (req, res) => {
   try {
-    const tripId = parseInt(req.params.tripId);
-    if (isNaN(tripId)) {
-      return res.status(400).json({ error: "Invalid trip ID" });
-    }
-
     const {
+      trip_id,
       from_stop,
       to_stop,
       fare,
@@ -21,6 +17,15 @@ exports.createTicketForTrip = async (req, res) => {
       pos_machine_id,
       seat_no
     } = req.body;
+
+    if (!trip_id) {
+      return res.status(400).json({ error: 'trip_id is required in the request body' });
+    }
+
+    const tripId = parseInt(trip_id);
+    if (isNaN(tripId)) {
+      return res.status(400).json({ error: 'Invalid trip_id' });
+    }
 
     // Validate required fields except journey_date
     if (!from_stop || !to_stop || !fare || !pos_machine_id) {
@@ -109,6 +114,7 @@ exports.createTicketForTrip = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 
