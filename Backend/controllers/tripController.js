@@ -69,7 +69,7 @@ exports.getAllTrips = async (req, res) => {
       prisma.trip.count({ where: whereClause }),
     ]);
 
-    // Flatten response
+    // Flatten response (snake_case keys)
     const trips = tripsRaw.map((trip) => ({
       id: trip.id,
       start_time: trip.start_time,
@@ -77,15 +77,15 @@ exports.getAllTrips = async (req, res) => {
       status: trip.status,
       created_at: trip.created_at,
       updated_at: trip.updated_at,
-      busId: trip.bus_id,
-      routeId: trip.route_id,
-      driverId: trip.driver_id,
-      conductorId: trip.conductor_id,
-      busNumber: trip.bus?.bus_number || null,
-      busCapacity: trip.bus?.capacity || null,
-      routeName: trip.route?.name || null,
-      driverName: trip.driver?.name || null,
-      conductorName: trip.conductor?.name || null,
+      bus_id: trip.bus_id,
+      route_id: trip.route_id,
+      driver_id: trip.driver_id,
+      conductor_id: trip.conductor_id,
+      bus_number: trip.bus?.bus_number || null,
+      bus_capacity: trip.bus?.capacity || null,
+      route_name: trip.route?.name || null,
+      driver_name: trip.driver?.name || null,
+      conductor_name: trip.conductor?.name || null,
     }));
 
     const totalPages = Math.ceil(totalCount / limitInt);
@@ -95,11 +95,11 @@ exports.getAllTrips = async (req, res) => {
     res.json({
       trips,
       pagination: {
-        currentPage: pageInt,
-        totalPages,
-        totalCount,
-        hasNextPage,
-        hasPrevPage,
+        current_page: pageInt,
+        total_pages: totalPages,
+        total_count: totalCount,
+        has_next_page: hasNextPage,
+        has_prev_page: hasPrevPage,
         limit: limitInt,
       },
     });
@@ -108,7 +108,6 @@ exports.getAllTrips = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 exports.getTripById = async (req, res) => {
   try {
     const tripId = parseInt(req.params.id);
