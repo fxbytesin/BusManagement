@@ -10,11 +10,11 @@ exports.getAllTrips = async (req, res) => {
       order = 'desc',
       orderColumn = 'start_time'
     } = req.query;
-
+ 
     const pageInt = parseInt(page);
     const limitInt = parseInt(limit);
     const skip = (pageInt - 1) * limitInt;
-
+ 
     // Build search filter (extended for joins)
     const whereClause = search
       ? {
@@ -28,7 +28,7 @@ exports.getAllTrips = async (req, res) => {
           ]
         }
       : {};
-
+ 
     const allowedColumns = [
       'start_time',
       'end_time',
@@ -39,7 +39,7 @@ exports.getAllTrips = async (req, res) => {
       ? orderColumn
       : 'start_time';
     const validOrder = order.toLowerCase() === 'asc' ? 'asc' : 'desc';
-
+ 
     // Fetch trips with related data
     const [tripsRaw, totalCount] = await Promise.all([
       prisma.trip.findMany({
@@ -68,7 +68,7 @@ exports.getAllTrips = async (req, res) => {
       }),
       prisma.trip.count({ where: whereClause })
     ]);
-
+ 
     // Flatten response (snake_case keys)
     const trips = tripsRaw.map(trip => ({
       id: trip.id,
@@ -87,11 +87,11 @@ exports.getAllTrips = async (req, res) => {
       driver_name: trip.driver?.name || null,
       conductor_name: trip.conductor?.name || null
     }));
-
+ 
     const totalPages = Math.ceil(totalCount / limitInt);
     const hasNextPage = pageInt < totalPages;
     const hasPrevPage = pageInt > 1;
-
+ 
     res.json({
       trips,
       pagination: {
@@ -108,10 +108,6 @@ exports.getAllTrips = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
-
-
-
 exports.getTripById = async (req, res) => {
   try {
     const tripId = parseInt(req.params.id);
