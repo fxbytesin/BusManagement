@@ -469,11 +469,33 @@ const ApiService = {
     }
   },
 
+  // getDashboard: async () => {
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     // Get token from localStorage or wherever you're storing it
+  //     const response = await axios.get(`${API_URL}/dashboard/stats`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "application/json", // optional but recommended
+  //       },
+  //     });
+
+  //     return {
+  //       success: true,
+  //       data: response.data,
+  //     };
+  //   } catch (error) {
+  //     return {
+  //       success: false,
+  //       error: error.response?.data || error.message,
+  //     };
+  //   }
+  // },
   getDashboard: async () => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/dashboard/stats`, {
+      const response = await axios.get(`${API_URL}/dashboard/trips-completed`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended

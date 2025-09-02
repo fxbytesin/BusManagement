@@ -132,15 +132,21 @@ export const messages = {
     conductorAdded: "कंडक्टर सफलतापूर्वक जोड़ा गया",
 
      // Dashboard Graph Labels
-    ticketsIssuedPerDay: "प्रतिदिन जारी टिकट",
-    revenueCollectedPerDay: "प्रतिदिन आय",
-    occupancyRate: "ओक्युपेंसी रेट",
-    tripsCompletedPerDay: "प्रतिदिन पूरी हुई यात्राएं",
-    paymentModeBreakdown: "पेमेंट मोड विवरण",
+    ticketsIssued: "जारी किए गए टिकट",
+    tripsCompleted: "पूर्ण यात्राएँ",
+    revenueCollected: "संग्रहित राजस्व",
+    occupancyRate: "आक्यूपेंसी दर",
     Daily: "दैनिक",
     Weekly: "साप्ताहिक",
     Monthly: "मासिक",
     Yearly: "वार्षिक",
+    
+    // Header
+    buses: "बसें",
+    routes: "मार्ग",
+    drivers: "चालक",
+    conductors: "कंडक्टर",
+    livetracking: "लाइव ट्रैकिंग"
   },
  
 
@@ -278,11 +284,17 @@ export const messages = {
     Weekly: "Weekly",
     Monthly: "Monthly",
     Yearly: "Yearly",
-    ticketsIssuedPerDay: "Tickets Issued Per Day",
-    revenueCollectedPerDay: "Revenue Collected Per Day",
-    occupancyRate: "Occupancy Rate",
-    tripsCompletedPerDay: "Trips Completed Per Day",
-    paymentModeBreakdown: "Payment Mode Breakdown",
+    ticketsIssued: "ticketsIssued",
+    tripsCompleted: "tripsCompleted",
+    revenueCollected: "revenueCollected",
+    occupancyRate: "occupancyRate",
+
+    // Header
+    buses: "Buses",
+    routes: "Routes",
+    drivers: "Drivers",
+    conductors: "Conductors",
+    livetracking: "Live Tracking"
   },
 
 };
