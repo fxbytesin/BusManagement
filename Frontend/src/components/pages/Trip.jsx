@@ -28,14 +28,15 @@ const Trip = ({
     const [trip, setTrip] = useState([])
     const [isPost, setIsPost] = useState(true)
     const [editId, setEditId] = useState(0)
-    const[showTicket,setShowTicket] = useState(false)
   
      useEffect(() => {
         const getData = async () => {
           try {
             const response = await ApiService.getTrip(); 
-              if (response?.success === true) {
-                setTrip(response?.data)
+            if (response?.success === true) {
+                console.log("response",response);
+                
+                setTrip(response?.data?.trips)
               }            
           } catch (err) {
           }
@@ -196,6 +197,9 @@ const Trip = ({
     setIsPost(true)
   }
   const navigate = useNavigate();
+
+  console.log("trip",trip);
+  
   return (
     showTrip ? 
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

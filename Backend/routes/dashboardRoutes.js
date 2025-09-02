@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middlewares/authMiddleware');
-const dashboardController=require('../controllers/dashboardController')
+const dashboardController = require('../controllers/dashboardController');
 
 /**
  * @swagger
@@ -12,16 +12,16 @@ const dashboardController=require('../controllers/dashboardController')
 
 /**
  * @swagger
- * /api/dashboard/stats:
+ * /api/dashboard/trips-completed:
  *   get:
- *     summary: Get dashboard overview and bus-specific stats for a given period
+ *     summary: Get count of trips completed by each bus filtered by period
  *     tags: [Dashboard]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - name: period
  *         in: query
- *         description: Period to filter stats by (daily, weekly, monthly, yearly)
+ *         description: Period to filter trip completion stats (daily, weekly, monthly, yearly)
  *         required: false
  *         schema:
  *           type: string
@@ -29,93 +29,7 @@ const dashboardController=require('../controllers/dashboardController')
  *           default: daily
  *     responses:
  *       200:
- *         description: Dashboard statistics overview for the specified period
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 overview:
- *                   type: object
- *                   properties:
- *                     total_buses:
- *                       type: integer
- *                     active_buses:
- *                       type: integer
- *                     today_revenue:
- *                       type: number
- *                     today_passengers:
- *                       type: integer
- *                     today_packages:
- *                       type: integer
- *                 buses:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       bus_number:
- *                         type: string
- *                       status:
- *                         type: string
- *                       capacity:
- *                         type: integer
- *                       current_location:
- *                         type: string
- *                       route_name:
- *                         type: string
- *                       today_passengers:
- *                         type: integer
- *                       today_revenue:
- *                         type: number
- *                       today_packages:
- *                         type: integer
- *                       occupancy_rate:
- *                         type: number
- *                         description: Percentage of seat occupancy (0-100)
- *       400:
- *         description: Invalid period parameter
- *       401:
- *         description: Unauthorized - Missing or invalid token
- *       500:
- *         description: Internal server error
- */
-router.get('/stats', authenticateToken, dashboardController.getdashboardStatistics);
-
-
-/**
- * @swagger
- * /api/dashboard/revenue:
- *   get:
- *     summary: Get revenue report between dates, optionally filtered by bus
- *     tags: [Dashboard]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - name: startDate
- *         in: query
- *         required: true
- *         description: Start date in YYYY-MM-DD format
- *         schema:
- *           type: string
- *           format: date
- *       - name: endDate
- *         in: query
- *         required: true
- *         description: End date in YYYY-MM-DD format
- *         schema:
- *           type: string
- *           format: date
- *       - name: busId
- *         in: query
- *         required: false
- *         description: Optional bus ID to filter revenue report
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Revenue report data
+ *         description: Trips completed count per bus for the specified period
  *         content:
  *           application/json:
  *             schema:
@@ -123,18 +37,22 @@ router.get('/stats', authenticateToken, dashboardController.getdashboardStatisti
  *               items:
  *                 type: object
  *                 properties:
- *                   date:
+ *                   bus_id:
+ *                     type: integer
+ *                   bus_number:
  *                     type: string
- *                     format: date
- *                   ticket_revenue:
- *                     type: number
- *                   package_revenue:
- *                     type: number
- *                   total_tickets:
+ *                   trips_completed:
  *                     type: integer
- *                   total_packages:
- *                     type: integer
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
  */
-router.get('/revenue', authenticateToken, dashboardController.getRevenueReport );
+
+router.get(
+  '/trips-completed',
+  authenticateToken,
+  dashboardController.getTripsCompletedReport
+);
 
 module.exports = router;

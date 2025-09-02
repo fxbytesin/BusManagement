@@ -1231,7 +1231,19 @@ const response = await ApiService.addDriver({
       }
           />
           <CustomRoute path='/registration' element={<Registration />} />
-          <CustomRoute path='/ticketview' element={<TicketView/>} />
+          <CustomRoute path='/ticketview' element={<TicketView />} />
+          <CustomRoute
+            path='/trips'
+            element={<TicketSystem
+            t={t}
+              currentPage={currentPage}
+              currentLanguage={currentLanguage}  
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+              setCurrentPage={setCurrentPage}
+              setCurrentLanguage={setCurrentLanguage}
+            />} />
+
   </Routes>
 </BrowserRouter>
     </>

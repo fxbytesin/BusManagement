@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import { Printer,Loader } from "lucide-react";
 import ApiService from '../../services/api';
+import NavigationComponent from '../Navigation';
 
-const TicketSystem = ({ t }) => {
+const TicketSystem = (
+  { t,
+    currentPage,
+    currentLanguage,
+    sidebarOpen,
+    setSidebarOpen,
+    setCurrentPage,
+    setCurrentLanguage
+  }) => {
   const [ticketForm, setTicketForm] = useState({
     from_stop: "",
     to_stop: "",
@@ -93,17 +102,33 @@ const TicketSystem = ({ t }) => {
 
   
   return (
-    <div className="p-6">
-      <h3 className="text-xl font-semibold mb-6">{t("ticketing")}</h3>
+    <div className='flex'>
+      <div>
+           <NavigationComponent
+              currentLanguage={currentLanguage}
+              t={t}
+              currentPage={currentPage}
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+              setCurrentPage={setCurrentPage}
+              setCurrentLanguage={setCurrentLanguage}
+            />
+      </div>
+       
 
-      <button
-        onClick={() => setShowModal(true)}
-        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 mb-6"
-      >
-        Create Ticket
-      </button>
+    <div>
+    <h3 className="text-xl font-semibold mb-6">{t("ticketing")}</h3>
 
-      {
+         <button
+           onClick={() => setShowModal(true)}
+           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 mb-6"
+            >
+            Create Ticket
+        </button>
+        
+
+        
+        {
         showModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
          <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
@@ -257,6 +282,7 @@ const TicketSystem = ({ t }) => {
     </div>
         )
       }
+   </div>
     </div>
   );
 };

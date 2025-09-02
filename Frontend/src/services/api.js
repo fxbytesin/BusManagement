@@ -633,13 +633,18 @@ const ApiService = {
   getTrip: async () => {
     try {
       const token = localStorage.getItem("token");
+
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/trip`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json", // optional but recommended
-        },
-      });
+      const response = await axios.post(
+        `${API_URL}/trip/allTrips`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json", // optional but recommended
+          },
+        }
+      );
 
       return {
         success: true,
