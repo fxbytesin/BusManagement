@@ -12,12 +12,19 @@ const ticketController = require('../controllers/ticketController');
 
 /**
  * @swagger
- * /api/ticket:
+ * /api/ticket/trip/{tripId}:
  *   post:
- *     summary: Create a new ticket
+ *     summary: Create a new ticket for a specific trip
  *     tags: [Ticket]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: tripId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Trip ID for which the ticket is being booked
  *     requestBody:
  *       description: Ticket data to create
  *       required: true
@@ -26,44 +33,41 @@ const ticketController = require('../controllers/ticketController');
  *           schema:
  *             type: object
  *             required:
- *               - bus_id
- *               - trip_id
  *               - from_stop
  *               - to_stop
  *               - fare
- *               - journey_date
  *               - pos_machine_id
  *             properties:
- *               bus_id:
- *                 type: integer
- *               trip_id:
- *                 type: integer
  *               from_stop:
  *                 type: string
+ *                 example: "Station A"
  *               to_stop:
  *                 type: string
+ *                 example: "Station B"
  *               fare:
  *                 type: number
  *                 format: float
- *               journey_date:
- *                 type: string
- *                 format: date-time
+ *                 example: 150.50
  *               payment_mode:
  *                 type: string
  *                 enum: [cash, online]
+ *                 example: cash
  *               pos_machine_id:
  *                 type: integer
+ *                 example: 5
  *               seat_no:
  *                 type: integer
+ *                 example: 12
  *     responses:
  *       201:
  *         description: Ticket created successfully
  *       400:
  *         description: Validation error or missing required fields
  *       404:
- *         description: Bus, trip, or POS machine not found
+ *         description: Trip or POS machine not found
  */
-router.post('/', authenticateToken, ticketController.createTicket);
+router.post('/trip/:tripId', authenticateToken, ticketController.createTicketForTrip);
+
 
 /**
  * @swagger
@@ -102,7 +106,7 @@ router.get('/trip/:tripId', authenticateToken, ticketController.getTicketForSpec
  * @swagger
  * /api/ticket/allocated-seats/trip/{tripId}:
  *   get:
- *     summary: Get allocated seat numbers for a specific trip and journey date
+ *     summary: Get allocated seat numbers for a specific trip (all dates)
  *     tags: [Ticket]
  *     security:
  *       - bearerAuth: []
@@ -113,16 +117,9 @@ router.get('/trip/:tripId', authenticateToken, ticketController.getTicketForSpec
  *         required: true
  *         schema:
  *           type: integer
- *       - name: date
- *         in: query
- *         description: |
- *           Date to filter tickets by (format: YYYY-MM-DD)
- *         required: true
- *         schema:
- *           type: string
  *     responses:
  *       200:
- *         description: List of seat numbers currently allocated for the trip on the given date
+ *         description: List of seat numbers currently allocated for the trip (all dates)
  *         content:
  *           application/json:
  *             schema:
@@ -137,48 +134,6 @@ router.get('/trip/:tripId', authenticateToken, ticketController.getTicketForSpec
  */
 router.get('/allocated-seats/trip/:tripId', authenticateToken, ticketController.getAllocatedSeatsByTrip);
 
-/**
- * @swagger
- * /api/ticket/tickets-count-per-trip:
- *   get:
- *     summary: Get the number of tickets issued and allocated seats per trip on a specific date
- *     tags: [Ticket]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - name: date
- *         in: query
- *         description: |
- *           Date to filter tickets by (format: YYYY-MM-DD)
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: List of trips with count of tickets issued and allocated seat numbers on the given date
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   trip_id:
- *                     type: integer
- *                   tickets_issued:
- *                     type: integer
- *                   allocated_seats:
- *                     type: array
- *                     items:
- *                       type: integer
- *       400:
- *         description: Missing or invalid date parameter
- *       401:
- *         description: Unauthorized - Missing or invalid token
- *       500:
- *         description: Internal server error
- */
-router.get('/tickets-count-per-trip', authenticateToken, ticketController.getAllocatedSeatsAndTicketCountPerTrip);
 
 /**
  * @swagger
@@ -206,4 +161,5 @@ router.get('/tickets-count-per-trip', authenticateToken, ticketController.getAll
  *         description: Ticket not found
  */
 router.get('/:id', authenticateToken, ticketController.viewTicket);
+
 module.exports = router;

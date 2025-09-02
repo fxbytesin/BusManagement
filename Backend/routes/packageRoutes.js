@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middlewares/authMiddleware');
-const packageController=require('../controllers/packageController')
+const packageController = require('../controllers/packageController');
 
 /**
  * @swagger
@@ -138,5 +138,30 @@ router.get('/bus/:busId', authenticateToken, packageController.getPackage);
  *         description: Package not found
  */
 router.put('/:id/status', authenticateToken, packageController.updatePackage);
+
+/**
+ * @swagger
+ * /api/package/{id}:
+ *   delete:
+ *     summary: Delete a package booking by ID
+ *     tags: [Package]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: Package ID to delete
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Package deleted successfully
+ *       400:
+ *         description: Invalid package ID
+ *       404:
+ *         description: Package not found
+ */
+router.delete('/:id', authenticateToken, packageController.deletePackage);
 
 module.exports = router;

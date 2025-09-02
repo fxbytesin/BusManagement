@@ -142,3 +142,26 @@ exports.updatePackage = async (req, res) => {
     }
   }
 };
+
+exports.deletePackage = async (req, res) => {
+  try {
+    const packageId = parseInt(req.params.id);
+    if (isNaN(packageId)) {
+      return res.status(400).json({ error: 'Invalid package ID' });
+    }
+
+    await prisma.package.delete({
+      where: { id: packageId }
+    });
+
+    res.json({ message: 'Package deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting package:', error);
+    if (error.code === 'P2025') {
+      // Prisma error code for record not found
+      res.status(404).json({ error: 'Package not found' });
+    } else {
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+};
