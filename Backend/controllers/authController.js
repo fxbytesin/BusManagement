@@ -157,6 +157,7 @@ module.exports.verifyRegistrationOTP = async (req, res) => {
 // 3. Request Login OTP
 module.exports.requestLoginOTP = async (req, res) => {
   try {
+    console.log('hi')
     const { phone } = req.body;
     if (!phone) {
       return res.status(400).json({ error: "Phone number is required" });

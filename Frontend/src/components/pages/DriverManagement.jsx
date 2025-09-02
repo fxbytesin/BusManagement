@@ -1,5 +1,5 @@
-import { Edit, Plus, Trash2, User } from 'lucide-react';
-import { useEffect } from 'react';
+import { Edit, Plus, Trash2, User,Loader } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import ApiService from '../../services/api';
 
 const DriverManagement = ({
@@ -13,12 +13,18 @@ const DriverManagement = ({
   handleEditDriver,
   handleDeleteDriver
 }) => {
+    const [loading, setLoading] = useState(true); 
+
   useEffect(() => {
     const getData = async () => {
       try {
+        setLoading(true)
         const response = await ApiService.getDriver();      
         setDrivers(response.data)
       } catch (err) {
+      }
+      finally {
+        setLoading(false)
       }
     }
     getData()
@@ -78,60 +84,82 @@ const DriverManagement = ({
                 {t("actions")}
               </th>
             </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {drivers?.map((driver) => {
-              return (
-                <tr key={driver.id}>
-                  <td className="px-6 py-4 whitespace-nowrap font-medium">
-                    {driver.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {driver.phone}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {driver.license_number}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {driver.experience_years}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center space-x-2">
-                      <button
-                        className="text-blue-600 hover:text-blue-900"
-                        onClick={()=>handleEditDriver(driver)}
-                        title={t("edit")}
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          // eslint-disable-next-line no-restricted-globals
-                          if (confirm(t("confirmDeleteDriver"))) {
-                            handleDeleteDriver(driver.id)
-                            setDrivers(
-                              drivers.filter((d) => d.id !== driver.id)
-                            );
-                            setBuses(
-                              buses?.map((bus) =>
-                                bus.driverId === driver.id
-                                  ? { ...bus, driverId: "" }
-                                  : bus
-                              )
-                            );
-                          }
-                        }}
-                        className="text-red-600 hover:text-red-900"
-                        title={t("delete")}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+              </thead>
+              
+              {
+                loading ? (
+                  <tr>
+                  <td colSpan={9} className="py-10">
+                    <div className="flex justify-center items-center w-full">
+                      <Loader />
                     </div>
                   </td>
                 </tr>
-              );
-            })}
-          </tbody>
+                ) : drivers.length > 0 ? (
+                  <tbody className="bg-white divide-y divide-gray-200">
+                  {drivers?.map((driver) => {
+                    return (
+                      <tr key={driver.id}>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium">
+                          {driver.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {driver.phone}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {driver.license_number}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {driver.experience_years}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center space-x-2">
+                            <button
+                              className="text-blue-600 hover:text-blue-900"
+                              onClick={()=>handleEditDriver(driver)}
+                              title={t("edit")}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => {
+                                // eslint-disable-next-line no-restricted-globals
+                                if (confirm(t("confirmDeleteDriver"))) {
+                                  handleDeleteDriver(driver.id)
+                                  setDrivers(
+                                    drivers.filter((d) => d.id !== driver.id)
+                                  );
+                                  setBuses(
+                                    buses?.map((bus) =>
+                                      bus.driverId === driver.id
+                                        ? { ...bus, driverId: "" }
+                                        : bus
+                                    )
+                                  );
+                                }
+                              }}
+                              className="text-red-600 hover:text-red-900"
+                              title={t("delete")}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+                  ) : (
+                    <tr>
+                    <td
+                      colSpan={9}
+                      className="py-10 text-center text-gray-500 italic"
+                    >
+                      {t("No Data Found")}
+                    </td>
+                  </tr>
+                  )
+              }
         </table>
       </div>
     )}

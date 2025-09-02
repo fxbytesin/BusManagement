@@ -23,6 +23,8 @@ import TicketSystem from './components/pages/TicketSystem';
 import Registration from './components/Registration';
 import PosMachine from './components/pages/PosMachine';
 import TicketView from './components/pages/TicketView';
+import Trip from './components/pages/Trip';
+import Parcel from './components/pages/Parcel';
 const BusManagementSoftware = () => {
   // Language State
   const [currentLanguage, setCurrentLanguage] = useState("hi");
@@ -34,6 +36,7 @@ const BusManagementSoftware = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [editingItem, setEditingItem] = useState(null);
+  const [showParcel, setShowParcel] = useState(false);
 
   // Business Data State
   const [buses, setBuses] = useState([]);
@@ -41,7 +44,7 @@ const BusManagementSoftware = () => {
   const [drivers, setDrivers] = useState([]);
   const [conductors, setConductors] = useState([]);
   const [liveTracking, setLiveTracking] = useState([])
-  const [dashboard,setDashboard] = useState([])
+  const [dashboard, setDashboard] = useState([])
   // Form States
   const [busForm, setBusForm] = useState({
     bus_number: "",
@@ -50,9 +53,8 @@ const BusManagementSoftware = () => {
     driver_id: "",
     conductor_id: "",
     status: "stopped",
-    current_location:""
+    current_location: ""
   });
-  console.log("buses",buses);
 
   const [routeForm, setRouteForm] = useState({
     name: "",
@@ -71,7 +73,7 @@ const BusManagementSoftware = () => {
     experience_years: "",
     license_expiry: "",
     address: "",
-    emergency_contact : ""
+    emergency_contact: ""
   });
 
   const [conductorForm, setConductorForm] = useState({
@@ -79,14 +81,15 @@ const BusManagementSoftware = () => {
     phone: "",
     experience_years: "",
     address: "",
-    emergency_contact:""
+    emergency_contact: ""
   });
 
   const [isLogin, setIsLogin] = useState(true)
-    const [showModalPos, setShowModalPos] = useState(false);
+  const [showModalPos, setShowModalPos] = useState(false);
+  const [showTrip, setShowTrip] = useState(false)
 
   // CRUD Operations for Buses
-  const handleAddBus = async() => {
+  const handleAddBus = async () => {
     if (!busForm.bus_number || !busForm.route_id) {
       alert(t("fillAllFields"));
       return;
@@ -99,11 +102,11 @@ const BusManagementSoftware = () => {
       driver_id: parseInt(busForm.driver_id, 10) || null,
       conductor_id: parseInt(busForm.conductor_id, 10) || null
     });
-    
+
     if (response.success === true) {
-      setBuses([...buses,response.data ]);  
+      setBuses([...buses, response.data]);
     }
-    
+
     // ApiService.getBus();
     setBusForm({
       bus_number: "",
@@ -128,7 +131,7 @@ const BusManagementSoftware = () => {
       ...busForm,
       route_id: parseInt(busForm.route_id, 10) || null,
       driver_id: parseInt(busForm.driver_id, 10) || null
-    }) 
+    })
     setBuses(
       buses.map((bus) =>
         bus.id === editingItem.id
@@ -148,22 +151,22 @@ const BusManagementSoftware = () => {
     setShowModal(false);
   };
 
-  const handleDeleteBus =async (busId) => {
+  const handleDeleteBus = async (busId) => {
     try {
       const response = await ApiService.deleteBus(busId); // Wait for delete to finish  
       if (response?.data?.message === 'Bus deleted successfully') {
         // eslint-disable-next-line no-unused-vars
-        const response = await ApiService.getBus();      
+        const response = await ApiService.getBus();
       }
-  
+
     } catch (error) {
       console.error("Error while deleting", error);
     }
-      setBuses(buses.filter((bus) => bus.id !== busId));
+    setBuses(buses.filter((bus) => bus.id !== busId));
   };
 
   // CRUD Operations for Routes
-  const handleAddRoute = async() => {
+  const handleAddRoute = async () => {
     if (!routeForm.name || !routeForm.code || !routeForm.distance) {
       alert(t("fillAllFields"));
       return;
@@ -182,8 +185,8 @@ const BusManagementSoftware = () => {
     //Implement Add api
     const response = await ApiService.addRoutes(routeForm)
     if (response.success === true) {
-      
-      setRoutes([...routes,response.data])
+
+      setRoutes([...routes, response.data])
     }
     setRouteForm({
       name: "",
@@ -209,20 +212,20 @@ const BusManagementSoftware = () => {
     setShowModal(true);
   };
 
-  const handleUpdateRoute = () => {    
-    ApiService.updateRoutes(routeForm)    
+  const handleUpdateRoute = () => {
+    ApiService.updateRoutes(routeForm)
     setRoutes(
       routes.map((route) =>
         route.id === editingItem.id
           ? {
-              ...route,
-              ...routeForm,
-              distance: parseFloat(routeForm.distance),
-              base_fare: parseFloat(routeForm.base_fare),
-              per_km_rate: parseFloat(routeForm.per_km_rate),
-              stops: routeForm.stops.filter((stop) => stop.trim() !== ""),
-              updatedAt: new Date().toISOString(),
-            }
+            ...route,
+            ...routeForm,
+            distance: parseFloat(routeForm.distance),
+            base_fare: parseFloat(routeForm.base_fare),
+            per_km_rate: parseFloat(routeForm.per_km_rate),
+            stops: routeForm.stops.filter((stop) => stop.trim() !== ""),
+            updatedAt: new Date().toISOString(),
+          }
           : route
       )
     );
@@ -251,7 +254,7 @@ const BusManagementSoftware = () => {
   };
 
   // CRUD Operations for Drivers
-  const handleAddDriver = async() => {
+  const handleAddDriver = async () => {
     if (!driverForm.name || !driverForm.phone || !driverForm.license_number) {
       alert(t("fillAllFields"));
       return;
@@ -263,13 +266,13 @@ const BusManagementSoftware = () => {
     }
 
 
-const response = await ApiService.addDriver({
-  ...driverForm,
-  experience_years: parseInt(driverForm.experience_years, 10)
-});
+    const response = await ApiService.addDriver({
+      ...driverForm,
+      experience_years: parseInt(driverForm.experience_years, 10)
+    });
 
-    if (response.success === true) {      
-      setDrivers([...drivers,response.data])
+    if (response.success === true) {
+      setDrivers([...drivers, response.data])
     }
     setDriverForm({ name: "", phone: "", license_number: "", experience_years: "" });
     setShowModal(false);
@@ -287,16 +290,16 @@ const response = await ApiService.addDriver({
   };
 
 
-  const handleUpdateDriver = () => {    
+  const handleUpdateDriver = () => {
     const d = new Date(driverForm.license_expiry);
     const license_expiry = d.toISOString().split("T")[0];
     driverForm.license_expiry = license_expiry
     ApiService.updateDriver({
       ...driverForm,
       experience_years: parseInt(driverForm.experience_years, 10)
-    })    
+    })
 
-    const updatedList = drivers.map((item) => 
+    const updatedList = drivers.map((item) =>
       item.id === driverForm.id ? driverForm : item
     );
     setDrivers(updatedList);
@@ -318,7 +321,7 @@ const response = await ApiService.addDriver({
       alert(t("phoneMustBe10Digits"));
       return;
     }
-  
+
     // Build payload with correct data types
     const payload = {
       ...conductorForm,
@@ -326,13 +329,13 @@ const response = await ApiService.addDriver({
         ? parseInt(conductorForm.experience_years, 10) // ✅ convert string → number
         : 0, // fallback if empty
     };
-  
+
     try {
       const response = await ApiService.addConductor(payload);
-  
+
       if (response.success === true) {
         setConductors((prev) => [...prev, response.data]);
-          setConductorForm({
+        setConductorForm({
           name: "",
           phone: "",
           experience_years: "",
@@ -348,7 +351,7 @@ const response = await ApiService.addDriver({
       alert(t("apiError"));
     }
   };
-  
+
 
   const handleEditConstructor = (conductors) => {
     setConductorForm(conductors);
@@ -356,12 +359,12 @@ const response = await ApiService.addDriver({
     setModalType("edit-conductors");
     setShowModal(true);
   };
-  const handleUpdateContructor = () => {    
+  const handleUpdateContructor = () => {
     ApiService.updateConstructor({
       ...conductorForm,
-      experience_years: parseInt(conductorForm.experience_years,10)
-    })    
-    const updatedList = conductors.map((item) => 
+      experience_years: parseInt(conductorForm.experience_years, 10)
+    })
+    const updatedList = conductors.map((item) =>
       item.id === conductorForm.id ? conductorForm : item
     );
     setConductors(updatedList);
@@ -693,7 +696,7 @@ const response = await ApiService.addDriver({
         );
 
       case "add-driver":
-        case "edit-driver":
+      case "edit-driver":
         return (
           <div className="space-y-4">
             <div>
@@ -785,7 +788,7 @@ const response = await ApiService.addDriver({
                 placeholder="2026-12-31"
               />
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 {t("Emergency_Contact")}
@@ -923,7 +926,7 @@ const response = await ApiService.addDriver({
               >
                 {t("cancel")}
               </button>
-              <button 
+              <button
                 onClick={editingItem ? handleUpdateContructor : handleAddConductor}
                 className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
               >
@@ -999,7 +1002,7 @@ const response = await ApiService.addDriver({
         />;
       case "drivers":
         return <DriverManagement
-        setModalType={setModalType}
+          setModalType={setModalType}
           setShowModal={setShowModal}
           t={t}
           drivers={drivers}
@@ -1011,9 +1014,9 @@ const response = await ApiService.addDriver({
         />;
       case "conductors":
         return <ConductorManagement
-        conductors={conductors}
-        setModalType={setModalType}
-        setShowModal={setShowModal}
+          conductors={conductors}
+          setModalType={setModalType}
+          setShowModal={setShowModal}
           t={t}
           buses={buses}
           setConductors={setConductors}
@@ -1064,117 +1067,173 @@ const response = await ApiService.addDriver({
             </div>
           </div>
         );
-        case "PosMachine":
-          return (
+      case "posMachine":
+        return (
             <div className="p-6">
-              <div className='mb-6'>
-              <h3 className="text-xl font-semibold">{t("Pos Machine")}</h3>
-               <button
-                 onClick={() => setShowModalPos(true)}
-                 className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
-                  >
-                    Add POS Machine
-               </button>
-              </div>
-         
-              <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-                <PosMachine
-                  showModalPos={showModalPos}
-                  setShowModalPos={setShowModalPos}
-                />
-                </div>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-semibold">{t("posMachine")}</h3>
+              <button
+                onClick={() => setShowModalPos(true)}
+                className="bg-orange-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-700"
+              >
+                <Plus className="w-5 h-5" />
+                <span>{t("addPOSMachine")}</span>
+              </button>
             </div>
-          );
+            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+              <PosMachine
+                showModalPos={showModalPos}
+                setShowModalPos={setShowModalPos}
+              />
+            </div>
+          </div>
+        );
+      case "trip":
+        return (
+          <div className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-semibold">{t("trip")}</h3>
+              <button
+                onClick={() => setShowTrip(true)}
+                className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700"
+              >
+                <Plus className="w-5 h-5" />
+                <span>{t("addTrip")}</span>
+              </button>
+            </div>
+            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+              <Trip
+                buses={buses}
+                routes={routes}
+                drivers={drivers}
+                conductors={conductors}
+
+                setBuses={setBuses}
+                setRoutes={setRoutes}
+                setDrivers={setDrivers}
+                setConductors={setConductors}
+                t={t}
+
+                showTrip={showTrip}
+                setShowTrip={setShowTrip}
+              />
+            </div>
+          </div>
+        );
+
+      case "parcel":
+        return ( <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-xl font-semibold">{t("parcel")}</h3>
+            <button
+               onClick={() => setShowParcel(true)}
+              className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700"
+            >
+              <Plus className="w-5 h-5" />
+              <span>{t("addParcel")}</span>
+            </button>
+          </div>
+
+            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+              <Parcel
+                buses={buses}
+                setBuses={setBuses}
+                setShowParcel={setShowParcel}
+                showParcel={showParcel}
+              />
+            </div>
+          </div>
+        );
       default:
         return <DashboardPage
-        buses={buses}
-        setModalType={setModalType}
-        setShowModal={setShowModal}
-        routes={routes}
-        t={t}
+          buses={buses}
+          setModalType={setModalType}
+          setShowModal={setShowModal}
+          routes={routes}
+          t={t}
         />;
     }
   };
 
   return (
     <>
-    <BrowserRouter>
-  <Routes>
-    <CustomRoute
-      path="/"
-      element={
-        isLogin ? (
-          <Login setIsLogin={setIsLogin} />
-        ) : (
-          <div className="flex h-screen bg-gray-100">
-            <NavigationComponent
-              currentLanguage={currentLanguage}
-              t={t}
-              currentPage={currentPage}
-              sidebarOpen={sidebarOpen}
-              setSidebarOpen={setSidebarOpen}
-              setCurrentPage={setCurrentPage}
-              setCurrentLanguage={setCurrentLanguage}
-            />
+      <BrowserRouter>
+        <Routes>
+          <CustomRoute
+            path="/"
+            element={
+              isLogin ? (
+                <Login setIsLogin={setIsLogin} />
+              ) : (
+                <div className="flex h-screen bg-gray-100">
+                  <NavigationComponent
+                    currentLanguage={currentLanguage}
+                    t={t}
+                    currentPage={currentPage}
+                    sidebarOpen={sidebarOpen}
+                    setSidebarOpen={setSidebarOpen}
+                    setCurrentPage={setCurrentPage}
+                    setCurrentLanguage={setCurrentLanguage}
+                  />
 
-            <div className="flex-1 flex flex-col overflow-hidden">
-              <Header
-                setSidebarOpen={setSidebarOpen}
-                t={t}
-                  currentPage={currentPage}
-                  setIsLogin={setIsLogin}
-              />
+                  <div className="flex-1 flex flex-col overflow-hidden">
+                    <Header
+                      setSidebarOpen={setSidebarOpen}
+                      t={t}
+                      currentPage={currentPage}
+                      setIsLogin={setIsLogin}
+                    />
 
-              <main className="flex-1 overflow-x-hidden overflow-y-auto">
-                {renderCurrentPage()}
-              </main>
-            </div>
+                    <main className="flex-1 overflow-x-hidden overflow-y-auto">
+                      {renderCurrentPage()}
+                    </main>
+                  </div>
 
-            {showModal && (
-              <Modal
-                title={getModalTitle()}
-                onClose={() => {
-                  setShowModal(false);
-                  setEditingItem(null);
-                  setBusForm({
-                    bus_number: '',
-                    capacity: 45,
-                    route_id: '',
-                    driver_id: '',
-                    conductor_id: '',
-                    status: 'stopped',
-                  });
-                  setRouteForm({
-                    name: '',
-                    code: '',
-                    distance: '',
-                    stops: [''],
-                    base_fare: '',
-                    per_km_rate: '',
-                    active: true,
-                  });
-                  setDriverForm({ name: '', phone: '', license_number: '', experience_years: '' });
-                  setConductorForm({ name: '', phone: '', experience_years: '' });
-                }}
-              >
-                {renderModalContent()}
-              </Modal>
-            )}
+                  {showModal && (
+                    <Modal
+                      title={getModalTitle()}
+                      onClose={() => {
+                        setShowModal(false);
+                        setEditingItem(null);
+                        setBusForm({
+                          bus_number: '',
+                          capacity: 45,
+                          route_id: '',
+                          driver_id: '',
+                          conductor_id: '',
+                          status: 'stopped',
+                        });
+                        setRouteForm({
+                          name: '',
+                          code: '',
+                          distance: '',
+                          stops: [''],
+                          base_fare: '',
+                          per_km_rate: '',
+                          active: true,
+                        });
+                        setDriverForm({ name: '', phone: '', license_number: '', experience_years: '' });
+                        setConductorForm({ name: '', phone: '', experience_years: '' });
+                      }}
+                    >
+                      {renderModalContent()}
+                    </Modal>
+                  )}
 
-            {sidebarOpen && (
-              <div
-                className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-                onClick={() => setSidebarOpen(false)}
-              />
-            )}
-          </div>
-        )
-      }
+                  {sidebarOpen && (
+                    <div
+                      className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+                      onClick={() => setSidebarOpen(false)}
+                    />
+                  )}
+                </div>
+              )
+            }
           />
           <CustomRoute path='/registration' element={<Registration />} />
-          <CustomRoute path='/ticketview' element={<TicketView/>} />
-  </Routes>
-</BrowserRouter>
+          <CustomRoute path='/ticketview' element={<TicketView />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 };

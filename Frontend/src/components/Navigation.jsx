@@ -1,4 +1,4 @@
-import { BarChart3, Bus, Home, MapPin, Printer, Route, Settings, User, Users, X } from 'lucide-react';
+import { BarChart3, Bus, Home, MapPin, Printer, Route, Settings, User, Users, X,Box,Package, Navigation } from 'lucide-react';
 
 const NavigationComponent = ({
     currentLanguage,
@@ -19,7 +19,9 @@ const NavigationComponent = ({
       { id: "ticketing", label: t("ticketing"), icon: Printer },
       { id: "reports", label: t("reports"), icon: BarChart3 },
       { id: "settings", label: t("settings"), icon: Settings },
-      { id: "PosMachine", label: t("PosMachine"), icon: Settings },
+      { id: "posMachine", label: t("posMachine"), icon: Box },
+      { id: "trip", label: t("trip"), icon: Navigation },
+      { id: "parcel", label: t("parcel"), icon: Package },
     ];
 
     return (
