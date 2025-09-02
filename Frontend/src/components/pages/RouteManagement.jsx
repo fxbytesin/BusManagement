@@ -1,4 +1,4 @@
-import { Edit, Plus, Route, Trash2 } from 'lucide-react';
+import { Edit, Loader, Plus, Route, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import  ApiService from '../../services/api'
 // Route Management Page
@@ -29,7 +29,9 @@ const RouteManagement = (
   }, [setRoutes])
   
   return loader ? (
-    <div>Loading</div> // You can put a spinner here
+    <div className="flex justify-center items-center w-full">
+    <Loader />
+  </div>
   ) : (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -128,9 +130,8 @@ const RouteManagement = (
       </span>
     ))}
   </div>
-</div>
-
-  
+              </div>
+              
               <div className="mt-4 pt-4 border-t">
                 <span
                   className={`px-2 py-1 rounded-full text-xs ${route.active

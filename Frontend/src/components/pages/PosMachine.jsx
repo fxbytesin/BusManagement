@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ApiService from '../../services/api';
-import { Trash2 } from 'lucide-react';
+import { Loader, Trash2 } from 'lucide-react';
 
 const PosMachine = ({
     showModalPos,
@@ -11,7 +11,8 @@ const PosMachine = ({
     status: "active", // default active
   });
     
-    const[posData,setPosData]= useState([])
+  const [posData, setPosData] = useState([])
+  const [loading,setLoading] = useState(true)
     
     const handleSubmit = async() => {
     if (!posForm.status || !posForm.serial_no) {
@@ -34,11 +35,15 @@ const PosMachine = ({
     
     useEffect(() => {
         const getData = async () => {
-            try {
+          try {
+            setLoading(true)
                 const response = await ApiService.getPos();      
                 setPosData(response?.data)
             } catch (err) {
-            }
+          }
+          finally {
+            setLoading(false)
+          }
           }
           getData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -145,59 +150,69 @@ const PosMachine = ({
 
     {/* Table Body */}
     <tbody className="divide-y divide-gray-200">
-      {posData?.length > 0 ? (
-        posData?.map((pos) => (
-          <tr
-            key={pos.id}
-            className="hover:bg-gray-50 transition-colors duration-150"
+  {loading ? (
+    <tr>
+      <td colSpan={3} className="py-10">
+        <div className="flex justify-center items-center w-full">
+          <Loader />
+        </div>
+      </td>
+    </tr>
+  ) : posData?.length > 0 ? (
+    posData.map((pos) => (
+      <tr
+        key={pos.id}
+        className="hover:bg-gray-50 transition-colors duration-150"
+      >
+        <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+          {pos.serial_no}
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <span
+            className={`px-2 py-1 text-xs font-medium rounded-full ${
+              pos.status === "active"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+            }`}
           >
-            <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-              {pos.serial_no}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <span
-                className={`px-2 py-1 text-xs font-medium rounded-full ${
-                  pos.status === "active"
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
-                }`}
-              >
-                {pos.status}
-              </span>
-                </td>
-                
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center space-x-2">
-                      <button
-                        className="text-red-600 hover:text-red-900"
-                            title={("delete")}
-                            onClick={() => {
-                                if (window.confirm("Are you sure you want to delete this POS machine?")) {
-                                  handleDeletePos(pos?.id);
-                                }
-                              }}                              
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td
-            colSpan="2"
-            className="px-6 py-4 text-center text-gray-500 italic"
-          >
-            No POS machines found
-          </td>
-        </tr>
-      )}
-    </tbody>
+            {pos.status}
+          </span>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <div className="flex items-center space-x-2">
+            <button
+              className="text-red-600 hover:text-red-900"
+              title="delete"
+              onClick={() => {
+                if (
+                  window.confirm(
+                    "Are you sure you want to delete this POS machine?"
+                  )
+                ) {
+                  handleDeletePos(pos?.id);
+                }
+              }}
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td
+        colSpan={3}
+        className="px-6 py-4 text-center text-gray-500 italic"
+      >
+        No POS machines found
+      </td>
+    </tr>
+  )}
+</tbody>
+
   </table>
 </div>
-
-
     </div>
   );
 };

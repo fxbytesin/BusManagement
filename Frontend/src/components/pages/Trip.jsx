@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ApiService from '../../services/api';
-import { Edit, Trash2 } from 'lucide-react';
-
+import { Edit, Trash2,SquareEqual } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 const Trip = ({
     buses,
     routes,
@@ -27,7 +27,9 @@ const Trip = ({
      });
     const [trip, setTrip] = useState([])
     const [isPost, setIsPost] = useState(true)
-    const [editId,setEditId] = useState(0)
+    const [editId, setEditId] = useState(0)
+    const[showTicket,setShowTicket] = useState(false)
+  
      useEffect(() => {
         const getData = async () => {
           try {
@@ -193,13 +195,15 @@ const Trip = ({
     })
     setIsPost(true)
   }
-    
-    return (
-        showTrip ? 
+  const navigate = useNavigate();
+  return (
+    showTrip ? 
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
       <form  onSubmit={handleSubmit}>
-             <div className="space-y-4">
+          <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                 {t("Bus")} *
               </label>  
               <select
@@ -219,8 +223,8 @@ const Trip = ({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("route")} *
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                {t("Route")} *
               </label>
               <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -239,8 +243,8 @@ const Trip = ({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("driver")}
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                {t("Driver")}
               </label>
               <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -259,8 +263,8 @@ const Trip = ({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("conductor")}
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                {t("Conductor")}
               </label>
               <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -280,8 +284,8 @@ const Trip = ({
 
          
             <div>
-  <label className="block text-sm font-medium text-gray-700 mb-1">
-    {t("startTime")}
+  <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+    {t("Start Time")}
   </label>
   <input
     type="datetime-local"
@@ -294,8 +298,8 @@ const Trip = ({
 </div>
 
 <div>
-  <label className="block text-sm font-medium text-gray-700 mb-1">
-    {t("endTime")}
+  <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+    {t("End Time")}
   </label>
   <input
     type="datetime-local"
@@ -309,7 +313,7 @@ const Trip = ({
 
   
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                 {t("Status")}
               </label>
               <select
@@ -343,7 +347,9 @@ const Trip = ({
               </button>
             </div>
           </div>    
-      </form>
+            </form>
+          </div>
+          </div>
             : (
                 <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
                 <table className="w-full">
@@ -395,20 +401,31 @@ const Trip = ({
                           {trip?.route?.name}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                          {trip?.start_time}
+                            {trip?.start_time
+                             ? new Date(trip.start_time).toLocaleString("en-IN", {
+                             dateStyle: "medium",
+                             timeStyle: "short",
+                             })
+                             : ""}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                          {trip?.end_time}
+
+                          {trip?.end_time
+                          ? new Date(trip.start_time).toLocaleString("en-IN", {
+                           dateStyle: "medium",
+                           timeStyle: "short",
+                           })
+                           : ""}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
                           {trip?.status}
                             </td>
                             <td>
-                            <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2">
                       <button
                         className="text-blue-600 hover:text-blue-900"
-                                        title={t("edit")}
-                                        onClick={()=>handleEdit(trip)}
+                        title={t("edit")}
+                        onClick={()=>handleEdit(trip)}
                       >
                         <Edit className="w-4 h-4" />
                       </button>
@@ -418,14 +435,19 @@ const Trip = ({
                                         onClick={()=>handleDelete(trip)}
                       >
                         <Trash2 className="w-4 h-4" />
-                      </button>
+                          </button>
+                            <button>
+                              <SquareEqual className="w-4 h-4"
+                                  onClick={() => navigate("/trips")}
+                              />
+                            </button>
                     </div>
-                            </td>
+                      </td>
                       </tr>
                     ))}
                   </tbody>
-                </table>
-              </div>
+           </table>
+        </div>
      )
   )
 }

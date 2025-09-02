@@ -1,5 +1,5 @@
-import { MapPin } from 'lucide-react';
-import { useEffect } from 'react';
+import { MapPin ,Loader} from 'lucide-react';
+import { useEffect, useState } from 'react';
 import ApiService from '../../services/api';
 
 const LiveTracking = (
@@ -9,12 +9,18 @@ const LiveTracking = (
     liveTracking,
     setLiveTracking
   }) => {
+      const [loading, setLoading] = useState(true); 
+  
   useEffect(() => {
     const getData = async () => {
       try {
+        setLoading(true)
         const response = await ApiService.getLiveTracking();      
         setLiveTracking(response.data)
       } catch (err) {
+      }
+      finally {
+        setLoading(false)
       }
     }
     getData()
@@ -58,47 +64,60 @@ const LiveTracking = (
                 {t("status")}
               </th>
             </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {liveTracking?.map((tracking) => {
-              return (
-                <tr key={tracking.id}>
-                  <td className="px-6 py-4 whitespace-nowrap font-medium">
-                    {tracking?.bus_number}
+              </thead>
+              
+              {loading ? (
+                <Loader/>
+              ) : liveTracking.length > 0 ? (
+                <tbody className="bg-white divide-y divide-gray-200">
+                {liveTracking?.map((tracking) => {
+                  return (
+                    <tr key={tracking.id}>
+                      <td className="px-6 py-4 whitespace-nowrap font-medium">
+                        {tracking?.bus_number}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {tracking?.route_name || t("notAssigned")}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {tracking?.current_location}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {tracking?.today_passengers}/{tracking?.capacity}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {t("rupees")}
+                        {tracking?.today_revenue || 0}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {tracking?.today_packages || 0}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs ${tracking?.status === "running"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-yellow-100 text-yellow-800"
+                            }`}
+                        >
+                          {t(tracking?.status)}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+                ): (
+                  <tr>
+                  <td
+                    colSpan={9}
+                    className="py-10 text-center text-gray-500 italic"
+                  >
+                    {t("No Data Found")}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {tracking?.route_name || t("notAssigned")}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {tracking?.current_location}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {tracking?.today_passengers}/{tracking?.capacity}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {t("rupees")}
-                    {tracking?.today_revenue || 0}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {tracking?.today_packages || 0}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs ${tracking?.status === "running"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
-                        }`}
-                    >
-                      {t(tracking?.status)}
-                    </span>
-                  </td>
-                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(bus.lastUpdate).toLocaleTimeString("hi-IN")}
-                  </td> */}
                 </tr>
-              );
-            })}
-          </tbody>
+              )
+              }
+         
         </table>
       </div>
     )}

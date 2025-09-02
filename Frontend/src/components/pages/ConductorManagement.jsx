@@ -1,5 +1,5 @@
-import { Edit, Plus, Trash2, Users } from 'lucide-react';
-import { useEffect } from 'react';
+import { Edit, Plus, Trash2, Users ,Loader} from 'lucide-react';
+import { useEffect, useState } from 'react';
 import ApiService from '../../services/api';
 
 const ConductorManagement = ({
@@ -14,12 +14,18 @@ const ConductorManagement = ({
   handleEditConstructor,
   handleDeleteConductor
 }) => {
+    const [loading, setLoading] = useState(true); 
+  
   useEffect(() => {
     const getData = async () => {
       try {
+        setLoading(true)
         const response = await ApiService.getConductor();      
         setConductors(response.data)
       } catch (err) {
+      }
+      finally {
+        setLoading(false)
       }
     }
     getData()
@@ -77,55 +83,69 @@ const ConductorManagement = ({
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {conductors?.map((conductor) => {
-              return (
-                <tr key={conductor.id}>
-                  <td className="px-6 py-4 whitespace-nowrap font-medium">
-                    {conductor.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {conductor.phone}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {conductor.experience_years}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center space-x-2">
-                      <button
-                        className="text-blue-600 hover:text-blue-900"
-                        title={t("edit")}
-                        onClick={()=>handleEditConstructor(conductor)}
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          // eslint-disable-next-line no-restricted-globals
-                          if (confirm(t("confirmDeleteConductor"))) {
-                            handleDeleteConductor(conductor.id)
-                            setConductors(
-                              conductors.filter((c) => c.id !== conductor.id)
-                            );
-                            setBuses(
-                              buses?.map((bus) =>
-                                bus.conductorId === conductor.id
-                                  ? { ...bus, conductorId: "" }
-                                  : bus
-                              )
-                            );
-                          }
-                        }}
-                        className="text-red-600 hover:text-red-900"
-                        title={t("delete")}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+              <tbody className="bg-white divide-y divide-gray-200">
+                {loading ? (
+                <Loader/>
+                ) : conductors?.length > 0 ? (
+                  conductors?.map((conductor) => {
+                    return (
+                      <tr key={conductor.id}>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium">
+                          {conductor.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {conductor.phone}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {conductor.experience_years}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center space-x-2">
+                            <button
+                              className="text-blue-600 hover:text-blue-900"
+                              title={t("edit")}
+                              onClick={()=>handleEditConstructor(conductor)}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => {
+                                // eslint-disable-next-line no-restricted-globals
+                                if (confirm(t("confirmDeleteConductor"))) {
+                                  handleDeleteConductor(conductor.id)
+                                  setConductors(
+                                    conductors.filter((c) => c.id !== conductor.id)
+                                  );
+                                  setBuses(
+                                    buses?.map((bus) =>
+                                      bus.conductorId === conductor.id
+                                        ? { ...bus, conductorId: "" }
+                                        : bus
+                                    )
+                                  );
+                                }
+                              }}
+                              className="text-red-600 hover:text-red-900"
+                              title={t("delete")}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                  ) : (
+                    <tr>
+                    <td
+                      colSpan={4}
+                      className="py-10 text-center text-gray-500 italic"
+                    >
+                      {t("noConductorsFound")}
+                    </td>
+                  </tr>
+                )
+                }
           </tbody>
         </table>
       </div>

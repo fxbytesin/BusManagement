@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Printer } from "lucide-react";
+import { Printer,Loader } from "lucide-react";
 import ApiService from '../../services/api';
 
 const TicketSystem = ({ t }) => {
@@ -11,11 +11,13 @@ const TicketSystem = ({ t }) => {
     payment_mode: "cash",
     pos_machine_id: "",
     seat_no: "",
-    bus_id: ""
+    bus_id: "",
+    trip_id : ""
   });
   const [busData, setBuses] = useState([])
   const [machineData,setMachineData] = useState([])
   const [showModal, setShowModal] = useState(false);
+  const [trip, setTrip] = useState([])
 
   const handleSubmit = async () => {
     const selectedBus = busData.find(
@@ -59,11 +61,35 @@ const TicketSystem = ({ t }) => {
       } catch (err) {
       }
     }
+
+    const getTrip = async () => {
+      try {
+        const response = await ApiService.getTrip(); 
+        if (response?.success === true) {            
+            setTrip(response?.data)
+          }            
+      } catch (err) {
+      }
+    }
+
     getData()
     getMachineData()
+    getTrip()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const handleClose = () => {
+    setTicketForm({
+      from_stop: "",
+      to_stop: "",
+      fare: "",
+      journey_date: "",
+      payment_mode: "cash",
+      pos_machine_id: "",
+      seat_no: "",
+    })
+    setShowModal(false)
+  }
 
   
   return (
@@ -79,6 +105,8 @@ const TicketSystem = ({ t }) => {
 
       {
         showModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+         <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
           <div className="bg-white rounded-lg shadow-sm border p-6">
           {/* From Stop */}
           <div className="mb-4">
@@ -210,17 +238,7 @@ const TicketSystem = ({ t }) => {
           {/* Actions */}
           <div className="flex justify-end space-x-2">
             <button
-              onClick={() =>
-                setTicketForm({
-                  from_stop: "",
-                  to_stop: "",
-                  fare: "",
-                  journey_date: "",
-                  payment_mode: "cash",
-                  pos_machine_id: "",
-                  seat_no: "",
-                })
-              }
+              onClick={() =>handleClose()}
               className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-50"
             >
               Cancel
@@ -232,8 +250,11 @@ const TicketSystem = ({ t }) => {
               <Printer className="w-4 h-4 mr-2" />
               Book Ticket
             </button>
+            </div>
+            
           </div>
-        </div>
+          </div>
+    </div>
         )
       }
     </div>
