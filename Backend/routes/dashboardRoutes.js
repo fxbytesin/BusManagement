@@ -88,22 +88,22 @@ router.get('/stats', authenticateToken, dashboardController.getdashboardStatisti
  * @swagger
  * /api/dashboard/revenue:
  *   get:
- *     summary: Get revenue report between dates, optionally filtered by bus
+ *     summary: Get revenue report (daily, weekly, monthly, yearly) between dates, optionally filtered by bus
  *     tags: [Dashboard]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - name: startDate
  *         in: query
- *         required: true
- *         description: Start date in YYYY-MM-DD format
+ *         required: false
+ *         description: Start date in YYYY-MM-DD format (default = 1 year ago)
  *         schema:
  *           type: string
  *           format: date
  *       - name: endDate
  *         in: query
- *         required: true
- *         description: End date in YYYY-MM-DD format
+ *         required: false
+ *         description: End date in YYYY-MM-DD format (default = today)
  *         schema:
  *           type: string
  *           format: date
@@ -119,22 +119,97 @@ router.get('/stats', authenticateToken, dashboardController.getdashboardStatisti
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   date:
- *                     type: string
- *                     format: date
- *                   ticket_revenue:
- *                     type: number
- *                   package_revenue:
- *                     type: number
- *                   total_tickets:
- *                     type: integer
- *                   total_packages:
- *                     type: integer
+ *               type: object
+ *               properties:
+ *                 revenue:
+ *                   type: object
+ *                   properties:
+ *                     daily:
+ *                       type: array
+ *                       description: Daily revenue report
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           date:
+ *                             type: string
+ *                             example: "01-Sep"
+ *                           ticket_revenue:
+ *                             type: number
+ *                             example: 1500
+ *                           package_revenue:
+ *                             type: number
+ *                             example: 800
+ *                           total_tickets:
+ *                             type: integer
+ *                             example: 45
+ *                           total_packages:
+ *                             type: integer
+ *                             example: 12
+ *                           additionalProperties:
+ *                             type: object
+ *                             description: Bus-wise breakdown
+ *                             properties:
+ *                               ticket_revenue:
+ *                                 type: number
+ *                               package_revenue:
+ *                                 type: number
+ *                               total_tickets:
+ *                                 type: integer
+ *                               total_packages:
+ *                                 type: integer
+ *                     weekly:
+ *                       type: array
+ *                       description: Weekly revenue report
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           week:
+ *                             type: string
+ *                             example: "Week 35"
+ *                           ticket_revenue:
+ *                             type: number
+ *                           package_revenue:
+ *                             type: number
+ *                           total_tickets:
+ *                             type: integer
+ *                           total_packages:
+ *                             type: integer
+ *                     monthly:
+ *                       type: array
+ *                       description: Monthly revenue report
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           month:
+ *                             type: string
+ *                             example: "Sep"
+ *                           ticket_revenue:
+ *                             type: number
+ *                           package_revenue:
+ *                             type: number
+ *                           total_tickets:
+ *                             type: integer
+ *                           total_packages:
+ *                             type: integer
+ *                     yearly:
+ *                       type: array
+ *                       description: Yearly revenue report
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           year:
+ *                             type: integer
+ *                             example: 2025
+ *                           ticket_revenue:
+ *                             type: number
+ *                           package_revenue:
+ *                             type: number
+ *                           total_tickets:
+ *                             type: integer
+ *                           total_packages:
+ *                             type: integer
  */
+
 router.get('/revenue', authenticateToken, dashboardController.getRevenueReport );
 
 module.exports = router;

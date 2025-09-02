@@ -61,23 +61,92 @@ const tripController = require("../controllers/tripController");
 router.post("/", authenticateToken, tripController.createTrip);
 /**
  * @swagger
- * /api/trip:
- *   get:
- *     summary: Get all Trips
+ * /api/trip/allTrips:
+ *   post:
+ *     summary: Get all Trips with filters and pagination
  *     tags: [Trip]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               search:
+ *                 type: string
+ *                 example: ""
+ *                 description: Search keyword for name, destination, or description
+ *               limit:
+ *                 type: integer
+ *                 default: 10
+ *                 example: 10
+ *                 description: Number of trips per page
+ *               page:
+ *                 type: integer
+ *                 default: 1
+ *                 example: 1
+ *                 description: Page number
+ *               order:
+ *                 type: string
+ *                 enum: [ASC, DESC]
+ *                 default: DESC
+ *                 example: ASC
+ *                 description: Sort order
+ *               orderColumn:
+ *                 type: string
+ *                 enum: [start_time, end_time, name, destination, created_at]
+ *                 default: created_at
+ *                 example: created_at
+ *                 description: Column to sort by
  *     responses:
  *       200:
- *         description: List of Trips
+ *         description: List of Trips with pagination metadata
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
+ *               type: object
+ *               properties:
+ *                 trips:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *                       destination:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *                       start_time:
+ *                         type: string
+ *                         format: date-time
+ *                       end_time:
+ *                         type: string
+ *                         format: date-time
+ *                       created_at:
+ *                         type: string
+ *                         format: date-time
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     currentPage:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *                     totalCount:
+ *                       type: integer
+ *                     hasNextPage:
+ *                       type: boolean
+ *                     hasPrevPage:
+ *                       type: boolean
+ *                     limit:
+ *                       type: integer
  */
-router.get("/", authenticateToken, tripController.getAllTrips);
+router.post("/allTrips", authenticateToken, tripController.getAllTrips);
 /**
  * @swagger
  * /api/trip/{id}:
@@ -117,7 +186,7 @@ router.get("/:id", authenticateToken, tripController.getTripById);
  *           type: integer
  *     requestBody:
  *       description: Trip fields to update
- *       required: true
+ *       required: truegetAllTrips
  *       content:
  *         application/json:
  *           schema:
