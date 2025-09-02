@@ -3,10 +3,64 @@ const prisma = new PrismaClient();
 
 exports.getAllTrips = async (req, res) => {
   try {
-    const trips = await prisma.trip.findMany({
-      orderBy: { start_time: 'desc' }
+    // Extract query parameters with default values
+    const {
+      search = '',
+      limit = 10,
+      page = 1,
+      order = 'desc',
+      orderColumn = 'start_time'
+    } = req.query;
+ 
+    // Calculate pagination values
+    const pageInt = parseInt(page);
+    const limitInt = parseInt(limit);
+    const skip = (pageInt - 1) * limitInt;
+ 
+    // Build the where clause for search
+    const whereClause = search ? {
+      OR: [
+        { name: { contains: search, mode: 'insensitive' } },
+        { destination: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } }
+      ]
+    } : {};
+ 
+    // Validate orderColumn to prevent SQL injection
+    const allowedColumns = ['start_time', 'end_time', 'name', 'destination', 'created_at'];
+    const validOrderColumn = allowedColumns.includes(orderColumn) ? orderColumn : 'start_time';
+    
+    // Validate order direction
+    const validOrder = order.toLowerCase() === 'asc' ? 'asc' : 'desc';
+ 
+    // Execute the query
+    const [trips, totalCount] = await Promise.all([
+      prisma.trip.findMany({
+        where: whereClause,
+        orderBy: { [validOrderColumn]: validOrder },
+        skip: skip,
+        take: limitInt,
+      }),
+      prisma.trip.count({ where: whereClause })
+    ]);
+ 
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(totalCount / limitInt);
+    const hasNextPage = pageInt < totalPages;
+    const hasPrevPage = pageInt > 1;
+ 
+    // Return response with pagination info
+    res.json({
+      trips,
+      pagination: {
+        currentPage: pageInt,
+        totalPages,
+        totalCount,
+        hasNextPage,
+        hasPrevPage,
+        limit: limitInt
+      }
     });
-    res.json(trips);
   } catch (error) {
     console.error('Error fetching trips:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -33,7 +87,7 @@ exports.getTripById = async (req, res) => {
 
 exports.createTrip = async (req, res) => {
   try {
-    const { bus_id, route_id, start_time, end_time, status, driver_id, conductor_id } = req.body;
+    const { bus_id, route_id, start_time, end_time, driver_id, conductor_id } = req.body;
 
     if (!bus_id || !route_id || !start_time) {
       return res.status(400).json({ error: 'bus_id, route_id and start_time are required' });
@@ -166,7 +220,7 @@ exports.createTrip = async (req, res) => {
         route_id,
         start_time: start,
         end_time: end,
-        status: status || 'SCHEDULED',
+        status: 'SCHEDULED',
         driver_id: driver_id || null,
         conductor_id: conductor_id || null,
       },
@@ -302,5 +356,33 @@ exports.deleteTrip = async (req, res) => {
     } else {
       res.status(500).json({ error: 'Internal server error' });
     }
+  }
+};
+
+exports.updateTripStatus = async (req, res) => {
+  try {
+    const tripId = parseInt(req.params.id);
+    if (isNaN(tripId)) return res.status(400).json({ error: 'Invalid trip ID' });
+
+    const { status } = req.body;
+    const allowedStatuses = ["SCHEDULED", "RUNNING", "COMPLETED", "CANCELLED"];
+
+    if (!status || !allowedStatuses.includes(status)) {
+      return res.status(400).json({ error: 'Invalid or missing status value' });
+    }
+
+    const trip = await prisma.trip.findUnique({ where: { id: tripId } });
+    if (!trip) return res.status(404).json({ error: 'Trip not found' });
+
+
+    const updatedTrip = await prisma.trip.update({
+      where: { id: tripId },
+      data: { status },
+    });
+
+    res.json({ message: 'Trip status updated successfully', trip: updatedTrip });
+  } catch (error) {
+    console.error('Error updating trip status:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
