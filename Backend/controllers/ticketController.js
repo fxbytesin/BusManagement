@@ -10,42 +10,42 @@ function generateTicketNumber() {
 exports.createTicket = async (req, res) => {
   try {
     const {
-      trip_id,
-      bus_id,
+      bus_number,
       from_stop,
       to_stop,
-      fare,
       journey_date,
+      seat_no,
+      fare,
       payment_mode,
-      pos_machine_id,
-      seat_no
+      pos_machine_id
     } = req.body;
 
     // Validate required fields
-    if (!bus_id || !trip_id || !from_stop || !to_stop || !fare || !journey_date || !pos_machine_id) {
+    if (!bus_number || !from_stop || !to_stop || !fare || !journey_date || !pos_machine_id) {
       return res.status(400).json({
-        error: 'bus_id, trip_id, from_stop, to_stop, fare, journey_date, and pos_machine_id are required.'
+        error: 'bus_number, from_stop, to_stop, fare, journey_date, and pos_machine_id are required.'
       });
     }
 
-    // Validate bus exists
-    const bus = await prisma.bus.findUnique({ where: { id: bus_id }, select: { capacity: true } });
+    // Lookup bus
+    const bus = await prisma.bus.findUnique({ where: { bus_number }, select: { id: true, capacity: true } });
     if (!bus) {
       return res.status(404).json({ error: 'Bus not found' });
     }
 
-    // Validate trip exists & matches bus
-    const trip = await prisma.trip.findUnique({ where: { id: trip_id } });
+    // Lookup trip using details
+    const trip = await prisma.trip.findFirst({
+      where: {
+        bus_id: bus.id,
+        from_stop,
+        to_stop,
+        start_time: { lte: new Date(journey_date) }, // adjust logic as needed
+        end_time: { gte: new Date(journey_date) },
+        status: { notIn: ['COMPLETED', 'CANCELLED'] }
+      }
+    });
     if (!trip) {
-      return res.status(404).json({ error: 'Trip not found' });
-    }
-
-    if (trip.status === 'COMPLETED' || trip.status === 'CANCELLED') {
-  return res.status(400).json({ error: `Cannot create ticket: Trip is ${trip.status.toLowerCase()}` });
-  }
-
-    if (trip.bus_id !== bus_id) {
-      return res.status(400).json({ error: 'Trip does not belong to the specified bus' });
+      return res.status(404).json({ error: 'Matching trip not found' });
     }
 
     // Validate seat_no if provided
@@ -53,18 +53,17 @@ exports.createTicket = async (req, res) => {
       if (seat_no <= 0 || seat_no > bus.capacity) {
         return res.status(400).json({ error: `Invalid seat_no. Bus capacity is ${bus.capacity}` });
       }
-
-      // Check seat availability for trip and date
+      // Check seat availability
       const existingTicket = await prisma.ticket.findFirst({
         where: {
-          trip_id,
+          trip_id: trip.id,
           journey_date: new Date(journey_date),
           seat_no,
           status: { not: 'cancelled' }
         }
       });
       if (existingTicket) {
-        return res.status(400).json({ error: `Seat number ${seat_no} is already booked for this trip on the selected date.` });
+        return res.status(400).json({ error: `Seat number ${seat_no} already booked for this trip on selected date.` });
       }
     }
 
@@ -87,10 +86,11 @@ exports.createTicket = async (req, res) => {
 
     const ticket_number = generateTicketNumber();
 
+    // Create the ticket
     const newTicket = await prisma.ticket.create({
       data: {
-        bus_id,
-        trip_id,
+        bus_id: bus.id,
+        trip_id: trip.id,
         ticket_number,
         from_stop,
         to_stop,
@@ -109,6 +109,7 @@ exports.createTicket = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 // Get tickets for a specific trip with optional journey_date filter

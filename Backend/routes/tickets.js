@@ -26,35 +26,41 @@ const ticketController = require('../controllers/ticketController');
  *           schema:
  *             type: object
  *             required:
- *               - bus_id
- *               - trip_id
+ *               - bus_number
  *               - from_stop
  *               - to_stop
  *               - fare
  *               - journey_date
  *               - pos_machine_id
  *             properties:
- *               bus_id:
- *                 type: integer
- *               trip_id:
- *                 type: integer
+ *               bus_number:
+ *                 type: string
+ *                 description: Bus number as shown to the user
  *               from_stop:
  *                 type: string
+ *                 description: Starting point of journey
  *               to_stop:
  *                 type: string
+ *                 description: Ending point of journey
  *               fare:
  *                 type: number
  *                 format: float
+ *                 minimum: 0.01
+ *                 description: Ticket fare (must be positive)
  *               journey_date:
  *                 type: string
  *                 format: date-time
+ *                 description: Date and time of journey
  *               payment_mode:
  *                 type: string
  *                 enum: [cash, online]
+ *                 description: Payment mode (defaults to cash if not provided)
  *               pos_machine_id:
  *                 type: integer
+ *                 description: POS machine identifier
  *               seat_no:
  *                 type: integer
+ *                 description: Seat number (optional, must be within bus capacity)
  *     responses:
  *       201:
  *         description: Ticket created successfully
@@ -62,6 +68,8 @@ const ticketController = require('../controllers/ticketController');
  *         description: Validation error or missing required fields
  *       404:
  *         description: Bus, trip, or POS machine not found
+ *       500:
+ *         description: Internal server error
  */
 router.post('/', authenticateToken, ticketController.createTicket);
 

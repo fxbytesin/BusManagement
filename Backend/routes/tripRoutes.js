@@ -19,7 +19,7 @@ const tripController = require("../controllers/tripController");
  *     security:
  *       - bearerAuth: []
  *     requestBody:
- *       description: Trip details
+ *       description: Trip creation details
  *       required: true
  *       content:
  *         application/json:
@@ -27,15 +27,11 @@ const tripController = require("../controllers/tripController");
  *             type: object
  *             required:
  *               - bus_id
- *               - route_id
  *               - start_time
  *             properties:
  *               bus_id:
  *                 type: integer
  *                 example: 1
- *               route_id:
- *                 type: integer
- *                 example: 2
  *               start_time:
  *                 type: string
  *                 format: date-time
@@ -48,17 +44,21 @@ const tripController = require("../controllers/tripController");
  *                 type: string
  *                 example: "SCHEDULED"
  *                 enum: [SCHEDULED, RUNNING, COMPLETED, CANCELLED]
- *               driver_id:
- *                 type: integer
- *               conductor_id:
- *                 type: integer
  *     responses:
  *       201:
  *         description: Trip created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Trip'
  *       400:
  *         description: Validation error
+ *       404:
+ *         description: Bus not found
  */
 router.post("/", authenticateToken, tripController.createTrip);
+
+
 /**
  * @swagger
  * /api/trip:
@@ -100,49 +100,50 @@ router.get("/", authenticateToken, tripController.getAllTrips);
  *         description: Trip not found
  */
 router.get("/:id", authenticateToken, tripController.getTripById);
+
+
 /**
  * @swagger
  * /api/trip/{id}:
  *   put:
- *     summary: Update Trip
+ *     summary: Update an existing Trip
  *     tags: [Trip]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - name: id
- *         in: path
- *         description: Trip ID
- *         required: true
+ *       - in: path
+ *         name: id
  *         schema:
  *           type: integer
+ *         required: true
+ *         description: Trip ID to update
  *     requestBody:
- *       description: Trip fields to update
+ *       description: Trip update details (bus_id cannot be changed)
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               bus_id:
- *                 type: integer
- *               route_id:
- *                 type: integer
  *               start_time:
  *                 type: string
  *                 format: date-time
+ *                 example: "2025-08-29T08:00:00Z"
  *               end_time:
  *                 type: string
  *                 format: date-time
+ *                 example: "2025-08-29T12:00:00Z"
  *               status:
  *                 type: string
+ *                 example: "RUNNING"
  *                 enum: [SCHEDULED, RUNNING, COMPLETED, CANCELLED]
- *               driver_id:
- *                 type: integer
- *               conductor_id:
- *                 type: integer
  *     responses:
  *       200:
  *         description: Trip updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Trip'
  *       400:
  *         description: Validation error
  *       404:

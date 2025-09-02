@@ -12,5 +12,4 @@ model Conductor {
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   buses Bus[]
-  trips Trip[]
 }

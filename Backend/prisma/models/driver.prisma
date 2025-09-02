@@ -15,5 +15,4 @@ model Driver {
   // Relation to User model
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   buses Bus[]
-  trips Trip[]
 }
