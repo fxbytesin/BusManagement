@@ -12,12 +12,19 @@ const ticketController = require('../controllers/ticketController');
 
 /**
  * @swagger
- * /api/ticket:
+ * /api/ticket/trip/{tripId}:
  *   post:
- *     summary: Create a new ticket
+ *     summary: Create a new ticket for a specific trip
  *     tags: [Ticket]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: tripId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Trip ID for which the ticket is being booked
  *     requestBody:
  *       description: Ticket data to create
  *       required: true
@@ -26,52 +33,41 @@ const ticketController = require('../controllers/ticketController');
  *           schema:
  *             type: object
  *             required:
- *               - bus_number
  *               - from_stop
  *               - to_stop
  *               - fare
- *               - journey_date
  *               - pos_machine_id
  *             properties:
- *               bus_number:
- *                 type: string
- *                 description: Bus number as shown to the user
  *               from_stop:
  *                 type: string
- *                 description: Starting point of journey
+ *                 example: "Station A"
  *               to_stop:
  *                 type: string
- *                 description: Ending point of journey
+ *                 example: "Station B"
  *               fare:
  *                 type: number
  *                 format: float
- *                 minimum: 0.01
- *                 description: Ticket fare (must be positive)
- *               journey_date:
- *                 type: string
- *                 format: date-time
- *                 description: Date and time of journey
+ *                 example: 150.50
  *               payment_mode:
  *                 type: string
  *                 enum: [cash, online]
- *                 description: Payment mode (defaults to cash if not provided)
+ *                 example: cash
  *               pos_machine_id:
  *                 type: integer
- *                 description: POS machine identifier
+ *                 example: 5
  *               seat_no:
  *                 type: integer
- *                 description: Seat number (optional, must be within bus capacity)
+ *                 example: 12
  *     responses:
  *       201:
  *         description: Ticket created successfully
  *       400:
  *         description: Validation error or missing required fields
  *       404:
- *         description: Bus, trip, or POS machine not found
- *       500:
- *         description: Internal server error
+ *         description: Trip or POS machine not found
  */
-router.post('/', authenticateToken, ticketController.createTicket);
+router.post('/trip/:tripId', authenticateToken, ticketController.createTicketForTrip);
+
 
 /**
  * @swagger
@@ -110,7 +106,7 @@ router.get('/trip/:tripId', authenticateToken, ticketController.getTicketForSpec
  * @swagger
  * /api/ticket/allocated-seats/trip/{tripId}:
  *   get:
- *     summary: Get allocated seat numbers for a specific trip and journey date
+ *     summary: Get allocated seat numbers for a specific trip (all dates)
  *     tags: [Ticket]
  *     security:
  *       - bearerAuth: []
@@ -121,16 +117,9 @@ router.get('/trip/:tripId', authenticateToken, ticketController.getTicketForSpec
  *         required: true
  *         schema:
  *           type: integer
- *       - name: date
- *         in: query
- *         description: |
- *           Date to filter tickets by (format: YYYY-MM-DD)
- *         required: true
- *         schema:
- *           type: string
  *     responses:
  *       200:
- *         description: List of seat numbers currently allocated for the trip on the given date
+ *         description: List of seat numbers currently allocated for the trip (all dates)
  *         content:
  *           application/json:
  *             schema:
@@ -144,6 +133,7 @@ router.get('/trip/:tripId', authenticateToken, ticketController.getTicketForSpec
  *         description: Validation error or missing required fields
  */
 router.get('/allocated-seats/trip/:tripId', authenticateToken, ticketController.getAllocatedSeatsByTrip);
+
 
 /**
  * @swagger
