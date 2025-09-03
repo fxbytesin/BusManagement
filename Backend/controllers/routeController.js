@@ -46,13 +46,6 @@ exports.getAllRoutes = async (req, res) => {
 
     const totalCount = await prisma.route.count({ where: whereCondition });
 
-    // ✅ If search provided but no results
-    if (search && totalCount === 0) {
-      return res.status(404).json({
-        error: `No routes found matching "${search}"`
-      });
-    }
-
     res.json({
       data: routes,
       pagination: {

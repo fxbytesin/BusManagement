@@ -70,13 +70,6 @@ exports.getAllPOSMachines = async (req, res) => {
 
     const totalCount = await prisma.pOSMachine.count({ where: whereCondition });
 
-    // ✅ If search provided but no results
-    if (search && totalCount === 0) {
-      return res.status(404).json({
-        error: `No POS machines found matching "${search}"`
-      });
-    }
-
     res.json({
       data: posMachines,
       pagination: {
