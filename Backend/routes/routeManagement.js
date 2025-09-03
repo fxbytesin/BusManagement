@@ -13,7 +13,7 @@ const routeController=require('../controllers/routeController')
 
 /**
  * @swagger
- * /api/routes:
+ * /api/routes/list:
  *   get:
  *     summary: Get all routes belonging to authenticated user with search, pagination, and sorting
  *     tags: [Route]
@@ -91,7 +91,7 @@ const routeController=require('../controllers/routeController')
  */
 
 
-router.post('/', authenticateToken, routeController.getAllRoutes);
+router.post('/list', authenticateToken, routeController.getAllRoutes);
 
 /**
  * @swagger
