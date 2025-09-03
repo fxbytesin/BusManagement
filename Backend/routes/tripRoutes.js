@@ -189,7 +189,7 @@ router.get("/:id", authenticateToken, tripController.getTripById);
  *           type: integer
  *     requestBody:
  *       description: Trip fields to update
- *       required: true
+ *       required: truegetAllTrips
  *       content:
  *         application/json:
  *           schema:

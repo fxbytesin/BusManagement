@@ -44,12 +44,6 @@ function getPeriodRange(period) {
       break;
   }
 
-  console.log('Calculated Period Range:', {
-    period,
-    startDate: startDate.toISOString(),
-    endDate: endDate.toISOString(),
-  });
-
   return { startDate, endDate };
 }
 
@@ -63,14 +57,12 @@ function toLocalDateString(date) {
 
 exports.getTripsCompletedReport = async (req, res) => {
   try {
-    // Helper function: trips completed + tickets generated
+    const userId = req.user.id;
+
     const fetchTripsAndTicketsForPeriod = async (period) => {
       const { startDate, endDate } = getPeriodRange(period);
       const startDateStr = toLocalDateString(startDate);
       const endDateStr = toLocalDateString(endDate);
-      const userId = req.user.id;
-
-      const params = [startDateStr, endDateStr, startDateStr, endDateStr, userId];
 
       const query = `
         SELECT 
@@ -83,31 +75,26 @@ exports.getTripsCompletedReport = async (req, res) => {
           ON t.bus_id = b.id
           AND t.status = 'COMPLETED'
           AND t.end_time IS NOT NULL
-          AND DATE(t.end_time) >= ?
-          AND DATE(t.end_time) < ?
+          AND t.end_time >= ?
+          AND t.end_time < ?
         LEFT JOIN Ticket tk
-          ON tk.bus_id = b.id
-          AND DATE(tk.journey_date) >= ?
-          AND DATE(tk.journey_date) < ?
+          ON tk.trip_id = t.id
+          AND tk.journey_date >= ?
+          AND tk.journey_date < ?
         WHERE b.user_id = ?
         GROUP BY b.id, b.bus_number
         ORDER BY trips_completed DESC
       `;
 
+      const params = [startDateStr, endDateStr, startDateStr, endDateStr, userId];
       const result = await prisma.$queryRawUnsafe(query, ...params);
-
-      return JSON.parse(JSON.stringify(result, (key, value) =>
-        typeof value === 'bigint' ? Number(value) : value));
+      return JSON.parse(JSON.stringify(result, (key, value) => typeof value === 'bigint' ? Number(value) : value));
     };
 
-    // Helper function: occupancy rate
     const fetchOccupancyRateForPeriod = async (period) => {
       const { startDate, endDate } = getPeriodRange(period);
       const startDateStr = toLocalDateString(startDate);
       const endDateStr = toLocalDateString(endDate);
-      const userId = req.user.id;
-
-      const params = [startDateStr, endDateStr, userId];
 
       const query = `
         SELECT 
@@ -120,27 +107,22 @@ exports.getTripsCompletedReport = async (req, res) => {
         LEFT JOIN Ticket tk
           ON tk.bus_id = b.id
           AND tk.status IN ('booked', 'used')
-          AND DATE(tk.journey_date) >= ?
-          AND DATE(tk.journey_date) < ?
+          AND tk.journey_date >= ?
+          AND tk.journey_date < ?
         WHERE b.user_id = ?
         GROUP BY b.id, b.bus_number, b.capacity
         ORDER BY occupancy_rate DESC
       `;
 
+      const params = [startDateStr, endDateStr, userId];
       const result = await prisma.$queryRawUnsafe(query, ...params);
-
-      return JSON.parse(JSON.stringify(result, (key, value) =>
-        typeof value === 'bigint' ? Number(value) : value));
+      return JSON.parse(JSON.stringify(result, (key, value) => typeof value === 'bigint' ? Number(value) : value));
     };
 
-    // Helper function: revenue per bus
     const fetchRevenueForPeriod = async (period) => {
       const { startDate, endDate } = getPeriodRange(period);
       const startDateStr = toLocalDateString(startDate);
       const endDateStr = toLocalDateString(endDate);
-      const userId = req.user.id;
-
-      const params = [startDateStr, endDateStr, userId];
 
       const query = `
         SELECT 
@@ -151,68 +133,47 @@ exports.getTripsCompletedReport = async (req, res) => {
         LEFT JOIN Ticket tk
           ON tk.bus_id = b.id
           AND tk.status IN ('booked', 'used')
-          AND DATE(tk.journey_date) >= ?
-          AND DATE(tk.journey_date) < ?
+          AND tk.journey_date >= ?
+          AND tk.journey_date < ?
         WHERE b.user_id = ?
         GROUP BY b.id, b.bus_number
         ORDER BY revenue DESC
       `;
 
+      const params = [startDateStr, endDateStr, userId];
       const result = await prisma.$queryRawUnsafe(query, ...params);
-
-      return JSON.parse(JSON.stringify(result, (key, value) =>
-        typeof value === 'bigint' ? Number(value) : value));
+      return JSON.parse(JSON.stringify(result, (key, value) => typeof value === 'bigint' ? Number(value) : value));
     };
 
-    // Fetch all in parallel (trips & tickets, occupancy, revenue)
-    const [dailyTrips, weeklyTrips, monthlyTrips, yearlyTrips] = await Promise.all([
-      fetchTripsAndTicketsForPeriod('daily'),
-      fetchTripsAndTicketsForPeriod('weekly'),
-      fetchTripsAndTicketsForPeriod('monthly'),
-      fetchTripsAndTicketsForPeriod('yearly')
-    ]);
+    // Parallel fetch for all periods
+    const periods = ['daily', 'weekly', 'monthly', 'yearly'];
 
-    const [dailyOcc, weeklyOcc, monthlyOcc, yearlyOcc] = await Promise.all([
-      fetchOccupancyRateForPeriod('daily'),
-      fetchOccupancyRateForPeriod('weekly'),
-      fetchOccupancyRateForPeriod('monthly'),
-      fetchOccupancyRateForPeriod('yearly')
-    ]);
+    const tripsAndTickets = await Promise.all(periods.map(period => fetchTripsAndTicketsForPeriod(period)));
+    const occupancyRates = await Promise.all(periods.map(period => fetchOccupancyRateForPeriod(period)));
+    const revenues = await Promise.all(periods.map(period => fetchRevenueForPeriod(period)));
 
-    const [dailyRevenue, weeklyRevenue, monthlyRevenue, yearlyRevenue] = await Promise.all([
-      fetchRevenueForPeriod('daily'),
-      fetchRevenueForPeriod('weekly'),
-      fetchRevenueForPeriod('monthly'),
-      fetchRevenueForPeriod('yearly')
-    ]);
-
-    // Combine all responses
     res.json({
       tripsAndTickets: {
-        daily: dailyTrips,
-        weekly: weeklyTrips,
-        monthly: monthlyTrips,
-        yearly: yearlyTrips
+        daily: tripsAndTickets[0],
+        weekly: tripsAndTickets[1],
+        monthly: tripsAndTickets[2],
+        yearly: tripsAndTickets[3],
       },
       occupancyRate: {
-        daily: dailyOcc,
-        weekly: weeklyOcc,
-        monthly: monthlyOcc,
-        yearly: yearlyOcc
+        daily: occupancyRates[0],
+        weekly: occupancyRates[1],
+        monthly: occupancyRates[2],
+        yearly: occupancyRates[3],
       },
       revenue: {
-        daily: dailyRevenue,
-        weekly: weeklyRevenue,
-        monthly: monthlyRevenue,
-        yearly: yearlyRevenue
-      }
+        daily: revenues[0],
+        weekly: revenues[1],
+        monthly: revenues[2],
+        yearly: revenues[3],
+      },
     });
-
   } catch (error) {
     console.error('Error fetching report:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
-
-

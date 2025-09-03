@@ -3,16 +3,71 @@ const prisma = new PrismaClient();
 
 exports.getAllDriver = async (req, res) => {
   try {
+    const {
+      search = "",
+      limit = 10,
+      page = 1,
+      order = "ASC",
+      orderColumn = "created_at"
+    } = req.body;
+
+    const take = Number(limit);
+    const skip = (Number(page) - 1) * take;
+
+    // ✅ Ensure valid order
+    const sortOrder = order && order.toUpperCase() === "DESC" ? "desc" : "asc";
+
+    // ✅ Allow only safe columns
+    const validColumns = ["created_at", "name", "email", "phone", "license_number"];
+    const sortColumn = validColumns.includes(orderColumn) ? orderColumn : "created_at";
+
+    // ✅ Search filter
+    const whereCondition = {
+      // user_id: req.user.id,
+      ...(search
+        ? {
+            OR: [
+              { name: { contains: search } },
+              { phone: { contains: search } },
+            ]
+          }
+        : {})
+    };
+
+    console.log(whereCondition,"whereConditionwhereConditionwhereCondition")
     const drivers = await prisma.driver.findMany({
-      where: { user_id: req.user.id },
-      orderBy: { created_at: 'desc' }
+      where: whereCondition,
+      orderBy: { [sortColumn]: sortOrder },
+      skip,
+      take
     });
-    res.json(drivers);
+
+    const totalCount = await prisma.driver.count({ where: whereCondition });
+
+    // ✅ If search is provided but no results found → return error
+    if (search && totalCount === 0) {
+      return res.status(404).json({
+        error: `No drivers found matching "${search}"`
+      });
+    }
+
+    res.json({
+      data: drivers,
+      pagination: {
+        total: totalCount,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(totalCount / take)
+      }
+    });
   } catch (error) {
-    console.error('Error fetching drivers:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching drivers:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+
 
 exports.createDriver = async (req, res) => {
   try {

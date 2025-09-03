@@ -15,20 +15,83 @@ const routeController=require('../controllers/routeController')
  * @swagger
  * /api/routes:
  *   get:
- *     summary: Get all routes belonging to authenticated user
+ *     summary: Get all routes belonging to authenticated user with search, pagination, and sorting
  *     tags: [Route]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by route name or code
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of results per page
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *           enum: [ASC, DESC]
+ *           default: ASC
+ *         description: Sort order
+ *       - in: query
+ *         name: orderColumn
+ *         schema:
+ *           type: string
+ *           enum: [created_at, name, code]
+ *           default: created_at
+ *         description: Column to sort by
  *     responses:
  *       200:
- *         description: List of routes
+ *         description: List of routes with pagination
  *         content:
  *           application/json:
  *             schema:
- *               type: array
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *                       code:
+ *                         type: string
+ *                       created_at:
+ *                         type: string
+ *                         format: date-time
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                     page:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *       404:
+ *         description: No routes found for the given search
+ *       500:
+ *         description: Internal server error
  */
 
-router.get('/', authenticateToken, routeController.getAllRoutes);
+
+router.post('/', authenticateToken, routeController.getAllRoutes);
 
 /**
  * @swagger
