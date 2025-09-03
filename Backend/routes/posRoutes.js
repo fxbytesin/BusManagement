@@ -45,7 +45,7 @@ router.post("/create", authenticateToken, posController.createPOSMachine);
 
 /**
  * @swagger
- * /api/pos/all:
+ * /api/pos/list:
  *   post:
  *     summary: Get all POS machines including their assigned bus (with search, pagination, and sorting)
  *     tags: [POSMachine]
@@ -126,7 +126,7 @@ router.post("/create", authenticateToken, posController.createPOSMachine);
  *       500:
  *         description: Internal server error
  */
-router.post("/all", authenticateToken, posController.getAllPOSMachines);
+router.post("/list", authenticateToken, posController.getAllPOSMachines);
 
 /**
  * @swagger
