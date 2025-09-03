@@ -28,7 +28,7 @@ const busController=require('../controllers/busController')
  *               items:
  *                 type: object
  */
-router.get('/', authenticateToken, busController.getAllBuses);
+router.post('/', authenticateToken, busController.getAllBuses);
 
 /**
  * @swagger
