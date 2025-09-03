@@ -50,7 +50,7 @@ const driverController=require('../controllers/driverController')
  */
 
 /* Get all drivers */
-router.get('/', authenticateToken, driverController.getAllDriver);
+router.post('/', authenticateToken, driverController.getAllDriver);
 
 
 /**

@@ -1,10 +1,37 @@
 const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
-exports.getAllBuses=async (req, res) => {
+exports.getAllBuses = async (req, res) => {
   try {
+    // Get query/body parameters (depends on whether you are sending them in body or query)
+    const {
+      search = "",
+      limit = 10,
+      page = 1,
+      order = "ASC",
+      orderColumn = "created_at"
+    } = req.query; // or req.body if you send via POST
+
+    // Convert limit/page to numbers
+    const take = Number(limit);
+    const skip = (Number(page) - 1) * take;
+
+    // Build where condition with search
+    const whereCondition = {
+      user_id: req.user.id,
+      OR: search
+        ? [
+            { bus_number: { contains: search, mode: "insensitive" } },
+            { route: { name: { contains: search, mode: "insensitive" } } },
+            { route: { code: { contains: search, mode: "insensitive" } } },
+            { driver: { name: { contains: search, mode: "insensitive" } } },
+            { conductor: { name: { contains: search, mode: "insensitive" } } }
+          ]
+        : undefined
+    };
+
     const buses = await prisma.bus.findMany({
-      where: { user_id: req.user.id },
+      where: whereCondition,
       include: {
         route: {
           select: {
@@ -23,10 +50,15 @@ exports.getAllBuses=async (req, res) => {
           }
         }
       },
-      orderBy: { created_at: 'desc' }
+      orderBy: { [orderColumn]: order.toLowerCase() }, // ASC / DESC
+      skip,
+      take
     });
 
-    // Format the response to match the original structure
+    // Get total count for pagination
+    const totalCount = await prisma.bus.count({ where: whereCondition });
+
+    // Format the response
     const formattedBuses = buses.map(bus => ({
       ...bus,
       route_name: bus.route?.name || null,
@@ -35,12 +67,21 @@ exports.getAllBuses=async (req, res) => {
       conductor_name: bus.conductor?.name || null
     }));
 
-    res.json(formattedBuses);
+    res.json({
+      data: formattedBuses,
+      pagination: {
+        total: totalCount,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(totalCount / take)
+      }
+    });
   } catch (error) {
-    console.error('Error fetching buses:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching buses:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-}
+};
+
 
 exports.createBus = async (req, res) => {
   try {

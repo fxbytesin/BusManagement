@@ -274,7 +274,6 @@ exports.createTrip = async (req, res) => {
   }
 };
 
-
 exports.updateTrip = async (req, res) => {
   try {
     const tripId = parseInt(req.params.id);

@@ -14,21 +14,89 @@ const busController=require('../controllers/busController')
  * @swagger
  * /api/bus:
  *   get:
- *     summary: Get all buses
+ *     summary: Get all buses with search, pagination, and sorting
  *     tags: [Bus]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by bus number, route name/code, driver or conductor name
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of results per page
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *           enum: [ASC, DESC]
+ *           default: ASC
+ *         description: Sort order
+ *       - in: query
+ *         name: orderColumn
+ *         schema:
+ *           type: string
+ *           default: created_at
+ *         description: Column to sort by
  *     responses:
  *       200:
- *         description: List of buses with related info
+ *         description: List of buses with related info and pagination
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                       bus_number:
+ *                         type: string
+ *                       route_name:
+ *                         type: string
+ *                         nullable: true
+ *                       route_code:
+ *                         type: string
+ *                         nullable: true
+ *                       driver_name:
+ *                         type: string
+ *                         nullable: true
+ *                       conductor_name:
+ *                         type: string
+ *                         nullable: true
+ *                       created_at:
+ *                         type: string
+ *                         format: date-time
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                     page:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *       500:
+ *         description: Internal server error
  */
-router.get('/', authenticateToken, busController.getAllBuses);
+
+router.post('/', authenticateToken, busController.getAllBuses);
 
 /**
  * @swagger
