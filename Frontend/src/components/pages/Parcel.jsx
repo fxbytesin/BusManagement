@@ -111,9 +111,6 @@ const Parcel = ({
         }
       };
       
-    
-      
-
     useEffect(() => {
         const getData = async () => {
           try {
