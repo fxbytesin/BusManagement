@@ -76,8 +76,6 @@ const DriverManagement = ({
   const handlePageChange = (page) => {
     setPage(page); // Update the page state variable to the specified page number
   };
-
-  console.log("drivers",drivers);
   
   return (
   <div className="p-6">

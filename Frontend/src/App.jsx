@@ -1070,7 +1070,7 @@ const BusManagementSoftware = () => {
       case "posMachine":
         return (
             <div className="p-6">
-            <div className="flex justify-between items-center mb-6">
+            {/* <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-semibold">{t("posMachine")}</h3>
               <button
                 onClick={() => setShowModalPos(true)}
@@ -1079,7 +1079,7 @@ const BusManagementSoftware = () => {
                 <Plus className="w-5 h-5" />
                 <span>{t("addPOSMachine")}</span>
               </button>
-            </div>
+            </div> */}
             <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
               <PosMachine
                 showModalPos={showModalPos}

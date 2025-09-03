@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import ApiService from '../../services/api';
 import TicketView from './TicketView';
 import SortColumn from './SortColumn';
+import DataPagination from './DataPagination';
 
  // Bus Management Page
 const BusManagementPage = (
@@ -25,37 +26,115 @@ const BusManagementPage = (
   const [showComponent, setShowComponent] = useState(true)
   const [busId, setBusId] = useState(0)
   const [loading, setLoading] = useState(true); 
+
+
   const [search, setSearch] = useState("");
   const [sortDescriptor, setSortDescriptor] = useState({
-    column: "PositionName",
+    column: "name",
     direction: "ASC",
-  }); // Sorting descriptor state
+  }); 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
+
+
+  const getBusData = async () => {
+    const body = {
+      search : search,
+      limit: 1,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      setLoading(true);
+      const response = await ApiService.getBus(body);      
+      setBuses(response?.data?.data)
+      setTotalPages(response?.data?.pagination?.totalPages)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+  
+
+  const getRoutesData = async () => {
+    const body = {
+      search : search,
+      limit: 1,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      setLoading(true);
+      const response = await ApiService.getRoutes(body);      
+      setRoutes(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+  
+  const getDriverData = async () => {
+    const body = {
+      search : search,
+      limit: 1,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      setLoading(true);
+      const response = await ApiService.getDriver(body);      
+      setDrivers(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+  
+  const getConductorData = async () => {
+    const body = {
+      search : search,
+      limit: 1,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      setLoading(true);
+      const response = await ApiService.getConductor(body);      
+      setConductors(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      setLoading(false);
+    }
+}
+
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        setLoading(true);
-        const response = await ApiService.getBus();      
-        setBuses(response.data)
-
-        const route = await ApiService.getRoutes();      
-        setRoutes(route.data)
-
-        const driver = await ApiService.getDriver();      
-        setDrivers(driver.data)
-
-        const conductor = await ApiService.getConductor();      
-        setConductors(conductor.data)
-
-      } catch (err) {
-      }
-      finally {
-        setLoading(false);
-      }
-    }
-    getData()
+    getBusData()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setBuses])
+  }, [setBuses,search,page,sortDescriptor])
+
+  useEffect(() => {
+    getRoutesData()
+    getDriverData()
+    getConductorData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   const functionClick = (id) => {
     setBusId(id)
@@ -85,6 +164,10 @@ const BusManagementPage = (
     });
   };
   
+
+  const handlePageChange = (page) => {
+    setPage(page); // Update the page state variable to the specified page number
+  };
   return (
       showComponent ? (
       <div className="p-6">
@@ -135,12 +218,12 @@ const BusManagementPage = (
                 <tr>
                     <th
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      onClick={() => handleSorting("PositionName")}
+                      onClick={() => handleSorting("bus_number")}
                     >
                       {t("busNumber")}
                       <SortColumn
                        sortDescriptor={sortDescriptor}
-                        name="PositionName"
+                        name="bus_number"
                       />
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -249,7 +332,14 @@ const BusManagementPage = (
 </tbody>
 
             
-            </table>
+              </table>
+              {buses && buses.length > 0 && (
+                  <DataPagination
+                    onPageChange={handlePageChange}
+                    totalPages={totalPages}
+                    currentPage={page}
+                  />
+                )}
           </div>
         )}
       </div>

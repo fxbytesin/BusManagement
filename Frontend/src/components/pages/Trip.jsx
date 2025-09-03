@@ -53,7 +53,6 @@ const Trip = ({
       const response = await ApiService.getTrip(body);
       if (response?.success === true) {          
         setTrip(response?.data?.trips)
-        console.log("response",response);
         setTotalPages(response?.data?.pagination?.totalPages)
       }
     } catch (err) {
@@ -65,28 +64,93 @@ const Trip = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search,page,sortDescriptor])
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await ApiService.getBus();
-        setBuses(response.data)
 
-        const route = await ApiService.getRoutes();
-        setRoutes(route.data)
-
-        const driver = await ApiService.getDriver();
-        setDrivers(driver.data)
-
-        const conductor = await ApiService.getConductor();
-        setConductors(conductor.data)
-
-      } catch (err) {
-      }
+  const getBusData = async () => {
+    const body = {
+      search : search,
+      limit: 1,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
     }
-    getData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    try {
+      const response = await ApiService.getBus(body);      
+      setBuses(response?.data?.data)
+      setTotalPages(response?.data?.pagination?.totalPages)
+    }
+    catch (err) {
+      
+    }
+    finally {
+    }
+  }
+  
 
+  const getRoutesData = async () => {
+    const body = {
+      search : search,
+      limit: 1,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      const response = await ApiService.getRoutes(body);      
+      setRoutes(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      
+    }
+  }
+  
+  const getDriverData = async () => {
+    const body = {
+      search : search,
+      limit: 1,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      const response = await ApiService.getDriver(body);      
+      setDrivers(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+    }
+  }
+  
+  const getConductorData = async () => {
+    const body = {
+      search : search,
+      limit: 1,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      const response = await ApiService.getConductor(body);      
+      setConductors(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+    }
+}
+
+useEffect(() => {
+  getRoutesData()
+  getDriverData()
+  getConductorData()
+  getBusData()
+// eslint-disable-next-line react-hooks/exhaustive-deps
+},[])
 
   const status = [
     "SCHEDULED",
@@ -401,13 +465,13 @@ const Trip = ({
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-semibold ml-5">{t("trip")}</h3>
 
-<div className='flex'>
-                <form className="flex max-w-lg mx-auto mr-6">   
-                <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
-                 onChange={handleChange}
+             <div className='flex'>
+                <form className="flex max-w-lg mx-auto mr-6 mt-[19px]">   
+                   <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+                   onChange={handleChange}
                 />
          
-                </form>
+                  </form>
                 <button
                  onClick={() => setShowTrip(true)}
                  className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700 mr-5 mt-5"
@@ -415,7 +479,7 @@ const Trip = ({
               <Plus className="w-5 h-5" />
               <span>{t("addTrip")}</span>
                 </button>
-                </div>
+            </div>
 
           </div>
             <table className="w-full">           

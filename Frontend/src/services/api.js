@@ -186,11 +186,11 @@ const ApiService = {
       };
     }
   },
-  getBus: async () => {
+  getBus: async (body) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/bus`, {
+      const response = await axios.post(`${API_URL}/bus/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -537,11 +537,11 @@ const ApiService = {
     }
   },
 
-  getPos: async () => {
+  getPos: async (body) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/pos/all`, {
+      const response = await axios.post(`${API_URL}/pos/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -661,7 +661,7 @@ const ApiService = {
       const token = localStorage.getItem("token");
 
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.post(`${API_URL}/trip/allTrips`, body, {
+      const response = await axios.post(`${API_URL}/trip/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
