@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import ApiService from '../../services/api';
 import { Edit, Trash2, SquareEqual, Plus } from 'lucide-react';
 import TicketSystem from './TicketSystem';
+import DataPagination from './DataPagination';
+import SortColumn from './SortColumn';
 const Trip = ({
   buses,
   routes,
@@ -31,12 +33,28 @@ const Trip = ({
   const [showTicket, setShowTicket] = useState(true) 
   const [selectedTripId, setSelectedTripId] = useState(null);
   const [busCapacity, setBusCapacity] = useState(0)
+  const [search, setSearch] = useState("");
+  const [sortDescriptor, setSortDescriptor] = useState({
+    column: "bus_number",
+    direction: "ASC",
+  }); 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
   
   const getData = async () => {
+    const body = {
+      search : search,
+      limit: 1,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
     try {
-      const response = await ApiService.getTrip();
+      const response = await ApiService.getTrip(body);
       if (response?.success === true) {          
         setTrip(response?.data?.trips)
+        console.log("response",response);
+        setTotalPages(response?.data?.pagination?.totalPages)
       }
     } catch (err) {
     }
@@ -45,7 +63,7 @@ const Trip = ({
   useEffect(() => {
     getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [search,page,sortDescriptor])
 
   useEffect(() => {
     const getData = async () => {
@@ -155,7 +173,6 @@ const Trip = ({
         setTrip((prevTrips) => prevTrips.filter((trip) => trip.id !== obj.id));
       }
     } catch (error) {
-      console.error("Delete failed:", error);
     }
   };
 
@@ -167,9 +184,7 @@ const Trip = ({
     return date.toISOString().slice(0, 16);
   };
 
-  const handleEdit = (obj) => {
-    console.log("object",obj);
-    
+  const handleEdit = (obj) => {    
     setTripForm({
       bus_id: obj.bus_id,
       route_id: obj.route_id,
@@ -198,7 +213,32 @@ const Trip = ({
     })
     setIsPost(true)
   }
-  
+
+  const handleChange = (e) => {
+    setSearch(e.target.value); 
+  }
+  const handlePageChange = (page) => {
+    setPage(page); // Update the page state variable to the specified page number
+  };
+
+  const handleSorting = (column) => {
+    setSortDescriptor((prevDescriptor) => {
+      if (prevDescriptor.column === column) {
+        return {
+          ...prevDescriptor,
+          direction:
+            prevDescriptor.direction === "ASC"
+              ? "DESC"
+              : "ASC",
+        };
+      } else {
+        return {
+          column: column,
+          direction: "DESC",
+        };
+      }
+    });
+  };
   return (
     
     showTrip ?
@@ -360,19 +400,35 @@ const Trip = ({
             <div>
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-semibold ml-5">{t("trip")}</h3>
+
+<div className='flex'>
+                <form className="flex max-w-lg mx-auto mr-6">   
+                <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+                 onChange={handleChange}
+                />
+         
+                </form>
                 <button
                  onClick={() => setShowTrip(true)}
                  className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700 mr-5 mt-5"
                  >
               <Plus className="w-5 h-5" />
               <span>{t("addTrip")}</span>
-            </button>
+                </button>
+                </div>
+
           </div>
             <table className="w-full">           
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("Bus Number")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    onClick={() => handleSorting("bus_number")}
+                    >
+                      {("Bus Number")}
+                      <SortColumn
+                      sortDescriptor={sortDescriptor}
+                      name="bus_number"
+                      />
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {("Conductor Name")}
@@ -467,6 +523,13 @@ const Trip = ({
                 ))}
               </tbody>
               </table>
+              {conductors && conductors.length > 0 && (
+                <DataPagination
+                  onPageChange={handlePageChange}
+                  totalPages={totalPages}
+                  currentPage={page}
+                />
+              )}
               </div>
           ) : (
               <div>

@@ -92,7 +92,7 @@ const BusManagementPage = (
           <h3 className="text-xl font-semibold">{t("busManagement")}</h3>
 
           <div className='flex'>
-    <form class="flex max-w-lg mx-auto mr-6">   
+            <form class="flex max-w-lg mx-auto mr-6">   
               <input type="text" id="voice-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
                onChange={handleChange}
               />
@@ -138,7 +138,10 @@ const BusManagementPage = (
                       onClick={() => handleSorting("PositionName")}
                     >
                       {t("busNumber")}
-                    {/* <SortColumn/> */}
+                      <SortColumn
+                       sortDescriptor={sortDescriptor}
+                        name="PositionName"
+                      />
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {t("route")}
@@ -238,8 +241,8 @@ const BusManagementPage = (
     ))
   ) : (
     <tr>
-      <td colSpan={9} className="py-10 text-center text-gray-500 italic">
-        {t("noDataFound")}
+      <td colSpan={9} className="py-10 text-center text-gray-500">
+        {t("No Data Found")}
       </td>
     </tr>
   )}

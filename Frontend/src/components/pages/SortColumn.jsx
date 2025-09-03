@@ -1,22 +1,22 @@
 import React from "react";
-import { ArrowDownIcon, ArrowUpIcon, ArrowsUpDownIcon } from "@heroicons/react/24/solid";
+import {ArrowUp,ArrowDown} from 'lucide-react';
 
 const SORTDIRECTION = {
-  ASC: "asc",
-  DESC: "desc",
+  ASC: "ASC",
+  DESC: "DESC",
 };
 
-function SortColumn({ sortDescriptor, name }) {
+function SortColumn({ sortDescriptor, name }) {  
   return (
-    <div className="inline-flex items-center space-x-1">
+    <div className="inline-flex items-center space-x-1 -mt-[4px] ml-1">
       {sortDescriptor?.column === name ? (
         sortDescriptor.direction === SORTDIRECTION.DESC ? (
-          <ArrowDownIcon className="w-4 h-4 text-gray-700" />
+          <ArrowDown className="w-4 h-4 text-gray-700" />
         ) : (
-          <ArrowUpIcon className="w-4 h-4 text-gray-700" />
+          <ArrowUp className="w-4 h-4 text-gray-700" />
         )
       ) : (
-        <ArrowsUpDownIcon className="w-4 h-4 text-gray-400" />
+        <ArrowUp className="w-4 h-4 text-gray-700" />
       )}
     </div>
   );

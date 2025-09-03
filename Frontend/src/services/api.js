@@ -374,11 +374,11 @@ const ApiService = {
     }
   },
 
-  getConductor: async () => {
+  getConductor: async (body) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/conductor`, {
+      const response = await axios.post(`${API_URL}/conductor/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -656,21 +656,17 @@ const ApiService = {
     }
   },
 
-  getTrip: async () => {
+  getTrip: async (body) => {
     try {
       const token = localStorage.getItem("token");
 
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.post(
-        `${API_URL}/trip/allTrips`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json", // optional but recommended
-          },
-        }
-      );
+      const response = await axios.post(`${API_URL}/trip/allTrips`, body, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
 
       return {
         success: true,
