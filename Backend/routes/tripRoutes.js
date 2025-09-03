@@ -62,7 +62,7 @@ router.post("/", authenticateToken, tripController.createTrip);
 
 /**
 * @swagger
-* /api/trip/allTrips:
+* /api/trip/list:
 *   post:
 *     summary: Get all Trips with filters and pagination
 *     tags: [Trip]
@@ -147,7 +147,7 @@ router.post("/", authenticateToken, tripController.createTrip);
 *                     limit:
 *                       type: integer
 */
-router.post("/allTrips", authenticateToken, tripController.getAllTrips);
+router.post("/list", authenticateToken, tripController.getAllTrips);
 
 /**
  * @swagger

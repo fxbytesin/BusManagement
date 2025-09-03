@@ -92,7 +92,6 @@ const conductorController=require("../controllers/conductorController");
  *       500:
  *         description: Internal server error
  */
-
 router.post('/list', authenticateToken, conductorController.getAllConductor);
 
 /**
@@ -203,6 +202,5 @@ router.put('/:id', authenticateToken, conductorController.updateConductor );
  *         description: Conductor not found
  */
 router.delete('/:id', authenticateToken, conductorController.deleteConductor);
-
 
 module.exports = router;
