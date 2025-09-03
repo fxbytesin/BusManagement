@@ -60,6 +60,7 @@ const TicketSystem = (
     if (response?.success) {
       alert("Ticket Created Successfully")     
       getTrip()
+      getBookTrips()
     }
     setShowModal(false)
     setTicketForm({
@@ -96,15 +97,15 @@ const TicketSystem = (
     }
   }
 
-
-  useEffect(() => {
-    const getData = async () => {
+     const getData = async () => {
       try {
         const response = await ApiService.getBus();      
         setBuses(response?.data)
       } catch (err) {
       }
     }
+
+  useEffect(() => {
     const getMachineData = async () => {
       try {
         const response = await ApiService.getPos();      
@@ -291,6 +292,10 @@ const TicketSystem = (
     }
     className="w-full p-2 border rounded-md"
   >
+    <option value="" disabled>
+      Select Seat Number
+    </option>
+
     {Array.from({ length: busCapacity }, (_, i) => i + 1).map((seat) => (
       <option key={seat} value={seat} disabled={bookedTicket.includes(seat)}>
         {seat} {bookedTicket.includes(seat) ? " (Booked)" : ""}
@@ -298,6 +303,7 @@ const TicketSystem = (
     ))}
   </select>
 </div>
+
 
 
   

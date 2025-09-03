@@ -2,6 +2,7 @@ import { Bus, Edit, Plus, Trash2,Loader, } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ApiService from '../../services/api';
 import TicketView from './TicketView';
+import SortColumn from './SortColumn';
 
  // Bus Management Page
 const BusManagementPage = (
@@ -24,6 +25,11 @@ const BusManagementPage = (
   const [showComponent, setShowComponent] = useState(true)
   const [busId, setBusId] = useState(0)
   const [loading, setLoading] = useState(true); 
+  const [search, setSearch] = useState("");
+  const [sortDescriptor, setSortDescriptor] = useState({
+    column: "PositionName",
+    direction: "ASC",
+  }); // Sorting descriptor state
 
   useEffect(() => {
     const getData = async () => {
@@ -55,11 +61,43 @@ const BusManagementPage = (
     setBusId(id)
     setShowComponent(false)
   }
+
+  const handleChange = (e) => {
+    setSearch(e.target.value); 
+  }
+
+  const handleSorting = (column) => {
+    setSortDescriptor((prevDescriptor) => {
+      if (prevDescriptor.column === column) {
+        return {
+          ...prevDescriptor,
+          direction:
+            prevDescriptor.direction === "ASC"
+              ? "DESC"
+              : "ASC",
+        };
+      } else {
+        return {
+          column: column,
+          direction: "DESC",
+        };
+      }
+    });
+  };
+  
   return (
       showComponent ? (
-        <div className="p-6">
+      <div className="p-6">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold">{t("busManagement")}</h3>
+
+          <div className='flex'>
+    <form class="flex max-w-lg mx-auto mr-6">   
+              <input type="text" id="voice-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+               onChange={handleChange}
+              />
+       
+          </form>
           <button
             onClick={() => {
               setModalType("add-bus");
@@ -70,6 +108,7 @@ const BusManagementPage = (
             <Plus className="w-5 h-5" />
             <span>{t("addNewBus")}</span>
           </button>
+          </div>
         </div>
     
         {buses?.length === 0 ? (
@@ -94,8 +133,12 @@ const BusManagementPage = (
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("busNumber")}
+                    <th
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      onClick={() => handleSorting("PositionName")}
+                    >
+                      {t("busNumber")}
+                    {/* <SortColumn/> */}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {t("route")}

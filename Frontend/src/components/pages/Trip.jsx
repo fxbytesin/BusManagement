@@ -30,17 +30,19 @@ const Trip = ({
   const [editId, setEditId] = useState(0)
   const [showTicket, setShowTicket] = useState(true) 
   const [selectedTripId, setSelectedTripId] = useState(null);
-  const [busCapacity,setBusCapacity] = useState(0)
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await ApiService.getTrip();
-        if (response?.success === true) {          
-          setTrip(response?.data?.trips)
-        }
-      } catch (err) {
+  const [busCapacity, setBusCapacity] = useState(0)
+  
+  const getData = async () => {
+    try {
+      const response = await ApiService.getTrip();
+      if (response?.success === true) {          
+        setTrip(response?.data?.trips)
       }
+    } catch (err) {
     }
+  }
+
+  useEffect(() => {
     getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -103,8 +105,7 @@ const Trip = ({
       };
       const response = await ApiService.createTrip(payload)
       if (response?.data) {
-        const response = await ApiService.getTrip();
-        setTrip(response.data);
+        getData()
         alert("Trip saved successfully");
       }
 
@@ -125,8 +126,7 @@ const Trip = ({
       const response = await ApiService.updateTrip(payload, editId);
       if (response?.success === true) {
         alert("Trip Updated successfully ");
-        const response = await ApiService.getTrip();
-        setTrip(response.data);
+        getData()
       }
       else {
         alert("Trip Updated Fail ");
@@ -168,11 +168,13 @@ const Trip = ({
   };
 
   const handleEdit = (obj) => {
+    console.log("object",obj);
+    
     setTripForm({
-      bus_id: obj.bus.id,
-      route_id: obj.route.id,
-      driver_id: obj.driver.id,
-      conductor_id: obj.conductor.id,
+      bus_id: obj.bus_id,
+      route_id: obj.route_id,
+      driver_id: obj.driver_id,
+      conductor_id: obj.conductor_id,
       status: obj.status,
       start_time: formatDateTimeLocal(obj.start_time),
       end_time: formatDateTimeLocal(obj.end_time),
