@@ -12,43 +12,40 @@ const busController=require('../controllers/busController')
 
 /**
  * @swagger
- * /api/bus:
- *   get:
+ * /api/bus/list:
+ *   post:
  *     summary: Get all buses with search, pagination, and sorting
  *     tags: [Bus]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: search
- *         schema:
- *           type: string
- *         description: Search by bus number, route name/code, driver or conductor name
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Number of results per page
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           default: 1
- *         description: Page number
- *       - in: query
- *         name: order
- *         schema:
- *           type: string
- *           enum: [ASC, DESC]
- *           default: ASC
- *         description: Sort order
- *       - in: query
- *         name: orderColumn
- *         schema:
- *           type: string
- *           default: created_at
- *         description: Column to sort by
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               search:
+ *                 type: string
+ *                 description: Search by bus number, route name/code, driver or conductor name
+ *                 example: "BUS101"
+ *               limit:
+ *                 type: integer
+ *                 default: 10
+ *                 description: Number of results per page
+ *               page:
+ *                 type: integer
+ *                 default: 1
+ *                 description: Page number
+ *               order:
+ *                 type: string
+ *                 enum: [ASC, DESC]
+ *                 default: ASC
+ *                 description: Sort order
+ *               orderColumn:
+ *                 type: string
+ *                 default: created_at
+ *                 description: Column to sort by
  *     responses:
  *       200:
  *         description: List of buses with related info and pagination
@@ -95,8 +92,7 @@ const busController=require('../controllers/busController')
  *       500:
  *         description: Internal server error
  */
-
-router.post('/', authenticateToken, busController.getAllBuses);
+router.post('/list', authenticateToken, busController.getAllBuses);
 
 /**
  * @swagger

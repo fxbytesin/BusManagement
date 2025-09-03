@@ -12,8 +12,8 @@ const driverController=require('../controllers/driverController')
 
 /**
  * @swagger
- * /api/drivers:
- *   get:
+ * /api/drivers/list:
+ *   post:
  *     summary: Get all drivers for the authenticated user
  *     tags: [Driver]
  *     security:
@@ -50,7 +50,7 @@ const driverController=require('../controllers/driverController')
  */
 
 /* Get all drivers */
-router.post('/', authenticateToken, driverController.getAllDriver);
+router.post('/list', authenticateToken, driverController.getAllDriver);
 
 
 /**
