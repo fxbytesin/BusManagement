@@ -23,15 +23,75 @@ exports.createPOSMachine = async (req, res) => {
 };
 
 // Get all POS machines
+
 exports.getAllPOSMachines = async (req, res) => {
   try {
-    const posMachines = await prisma.pOSMachine.findMany({ include: { bus: true } });
-    res.json(posMachines);
+    const {
+      search = "",
+      limit = 10,
+      page = 1,
+      order = "ASC",
+      orderColumn = "created_at"
+    } = req.body;
+
+    const take = Number(limit);
+    const skip = (Number(page) - 1) * take;
+
+    // ✅ Ensure valid sort order
+    const sortOrder = order && order.toUpperCase() === "DESC" ? "desc" : "asc";
+
+    // ✅ Allow only safe columns (update based on your actual schema)
+    const validColumns = ["created_at", "serial_number", "status"];
+    const sortColumn = validColumns.includes(orderColumn) ? orderColumn : "created_at";
+
+    // ✅ Build where condition
+    const whereCondition = {
+      ...(search
+        ? {
+            OR: [
+              { serial_no: { contains: search } },
+
+            ]
+          }
+        : {})
+    };
+
+    console.log("whereCondition:", JSON.stringify(whereCondition, null, 2));
+
+    const posMachines = await prisma.pOSMachine.findMany({
+      where: whereCondition,
+      include: {
+        bus: { select: { bus_number: true, id: true } }
+      },
+      orderBy: { [sortColumn]: sortOrder },
+      skip,
+      take
+    });
+
+    const totalCount = await prisma.pOSMachine.count({ where: whereCondition });
+
+    // ✅ If search provided but no results
+    if (search && totalCount === 0) {
+      return res.status(404).json({
+        error: `No POS machines found matching "${search}"`
+      });
+    }
+
+    res.json({
+      data: posMachines,
+      pagination: {
+        total: totalCount,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(totalCount / take)
+      }
+    });
   } catch (error) {
     console.error("Error fetching POS machines:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 // Get POS machine by ID
 exports.getPOSMachineById = async (req, res) => {

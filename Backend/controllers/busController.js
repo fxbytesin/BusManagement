@@ -1,47 +1,6 @@
 const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
-// exports.getAllBuses=async (req, res) => {
-//   try {
-//     const buses = await prisma.bus.findMany({
-//       where: { user_id: req.user.id },
-//       include: {
-//         route: {
-//           select: {
-//             name: true,
-//             code: true
-//           }
-//         },
-//         driver: {
-//           select: {
-//             name: true
-//           }
-//         },
-//         conductor: {
-//           select: {
-//             name: true
-//           }
-//         }
-//       },
-//       orderBy: { created_at: 'desc' }
-//     });
-
-//     // Format the response to match the original structure
-//     const formattedBuses = buses.map(bus => ({
-//       ...bus,
-//       route_name: bus.route?.name || null,
-//       route_code: bus.route?.code || null,
-//       driver_name: bus.driver?.name || null,
-//       conductor_name: bus.conductor?.name || null
-//     }));
-
-//     res.json(formattedBuses);
-//   } catch (error) {
-//     console.error('Error fetching buses:', error);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// }
-
 exports.getAllBuses = async (req, res) => {
   try {
     // Get query/body parameters (depends on whether you are sending them in body or query)
