@@ -92,11 +92,11 @@ const ApiService = {
     }
   },
 
-  getRoutes: async () => {
+  getRoutes: async (body) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/routes`, {
+      const response = await axios.post(`${API_URL}/routes/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -279,11 +279,11 @@ const ApiService = {
       };
     }
   },
-  getDriver: async () => {
+  getDriver: async (body) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/drivers`, {
+      const response = await axios.post(`${API_URL}/drivers/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
