@@ -19,38 +19,34 @@ const routeController=require('../controllers/routeController')
  *     tags: [Route]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: search
- *         schema:
- *           type: string
- *         description: Search by route name or code
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Number of results per page
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           default: 1
- *         description: Page number
- *       - in: query
- *         name: order
- *         schema:
- *           type: string
- *           enum: [ASC, DESC]
- *           default: ASC
- *         description: Sort order
- *       - in: query
- *         name: orderColumn
- *         schema:
- *           type: string
- *           enum: [created_at, name, code]
- *           default: created_at
- *         description: Column to sort by
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               search:
+ *                 type: string
+ *                 description: Search by route name or code
+ *               limit:
+ *                 type: integer
+ *                 default: 10
+ *                 description: Number of results per page
+ *               page:
+ *                 type: integer
+ *                 default: 1
+ *                 description: Page number
+ *               order:
+ *                 type: string
+ *                 enum: [ASC, DESC]
+ *                 default: ASC
+ *                 description: Sort order
+ *               orderColumn:
+ *                 type: string
+ *                 enum: [created_at, name, code]
+ *                 default: created_at
+ *                 description: Column to sort by
  *     responses:
  *       200:
  *         description: List of routes with pagination
@@ -90,6 +86,7 @@ const routeController=require('../controllers/routeController')
  *         description: Internal server error
  */
 router.post('/list', authenticateToken, routeController.getAllRoutes);
+
 
 /**
  * @swagger

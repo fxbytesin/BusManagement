@@ -222,7 +222,7 @@ exports.updateUser = async (req, res) => {
 };
 
 
-// Delete user (driver or conductor)
+// Delete user 
 exports.deleteUser = async (req, res) => {
   try {
     const userId = parseInt(req.params.id);

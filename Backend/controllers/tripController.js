@@ -130,20 +130,22 @@ exports.createTrip = async (req, res) => {
     const route = await prisma.route.findUnique({ where: { id: route_id } });
     if (!route) return res.status(404).json({ error: "Route not found" });
 
-    if (driver_id) {
-      const driver = await prisma.driver.findUnique({
-        where: { id: driver_id },
-      });
-      if (!driver) return res.status(404).json({ error: "Driver not found" });
-    }
+ if (driver_id) {
+  const driver = await prisma.user.findFirst({
+    where: { id: driver_id, role: 'driver' },
+  });
+  if (!driver)
+    return res.status(404).json({ error: 'Driver not found' });
+}
 
-    if (conductor_id) {
-      const conductor = await prisma.conductor.findUnique({
-        where: { id: conductor_id },
-      });
-      if (!conductor)
-        return res.status(404).json({ error: "Conductor not found" });
-    }
+if (conductor_id) {
+  const conductor = await prisma.user.findFirst({
+    where: { id: conductor_id, role: 'conductor' },
+  });
+  if (!conductor)
+    return res.status(404).json({ error: 'Conductor not found' });
+}
+
 
     // Check overlapping trips for bus
     const start = new Date(start_time);
@@ -301,14 +303,14 @@ exports.updateTrip = async (req, res) => {
       if (!route) return res.status(404).json({ error: "Route not found" });
     }
     if (driver_id) {
-      const driver = await prisma.driver.findUnique({
-        where: { id: driver_id },
+      const driver = await prisma.user.findFirst({
+        where: { id: driver_id, role: 'driver' },
       });
       if (!driver) return res.status(404).json({ error: "Driver not found" });
     }
     if (conductor_id) {
-      const conductor = await prisma.conductor.findUnique({
-        where: { id: conductor_id },
+      const conductor = await prisma.user.findFirst({
+        where: { id: conductor_id, role: 'conductor' },
       });
       if (!conductor)
         return res.status(404).json({ error: "Conductor not found" });
@@ -317,21 +319,15 @@ exports.updateTrip = async (req, res) => {
     const start = start_time ? new Date(start_time) : null;
     const end = end_time ? new Date(end_time) : null;
 
-    // Get existing trip before update to compare
-    const existingTrip = await prisma.trip.findUnique({
-      where: { id: tripId },
-    });
+    const existingTrip = await prisma.trip.findUnique({ where: { id: tripId } });
     if (!existingTrip) return res.status(404).json({ error: "Trip not found" });
 
     const busToCheck = bus_id || existingTrip.bus_id;
-    const driverToCheck =
-      driver_id !== undefined ? driver_id : existingTrip.driver_id;
-    const conductorToCheck =
-      conductor_id !== undefined ? conductor_id : existingTrip.conductor_id;
+    const driverToCheck = driver_id !== undefined ? driver_id : existingTrip.driver_id;
+    const conductorToCheck = conductor_id !== undefined ? conductor_id : existingTrip.conductor_id;
     const startToCheck = start || existingTrip.start_time;
     const endToCheck = end !== null ? end : existingTrip.end_time;
 
-    // Function to check overlap excluding current trip
     async function hasOverlap(entityField, entityId) {
       if (!entityId) return false;
       const overlapping = await prisma.trip.findFirst({
@@ -339,9 +335,7 @@ exports.updateTrip = async (req, res) => {
           status: { notIn: ["COMPLETED", "CANCELLED"] },
           AND: [
             { [entityField]: entityId },
-            {
-              id: { not: tripId }, // exclude current updating trip
-            },
+            { id: { not: tripId } },
             endToCheck
               ? {
                   OR: [
@@ -371,18 +365,15 @@ exports.updateTrip = async (req, res) => {
     }
     if (await hasOverlap("driver_id", driverToCheck)) {
       return res.status(400).json({
-        error:
-          "Driver already assigned to an overlapping trip during this time",
+        error: "Driver already assigned to an overlapping trip during this time",
       });
     }
     if (await hasOverlap("conductor_id", conductorToCheck)) {
       return res.status(400).json({
-        error:
-          "Conductor already assigned to an overlapping trip during this time",
+        error: "Conductor already assigned to an overlapping trip during this time",
       });
     }
 
-    // Proceed with update
     const updatedTrip = await prisma.trip.update({
       where: { id: tripId },
       data: {
@@ -406,6 +397,7 @@ exports.updateTrip = async (req, res) => {
     }
   }
 };
+
 
 exports.deleteTrip = async (req, res) => {
   try {
