@@ -89,8 +89,24 @@ const busController=require('../controllers/busController')
  *                       type: integer
  *                     totalPages:
  *                       type: integer
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  */
 router.post('/list', authenticateToken, busController.getAllBuses);
 
