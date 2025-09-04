@@ -27,7 +27,7 @@ const RouteManagement = (
   const getData = async () => {
     const body = {
       search : search,
-      limit: 1,
+      limit: 4,
       page: page,
       order: sortDescriptor.direction,
       orderColumn : sortDescriptor.column

@@ -44,15 +44,15 @@ const Trip = ({
   const getData = async () => {
     const body = {
       search : search,
-      limit: 1,
+      limit: 10,
       page: page,
       order: sortDescriptor.direction,
       orderColumn : sortDescriptor.column
     }
     try {
       const response = await ApiService.getTrip(body);
-      if (response?.success === true) {          
-        setTrip(response?.data?.trips)
+      if (response?.success === true) {                 
+        setTrip(response?.data?.data)
         setTotalPages(response?.data?.pagination?.totalPages)
       }
     } catch (err) {
@@ -68,7 +68,7 @@ const Trip = ({
   const getBusData = async () => {
     const body = {
       search : search,
-      limit: 1,
+      limit: 10,
       page: page,
       order: sortDescriptor.direction,
       orderColumn : sortDescriptor.column
@@ -89,7 +89,7 @@ const Trip = ({
   const getRoutesData = async () => {
     const body = {
       search : search,
-      limit: 1,
+      limit: 10,
       page: page,
       order: sortDescriptor.direction,
       orderColumn : sortDescriptor.column
@@ -109,7 +109,7 @@ const Trip = ({
   const getDriverData = async () => {
     const body = {
       search : search,
-      limit: 1,
+      limit: 10,
       page: page,
       order: sortDescriptor.direction,
       orderColumn : sortDescriptor.column
@@ -128,7 +128,7 @@ const Trip = ({
   const getConductorData = async () => {
     const body = {
       search : search,
-      limit: 1,
+      limit: 10,
       page: page,
       order: sortDescriptor.direction,
       orderColumn : sortDescriptor.column

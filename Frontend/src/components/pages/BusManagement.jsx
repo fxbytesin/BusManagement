@@ -40,7 +40,7 @@ const BusManagementPage = (
   const getBusData = async () => {
     const body = {
       search : search,
-      limit: 1,
+      limit: 10,
       page: page,
       order: sortDescriptor.direction,
       orderColumn : sortDescriptor.column
@@ -63,7 +63,7 @@ const BusManagementPage = (
   const getRoutesData = async () => {
     const body = {
       search : search,
-      limit: 1,
+      limit: 10,
       page: page,
       order: sortDescriptor.direction,
       orderColumn : sortDescriptor.column
@@ -84,7 +84,7 @@ const BusManagementPage = (
   const getDriverData = async () => {
     const body = {
       search : search,
-      limit: 1,
+      limit: 10,
       page: page,
       order: sortDescriptor.direction,
       orderColumn : sortDescriptor.column
@@ -105,7 +105,7 @@ const BusManagementPage = (
   const getConductorData = async () => {
     const body = {
       search : search,
-      limit: 1,
+      limit: 10,
       page: page,
       order: sortDescriptor.direction,
       orderColumn : sortDescriptor.column

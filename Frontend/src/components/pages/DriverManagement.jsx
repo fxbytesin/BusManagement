@@ -28,7 +28,7 @@ const DriverManagement = ({
     try {
       const body = {
         search : search,
-        limit: 1,
+        limit: 10,
         page: page,
         order: sortDescriptor.direction,
         orderColumn : sortDescriptor.column
