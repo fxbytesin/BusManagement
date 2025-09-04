@@ -1,75 +1,60 @@
 const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
+
 exports.getAllTrips = async (req, res) => {
   try {
     const {
-      search = '',
+      search = "",
       limit = 10,
       page = 1,
-      order = 'desc',
-      orderColumn = 'start_time'
-    } = req.query;
- 
-    const pageInt = parseInt(page);
-    const limitInt = parseInt(limit);
-    const skip = (pageInt - 1) * limitInt;
- 
-    // Build search filter (extended for joins)
-    const whereClause = search
-      ? {
-          OR: [
-            { destination: { contains: search, mode: 'insensitive' } },
-            { description: { contains: search, mode: 'insensitive' } },
-            { route: { name: { contains: search, mode: 'insensitive' } } },
-            { bus: { bus_number: { contains: search, mode: 'insensitive' } } },
-            { driver: { name: { contains: search, mode: 'insensitive' } } },
-            { conductor: { name: { contains: search, mode: 'insensitive' } } }
-          ]
-        }
-      : {};
- 
-    const allowedColumns = [
-      'start_time',
-      'end_time',
-      'destination',
-      'created_at'
-    ];
-    const validOrderColumn = allowedColumns.includes(orderColumn)
-      ? orderColumn
-      : 'start_time';
-    const validOrder = order.toLowerCase() === 'asc' ? 'asc' : 'desc';
- 
-    // Fetch trips with related data
-    const [tripsRaw, totalCount] = await Promise.all([
-      prisma.trip.findMany({
-        where: whereClause,
-        orderBy: { [validOrderColumn]: validOrder },
-        skip: skip,
-        take: limitInt,
-        include: {
-          bus: {
-            select: {
-              id: true,
-              bus_number: true,
-              capacity: true
-            }
-          },
-          route: {
-            select: { id: true, name: true }
-          },
-          driver: {
-            select: { id: true, name: true }
-          },
-          conductor: {
-            select: { id: true, name: true }
+      order = "DESC",
+      orderColumn = "start_time"
+    } = req.body; // ✅ same as getAllRoutes
+
+    const take = Number(limit);
+    const skip = (Number(page) - 1) * take;
+
+    // ✅ Ensure valid sort order
+    const sortOrder = order && order.toUpperCase() === "ASC" ? "asc" : "desc";
+
+    // ✅ Allow only safe columns
+    const validColumns = ["start_time", "end_time", "destination", "created_at"];
+    const sortColumn = validColumns.includes(orderColumn) ? orderColumn : "start_time";
+
+    // ✅ Build search filter
+    const whereCondition = {
+      ...(search
+        ? {
+            OR: [
+              { route: { is: { name: { contains: search } } } },
+              { bus: { is: { bus_number: { contains: search } } } },
+              { driver: { is: { name: { contains: search } } } },
+              { conductor: { is: { name: { contains: search } } } }
+            ]
           }
-        }
-      }),
-      prisma.trip.count({ where: whereClause })
-    ]);
- 
-    // Flatten response (snake_case keys)
+        : {})
+    };
+
+    console.log("whereCondition:", JSON.stringify(whereCondition, null, 2));
+
+    // ✅ Fetch trips
+    const tripsRaw = await prisma.trip.findMany({
+      where: whereCondition,
+      orderBy: { [sortColumn]: sortOrder },
+      skip,
+      take,
+      include: {
+        bus: { select: { id: true, bus_number: true, capacity: true } },
+        route: { select: { id: true, name: true } },
+        driver: { select: { id: true, name: true } },
+        conductor: { select: { id: true, name: true } }
+      }
+    });
+
+    const totalCount = await prisma.trip.count({ where: whereCondition });
+
+    // ✅ Flatten response
     const trips = tripsRaw.map(trip => ({
       id: trip.id,
       start_time: trip.start_time,
@@ -87,27 +72,23 @@ exports.getAllTrips = async (req, res) => {
       driver_name: trip.driver?.name || null,
       conductor_name: trip.conductor?.name || null
     }));
- 
-    const totalPages = Math.ceil(totalCount / limitInt);
-    const hasNextPage = pageInt < totalPages;
-    const hasPrevPage = pageInt > 1;
- 
+
     res.json({
-      trips,
+      data: trips,
       pagination: {
-        current_page: pageInt,
-        total_pages: totalPages,
-        total_count: totalCount,
-        has_next_page: hasNextPage,
-        has_prev_page: hasPrevPage,
-        limit: limitInt
+        total: totalCount,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(totalCount / take)
       }
     });
   } catch (error) {
-    console.error('Error fetching trips:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching trips:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
 exports.getTripById = async (req, res) => {
   try {
     const tripId = parseInt(req.params.id);
@@ -426,3 +407,4 @@ exports.updateTripStatus = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
