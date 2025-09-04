@@ -157,7 +157,10 @@ export const messages = {
     addPOSMachine: "पीओएस मशीन जोड़ें",
 
     // parcel
-    parcel: "पार्सल"
+    parcel: "पार्सल",
+
+    // createTicket
+    createTicket: "टिकट बनाएँ"
   },
 
 
@@ -316,7 +319,10 @@ export const messages = {
     addPOSMachine: "Add POS Machine",
 
     // parcel
-    parcel: "Parcel"
+    parcel: "Parcel",
+
+    // createTicket
+    createTicket: "Create Ticket"
   },
 
 };

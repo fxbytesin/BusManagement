@@ -495,7 +495,7 @@ const ApiService = {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/dashboard/trips-completed`, {
+      const response = await axios.get(`${API_URL}/dashboard/analytics`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
