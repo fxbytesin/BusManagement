@@ -220,29 +220,82 @@ const BusManagementPage = (
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("bus_number")}
                     >
+                      <div className='flex'>
                       {t("busNumber")}
-                      <SortColumn
-                       sortDescriptor={sortDescriptor}
+                        <SortColumn
+                        sortDescriptor={sortDescriptor}
                         name="bus_number"
                       />
+                      </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("route")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    onClick={() => handleSorting("route_id")}
+                    >                      
+                      <div className='flex'>
+                      {t("route")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="route_id"
+                        />
+                      </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("driver")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                     onClick={() => handleSorting("driver_id")}
+                    >
+                      <div className='flex'>
+                      {t("driver")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="driver_id"
+                        />
+                      </div>
+
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("conductor")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    onClick={() => handleSorting("conductor_id")}
+                    >                      
+                      <div className='flex'>
+                      {t("conductor")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="conductor_id"
+                        />
+                      </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("capacity")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                     onClick={() => handleSorting("capacity")}
+                    >
+                      <div className='flex'>
+                      {t("capacity")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="capacity"
+                        />
+                      </div>
+
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("status")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                     onClick={() => handleSorting("status")}
+                    >
+                      <div className='flex'>
+                      {t("status")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="status"
+                        />
+                      </div>
+
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("current location")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      onClick={() => handleSorting("current_location")}
+                    >
+                      <div className='flex'>
+                      {t("current location")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="current_location"
+                        />
+                      </div>
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {t("Ticket View")}
@@ -268,14 +321,13 @@ const BusManagementPage = (
           {bus.bus_number}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          {routes.find((r) => r.id === bus.route_id)?.name || t("notAssigned")}
+          {bus.route_name}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          {drivers.find((d) => d.id === bus.driver_id)?.name || t("notAssigned")}
+          {bus.driver_name}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          {conductors.find((c) => c.id === bus.conductor_id)?.name ||
-            t("notAssigned")}
+        {bus.conductor_name}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">{bus.capacity}</td>
         <td className="px-6 py-4 whitespace-nowrap">

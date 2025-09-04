@@ -8,7 +8,7 @@ const SORTDIRECTION = {
 
 function SortColumn({ sortDescriptor, name }) {  
   return (
-    <div className="inline-flex items-center space-x-1 -mt-[4px] ml-1">
+    <div className="inline-flex items-center space-x-1 -mt-[4px] ml-1 cursor-pointer">
       {sortDescriptor?.column === name ? (
         sortDescriptor.direction === SORTDIRECTION.DESC ? (
           <ArrowDown className="w-4 h-4 text-gray-700" />

@@ -54,12 +54,12 @@ const LiveTracking = (
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("totalPassengers")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("todayIncome")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("packages")}
-              </th>
+              </th> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("status")}
               </th>
@@ -85,13 +85,13 @@ const LiveTracking = (
                       <td className="px-6 py-4 whitespace-nowrap">
                         {tracking?.today_passengers}/{tracking?.capacity}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      {/* <td className="px-6 py-4 whitespace-nowrap">
                         {t("rupees")}
                         {tracking?.today_revenue || 0}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {tracking?.today_packages || 0}
-                      </td>
+                      </td> */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-2 py-1 rounded-full text-xs ${tracking?.status === "running"

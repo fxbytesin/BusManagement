@@ -127,7 +127,7 @@ const DriverManagement = ({
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   onClick={() => handleSorting("name")}
                   >
-                    <div>
+                    <div className='flex'>
                     {t("name")}
                     <SortColumn
                         sortDescriptor={sortDescriptor}
@@ -135,14 +135,40 @@ const DriverManagement = ({
                         />
                     </div>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {t("phone")}
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    onClick={() => handleSorting("phone")}
+                  >
+
+                    <div className='flex'>
+                    {t("phone")}
+                    <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="phone"
+                        />
+                    </div>
+
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {t("license")}
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    onClick={() => handleSorting("license_number")}
+                  > 
+                    <div className='flex'>
+                    {t("license")}
+                    <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="license_number"
+                        />
+                    </div>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {t("experience")}
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  onClick={() => handleSorting("experience_years")}
+                  >
+                    <div className='flex'>
+                    {t("experience")}
+                    <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="experience_years"
+                        />
+                    </div>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {t("actions")}

@@ -486,23 +486,48 @@ useEffect(() => {
               <thead className="bg-gray-50">
                 <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("bus_number")}
+                    onClick={() => handleSorting("bus_id")}
                     >
                       {("Bus Number")}
                       <SortColumn
                       sortDescriptor={sortDescriptor}
-                      name="bus_number"
+                      name="bus_id"
                       />
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("Conductor Name")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    onClick={() => handleSorting("conductor_id")}
+                    >
+                      <div className='flex'>
+                      {("Conductor Name")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="conductor_id"
+                        />
+                        </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("Driver Name")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    onClick={() => handleSorting("driver_id")}
+                    >
+                      <div className='flex'>
+                      {("Driver Name")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="driver_id"
+                        />
+                        </div>
                   </th>
 
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("Route")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    onClick={() => handleSorting("route_id")}
+                    >  
+                      <div className='flex'>
+                      {("Route")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="route_id"
+                        />
+                      </div>
+                      
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {("Start Time")}
