@@ -21,8 +21,8 @@ model Bus {
   bus_number       String    @unique @db.VarChar(20)
   capacity         Int       @default(45)
   route_id         Int?
-  driver_id        Int?
-  conductor_id     Int?
+  driver_id        Int?      // references User table ID for driver
+  conductor_id     Int?      // references User table ID for conductor
   status           BusStatus @default(stopped)
   current_location String?   @db.VarChar(200)
   fuel_level       Decimal?  @db.Decimal(5, 2) @default(0)
@@ -33,58 +33,21 @@ model Bus {
   updated_at       DateTime  @updatedAt
 
   // Relations
-  user      User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  route     Route?     @relation(fields: [route_id], references: [id], onDelete: SetNull)
-  driver    Driver?    @relation(fields: [driver_id], references: [id], onDelete: SetNull)
-  conductor Conductor? @relation(fields: [conductor_id], references: [id], onDelete: SetNull)
+  user      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  route     Route?    @relation(fields: [route_id], references: [id], onDelete: SetNull)
+  driver    User?     @relation("BusDriver", fields: [driver_id], references: [id], onDelete: SetNull)
+  conductor User?     @relation("BusConductor", fields: [conductor_id], references: [id], onDelete: SetNull)
   tickets   Ticket[]
   packages  Package[]
   dailyReports DailyReport[]
-  posMachines    POSMachine[]  
-  trips Trip[]   
+  posMachines POSMachine[]  
+  trips     Trip[]
 }
 
 enum BusStatus {
   running
   stopped
   maintenance
-}
-
-model Conductor {
-  id                Int      @id @default(autoincrement())
-  user_id           Int
-  name              String   @db.VarChar(100)
-  phone             String   @db.VarChar(15)
-  experience_years  Int      @default(0)
-  address           String?  @db.Text
-  emergency_contact String?  @db.VarChar(15)
-  active            Boolean  @default(true)
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  buses Bus[]
-  trips Trip[]
-}
-
-model Driver {
-  id               Int      @id @default(autoincrement())
-  user_id          Int
-  name             String   @db.VarChar(100)
-  phone            String   @db.VarChar(15)
-  license_number   String   @db.VarChar(50)
-  license_expiry   DateTime?
-  experience_years Int      @default(0)
-  address          String?  @db.Text
-  emergency_contact String? @db.VarChar(15)
-  active           Boolean  @default(true)
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
-
-  // Relation to User model
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  buses Bus[]
-  trips Trip[]
 }
 
 model Package {
@@ -117,7 +80,6 @@ enum PackageStatus {
   delivered
   cancelled
 }
-
 model POSMachine {
   id          Int       @id @default(autoincrement())
   serial_no   String    @unique
@@ -154,7 +116,6 @@ model DailyReport {
 
   @@unique([bus_id, report_date], name: "unique_bus_date")
 }
-
 model Route {
   id          Int      @id @default(autoincrement())
   user_id     Int
@@ -172,7 +133,6 @@ model Route {
   buses Bus[]
   trips Trip[]
 }
-
 model Ticket {
   id              Int           @id @default(autoincrement())
   bus_id          Int
@@ -216,7 +176,6 @@ enum PaymentMode {
   cash
   online
 }
-
 model Trip {
   id            Int        @id @default(autoincrement())
   bus_id        Int
@@ -228,10 +187,13 @@ model Trip {
   conductor_id  Int?
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
+
   bus           Bus        @relation(fields: [bus_id], references: [id], onDelete: Cascade)
   route         Route      @relation(fields: [route_id], references: [id], onDelete: Cascade)
-  driver        Driver?    @relation(fields: [driver_id], references: [id], onDelete: SetNull)
-  conductor     Conductor? @relation(fields: [conductor_id], references: [id], onDelete: SetNull)
+
+  driver        User?      @relation("TripDriver", fields: [driver_id], references: [id], onDelete: SetNull)
+  conductor     User?      @relation("TripConductor", fields: [conductor_id], references: [id], onDelete: SetNull)
+
   tickets       Ticket[]
   packages      Package[]
 }
@@ -244,22 +206,48 @@ enum TripStatus {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   name         String
-  email        String?  @unique   // Optional for phone-based login
-  password     String?           // Optional if using OTP only
-  phone        String   @unique  // Required for OTP login
-  role         Role     @default(owner)
+  email        String?    @unique
+  password     String?
+  phone        String     @unique
+  role         Role       @default(owner)
   company_name String?
-  is_verified  Boolean  @default(false)
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  is_verified  Boolean    @default(false)
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
 
-  drivers      Driver[]
+  // Relation to UserExtra - foreign key on UserExtra only, so no fields/references here
+  userExtra    UserExtra?
+
+  // Relations for Bus and Trip driver/conductor
+  busesDriven    Bus[]    @relation("BusDriver")
+  busesConducted Bus[]    @relation("BusConductor")
+
+  tripsDriven    Trip[]   @relation("TripDriver")
+  tripsConducted Trip[]   @relation("TripConductor")
+
+  // Other relations
   routes       Route[]
-  conductors   Conductor[]
   buses        Bus[]
   otps         OTP[]
+}
+
+model UserExtra {
+  id                Int       @id @default(autoincrement())
+  userId            Int       @unique
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name              String?   @db.VarChar(100)
+  license_number    String?   @db.VarChar(50)
+  license_expiry    DateTime?
+  experience_years  Int       @default(0)
+  address           String?   @db.Text
+  emergency_contact String?   @db.VarChar(15)
+  active            Boolean   @default(true)
+
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
 }
 
 model OTP {

@@ -19,16 +19,6 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Bus = $Result.DefaultSelection<Prisma.$BusPayload>
 /**
- * Model Conductor
- * 
- */
-export type Conductor = $Result.DefaultSelection<Prisma.$ConductorPayload>
-/**
- * Model Driver
- * 
- */
-export type Driver = $Result.DefaultSelection<Prisma.$DriverPayload>
-/**
  * Model Package
  * 
  */
@@ -63,6 +53,11 @@ export type Trip = $Result.DefaultSelection<Prisma.$TripPayload>
  * 
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model UserExtra
+ * 
+ */
+export type UserExtra = $Result.DefaultSelection<Prisma.$UserExtraPayload>
 /**
  * Model OTP
  * 
@@ -330,26 +325,6 @@ export class PrismaClient<
   get bus(): Prisma.BusDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.conductor`: Exposes CRUD operations for the **Conductor** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Conductors
-    * const conductors = await prisma.conductor.findMany()
-    * ```
-    */
-  get conductor(): Prisma.ConductorDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.driver`: Exposes CRUD operations for the **Driver** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Drivers
-    * const drivers = await prisma.driver.findMany()
-    * ```
-    */
-  get driver(): Prisma.DriverDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.package`: Exposes CRUD operations for the **Package** model.
     * Example usage:
     * ```ts
@@ -418,6 +393,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userExtra`: Exposes CRUD operations for the **UserExtra** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserExtras
+    * const userExtras = await prisma.userExtra.findMany()
+    * ```
+    */
+  get userExtra(): Prisma.UserExtraDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.oTP`: Exposes CRUD operations for the **OTP** model.
@@ -869,8 +854,6 @@ export namespace Prisma {
 
   export const ModelName: {
     Bus: 'Bus',
-    Conductor: 'Conductor',
-    Driver: 'Driver',
     Package: 'Package',
     POSMachine: 'POSMachine',
     DailyReport: 'DailyReport',
@@ -878,6 +861,7 @@ export namespace Prisma {
     Ticket: 'Ticket',
     Trip: 'Trip',
     User: 'User',
+    UserExtra: 'UserExtra',
     OTP: 'OTP'
   };
 
@@ -897,7 +881,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "bus" | "conductor" | "driver" | "package" | "pOSMachine" | "dailyReport" | "route" | "ticket" | "trip" | "user" | "oTP"
+      modelProps: "bus" | "package" | "pOSMachine" | "dailyReport" | "route" | "ticket" | "trip" | "user" | "userExtra" | "oTP"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -964,138 +948,6 @@ export namespace Prisma {
           count: {
             args: Prisma.BusCountArgs<ExtArgs>
             result: $Utils.Optional<BusCountAggregateOutputType> | number
-          }
-        }
-      }
-      Conductor: {
-        payload: Prisma.$ConductorPayload<ExtArgs>
-        fields: Prisma.ConductorFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ConductorFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ConductorPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ConductorFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ConductorPayload>
-          }
-          findFirst: {
-            args: Prisma.ConductorFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ConductorPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ConductorFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ConductorPayload>
-          }
-          findMany: {
-            args: Prisma.ConductorFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ConductorPayload>[]
-          }
-          create: {
-            args: Prisma.ConductorCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ConductorPayload>
-          }
-          createMany: {
-            args: Prisma.ConductorCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.ConductorDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ConductorPayload>
-          }
-          update: {
-            args: Prisma.ConductorUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ConductorPayload>
-          }
-          deleteMany: {
-            args: Prisma.ConductorDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ConductorUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.ConductorUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ConductorPayload>
-          }
-          aggregate: {
-            args: Prisma.ConductorAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateConductor>
-          }
-          groupBy: {
-            args: Prisma.ConductorGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ConductorGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ConductorCountArgs<ExtArgs>
-            result: $Utils.Optional<ConductorCountAggregateOutputType> | number
-          }
-        }
-      }
-      Driver: {
-        payload: Prisma.$DriverPayload<ExtArgs>
-        fields: Prisma.DriverFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.DriverFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DriverPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.DriverFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DriverPayload>
-          }
-          findFirst: {
-            args: Prisma.DriverFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DriverPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.DriverFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DriverPayload>
-          }
-          findMany: {
-            args: Prisma.DriverFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DriverPayload>[]
-          }
-          create: {
-            args: Prisma.DriverCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DriverPayload>
-          }
-          createMany: {
-            args: Prisma.DriverCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.DriverDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DriverPayload>
-          }
-          update: {
-            args: Prisma.DriverUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DriverPayload>
-          }
-          deleteMany: {
-            args: Prisma.DriverDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.DriverUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.DriverUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DriverPayload>
-          }
-          aggregate: {
-            args: Prisma.DriverAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateDriver>
-          }
-          groupBy: {
-            args: Prisma.DriverGroupByArgs<ExtArgs>
-            result: $Utils.Optional<DriverGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.DriverCountArgs<ExtArgs>
-            result: $Utils.Optional<DriverCountAggregateOutputType> | number
           }
         }
       }
@@ -1561,6 +1413,72 @@ export namespace Prisma {
           }
         }
       }
+      UserExtra: {
+        payload: Prisma.$UserExtraPayload<ExtArgs>
+        fields: Prisma.UserExtraFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserExtraFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExtraPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserExtraFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExtraPayload>
+          }
+          findFirst: {
+            args: Prisma.UserExtraFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExtraPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserExtraFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExtraPayload>
+          }
+          findMany: {
+            args: Prisma.UserExtraFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExtraPayload>[]
+          }
+          create: {
+            args: Prisma.UserExtraCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExtraPayload>
+          }
+          createMany: {
+            args: Prisma.UserExtraCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.UserExtraDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExtraPayload>
+          }
+          update: {
+            args: Prisma.UserExtraUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExtraPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserExtraDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserExtraUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.UserExtraUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExtraPayload>
+          }
+          aggregate: {
+            args: Prisma.UserExtraAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserExtra>
+          }
+          groupBy: {
+            args: Prisma.UserExtraGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserExtraGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserExtraCountArgs<ExtArgs>
+            result: $Utils.Optional<UserExtraCountAggregateOutputType> | number
+          }
+        }
+      }
       OTP: {
         payload: Prisma.$OTPPayload<ExtArgs>
         fields: Prisma.OTPFieldRefs
@@ -1720,8 +1638,6 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     bus?: BusOmit
-    conductor?: ConductorOmit
-    driver?: DriverOmit
     package?: PackageOmit
     pOSMachine?: POSMachineOmit
     dailyReport?: DailyReportOmit
@@ -1729,6 +1645,7 @@ export namespace Prisma {
     ticket?: TicketOmit
     trip?: TripOmit
     user?: UserOmit
+    userExtra?: UserExtraOmit
     oTP?: OTPOmit
   }
 
@@ -1892,86 +1809,6 @@ export namespace Prisma {
 
 
   /**
-   * Count Type ConductorCountOutputType
-   */
-
-  export type ConductorCountOutputType = {
-    buses: number
-    trips: number
-  }
-
-  export type ConductorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    buses?: boolean | ConductorCountOutputTypeCountBusesArgs
-    trips?: boolean | ConductorCountOutputTypeCountTripsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * ConductorCountOutputType without action
-   */
-  export type ConductorCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ConductorCountOutputType
-     */
-    select?: ConductorCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * ConductorCountOutputType without action
-   */
-  export type ConductorCountOutputTypeCountBusesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: BusWhereInput
-  }
-
-  /**
-   * ConductorCountOutputType without action
-   */
-  export type ConductorCountOutputTypeCountTripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TripWhereInput
-  }
-
-
-  /**
-   * Count Type DriverCountOutputType
-   */
-
-  export type DriverCountOutputType = {
-    buses: number
-    trips: number
-  }
-
-  export type DriverCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    buses?: boolean | DriverCountOutputTypeCountBusesArgs
-    trips?: boolean | DriverCountOutputTypeCountTripsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * DriverCountOutputType without action
-   */
-  export type DriverCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the DriverCountOutputType
-     */
-    select?: DriverCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * DriverCountOutputType without action
-   */
-  export type DriverCountOutputTypeCountBusesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: BusWhereInput
-  }
-
-  /**
-   * DriverCountOutputType without action
-   */
-  export type DriverCountOutputTypeCountTripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TripWhereInput
-  }
-
-
-  /**
    * Count Type POSMachineCountOutputType
    */
 
@@ -2087,17 +1924,21 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    drivers: number
+    busesDriven: number
+    busesConducted: number
+    tripsDriven: number
+    tripsConducted: number
     routes: number
-    conductors: number
     buses: number
     otps: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    drivers?: boolean | UserCountOutputTypeCountDriversArgs
+    busesDriven?: boolean | UserCountOutputTypeCountBusesDrivenArgs
+    busesConducted?: boolean | UserCountOutputTypeCountBusesConductedArgs
+    tripsDriven?: boolean | UserCountOutputTypeCountTripsDrivenArgs
+    tripsConducted?: boolean | UserCountOutputTypeCountTripsConductedArgs
     routes?: boolean | UserCountOutputTypeCountRoutesArgs
-    conductors?: boolean | UserCountOutputTypeCountConductorsArgs
     buses?: boolean | UserCountOutputTypeCountBusesArgs
     otps?: boolean | UserCountOutputTypeCountOtpsArgs
   }
@@ -2116,8 +1957,29 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountDriversArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DriverWhereInput
+  export type UserCountOutputTypeCountBusesDrivenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BusWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBusesConductedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BusWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTripsDrivenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TripWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTripsConductedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TripWhereInput
   }
 
   /**
@@ -2125,13 +1987,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountRoutesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RouteWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountConductorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ConductorWhereInput
   }
 
   /**
@@ -2506,8 +2361,8 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       route: Prisma.$RoutePayload<ExtArgs> | null
-      driver: Prisma.$DriverPayload<ExtArgs> | null
-      conductor: Prisma.$ConductorPayload<ExtArgs> | null
+      driver: Prisma.$UserPayload<ExtArgs> | null
+      conductor: Prisma.$UserPayload<ExtArgs> | null
       tickets: Prisma.$TicketPayload<ExtArgs>[]
       packages: Prisma.$PackagePayload<ExtArgs>[]
       dailyReports: Prisma.$DailyReportPayload<ExtArgs>[]
@@ -2872,8 +2727,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     route<T extends Bus$routeArgs<ExtArgs> = {}>(args?: Subset<T, Bus$routeArgs<ExtArgs>>): Prisma__RouteClient<$Result.GetResult<Prisma.$RoutePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    driver<T extends Bus$driverArgs<ExtArgs> = {}>(args?: Subset<T, Bus$driverArgs<ExtArgs>>): Prisma__DriverClient<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    conductor<T extends Bus$conductorArgs<ExtArgs> = {}>(args?: Subset<T, Bus$conductorArgs<ExtArgs>>): Prisma__ConductorClient<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    driver<T extends Bus$driverArgs<ExtArgs> = {}>(args?: Subset<T, Bus$driverArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    conductor<T extends Bus$conductorArgs<ExtArgs> = {}>(args?: Subset<T, Bus$conductorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     tickets<T extends Bus$ticketsArgs<ExtArgs> = {}>(args?: Subset<T, Bus$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     packages<T extends Bus$packagesArgs<ExtArgs> = {}>(args?: Subset<T, Bus$packagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dailyReports<T extends Bus$dailyReportsArgs<ExtArgs> = {}>(args?: Subset<T, Bus$dailyReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3289,18 +3144,18 @@ export namespace Prisma {
    */
   export type Bus$driverArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Driver
+     * Select specific fields to fetch from the User
      */
-    select?: DriverSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Driver
+     * Omit specific fields from the User
      */
-    omit?: DriverOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: DriverInclude<ExtArgs> | null
-    where?: DriverWhereInput
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -3308,18 +3163,18 @@ export namespace Prisma {
    */
   export type Bus$conductorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conductor
+     * Select specific fields to fetch from the User
      */
-    select?: ConductorSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conductor
+     * Omit specific fields from the User
      */
-    omit?: ConductorOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ConductorInclude<ExtArgs> | null
-    where?: ConductorWhereInput
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -3458,2196 +3313,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: BusInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Conductor
-   */
-
-  export type AggregateConductor = {
-    _count: ConductorCountAggregateOutputType | null
-    _avg: ConductorAvgAggregateOutputType | null
-    _sum: ConductorSumAggregateOutputType | null
-    _min: ConductorMinAggregateOutputType | null
-    _max: ConductorMaxAggregateOutputType | null
-  }
-
-  export type ConductorAvgAggregateOutputType = {
-    id: number | null
-    user_id: number | null
-    experience_years: number | null
-  }
-
-  export type ConductorSumAggregateOutputType = {
-    id: number | null
-    user_id: number | null
-    experience_years: number | null
-  }
-
-  export type ConductorMinAggregateOutputType = {
-    id: number | null
-    user_id: number | null
-    name: string | null
-    phone: string | null
-    experience_years: number | null
-    address: string | null
-    emergency_contact: string | null
-    active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type ConductorMaxAggregateOutputType = {
-    id: number | null
-    user_id: number | null
-    name: string | null
-    phone: string | null
-    experience_years: number | null
-    address: string | null
-    emergency_contact: string | null
-    active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type ConductorCountAggregateOutputType = {
-    id: number
-    user_id: number
-    name: number
-    phone: number
-    experience_years: number
-    address: number
-    emergency_contact: number
-    active: number
-    created_at: number
-    updated_at: number
-    _all: number
-  }
-
-
-  export type ConductorAvgAggregateInputType = {
-    id?: true
-    user_id?: true
-    experience_years?: true
-  }
-
-  export type ConductorSumAggregateInputType = {
-    id?: true
-    user_id?: true
-    experience_years?: true
-  }
-
-  export type ConductorMinAggregateInputType = {
-    id?: true
-    user_id?: true
-    name?: true
-    phone?: true
-    experience_years?: true
-    address?: true
-    emergency_contact?: true
-    active?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type ConductorMaxAggregateInputType = {
-    id?: true
-    user_id?: true
-    name?: true
-    phone?: true
-    experience_years?: true
-    address?: true
-    emergency_contact?: true
-    active?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type ConductorCountAggregateInputType = {
-    id?: true
-    user_id?: true
-    name?: true
-    phone?: true
-    experience_years?: true
-    address?: true
-    emergency_contact?: true
-    active?: true
-    created_at?: true
-    updated_at?: true
-    _all?: true
-  }
-
-  export type ConductorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Conductor to aggregate.
-     */
-    where?: ConductorWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Conductors to fetch.
-     */
-    orderBy?: ConductorOrderByWithRelationInput | ConductorOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ConductorWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Conductors from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Conductors.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Conductors
-    **/
-    _count?: true | ConductorCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ConductorAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ConductorSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ConductorMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ConductorMaxAggregateInputType
-  }
-
-  export type GetConductorAggregateType<T extends ConductorAggregateArgs> = {
-        [P in keyof T & keyof AggregateConductor]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateConductor[P]>
-      : GetScalarType<T[P], AggregateConductor[P]>
-  }
-
-
-
-
-  export type ConductorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ConductorWhereInput
-    orderBy?: ConductorOrderByWithAggregationInput | ConductorOrderByWithAggregationInput[]
-    by: ConductorScalarFieldEnum[] | ConductorScalarFieldEnum
-    having?: ConductorScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ConductorCountAggregateInputType | true
-    _avg?: ConductorAvgAggregateInputType
-    _sum?: ConductorSumAggregateInputType
-    _min?: ConductorMinAggregateInputType
-    _max?: ConductorMaxAggregateInputType
-  }
-
-  export type ConductorGroupByOutputType = {
-    id: number
-    user_id: number
-    name: string
-    phone: string
-    experience_years: number
-    address: string | null
-    emergency_contact: string | null
-    active: boolean
-    created_at: Date
-    updated_at: Date
-    _count: ConductorCountAggregateOutputType | null
-    _avg: ConductorAvgAggregateOutputType | null
-    _sum: ConductorSumAggregateOutputType | null
-    _min: ConductorMinAggregateOutputType | null
-    _max: ConductorMaxAggregateOutputType | null
-  }
-
-  type GetConductorGroupByPayload<T extends ConductorGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ConductorGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ConductorGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ConductorGroupByOutputType[P]>
-            : GetScalarType<T[P], ConductorGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ConductorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    user_id?: boolean
-    name?: boolean
-    phone?: boolean
-    experience_years?: boolean
-    address?: boolean
-    emergency_contact?: boolean
-    active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    buses?: boolean | Conductor$busesArgs<ExtArgs>
-    trips?: boolean | Conductor$tripsArgs<ExtArgs>
-    _count?: boolean | ConductorCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["conductor"]>
-
-
-
-  export type ConductorSelectScalar = {
-    id?: boolean
-    user_id?: boolean
-    name?: boolean
-    phone?: boolean
-    experience_years?: boolean
-    address?: boolean
-    emergency_contact?: boolean
-    active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }
-
-  export type ConductorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "phone" | "experience_years" | "address" | "emergency_contact" | "active" | "created_at" | "updated_at", ExtArgs["result"]["conductor"]>
-  export type ConductorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    buses?: boolean | Conductor$busesArgs<ExtArgs>
-    trips?: boolean | Conductor$tripsArgs<ExtArgs>
-    _count?: boolean | ConductorCountOutputTypeDefaultArgs<ExtArgs>
-  }
-
-  export type $ConductorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Conductor"
-    objects: {
-      user: Prisma.$UserPayload<ExtArgs>
-      buses: Prisma.$BusPayload<ExtArgs>[]
-      trips: Prisma.$TripPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      user_id: number
-      name: string
-      phone: string
-      experience_years: number
-      address: string | null
-      emergency_contact: string | null
-      active: boolean
-      created_at: Date
-      updated_at: Date
-    }, ExtArgs["result"]["conductor"]>
-    composites: {}
-  }
-
-  type ConductorGetPayload<S extends boolean | null | undefined | ConductorDefaultArgs> = $Result.GetResult<Prisma.$ConductorPayload, S>
-
-  type ConductorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ConductorFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ConductorCountAggregateInputType | true
-    }
-
-  export interface ConductorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Conductor'], meta: { name: 'Conductor' } }
-    /**
-     * Find zero or one Conductor that matches the filter.
-     * @param {ConductorFindUniqueArgs} args - Arguments to find a Conductor
-     * @example
-     * // Get one Conductor
-     * const conductor = await prisma.conductor.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ConductorFindUniqueArgs>(args: SelectSubset<T, ConductorFindUniqueArgs<ExtArgs>>): Prisma__ConductorClient<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Conductor that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ConductorFindUniqueOrThrowArgs} args - Arguments to find a Conductor
-     * @example
-     * // Get one Conductor
-     * const conductor = await prisma.conductor.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ConductorFindUniqueOrThrowArgs>(args: SelectSubset<T, ConductorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ConductorClient<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Conductor that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ConductorFindFirstArgs} args - Arguments to find a Conductor
-     * @example
-     * // Get one Conductor
-     * const conductor = await prisma.conductor.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ConductorFindFirstArgs>(args?: SelectSubset<T, ConductorFindFirstArgs<ExtArgs>>): Prisma__ConductorClient<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Conductor that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ConductorFindFirstOrThrowArgs} args - Arguments to find a Conductor
-     * @example
-     * // Get one Conductor
-     * const conductor = await prisma.conductor.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ConductorFindFirstOrThrowArgs>(args?: SelectSubset<T, ConductorFindFirstOrThrowArgs<ExtArgs>>): Prisma__ConductorClient<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Conductors that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ConductorFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Conductors
-     * const conductors = await prisma.conductor.findMany()
-     * 
-     * // Get first 10 Conductors
-     * const conductors = await prisma.conductor.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const conductorWithIdOnly = await prisma.conductor.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ConductorFindManyArgs>(args?: SelectSubset<T, ConductorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Conductor.
-     * @param {ConductorCreateArgs} args - Arguments to create a Conductor.
-     * @example
-     * // Create one Conductor
-     * const Conductor = await prisma.conductor.create({
-     *   data: {
-     *     // ... data to create a Conductor
-     *   }
-     * })
-     * 
-     */
-    create<T extends ConductorCreateArgs>(args: SelectSubset<T, ConductorCreateArgs<ExtArgs>>): Prisma__ConductorClient<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Conductors.
-     * @param {ConductorCreateManyArgs} args - Arguments to create many Conductors.
-     * @example
-     * // Create many Conductors
-     * const conductor = await prisma.conductor.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ConductorCreateManyArgs>(args?: SelectSubset<T, ConductorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Conductor.
-     * @param {ConductorDeleteArgs} args - Arguments to delete one Conductor.
-     * @example
-     * // Delete one Conductor
-     * const Conductor = await prisma.conductor.delete({
-     *   where: {
-     *     // ... filter to delete one Conductor
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ConductorDeleteArgs>(args: SelectSubset<T, ConductorDeleteArgs<ExtArgs>>): Prisma__ConductorClient<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Conductor.
-     * @param {ConductorUpdateArgs} args - Arguments to update one Conductor.
-     * @example
-     * // Update one Conductor
-     * const conductor = await prisma.conductor.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ConductorUpdateArgs>(args: SelectSubset<T, ConductorUpdateArgs<ExtArgs>>): Prisma__ConductorClient<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Conductors.
-     * @param {ConductorDeleteManyArgs} args - Arguments to filter Conductors to delete.
-     * @example
-     * // Delete a few Conductors
-     * const { count } = await prisma.conductor.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ConductorDeleteManyArgs>(args?: SelectSubset<T, ConductorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Conductors.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ConductorUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Conductors
-     * const conductor = await prisma.conductor.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ConductorUpdateManyArgs>(args: SelectSubset<T, ConductorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Conductor.
-     * @param {ConductorUpsertArgs} args - Arguments to update or create a Conductor.
-     * @example
-     * // Update or create a Conductor
-     * const conductor = await prisma.conductor.upsert({
-     *   create: {
-     *     // ... data to create a Conductor
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Conductor we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ConductorUpsertArgs>(args: SelectSubset<T, ConductorUpsertArgs<ExtArgs>>): Prisma__ConductorClient<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Conductors.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ConductorCountArgs} args - Arguments to filter Conductors to count.
-     * @example
-     * // Count the number of Conductors
-     * const count = await prisma.conductor.count({
-     *   where: {
-     *     // ... the filter for the Conductors we want to count
-     *   }
-     * })
-    **/
-    count<T extends ConductorCountArgs>(
-      args?: Subset<T, ConductorCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ConductorCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Conductor.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ConductorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ConductorAggregateArgs>(args: Subset<T, ConductorAggregateArgs>): Prisma.PrismaPromise<GetConductorAggregateType<T>>
-
-    /**
-     * Group by Conductor.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ConductorGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ConductorGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ConductorGroupByArgs['orderBy'] }
-        : { orderBy?: ConductorGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ConductorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetConductorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Conductor model
-   */
-  readonly fields: ConductorFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Conductor.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ConductorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    buses<T extends Conductor$busesArgs<ExtArgs> = {}>(args?: Subset<T, Conductor$busesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    trips<T extends Conductor$tripsArgs<ExtArgs> = {}>(args?: Subset<T, Conductor$tripsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Conductor model
-   */
-  interface ConductorFieldRefs {
-    readonly id: FieldRef<"Conductor", 'Int'>
-    readonly user_id: FieldRef<"Conductor", 'Int'>
-    readonly name: FieldRef<"Conductor", 'String'>
-    readonly phone: FieldRef<"Conductor", 'String'>
-    readonly experience_years: FieldRef<"Conductor", 'Int'>
-    readonly address: FieldRef<"Conductor", 'String'>
-    readonly emergency_contact: FieldRef<"Conductor", 'String'>
-    readonly active: FieldRef<"Conductor", 'Boolean'>
-    readonly created_at: FieldRef<"Conductor", 'DateTime'>
-    readonly updated_at: FieldRef<"Conductor", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Conductor findUnique
-   */
-  export type ConductorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conductor
-     */
-    select?: ConductorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conductor
-     */
-    omit?: ConductorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConductorInclude<ExtArgs> | null
-    /**
-     * Filter, which Conductor to fetch.
-     */
-    where: ConductorWhereUniqueInput
-  }
-
-  /**
-   * Conductor findUniqueOrThrow
-   */
-  export type ConductorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conductor
-     */
-    select?: ConductorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conductor
-     */
-    omit?: ConductorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConductorInclude<ExtArgs> | null
-    /**
-     * Filter, which Conductor to fetch.
-     */
-    where: ConductorWhereUniqueInput
-  }
-
-  /**
-   * Conductor findFirst
-   */
-  export type ConductorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conductor
-     */
-    select?: ConductorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conductor
-     */
-    omit?: ConductorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConductorInclude<ExtArgs> | null
-    /**
-     * Filter, which Conductor to fetch.
-     */
-    where?: ConductorWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Conductors to fetch.
-     */
-    orderBy?: ConductorOrderByWithRelationInput | ConductorOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Conductors.
-     */
-    cursor?: ConductorWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Conductors from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Conductors.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Conductors.
-     */
-    distinct?: ConductorScalarFieldEnum | ConductorScalarFieldEnum[]
-  }
-
-  /**
-   * Conductor findFirstOrThrow
-   */
-  export type ConductorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conductor
-     */
-    select?: ConductorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conductor
-     */
-    omit?: ConductorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConductorInclude<ExtArgs> | null
-    /**
-     * Filter, which Conductor to fetch.
-     */
-    where?: ConductorWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Conductors to fetch.
-     */
-    orderBy?: ConductorOrderByWithRelationInput | ConductorOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Conductors.
-     */
-    cursor?: ConductorWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Conductors from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Conductors.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Conductors.
-     */
-    distinct?: ConductorScalarFieldEnum | ConductorScalarFieldEnum[]
-  }
-
-  /**
-   * Conductor findMany
-   */
-  export type ConductorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conductor
-     */
-    select?: ConductorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conductor
-     */
-    omit?: ConductorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConductorInclude<ExtArgs> | null
-    /**
-     * Filter, which Conductors to fetch.
-     */
-    where?: ConductorWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Conductors to fetch.
-     */
-    orderBy?: ConductorOrderByWithRelationInput | ConductorOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Conductors.
-     */
-    cursor?: ConductorWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Conductors from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Conductors.
-     */
-    skip?: number
-    distinct?: ConductorScalarFieldEnum | ConductorScalarFieldEnum[]
-  }
-
-  /**
-   * Conductor create
-   */
-  export type ConductorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conductor
-     */
-    select?: ConductorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conductor
-     */
-    omit?: ConductorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConductorInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Conductor.
-     */
-    data: XOR<ConductorCreateInput, ConductorUncheckedCreateInput>
-  }
-
-  /**
-   * Conductor createMany
-   */
-  export type ConductorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Conductors.
-     */
-    data: ConductorCreateManyInput | ConductorCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Conductor update
-   */
-  export type ConductorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conductor
-     */
-    select?: ConductorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conductor
-     */
-    omit?: ConductorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConductorInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Conductor.
-     */
-    data: XOR<ConductorUpdateInput, ConductorUncheckedUpdateInput>
-    /**
-     * Choose, which Conductor to update.
-     */
-    where: ConductorWhereUniqueInput
-  }
-
-  /**
-   * Conductor updateMany
-   */
-  export type ConductorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Conductors.
-     */
-    data: XOR<ConductorUpdateManyMutationInput, ConductorUncheckedUpdateManyInput>
-    /**
-     * Filter which Conductors to update
-     */
-    where?: ConductorWhereInput
-    /**
-     * Limit how many Conductors to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Conductor upsert
-   */
-  export type ConductorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conductor
-     */
-    select?: ConductorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conductor
-     */
-    omit?: ConductorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConductorInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Conductor to update in case it exists.
-     */
-    where: ConductorWhereUniqueInput
-    /**
-     * In case the Conductor found by the `where` argument doesn't exist, create a new Conductor with this data.
-     */
-    create: XOR<ConductorCreateInput, ConductorUncheckedCreateInput>
-    /**
-     * In case the Conductor was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ConductorUpdateInput, ConductorUncheckedUpdateInput>
-  }
-
-  /**
-   * Conductor delete
-   */
-  export type ConductorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conductor
-     */
-    select?: ConductorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conductor
-     */
-    omit?: ConductorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConductorInclude<ExtArgs> | null
-    /**
-     * Filter which Conductor to delete.
-     */
-    where: ConductorWhereUniqueInput
-  }
-
-  /**
-   * Conductor deleteMany
-   */
-  export type ConductorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Conductors to delete
-     */
-    where?: ConductorWhereInput
-    /**
-     * Limit how many Conductors to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Conductor.buses
-   */
-  export type Conductor$busesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Bus
-     */
-    select?: BusSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Bus
-     */
-    omit?: BusOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: BusInclude<ExtArgs> | null
-    where?: BusWhereInput
-    orderBy?: BusOrderByWithRelationInput | BusOrderByWithRelationInput[]
-    cursor?: BusWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: BusScalarFieldEnum | BusScalarFieldEnum[]
-  }
-
-  /**
-   * Conductor.trips
-   */
-  export type Conductor$tripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Trip
-     */
-    select?: TripSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Trip
-     */
-    omit?: TripOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TripInclude<ExtArgs> | null
-    where?: TripWhereInput
-    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
-    cursor?: TripWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TripScalarFieldEnum | TripScalarFieldEnum[]
-  }
-
-  /**
-   * Conductor without action
-   */
-  export type ConductorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conductor
-     */
-    select?: ConductorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conductor
-     */
-    omit?: ConductorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConductorInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Driver
-   */
-
-  export type AggregateDriver = {
-    _count: DriverCountAggregateOutputType | null
-    _avg: DriverAvgAggregateOutputType | null
-    _sum: DriverSumAggregateOutputType | null
-    _min: DriverMinAggregateOutputType | null
-    _max: DriverMaxAggregateOutputType | null
-  }
-
-  export type DriverAvgAggregateOutputType = {
-    id: number | null
-    user_id: number | null
-    experience_years: number | null
-  }
-
-  export type DriverSumAggregateOutputType = {
-    id: number | null
-    user_id: number | null
-    experience_years: number | null
-  }
-
-  export type DriverMinAggregateOutputType = {
-    id: number | null
-    user_id: number | null
-    name: string | null
-    phone: string | null
-    license_number: string | null
-    license_expiry: Date | null
-    experience_years: number | null
-    address: string | null
-    emergency_contact: string | null
-    active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type DriverMaxAggregateOutputType = {
-    id: number | null
-    user_id: number | null
-    name: string | null
-    phone: string | null
-    license_number: string | null
-    license_expiry: Date | null
-    experience_years: number | null
-    address: string | null
-    emergency_contact: string | null
-    active: boolean | null
-    created_at: Date | null
-    updated_at: Date | null
-  }
-
-  export type DriverCountAggregateOutputType = {
-    id: number
-    user_id: number
-    name: number
-    phone: number
-    license_number: number
-    license_expiry: number
-    experience_years: number
-    address: number
-    emergency_contact: number
-    active: number
-    created_at: number
-    updated_at: number
-    _all: number
-  }
-
-
-  export type DriverAvgAggregateInputType = {
-    id?: true
-    user_id?: true
-    experience_years?: true
-  }
-
-  export type DriverSumAggregateInputType = {
-    id?: true
-    user_id?: true
-    experience_years?: true
-  }
-
-  export type DriverMinAggregateInputType = {
-    id?: true
-    user_id?: true
-    name?: true
-    phone?: true
-    license_number?: true
-    license_expiry?: true
-    experience_years?: true
-    address?: true
-    emergency_contact?: true
-    active?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type DriverMaxAggregateInputType = {
-    id?: true
-    user_id?: true
-    name?: true
-    phone?: true
-    license_number?: true
-    license_expiry?: true
-    experience_years?: true
-    address?: true
-    emergency_contact?: true
-    active?: true
-    created_at?: true
-    updated_at?: true
-  }
-
-  export type DriverCountAggregateInputType = {
-    id?: true
-    user_id?: true
-    name?: true
-    phone?: true
-    license_number?: true
-    license_expiry?: true
-    experience_years?: true
-    address?: true
-    emergency_contact?: true
-    active?: true
-    created_at?: true
-    updated_at?: true
-    _all?: true
-  }
-
-  export type DriverAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Driver to aggregate.
-     */
-    where?: DriverWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Drivers to fetch.
-     */
-    orderBy?: DriverOrderByWithRelationInput | DriverOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: DriverWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Drivers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Drivers.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Drivers
-    **/
-    _count?: true | DriverCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: DriverAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: DriverSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: DriverMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: DriverMaxAggregateInputType
-  }
-
-  export type GetDriverAggregateType<T extends DriverAggregateArgs> = {
-        [P in keyof T & keyof AggregateDriver]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateDriver[P]>
-      : GetScalarType<T[P], AggregateDriver[P]>
-  }
-
-
-
-
-  export type DriverGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DriverWhereInput
-    orderBy?: DriverOrderByWithAggregationInput | DriverOrderByWithAggregationInput[]
-    by: DriverScalarFieldEnum[] | DriverScalarFieldEnum
-    having?: DriverScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: DriverCountAggregateInputType | true
-    _avg?: DriverAvgAggregateInputType
-    _sum?: DriverSumAggregateInputType
-    _min?: DriverMinAggregateInputType
-    _max?: DriverMaxAggregateInputType
-  }
-
-  export type DriverGroupByOutputType = {
-    id: number
-    user_id: number
-    name: string
-    phone: string
-    license_number: string
-    license_expiry: Date | null
-    experience_years: number
-    address: string | null
-    emergency_contact: string | null
-    active: boolean
-    created_at: Date
-    updated_at: Date
-    _count: DriverCountAggregateOutputType | null
-    _avg: DriverAvgAggregateOutputType | null
-    _sum: DriverSumAggregateOutputType | null
-    _min: DriverMinAggregateOutputType | null
-    _max: DriverMaxAggregateOutputType | null
-  }
-
-  type GetDriverGroupByPayload<T extends DriverGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<DriverGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof DriverGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], DriverGroupByOutputType[P]>
-            : GetScalarType<T[P], DriverGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type DriverSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    user_id?: boolean
-    name?: boolean
-    phone?: boolean
-    license_number?: boolean
-    license_expiry?: boolean
-    experience_years?: boolean
-    address?: boolean
-    emergency_contact?: boolean
-    active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    buses?: boolean | Driver$busesArgs<ExtArgs>
-    trips?: boolean | Driver$tripsArgs<ExtArgs>
-    _count?: boolean | DriverCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["driver"]>
-
-
-
-  export type DriverSelectScalar = {
-    id?: boolean
-    user_id?: boolean
-    name?: boolean
-    phone?: boolean
-    license_number?: boolean
-    license_expiry?: boolean
-    experience_years?: boolean
-    address?: boolean
-    emergency_contact?: boolean
-    active?: boolean
-    created_at?: boolean
-    updated_at?: boolean
-  }
-
-  export type DriverOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "name" | "phone" | "license_number" | "license_expiry" | "experience_years" | "address" | "emergency_contact" | "active" | "created_at" | "updated_at", ExtArgs["result"]["driver"]>
-  export type DriverInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    buses?: boolean | Driver$busesArgs<ExtArgs>
-    trips?: boolean | Driver$tripsArgs<ExtArgs>
-    _count?: boolean | DriverCountOutputTypeDefaultArgs<ExtArgs>
-  }
-
-  export type $DriverPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Driver"
-    objects: {
-      user: Prisma.$UserPayload<ExtArgs>
-      buses: Prisma.$BusPayload<ExtArgs>[]
-      trips: Prisma.$TripPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      user_id: number
-      name: string
-      phone: string
-      license_number: string
-      license_expiry: Date | null
-      experience_years: number
-      address: string | null
-      emergency_contact: string | null
-      active: boolean
-      created_at: Date
-      updated_at: Date
-    }, ExtArgs["result"]["driver"]>
-    composites: {}
-  }
-
-  type DriverGetPayload<S extends boolean | null | undefined | DriverDefaultArgs> = $Result.GetResult<Prisma.$DriverPayload, S>
-
-  type DriverCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<DriverFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: DriverCountAggregateInputType | true
-    }
-
-  export interface DriverDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Driver'], meta: { name: 'Driver' } }
-    /**
-     * Find zero or one Driver that matches the filter.
-     * @param {DriverFindUniqueArgs} args - Arguments to find a Driver
-     * @example
-     * // Get one Driver
-     * const driver = await prisma.driver.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends DriverFindUniqueArgs>(args: SelectSubset<T, DriverFindUniqueArgs<ExtArgs>>): Prisma__DriverClient<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Driver that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {DriverFindUniqueOrThrowArgs} args - Arguments to find a Driver
-     * @example
-     * // Get one Driver
-     * const driver = await prisma.driver.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends DriverFindUniqueOrThrowArgs>(args: SelectSubset<T, DriverFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DriverClient<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Driver that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DriverFindFirstArgs} args - Arguments to find a Driver
-     * @example
-     * // Get one Driver
-     * const driver = await prisma.driver.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends DriverFindFirstArgs>(args?: SelectSubset<T, DriverFindFirstArgs<ExtArgs>>): Prisma__DriverClient<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Driver that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DriverFindFirstOrThrowArgs} args - Arguments to find a Driver
-     * @example
-     * // Get one Driver
-     * const driver = await prisma.driver.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends DriverFindFirstOrThrowArgs>(args?: SelectSubset<T, DriverFindFirstOrThrowArgs<ExtArgs>>): Prisma__DriverClient<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Drivers that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DriverFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Drivers
-     * const drivers = await prisma.driver.findMany()
-     * 
-     * // Get first 10 Drivers
-     * const drivers = await prisma.driver.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const driverWithIdOnly = await prisma.driver.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends DriverFindManyArgs>(args?: SelectSubset<T, DriverFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Driver.
-     * @param {DriverCreateArgs} args - Arguments to create a Driver.
-     * @example
-     * // Create one Driver
-     * const Driver = await prisma.driver.create({
-     *   data: {
-     *     // ... data to create a Driver
-     *   }
-     * })
-     * 
-     */
-    create<T extends DriverCreateArgs>(args: SelectSubset<T, DriverCreateArgs<ExtArgs>>): Prisma__DriverClient<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Drivers.
-     * @param {DriverCreateManyArgs} args - Arguments to create many Drivers.
-     * @example
-     * // Create many Drivers
-     * const driver = await prisma.driver.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends DriverCreateManyArgs>(args?: SelectSubset<T, DriverCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Driver.
-     * @param {DriverDeleteArgs} args - Arguments to delete one Driver.
-     * @example
-     * // Delete one Driver
-     * const Driver = await prisma.driver.delete({
-     *   where: {
-     *     // ... filter to delete one Driver
-     *   }
-     * })
-     * 
-     */
-    delete<T extends DriverDeleteArgs>(args: SelectSubset<T, DriverDeleteArgs<ExtArgs>>): Prisma__DriverClient<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Driver.
-     * @param {DriverUpdateArgs} args - Arguments to update one Driver.
-     * @example
-     * // Update one Driver
-     * const driver = await prisma.driver.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends DriverUpdateArgs>(args: SelectSubset<T, DriverUpdateArgs<ExtArgs>>): Prisma__DriverClient<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Drivers.
-     * @param {DriverDeleteManyArgs} args - Arguments to filter Drivers to delete.
-     * @example
-     * // Delete a few Drivers
-     * const { count } = await prisma.driver.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends DriverDeleteManyArgs>(args?: SelectSubset<T, DriverDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Drivers.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DriverUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Drivers
-     * const driver = await prisma.driver.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends DriverUpdateManyArgs>(args: SelectSubset<T, DriverUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Driver.
-     * @param {DriverUpsertArgs} args - Arguments to update or create a Driver.
-     * @example
-     * // Update or create a Driver
-     * const driver = await prisma.driver.upsert({
-     *   create: {
-     *     // ... data to create a Driver
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Driver we want to update
-     *   }
-     * })
-     */
-    upsert<T extends DriverUpsertArgs>(args: SelectSubset<T, DriverUpsertArgs<ExtArgs>>): Prisma__DriverClient<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Drivers.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DriverCountArgs} args - Arguments to filter Drivers to count.
-     * @example
-     * // Count the number of Drivers
-     * const count = await prisma.driver.count({
-     *   where: {
-     *     // ... the filter for the Drivers we want to count
-     *   }
-     * })
-    **/
-    count<T extends DriverCountArgs>(
-      args?: Subset<T, DriverCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], DriverCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Driver.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DriverAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends DriverAggregateArgs>(args: Subset<T, DriverAggregateArgs>): Prisma.PrismaPromise<GetDriverAggregateType<T>>
-
-    /**
-     * Group by Driver.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DriverGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends DriverGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: DriverGroupByArgs['orderBy'] }
-        : { orderBy?: DriverGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, DriverGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDriverGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Driver model
-   */
-  readonly fields: DriverFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Driver.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__DriverClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    buses<T extends Driver$busesArgs<ExtArgs> = {}>(args?: Subset<T, Driver$busesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    trips<T extends Driver$tripsArgs<ExtArgs> = {}>(args?: Subset<T, Driver$tripsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Driver model
-   */
-  interface DriverFieldRefs {
-    readonly id: FieldRef<"Driver", 'Int'>
-    readonly user_id: FieldRef<"Driver", 'Int'>
-    readonly name: FieldRef<"Driver", 'String'>
-    readonly phone: FieldRef<"Driver", 'String'>
-    readonly license_number: FieldRef<"Driver", 'String'>
-    readonly license_expiry: FieldRef<"Driver", 'DateTime'>
-    readonly experience_years: FieldRef<"Driver", 'Int'>
-    readonly address: FieldRef<"Driver", 'String'>
-    readonly emergency_contact: FieldRef<"Driver", 'String'>
-    readonly active: FieldRef<"Driver", 'Boolean'>
-    readonly created_at: FieldRef<"Driver", 'DateTime'>
-    readonly updated_at: FieldRef<"Driver", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Driver findUnique
-   */
-  export type DriverFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Driver
-     */
-    select?: DriverSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Driver
-     */
-    omit?: DriverOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DriverInclude<ExtArgs> | null
-    /**
-     * Filter, which Driver to fetch.
-     */
-    where: DriverWhereUniqueInput
-  }
-
-  /**
-   * Driver findUniqueOrThrow
-   */
-  export type DriverFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Driver
-     */
-    select?: DriverSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Driver
-     */
-    omit?: DriverOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DriverInclude<ExtArgs> | null
-    /**
-     * Filter, which Driver to fetch.
-     */
-    where: DriverWhereUniqueInput
-  }
-
-  /**
-   * Driver findFirst
-   */
-  export type DriverFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Driver
-     */
-    select?: DriverSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Driver
-     */
-    omit?: DriverOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DriverInclude<ExtArgs> | null
-    /**
-     * Filter, which Driver to fetch.
-     */
-    where?: DriverWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Drivers to fetch.
-     */
-    orderBy?: DriverOrderByWithRelationInput | DriverOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Drivers.
-     */
-    cursor?: DriverWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Drivers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Drivers.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Drivers.
-     */
-    distinct?: DriverScalarFieldEnum | DriverScalarFieldEnum[]
-  }
-
-  /**
-   * Driver findFirstOrThrow
-   */
-  export type DriverFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Driver
-     */
-    select?: DriverSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Driver
-     */
-    omit?: DriverOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DriverInclude<ExtArgs> | null
-    /**
-     * Filter, which Driver to fetch.
-     */
-    where?: DriverWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Drivers to fetch.
-     */
-    orderBy?: DriverOrderByWithRelationInput | DriverOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Drivers.
-     */
-    cursor?: DriverWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Drivers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Drivers.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Drivers.
-     */
-    distinct?: DriverScalarFieldEnum | DriverScalarFieldEnum[]
-  }
-
-  /**
-   * Driver findMany
-   */
-  export type DriverFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Driver
-     */
-    select?: DriverSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Driver
-     */
-    omit?: DriverOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DriverInclude<ExtArgs> | null
-    /**
-     * Filter, which Drivers to fetch.
-     */
-    where?: DriverWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Drivers to fetch.
-     */
-    orderBy?: DriverOrderByWithRelationInput | DriverOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Drivers.
-     */
-    cursor?: DriverWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Drivers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Drivers.
-     */
-    skip?: number
-    distinct?: DriverScalarFieldEnum | DriverScalarFieldEnum[]
-  }
-
-  /**
-   * Driver create
-   */
-  export type DriverCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Driver
-     */
-    select?: DriverSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Driver
-     */
-    omit?: DriverOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DriverInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Driver.
-     */
-    data: XOR<DriverCreateInput, DriverUncheckedCreateInput>
-  }
-
-  /**
-   * Driver createMany
-   */
-  export type DriverCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Drivers.
-     */
-    data: DriverCreateManyInput | DriverCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Driver update
-   */
-  export type DriverUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Driver
-     */
-    select?: DriverSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Driver
-     */
-    omit?: DriverOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DriverInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Driver.
-     */
-    data: XOR<DriverUpdateInput, DriverUncheckedUpdateInput>
-    /**
-     * Choose, which Driver to update.
-     */
-    where: DriverWhereUniqueInput
-  }
-
-  /**
-   * Driver updateMany
-   */
-  export type DriverUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Drivers.
-     */
-    data: XOR<DriverUpdateManyMutationInput, DriverUncheckedUpdateManyInput>
-    /**
-     * Filter which Drivers to update
-     */
-    where?: DriverWhereInput
-    /**
-     * Limit how many Drivers to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Driver upsert
-   */
-  export type DriverUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Driver
-     */
-    select?: DriverSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Driver
-     */
-    omit?: DriverOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DriverInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Driver to update in case it exists.
-     */
-    where: DriverWhereUniqueInput
-    /**
-     * In case the Driver found by the `where` argument doesn't exist, create a new Driver with this data.
-     */
-    create: XOR<DriverCreateInput, DriverUncheckedCreateInput>
-    /**
-     * In case the Driver was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<DriverUpdateInput, DriverUncheckedUpdateInput>
-  }
-
-  /**
-   * Driver delete
-   */
-  export type DriverDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Driver
-     */
-    select?: DriverSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Driver
-     */
-    omit?: DriverOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DriverInclude<ExtArgs> | null
-    /**
-     * Filter which Driver to delete.
-     */
-    where: DriverWhereUniqueInput
-  }
-
-  /**
-   * Driver deleteMany
-   */
-  export type DriverDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Drivers to delete
-     */
-    where?: DriverWhereInput
-    /**
-     * Limit how many Drivers to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Driver.buses
-   */
-  export type Driver$busesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Bus
-     */
-    select?: BusSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Bus
-     */
-    omit?: BusOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: BusInclude<ExtArgs> | null
-    where?: BusWhereInput
-    orderBy?: BusOrderByWithRelationInput | BusOrderByWithRelationInput[]
-    cursor?: BusWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: BusScalarFieldEnum | BusScalarFieldEnum[]
-  }
-
-  /**
-   * Driver.trips
-   */
-  export type Driver$tripsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Trip
-     */
-    select?: TripSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Trip
-     */
-    omit?: TripOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TripInclude<ExtArgs> | null
-    where?: TripWhereInput
-    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
-    cursor?: TripWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TripScalarFieldEnum | TripScalarFieldEnum[]
-  }
-
-  /**
-   * Driver without action
-   */
-  export type DriverDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Driver
-     */
-    select?: DriverSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Driver
-     */
-    omit?: DriverOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DriverInclude<ExtArgs> | null
   }
 
 
@@ -11412,8 +9077,8 @@ export namespace Prisma {
     objects: {
       bus: Prisma.$BusPayload<ExtArgs>
       route: Prisma.$RoutePayload<ExtArgs>
-      driver: Prisma.$DriverPayload<ExtArgs> | null
-      conductor: Prisma.$ConductorPayload<ExtArgs> | null
+      driver: Prisma.$UserPayload<ExtArgs> | null
+      conductor: Prisma.$UserPayload<ExtArgs> | null
       tickets: Prisma.$TicketPayload<ExtArgs>[]
       packages: Prisma.$PackagePayload<ExtArgs>[]
     }
@@ -11770,8 +9435,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     bus<T extends BusDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusDefaultArgs<ExtArgs>>): Prisma__BusClient<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     route<T extends RouteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RouteDefaultArgs<ExtArgs>>): Prisma__RouteClient<$Result.GetResult<Prisma.$RoutePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    driver<T extends Trip$driverArgs<ExtArgs> = {}>(args?: Subset<T, Trip$driverArgs<ExtArgs>>): Prisma__DriverClient<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    conductor<T extends Trip$conductorArgs<ExtArgs> = {}>(args?: Subset<T, Trip$conductorArgs<ExtArgs>>): Prisma__ConductorClient<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    driver<T extends Trip$driverArgs<ExtArgs> = {}>(args?: Subset<T, Trip$driverArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    conductor<T extends Trip$conductorArgs<ExtArgs> = {}>(args?: Subset<T, Trip$conductorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     tickets<T extends Trip$ticketsArgs<ExtArgs> = {}>(args?: Subset<T, Trip$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     packages<T extends Trip$packagesArgs<ExtArgs> = {}>(args?: Subset<T, Trip$packagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -12160,18 +9825,18 @@ export namespace Prisma {
    */
   export type Trip$driverArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Driver
+     * Select specific fields to fetch from the User
      */
-    select?: DriverSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Driver
+     * Omit specific fields from the User
      */
-    omit?: DriverOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: DriverInclude<ExtArgs> | null
-    where?: DriverWhereInput
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -12179,18 +9844,18 @@ export namespace Prisma {
    */
   export type Trip$conductorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conductor
+     * Select specific fields to fetch from the User
      */
-    select?: ConductorSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conductor
+     * Omit specific fields from the User
      */
-    omit?: ConductorOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ConductorInclude<ExtArgs> | null
-    where?: ConductorWhereInput
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -12498,9 +10163,12 @@ export namespace Prisma {
     is_verified?: boolean
     created_at?: boolean
     updated_at?: boolean
-    drivers?: boolean | User$driversArgs<ExtArgs>
+    userExtra?: boolean | User$userExtraArgs<ExtArgs>
+    busesDriven?: boolean | User$busesDrivenArgs<ExtArgs>
+    busesConducted?: boolean | User$busesConductedArgs<ExtArgs>
+    tripsDriven?: boolean | User$tripsDrivenArgs<ExtArgs>
+    tripsConducted?: boolean | User$tripsConductedArgs<ExtArgs>
     routes?: boolean | User$routesArgs<ExtArgs>
-    conductors?: boolean | User$conductorsArgs<ExtArgs>
     buses?: boolean | User$busesArgs<ExtArgs>
     otps?: boolean | User$otpsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -12523,9 +10191,12 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "phone" | "role" | "company_name" | "is_verified" | "created_at" | "updated_at", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    drivers?: boolean | User$driversArgs<ExtArgs>
+    userExtra?: boolean | User$userExtraArgs<ExtArgs>
+    busesDriven?: boolean | User$busesDrivenArgs<ExtArgs>
+    busesConducted?: boolean | User$busesConductedArgs<ExtArgs>
+    tripsDriven?: boolean | User$tripsDrivenArgs<ExtArgs>
+    tripsConducted?: boolean | User$tripsConductedArgs<ExtArgs>
     routes?: boolean | User$routesArgs<ExtArgs>
-    conductors?: boolean | User$conductorsArgs<ExtArgs>
     buses?: boolean | User$busesArgs<ExtArgs>
     otps?: boolean | User$otpsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -12534,9 +10205,12 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      drivers: Prisma.$DriverPayload<ExtArgs>[]
+      userExtra: Prisma.$UserExtraPayload<ExtArgs> | null
+      busesDriven: Prisma.$BusPayload<ExtArgs>[]
+      busesConducted: Prisma.$BusPayload<ExtArgs>[]
+      tripsDriven: Prisma.$TripPayload<ExtArgs>[]
+      tripsConducted: Prisma.$TripPayload<ExtArgs>[]
       routes: Prisma.$RoutePayload<ExtArgs>[]
-      conductors: Prisma.$ConductorPayload<ExtArgs>[]
       buses: Prisma.$BusPayload<ExtArgs>[]
       otps: Prisma.$OTPPayload<ExtArgs>[]
     }
@@ -12891,9 +10565,12 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    drivers<T extends User$driversArgs<ExtArgs> = {}>(args?: Subset<T, User$driversArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DriverPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    userExtra<T extends User$userExtraArgs<ExtArgs> = {}>(args?: Subset<T, User$userExtraArgs<ExtArgs>>): Prisma__UserExtraClient<$Result.GetResult<Prisma.$UserExtraPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    busesDriven<T extends User$busesDrivenArgs<ExtArgs> = {}>(args?: Subset<T, User$busesDrivenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    busesConducted<T extends User$busesConductedArgs<ExtArgs> = {}>(args?: Subset<T, User$busesConductedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tripsDriven<T extends User$tripsDrivenArgs<ExtArgs> = {}>(args?: Subset<T, User$tripsDrivenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tripsConducted<T extends User$tripsConductedArgs<ExtArgs> = {}>(args?: Subset<T, User$tripsConductedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     routes<T extends User$routesArgs<ExtArgs> = {}>(args?: Subset<T, User$routesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    conductors<T extends User$conductorsArgs<ExtArgs> = {}>(args?: Subset<T, User$conductorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConductorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     buses<T extends User$busesArgs<ExtArgs> = {}>(args?: Subset<T, User$busesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     otps<T extends User$otpsArgs<ExtArgs> = {}>(args?: Subset<T, User$otpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OTPPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -13278,27 +10955,118 @@ export namespace Prisma {
   }
 
   /**
-   * User.drivers
+   * User.userExtra
    */
-  export type User$driversArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$userExtraArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Driver
+     * Select specific fields to fetch from the UserExtra
      */
-    select?: DriverSelect<ExtArgs> | null
+    select?: UserExtraSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Driver
+     * Omit specific fields from the UserExtra
      */
-    omit?: DriverOmit<ExtArgs> | null
+    omit?: UserExtraOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: DriverInclude<ExtArgs> | null
-    where?: DriverWhereInput
-    orderBy?: DriverOrderByWithRelationInput | DriverOrderByWithRelationInput[]
-    cursor?: DriverWhereUniqueInput
+    include?: UserExtraInclude<ExtArgs> | null
+    where?: UserExtraWhereInput
+  }
+
+  /**
+   * User.busesDriven
+   */
+  export type User$busesDrivenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bus
+     */
+    select?: BusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bus
+     */
+    omit?: BusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BusInclude<ExtArgs> | null
+    where?: BusWhereInput
+    orderBy?: BusOrderByWithRelationInput | BusOrderByWithRelationInput[]
+    cursor?: BusWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: DriverScalarFieldEnum | DriverScalarFieldEnum[]
+    distinct?: BusScalarFieldEnum | BusScalarFieldEnum[]
+  }
+
+  /**
+   * User.busesConducted
+   */
+  export type User$busesConductedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Bus
+     */
+    select?: BusSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Bus
+     */
+    omit?: BusOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BusInclude<ExtArgs> | null
+    where?: BusWhereInput
+    orderBy?: BusOrderByWithRelationInput | BusOrderByWithRelationInput[]
+    cursor?: BusWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BusScalarFieldEnum | BusScalarFieldEnum[]
+  }
+
+  /**
+   * User.tripsDriven
+   */
+  export type User$tripsDrivenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    where?: TripWhereInput
+    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
+    cursor?: TripWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TripScalarFieldEnum | TripScalarFieldEnum[]
+  }
+
+  /**
+   * User.tripsConducted
+   */
+  export type User$tripsConductedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Trip
+     */
+    select?: TripSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Trip
+     */
+    omit?: TripOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripInclude<ExtArgs> | null
+    where?: TripWhereInput
+    orderBy?: TripOrderByWithRelationInput | TripOrderByWithRelationInput[]
+    cursor?: TripWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TripScalarFieldEnum | TripScalarFieldEnum[]
   }
 
   /**
@@ -13323,30 +11091,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RouteScalarFieldEnum | RouteScalarFieldEnum[]
-  }
-
-  /**
-   * User.conductors
-   */
-  export type User$conductorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Conductor
-     */
-    select?: ConductorSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Conductor
-     */
-    omit?: ConductorOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConductorInclude<ExtArgs> | null
-    where?: ConductorWhereInput
-    orderBy?: ConductorOrderByWithRelationInput | ConductorOrderByWithRelationInput[]
-    cursor?: ConductorWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ConductorScalarFieldEnum | ConductorScalarFieldEnum[]
   }
 
   /**
@@ -13413,6 +11157,1043 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserExtra
+   */
+
+  export type AggregateUserExtra = {
+    _count: UserExtraCountAggregateOutputType | null
+    _avg: UserExtraAvgAggregateOutputType | null
+    _sum: UserExtraSumAggregateOutputType | null
+    _min: UserExtraMinAggregateOutputType | null
+    _max: UserExtraMaxAggregateOutputType | null
+  }
+
+  export type UserExtraAvgAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    experience_years: number | null
+  }
+
+  export type UserExtraSumAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    experience_years: number | null
+  }
+
+  export type UserExtraMinAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    name: string | null
+    license_number: string | null
+    license_expiry: Date | null
+    experience_years: number | null
+    address: string | null
+    emergency_contact: string | null
+    active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type UserExtraMaxAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    name: string | null
+    license_number: string | null
+    license_expiry: Date | null
+    experience_years: number | null
+    address: string | null
+    emergency_contact: string | null
+    active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type UserExtraCountAggregateOutputType = {
+    id: number
+    userId: number
+    name: number
+    license_number: number
+    license_expiry: number
+    experience_years: number
+    address: number
+    emergency_contact: number
+    active: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type UserExtraAvgAggregateInputType = {
+    id?: true
+    userId?: true
+    experience_years?: true
+  }
+
+  export type UserExtraSumAggregateInputType = {
+    id?: true
+    userId?: true
+    experience_years?: true
+  }
+
+  export type UserExtraMinAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    license_number?: true
+    license_expiry?: true
+    experience_years?: true
+    address?: true
+    emergency_contact?: true
+    active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type UserExtraMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    license_number?: true
+    license_expiry?: true
+    experience_years?: true
+    address?: true
+    emergency_contact?: true
+    active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type UserExtraCountAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    license_number?: true
+    license_expiry?: true
+    experience_years?: true
+    address?: true
+    emergency_contact?: true
+    active?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type UserExtraAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserExtra to aggregate.
+     */
+    where?: UserExtraWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserExtras to fetch.
+     */
+    orderBy?: UserExtraOrderByWithRelationInput | UserExtraOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserExtraWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserExtras from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserExtras.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserExtras
+    **/
+    _count?: true | UserExtraCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserExtraAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserExtraSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserExtraMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserExtraMaxAggregateInputType
+  }
+
+  export type GetUserExtraAggregateType<T extends UserExtraAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserExtra]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserExtra[P]>
+      : GetScalarType<T[P], AggregateUserExtra[P]>
+  }
+
+
+
+
+  export type UserExtraGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserExtraWhereInput
+    orderBy?: UserExtraOrderByWithAggregationInput | UserExtraOrderByWithAggregationInput[]
+    by: UserExtraScalarFieldEnum[] | UserExtraScalarFieldEnum
+    having?: UserExtraScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserExtraCountAggregateInputType | true
+    _avg?: UserExtraAvgAggregateInputType
+    _sum?: UserExtraSumAggregateInputType
+    _min?: UserExtraMinAggregateInputType
+    _max?: UserExtraMaxAggregateInputType
+  }
+
+  export type UserExtraGroupByOutputType = {
+    id: number
+    userId: number
+    name: string | null
+    license_number: string | null
+    license_expiry: Date | null
+    experience_years: number
+    address: string | null
+    emergency_contact: string | null
+    active: boolean
+    created_at: Date
+    updated_at: Date
+    _count: UserExtraCountAggregateOutputType | null
+    _avg: UserExtraAvgAggregateOutputType | null
+    _sum: UserExtraSumAggregateOutputType | null
+    _min: UserExtraMinAggregateOutputType | null
+    _max: UserExtraMaxAggregateOutputType | null
+  }
+
+  type GetUserExtraGroupByPayload<T extends UserExtraGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserExtraGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserExtraGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserExtraGroupByOutputType[P]>
+            : GetScalarType<T[P], UserExtraGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserExtraSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    license_number?: boolean
+    license_expiry?: boolean
+    experience_years?: boolean
+    address?: boolean
+    emergency_contact?: boolean
+    active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userExtra"]>
+
+
+
+  export type UserExtraSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    license_number?: boolean
+    license_expiry?: boolean
+    experience_years?: boolean
+    address?: boolean
+    emergency_contact?: boolean
+    active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type UserExtraOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "license_number" | "license_expiry" | "experience_years" | "address" | "emergency_contact" | "active" | "created_at" | "updated_at", ExtArgs["result"]["userExtra"]>
+  export type UserExtraInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserExtraPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserExtra"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      userId: number
+      name: string | null
+      license_number: string | null
+      license_expiry: Date | null
+      experience_years: number
+      address: string | null
+      emergency_contact: string | null
+      active: boolean
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["userExtra"]>
+    composites: {}
+  }
+
+  type UserExtraGetPayload<S extends boolean | null | undefined | UserExtraDefaultArgs> = $Result.GetResult<Prisma.$UserExtraPayload, S>
+
+  type UserExtraCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserExtraFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserExtraCountAggregateInputType | true
+    }
+
+  export interface UserExtraDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserExtra'], meta: { name: 'UserExtra' } }
+    /**
+     * Find zero or one UserExtra that matches the filter.
+     * @param {UserExtraFindUniqueArgs} args - Arguments to find a UserExtra
+     * @example
+     * // Get one UserExtra
+     * const userExtra = await prisma.userExtra.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserExtraFindUniqueArgs>(args: SelectSubset<T, UserExtraFindUniqueArgs<ExtArgs>>): Prisma__UserExtraClient<$Result.GetResult<Prisma.$UserExtraPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserExtra that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserExtraFindUniqueOrThrowArgs} args - Arguments to find a UserExtra
+     * @example
+     * // Get one UserExtra
+     * const userExtra = await prisma.userExtra.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserExtraFindUniqueOrThrowArgs>(args: SelectSubset<T, UserExtraFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserExtraClient<$Result.GetResult<Prisma.$UserExtraPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserExtra that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExtraFindFirstArgs} args - Arguments to find a UserExtra
+     * @example
+     * // Get one UserExtra
+     * const userExtra = await prisma.userExtra.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserExtraFindFirstArgs>(args?: SelectSubset<T, UserExtraFindFirstArgs<ExtArgs>>): Prisma__UserExtraClient<$Result.GetResult<Prisma.$UserExtraPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserExtra that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExtraFindFirstOrThrowArgs} args - Arguments to find a UserExtra
+     * @example
+     * // Get one UserExtra
+     * const userExtra = await prisma.userExtra.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserExtraFindFirstOrThrowArgs>(args?: SelectSubset<T, UserExtraFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserExtraClient<$Result.GetResult<Prisma.$UserExtraPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserExtras that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExtraFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserExtras
+     * const userExtras = await prisma.userExtra.findMany()
+     * 
+     * // Get first 10 UserExtras
+     * const userExtras = await prisma.userExtra.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userExtraWithIdOnly = await prisma.userExtra.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserExtraFindManyArgs>(args?: SelectSubset<T, UserExtraFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserExtraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserExtra.
+     * @param {UserExtraCreateArgs} args - Arguments to create a UserExtra.
+     * @example
+     * // Create one UserExtra
+     * const UserExtra = await prisma.userExtra.create({
+     *   data: {
+     *     // ... data to create a UserExtra
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserExtraCreateArgs>(args: SelectSubset<T, UserExtraCreateArgs<ExtArgs>>): Prisma__UserExtraClient<$Result.GetResult<Prisma.$UserExtraPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserExtras.
+     * @param {UserExtraCreateManyArgs} args - Arguments to create many UserExtras.
+     * @example
+     * // Create many UserExtras
+     * const userExtra = await prisma.userExtra.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserExtraCreateManyArgs>(args?: SelectSubset<T, UserExtraCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a UserExtra.
+     * @param {UserExtraDeleteArgs} args - Arguments to delete one UserExtra.
+     * @example
+     * // Delete one UserExtra
+     * const UserExtra = await prisma.userExtra.delete({
+     *   where: {
+     *     // ... filter to delete one UserExtra
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserExtraDeleteArgs>(args: SelectSubset<T, UserExtraDeleteArgs<ExtArgs>>): Prisma__UserExtraClient<$Result.GetResult<Prisma.$UserExtraPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserExtra.
+     * @param {UserExtraUpdateArgs} args - Arguments to update one UserExtra.
+     * @example
+     * // Update one UserExtra
+     * const userExtra = await prisma.userExtra.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserExtraUpdateArgs>(args: SelectSubset<T, UserExtraUpdateArgs<ExtArgs>>): Prisma__UserExtraClient<$Result.GetResult<Prisma.$UserExtraPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserExtras.
+     * @param {UserExtraDeleteManyArgs} args - Arguments to filter UserExtras to delete.
+     * @example
+     * // Delete a few UserExtras
+     * const { count } = await prisma.userExtra.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserExtraDeleteManyArgs>(args?: SelectSubset<T, UserExtraDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserExtras.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExtraUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserExtras
+     * const userExtra = await prisma.userExtra.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserExtraUpdateManyArgs>(args: SelectSubset<T, UserExtraUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UserExtra.
+     * @param {UserExtraUpsertArgs} args - Arguments to update or create a UserExtra.
+     * @example
+     * // Update or create a UserExtra
+     * const userExtra = await prisma.userExtra.upsert({
+     *   create: {
+     *     // ... data to create a UserExtra
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserExtra we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserExtraUpsertArgs>(args: SelectSubset<T, UserExtraUpsertArgs<ExtArgs>>): Prisma__UserExtraClient<$Result.GetResult<Prisma.$UserExtraPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserExtras.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExtraCountArgs} args - Arguments to filter UserExtras to count.
+     * @example
+     * // Count the number of UserExtras
+     * const count = await prisma.userExtra.count({
+     *   where: {
+     *     // ... the filter for the UserExtras we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserExtraCountArgs>(
+      args?: Subset<T, UserExtraCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserExtraCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserExtra.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExtraAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserExtraAggregateArgs>(args: Subset<T, UserExtraAggregateArgs>): Prisma.PrismaPromise<GetUserExtraAggregateType<T>>
+
+    /**
+     * Group by UserExtra.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExtraGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserExtraGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserExtraGroupByArgs['orderBy'] }
+        : { orderBy?: UserExtraGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserExtraGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserExtraGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserExtra model
+   */
+  readonly fields: UserExtraFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserExtra.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserExtraClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserExtra model
+   */
+  interface UserExtraFieldRefs {
+    readonly id: FieldRef<"UserExtra", 'Int'>
+    readonly userId: FieldRef<"UserExtra", 'Int'>
+    readonly name: FieldRef<"UserExtra", 'String'>
+    readonly license_number: FieldRef<"UserExtra", 'String'>
+    readonly license_expiry: FieldRef<"UserExtra", 'DateTime'>
+    readonly experience_years: FieldRef<"UserExtra", 'Int'>
+    readonly address: FieldRef<"UserExtra", 'String'>
+    readonly emergency_contact: FieldRef<"UserExtra", 'String'>
+    readonly active: FieldRef<"UserExtra", 'Boolean'>
+    readonly created_at: FieldRef<"UserExtra", 'DateTime'>
+    readonly updated_at: FieldRef<"UserExtra", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserExtra findUnique
+   */
+  export type UserExtraFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExtra
+     */
+    select?: UserExtraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExtra
+     */
+    omit?: UserExtraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExtraInclude<ExtArgs> | null
+    /**
+     * Filter, which UserExtra to fetch.
+     */
+    where: UserExtraWhereUniqueInput
+  }
+
+  /**
+   * UserExtra findUniqueOrThrow
+   */
+  export type UserExtraFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExtra
+     */
+    select?: UserExtraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExtra
+     */
+    omit?: UserExtraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExtraInclude<ExtArgs> | null
+    /**
+     * Filter, which UserExtra to fetch.
+     */
+    where: UserExtraWhereUniqueInput
+  }
+
+  /**
+   * UserExtra findFirst
+   */
+  export type UserExtraFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExtra
+     */
+    select?: UserExtraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExtra
+     */
+    omit?: UserExtraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExtraInclude<ExtArgs> | null
+    /**
+     * Filter, which UserExtra to fetch.
+     */
+    where?: UserExtraWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserExtras to fetch.
+     */
+    orderBy?: UserExtraOrderByWithRelationInput | UserExtraOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserExtras.
+     */
+    cursor?: UserExtraWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserExtras from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserExtras.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserExtras.
+     */
+    distinct?: UserExtraScalarFieldEnum | UserExtraScalarFieldEnum[]
+  }
+
+  /**
+   * UserExtra findFirstOrThrow
+   */
+  export type UserExtraFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExtra
+     */
+    select?: UserExtraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExtra
+     */
+    omit?: UserExtraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExtraInclude<ExtArgs> | null
+    /**
+     * Filter, which UserExtra to fetch.
+     */
+    where?: UserExtraWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserExtras to fetch.
+     */
+    orderBy?: UserExtraOrderByWithRelationInput | UserExtraOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserExtras.
+     */
+    cursor?: UserExtraWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserExtras from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserExtras.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserExtras.
+     */
+    distinct?: UserExtraScalarFieldEnum | UserExtraScalarFieldEnum[]
+  }
+
+  /**
+   * UserExtra findMany
+   */
+  export type UserExtraFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExtra
+     */
+    select?: UserExtraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExtra
+     */
+    omit?: UserExtraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExtraInclude<ExtArgs> | null
+    /**
+     * Filter, which UserExtras to fetch.
+     */
+    where?: UserExtraWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserExtras to fetch.
+     */
+    orderBy?: UserExtraOrderByWithRelationInput | UserExtraOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserExtras.
+     */
+    cursor?: UserExtraWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserExtras from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserExtras.
+     */
+    skip?: number
+    distinct?: UserExtraScalarFieldEnum | UserExtraScalarFieldEnum[]
+  }
+
+  /**
+   * UserExtra create
+   */
+  export type UserExtraCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExtra
+     */
+    select?: UserExtraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExtra
+     */
+    omit?: UserExtraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExtraInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserExtra.
+     */
+    data: XOR<UserExtraCreateInput, UserExtraUncheckedCreateInput>
+  }
+
+  /**
+   * UserExtra createMany
+   */
+  export type UserExtraCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserExtras.
+     */
+    data: UserExtraCreateManyInput | UserExtraCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserExtra update
+   */
+  export type UserExtraUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExtra
+     */
+    select?: UserExtraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExtra
+     */
+    omit?: UserExtraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExtraInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserExtra.
+     */
+    data: XOR<UserExtraUpdateInput, UserExtraUncheckedUpdateInput>
+    /**
+     * Choose, which UserExtra to update.
+     */
+    where: UserExtraWhereUniqueInput
+  }
+
+  /**
+   * UserExtra updateMany
+   */
+  export type UserExtraUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserExtras.
+     */
+    data: XOR<UserExtraUpdateManyMutationInput, UserExtraUncheckedUpdateManyInput>
+    /**
+     * Filter which UserExtras to update
+     */
+    where?: UserExtraWhereInput
+    /**
+     * Limit how many UserExtras to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserExtra upsert
+   */
+  export type UserExtraUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExtra
+     */
+    select?: UserExtraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExtra
+     */
+    omit?: UserExtraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExtraInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserExtra to update in case it exists.
+     */
+    where: UserExtraWhereUniqueInput
+    /**
+     * In case the UserExtra found by the `where` argument doesn't exist, create a new UserExtra with this data.
+     */
+    create: XOR<UserExtraCreateInput, UserExtraUncheckedCreateInput>
+    /**
+     * In case the UserExtra was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserExtraUpdateInput, UserExtraUncheckedUpdateInput>
+  }
+
+  /**
+   * UserExtra delete
+   */
+  export type UserExtraDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExtra
+     */
+    select?: UserExtraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExtra
+     */
+    omit?: UserExtraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExtraInclude<ExtArgs> | null
+    /**
+     * Filter which UserExtra to delete.
+     */
+    where: UserExtraWhereUniqueInput
+  }
+
+  /**
+   * UserExtra deleteMany
+   */
+  export type UserExtraDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserExtras to delete
+     */
+    where?: UserExtraWhereInput
+    /**
+     * Limit how many UserExtras to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserExtra without action
+   */
+  export type UserExtraDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExtra
+     */
+    select?: UserExtraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExtra
+     */
+    omit?: UserExtraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExtraInclude<ExtArgs> | null
   }
 
 
@@ -14440,40 +13221,6 @@ export namespace Prisma {
   export type BusScalarFieldEnum = (typeof BusScalarFieldEnum)[keyof typeof BusScalarFieldEnum]
 
 
-  export const ConductorScalarFieldEnum: {
-    id: 'id',
-    user_id: 'user_id',
-    name: 'name',
-    phone: 'phone',
-    experience_years: 'experience_years',
-    address: 'address',
-    emergency_contact: 'emergency_contact',
-    active: 'active',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
-  };
-
-  export type ConductorScalarFieldEnum = (typeof ConductorScalarFieldEnum)[keyof typeof ConductorScalarFieldEnum]
-
-
-  export const DriverScalarFieldEnum: {
-    id: 'id',
-    user_id: 'user_id',
-    name: 'name',
-    phone: 'phone',
-    license_number: 'license_number',
-    license_expiry: 'license_expiry',
-    experience_years: 'experience_years',
-    address: 'address',
-    emergency_contact: 'emergency_contact',
-    active: 'active',
-    created_at: 'created_at',
-    updated_at: 'updated_at'
-  };
-
-  export type DriverScalarFieldEnum = (typeof DriverScalarFieldEnum)[keyof typeof DriverScalarFieldEnum]
-
-
   export const PackageScalarFieldEnum: {
     id: 'id',
     bus_id: 'bus_id',
@@ -14597,6 +13344,23 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const UserExtraScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    name: 'name',
+    license_number: 'license_number',
+    license_expiry: 'license_expiry',
+    experience_years: 'experience_years',
+    address: 'address',
+    emergency_contact: 'emergency_contact',
+    active: 'active',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type UserExtraScalarFieldEnum = (typeof UserExtraScalarFieldEnum)[keyof typeof UserExtraScalarFieldEnum]
+
+
   export const OTPScalarFieldEnum: {
     id: 'id',
     user_id: 'user_id',
@@ -14639,27 +13403,6 @@ export namespace Prisma {
   };
 
   export type BusOrderByRelevanceFieldEnum = (typeof BusOrderByRelevanceFieldEnum)[keyof typeof BusOrderByRelevanceFieldEnum]
-
-
-  export const ConductorOrderByRelevanceFieldEnum: {
-    name: 'name',
-    phone: 'phone',
-    address: 'address',
-    emergency_contact: 'emergency_contact'
-  };
-
-  export type ConductorOrderByRelevanceFieldEnum = (typeof ConductorOrderByRelevanceFieldEnum)[keyof typeof ConductorOrderByRelevanceFieldEnum]
-
-
-  export const DriverOrderByRelevanceFieldEnum: {
-    name: 'name',
-    phone: 'phone',
-    license_number: 'license_number',
-    address: 'address',
-    emergency_contact: 'emergency_contact'
-  };
-
-  export type DriverOrderByRelevanceFieldEnum = (typeof DriverOrderByRelevanceFieldEnum)[keyof typeof DriverOrderByRelevanceFieldEnum]
 
 
   export const PackageOrderByRelevanceFieldEnum: {
@@ -14730,6 +13473,16 @@ export namespace Prisma {
   export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
 
 
+  export const UserExtraOrderByRelevanceFieldEnum: {
+    name: 'name',
+    license_number: 'license_number',
+    address: 'address',
+    emergency_contact: 'emergency_contact'
+  };
+
+  export type UserExtraOrderByRelevanceFieldEnum = (typeof UserExtraOrderByRelevanceFieldEnum)[keyof typeof UserExtraOrderByRelevanceFieldEnum]
+
+
   export const OTPOrderByRelevanceFieldEnum: {
     otp_code: 'otp_code'
   };
@@ -14778,16 +13531,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
+   * Reference to a field of type 'PackageStatus'
    */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+  export type EnumPackageStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PackageStatus'>
     
 
 
   /**
-   * Reference to a field of type 'PackageStatus'
+   * Reference to a field of type 'Boolean'
    */
-  export type EnumPackageStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PackageStatus'>
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -14885,8 +13638,8 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Bus"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     route?: XOR<RouteNullableScalarRelationFilter, RouteWhereInput> | null
-    driver?: XOR<DriverNullableScalarRelationFilter, DriverWhereInput> | null
-    conductor?: XOR<ConductorNullableScalarRelationFilter, ConductorWhereInput> | null
+    driver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    conductor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     tickets?: TicketListRelationFilter
     packages?: PackageListRelationFilter
     dailyReports?: DailyReportListRelationFilter
@@ -14912,8 +13665,8 @@ export namespace Prisma {
     updated_at?: SortOrder
     user?: UserOrderByWithRelationInput
     route?: RouteOrderByWithRelationInput
-    driver?: DriverOrderByWithRelationInput
-    conductor?: ConductorOrderByWithRelationInput
+    driver?: UserOrderByWithRelationInput
+    conductor?: UserOrderByWithRelationInput
     tickets?: TicketOrderByRelationAggregateInput
     packages?: PackageOrderByRelationAggregateInput
     dailyReports?: DailyReportOrderByRelationAggregateInput
@@ -14943,8 +13696,8 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Bus"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     route?: XOR<RouteNullableScalarRelationFilter, RouteWhereInput> | null
-    driver?: XOR<DriverNullableScalarRelationFilter, DriverWhereInput> | null
-    conductor?: XOR<ConductorNullableScalarRelationFilter, ConductorWhereInput> | null
+    driver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    conductor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     tickets?: TicketListRelationFilter
     packages?: PackageListRelationFilter
     dailyReports?: DailyReportListRelationFilter
@@ -14994,194 +13747,6 @@ export namespace Prisma {
     permit_expiry?: DateTimeNullableWithAggregatesFilter<"Bus"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"Bus"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Bus"> | Date | string
-  }
-
-  export type ConductorWhereInput = {
-    AND?: ConductorWhereInput | ConductorWhereInput[]
-    OR?: ConductorWhereInput[]
-    NOT?: ConductorWhereInput | ConductorWhereInput[]
-    id?: IntFilter<"Conductor"> | number
-    user_id?: IntFilter<"Conductor"> | number
-    name?: StringFilter<"Conductor"> | string
-    phone?: StringFilter<"Conductor"> | string
-    experience_years?: IntFilter<"Conductor"> | number
-    address?: StringNullableFilter<"Conductor"> | string | null
-    emergency_contact?: StringNullableFilter<"Conductor"> | string | null
-    active?: BoolFilter<"Conductor"> | boolean
-    created_at?: DateTimeFilter<"Conductor"> | Date | string
-    updated_at?: DateTimeFilter<"Conductor"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    buses?: BusListRelationFilter
-    trips?: TripListRelationFilter
-  }
-
-  export type ConductorOrderByWithRelationInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    name?: SortOrder
-    phone?: SortOrder
-    experience_years?: SortOrder
-    address?: SortOrderInput | SortOrder
-    emergency_contact?: SortOrderInput | SortOrder
-    active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    user?: UserOrderByWithRelationInput
-    buses?: BusOrderByRelationAggregateInput
-    trips?: TripOrderByRelationAggregateInput
-    _relevance?: ConductorOrderByRelevanceInput
-  }
-
-  export type ConductorWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: ConductorWhereInput | ConductorWhereInput[]
-    OR?: ConductorWhereInput[]
-    NOT?: ConductorWhereInput | ConductorWhereInput[]
-    user_id?: IntFilter<"Conductor"> | number
-    name?: StringFilter<"Conductor"> | string
-    phone?: StringFilter<"Conductor"> | string
-    experience_years?: IntFilter<"Conductor"> | number
-    address?: StringNullableFilter<"Conductor"> | string | null
-    emergency_contact?: StringNullableFilter<"Conductor"> | string | null
-    active?: BoolFilter<"Conductor"> | boolean
-    created_at?: DateTimeFilter<"Conductor"> | Date | string
-    updated_at?: DateTimeFilter<"Conductor"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    buses?: BusListRelationFilter
-    trips?: TripListRelationFilter
-  }, "id">
-
-  export type ConductorOrderByWithAggregationInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    name?: SortOrder
-    phone?: SortOrder
-    experience_years?: SortOrder
-    address?: SortOrderInput | SortOrder
-    emergency_contact?: SortOrderInput | SortOrder
-    active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    _count?: ConductorCountOrderByAggregateInput
-    _avg?: ConductorAvgOrderByAggregateInput
-    _max?: ConductorMaxOrderByAggregateInput
-    _min?: ConductorMinOrderByAggregateInput
-    _sum?: ConductorSumOrderByAggregateInput
-  }
-
-  export type ConductorScalarWhereWithAggregatesInput = {
-    AND?: ConductorScalarWhereWithAggregatesInput | ConductorScalarWhereWithAggregatesInput[]
-    OR?: ConductorScalarWhereWithAggregatesInput[]
-    NOT?: ConductorScalarWhereWithAggregatesInput | ConductorScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Conductor"> | number
-    user_id?: IntWithAggregatesFilter<"Conductor"> | number
-    name?: StringWithAggregatesFilter<"Conductor"> | string
-    phone?: StringWithAggregatesFilter<"Conductor"> | string
-    experience_years?: IntWithAggregatesFilter<"Conductor"> | number
-    address?: StringNullableWithAggregatesFilter<"Conductor"> | string | null
-    emergency_contact?: StringNullableWithAggregatesFilter<"Conductor"> | string | null
-    active?: BoolWithAggregatesFilter<"Conductor"> | boolean
-    created_at?: DateTimeWithAggregatesFilter<"Conductor"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Conductor"> | Date | string
-  }
-
-  export type DriverWhereInput = {
-    AND?: DriverWhereInput | DriverWhereInput[]
-    OR?: DriverWhereInput[]
-    NOT?: DriverWhereInput | DriverWhereInput[]
-    id?: IntFilter<"Driver"> | number
-    user_id?: IntFilter<"Driver"> | number
-    name?: StringFilter<"Driver"> | string
-    phone?: StringFilter<"Driver"> | string
-    license_number?: StringFilter<"Driver"> | string
-    license_expiry?: DateTimeNullableFilter<"Driver"> | Date | string | null
-    experience_years?: IntFilter<"Driver"> | number
-    address?: StringNullableFilter<"Driver"> | string | null
-    emergency_contact?: StringNullableFilter<"Driver"> | string | null
-    active?: BoolFilter<"Driver"> | boolean
-    created_at?: DateTimeFilter<"Driver"> | Date | string
-    updated_at?: DateTimeFilter<"Driver"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    buses?: BusListRelationFilter
-    trips?: TripListRelationFilter
-  }
-
-  export type DriverOrderByWithRelationInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    name?: SortOrder
-    phone?: SortOrder
-    license_number?: SortOrder
-    license_expiry?: SortOrderInput | SortOrder
-    experience_years?: SortOrder
-    address?: SortOrderInput | SortOrder
-    emergency_contact?: SortOrderInput | SortOrder
-    active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    user?: UserOrderByWithRelationInput
-    buses?: BusOrderByRelationAggregateInput
-    trips?: TripOrderByRelationAggregateInput
-    _relevance?: DriverOrderByRelevanceInput
-  }
-
-  export type DriverWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: DriverWhereInput | DriverWhereInput[]
-    OR?: DriverWhereInput[]
-    NOT?: DriverWhereInput | DriverWhereInput[]
-    user_id?: IntFilter<"Driver"> | number
-    name?: StringFilter<"Driver"> | string
-    phone?: StringFilter<"Driver"> | string
-    license_number?: StringFilter<"Driver"> | string
-    license_expiry?: DateTimeNullableFilter<"Driver"> | Date | string | null
-    experience_years?: IntFilter<"Driver"> | number
-    address?: StringNullableFilter<"Driver"> | string | null
-    emergency_contact?: StringNullableFilter<"Driver"> | string | null
-    active?: BoolFilter<"Driver"> | boolean
-    created_at?: DateTimeFilter<"Driver"> | Date | string
-    updated_at?: DateTimeFilter<"Driver"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    buses?: BusListRelationFilter
-    trips?: TripListRelationFilter
-  }, "id">
-
-  export type DriverOrderByWithAggregationInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    name?: SortOrder
-    phone?: SortOrder
-    license_number?: SortOrder
-    license_expiry?: SortOrderInput | SortOrder
-    experience_years?: SortOrder
-    address?: SortOrderInput | SortOrder
-    emergency_contact?: SortOrderInput | SortOrder
-    active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-    _count?: DriverCountOrderByAggregateInput
-    _avg?: DriverAvgOrderByAggregateInput
-    _max?: DriverMaxOrderByAggregateInput
-    _min?: DriverMinOrderByAggregateInput
-    _sum?: DriverSumOrderByAggregateInput
-  }
-
-  export type DriverScalarWhereWithAggregatesInput = {
-    AND?: DriverScalarWhereWithAggregatesInput | DriverScalarWhereWithAggregatesInput[]
-    OR?: DriverScalarWhereWithAggregatesInput[]
-    NOT?: DriverScalarWhereWithAggregatesInput | DriverScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Driver"> | number
-    user_id?: IntWithAggregatesFilter<"Driver"> | number
-    name?: StringWithAggregatesFilter<"Driver"> | string
-    phone?: StringWithAggregatesFilter<"Driver"> | string
-    license_number?: StringWithAggregatesFilter<"Driver"> | string
-    license_expiry?: DateTimeNullableWithAggregatesFilter<"Driver"> | Date | string | null
-    experience_years?: IntWithAggregatesFilter<"Driver"> | number
-    address?: StringNullableWithAggregatesFilter<"Driver"> | string | null
-    emergency_contact?: StringNullableWithAggregatesFilter<"Driver"> | string | null
-    active?: BoolWithAggregatesFilter<"Driver"> | boolean
-    created_at?: DateTimeWithAggregatesFilter<"Driver"> | Date | string
-    updated_at?: DateTimeWithAggregatesFilter<"Driver"> | Date | string
   }
 
   export type PackageWhereInput = {
@@ -15688,8 +14253,8 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Trip"> | Date | string
     bus?: XOR<BusScalarRelationFilter, BusWhereInput>
     route?: XOR<RouteScalarRelationFilter, RouteWhereInput>
-    driver?: XOR<DriverNullableScalarRelationFilter, DriverWhereInput> | null
-    conductor?: XOR<ConductorNullableScalarRelationFilter, ConductorWhereInput> | null
+    driver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    conductor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     tickets?: TicketListRelationFilter
     packages?: PackageListRelationFilter
   }
@@ -15707,8 +14272,8 @@ export namespace Prisma {
     updated_at?: SortOrder
     bus?: BusOrderByWithRelationInput
     route?: RouteOrderByWithRelationInput
-    driver?: DriverOrderByWithRelationInput
-    conductor?: ConductorOrderByWithRelationInput
+    driver?: UserOrderByWithRelationInput
+    conductor?: UserOrderByWithRelationInput
     tickets?: TicketOrderByRelationAggregateInput
     packages?: PackageOrderByRelationAggregateInput
   }
@@ -15729,8 +14294,8 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Trip"> | Date | string
     bus?: XOR<BusScalarRelationFilter, BusWhereInput>
     route?: XOR<RouteScalarRelationFilter, RouteWhereInput>
-    driver?: XOR<DriverNullableScalarRelationFilter, DriverWhereInput> | null
-    conductor?: XOR<ConductorNullableScalarRelationFilter, ConductorWhereInput> | null
+    driver?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    conductor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     tickets?: TicketListRelationFilter
     packages?: PackageListRelationFilter
   }, "id">
@@ -15783,9 +14348,12 @@ export namespace Prisma {
     is_verified?: BoolFilter<"User"> | boolean
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
-    drivers?: DriverListRelationFilter
+    userExtra?: XOR<UserExtraNullableScalarRelationFilter, UserExtraWhereInput> | null
+    busesDriven?: BusListRelationFilter
+    busesConducted?: BusListRelationFilter
+    tripsDriven?: TripListRelationFilter
+    tripsConducted?: TripListRelationFilter
     routes?: RouteListRelationFilter
-    conductors?: ConductorListRelationFilter
     buses?: BusListRelationFilter
     otps?: OTPListRelationFilter
   }
@@ -15801,9 +14369,12 @@ export namespace Prisma {
     is_verified?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-    drivers?: DriverOrderByRelationAggregateInput
+    userExtra?: UserExtraOrderByWithRelationInput
+    busesDriven?: BusOrderByRelationAggregateInput
+    busesConducted?: BusOrderByRelationAggregateInput
+    tripsDriven?: TripOrderByRelationAggregateInput
+    tripsConducted?: TripOrderByRelationAggregateInput
     routes?: RouteOrderByRelationAggregateInput
-    conductors?: ConductorOrderByRelationAggregateInput
     buses?: BusOrderByRelationAggregateInput
     otps?: OTPOrderByRelationAggregateInput
     _relevance?: UserOrderByRelevanceInput
@@ -15823,9 +14394,12 @@ export namespace Prisma {
     is_verified?: BoolFilter<"User"> | boolean
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
-    drivers?: DriverListRelationFilter
+    userExtra?: XOR<UserExtraNullableScalarRelationFilter, UserExtraWhereInput> | null
+    busesDriven?: BusListRelationFilter
+    busesConducted?: BusListRelationFilter
+    tripsDriven?: TripListRelationFilter
+    tripsConducted?: TripListRelationFilter
     routes?: RouteListRelationFilter
-    conductors?: ConductorListRelationFilter
     buses?: BusListRelationFilter
     otps?: OTPListRelationFilter
   }, "id" | "email" | "phone">
@@ -15862,6 +14436,94 @@ export namespace Prisma {
     is_verified?: BoolWithAggregatesFilter<"User"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type UserExtraWhereInput = {
+    AND?: UserExtraWhereInput | UserExtraWhereInput[]
+    OR?: UserExtraWhereInput[]
+    NOT?: UserExtraWhereInput | UserExtraWhereInput[]
+    id?: IntFilter<"UserExtra"> | number
+    userId?: IntFilter<"UserExtra"> | number
+    name?: StringNullableFilter<"UserExtra"> | string | null
+    license_number?: StringNullableFilter<"UserExtra"> | string | null
+    license_expiry?: DateTimeNullableFilter<"UserExtra"> | Date | string | null
+    experience_years?: IntFilter<"UserExtra"> | number
+    address?: StringNullableFilter<"UserExtra"> | string | null
+    emergency_contact?: StringNullableFilter<"UserExtra"> | string | null
+    active?: BoolFilter<"UserExtra"> | boolean
+    created_at?: DateTimeFilter<"UserExtra"> | Date | string
+    updated_at?: DateTimeFilter<"UserExtra"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UserExtraOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrderInput | SortOrder
+    license_number?: SortOrderInput | SortOrder
+    license_expiry?: SortOrderInput | SortOrder
+    experience_years?: SortOrder
+    address?: SortOrderInput | SortOrder
+    emergency_contact?: SortOrderInput | SortOrder
+    active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    user?: UserOrderByWithRelationInput
+    _relevance?: UserExtraOrderByRelevanceInput
+  }
+
+  export type UserExtraWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    userId?: number
+    AND?: UserExtraWhereInput | UserExtraWhereInput[]
+    OR?: UserExtraWhereInput[]
+    NOT?: UserExtraWhereInput | UserExtraWhereInput[]
+    name?: StringNullableFilter<"UserExtra"> | string | null
+    license_number?: StringNullableFilter<"UserExtra"> | string | null
+    license_expiry?: DateTimeNullableFilter<"UserExtra"> | Date | string | null
+    experience_years?: IntFilter<"UserExtra"> | number
+    address?: StringNullableFilter<"UserExtra"> | string | null
+    emergency_contact?: StringNullableFilter<"UserExtra"> | string | null
+    active?: BoolFilter<"UserExtra"> | boolean
+    created_at?: DateTimeFilter<"UserExtra"> | Date | string
+    updated_at?: DateTimeFilter<"UserExtra"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId">
+
+  export type UserExtraOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrderInput | SortOrder
+    license_number?: SortOrderInput | SortOrder
+    license_expiry?: SortOrderInput | SortOrder
+    experience_years?: SortOrder
+    address?: SortOrderInput | SortOrder
+    emergency_contact?: SortOrderInput | SortOrder
+    active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: UserExtraCountOrderByAggregateInput
+    _avg?: UserExtraAvgOrderByAggregateInput
+    _max?: UserExtraMaxOrderByAggregateInput
+    _min?: UserExtraMinOrderByAggregateInput
+    _sum?: UserExtraSumOrderByAggregateInput
+  }
+
+  export type UserExtraScalarWhereWithAggregatesInput = {
+    AND?: UserExtraScalarWhereWithAggregatesInput | UserExtraScalarWhereWithAggregatesInput[]
+    OR?: UserExtraScalarWhereWithAggregatesInput[]
+    NOT?: UserExtraScalarWhereWithAggregatesInput | UserExtraScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"UserExtra"> | number
+    userId?: IntWithAggregatesFilter<"UserExtra"> | number
+    name?: StringNullableWithAggregatesFilter<"UserExtra"> | string | null
+    license_number?: StringNullableWithAggregatesFilter<"UserExtra"> | string | null
+    license_expiry?: DateTimeNullableWithAggregatesFilter<"UserExtra"> | Date | string | null
+    experience_years?: IntWithAggregatesFilter<"UserExtra"> | number
+    address?: StringNullableWithAggregatesFilter<"UserExtra"> | string | null
+    emergency_contact?: StringNullableWithAggregatesFilter<"UserExtra"> | string | null
+    active?: BoolWithAggregatesFilter<"UserExtra"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"UserExtra"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"UserExtra"> | Date | string
   }
 
   export type OTPWhereInput = {
@@ -15945,8 +14607,8 @@ export namespace Prisma {
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutBusesInput
     route?: RouteCreateNestedOneWithoutBusesInput
-    driver?: DriverCreateNestedOneWithoutBusesInput
-    conductor?: ConductorCreateNestedOneWithoutBusesInput
+    driver?: UserCreateNestedOneWithoutBusesDrivenInput
+    conductor?: UserCreateNestedOneWithoutBusesConductedInput
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
@@ -15990,8 +14652,8 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutBusesNestedInput
     route?: RouteUpdateOneWithoutBusesNestedInput
-    driver?: DriverUpdateOneWithoutBusesNestedInput
-    conductor?: ConductorUpdateOneWithoutBusesNestedInput
+    driver?: UserUpdateOneWithoutBusesDrivenNestedInput
+    conductor?: UserUpdateOneWithoutBusesConductedNestedInput
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
@@ -16067,210 +14729,6 @@ export namespace Prisma {
     last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ConductorCreateInput = {
-    name: string
-    phone: string
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    user: UserCreateNestedOneWithoutConductorsInput
-    buses?: BusCreateNestedManyWithoutConductorInput
-    trips?: TripCreateNestedManyWithoutConductorInput
-  }
-
-  export type ConductorUncheckedCreateInput = {
-    id?: number
-    user_id: number
-    name: string
-    phone: string
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    buses?: BusUncheckedCreateNestedManyWithoutConductorInput
-    trips?: TripUncheckedCreateNestedManyWithoutConductorInput
-  }
-
-  export type ConductorUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutConductorsNestedInput
-    buses?: BusUpdateManyWithoutConductorNestedInput
-    trips?: TripUpdateManyWithoutConductorNestedInput
-  }
-
-  export type ConductorUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    buses?: BusUncheckedUpdateManyWithoutConductorNestedInput
-    trips?: TripUncheckedUpdateManyWithoutConductorNestedInput
-  }
-
-  export type ConductorCreateManyInput = {
-    id?: number
-    user_id: number
-    name: string
-    phone: string
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type ConductorUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ConductorUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DriverCreateInput = {
-    name: string
-    phone: string
-    license_number: string
-    license_expiry?: Date | string | null
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    user: UserCreateNestedOneWithoutDriversInput
-    buses?: BusCreateNestedManyWithoutDriverInput
-    trips?: TripCreateNestedManyWithoutDriverInput
-  }
-
-  export type DriverUncheckedCreateInput = {
-    id?: number
-    user_id: number
-    name: string
-    phone: string
-    license_number: string
-    license_expiry?: Date | string | null
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    buses?: BusUncheckedCreateNestedManyWithoutDriverInput
-    trips?: TripUncheckedCreateNestedManyWithoutDriverInput
-  }
-
-  export type DriverUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    license_number?: StringFieldUpdateOperationsInput | string
-    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutDriversNestedInput
-    buses?: BusUpdateManyWithoutDriverNestedInput
-    trips?: TripUpdateManyWithoutDriverNestedInput
-  }
-
-  export type DriverUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    license_number?: StringFieldUpdateOperationsInput | string
-    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    buses?: BusUncheckedUpdateManyWithoutDriverNestedInput
-    trips?: TripUncheckedUpdateManyWithoutDriverNestedInput
-  }
-
-  export type DriverCreateManyInput = {
-    id?: number
-    user_id: number
-    name: string
-    phone: string
-    license_number: string
-    license_expiry?: Date | string | null
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type DriverUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    license_number?: StringFieldUpdateOperationsInput | string
-    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DriverUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    license_number?: StringFieldUpdateOperationsInput | string
-    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16804,8 +15262,8 @@ export namespace Prisma {
     updated_at?: Date | string
     bus: BusCreateNestedOneWithoutTripsInput
     route: RouteCreateNestedOneWithoutTripsInput
-    driver?: DriverCreateNestedOneWithoutTripsInput
-    conductor?: ConductorCreateNestedOneWithoutTripsInput
+    driver?: UserCreateNestedOneWithoutTripsDrivenInput
+    conductor?: UserCreateNestedOneWithoutTripsConductedInput
     tickets?: TicketCreateNestedManyWithoutTripInput
     packages?: PackageCreateNestedManyWithoutTripInput
   }
@@ -16833,8 +15291,8 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bus?: BusUpdateOneRequiredWithoutTripsNestedInput
     route?: RouteUpdateOneRequiredWithoutTripsNestedInput
-    driver?: DriverUpdateOneWithoutTripsNestedInput
-    conductor?: ConductorUpdateOneWithoutTripsNestedInput
+    driver?: UserUpdateOneWithoutTripsDrivenNestedInput
+    conductor?: UserUpdateOneWithoutTripsConductedNestedInput
     tickets?: TicketUpdateManyWithoutTripNestedInput
     packages?: PackageUpdateManyWithoutTripNestedInput
   }
@@ -16898,9 +15356,12 @@ export namespace Prisma {
     is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    drivers?: DriverCreateNestedManyWithoutUserInput
+    userExtra?: UserExtraCreateNestedOneWithoutUserInput
+    busesDriven?: BusCreateNestedManyWithoutDriverInput
+    busesConducted?: BusCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripCreateNestedManyWithoutConductorInput
     routes?: RouteCreateNestedManyWithoutUserInput
-    conductors?: ConductorCreateNestedManyWithoutUserInput
     buses?: BusCreateNestedManyWithoutUserInput
     otps?: OTPCreateNestedManyWithoutUserInput
   }
@@ -16916,9 +15377,12 @@ export namespace Prisma {
     is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    drivers?: DriverUncheckedCreateNestedManyWithoutUserInput
+    userExtra?: UserExtraUncheckedCreateNestedOneWithoutUserInput
+    busesDriven?: BusUncheckedCreateNestedManyWithoutDriverInput
+    busesConducted?: BusUncheckedCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripUncheckedCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripUncheckedCreateNestedManyWithoutConductorInput
     routes?: RouteUncheckedCreateNestedManyWithoutUserInput
-    conductors?: ConductorUncheckedCreateNestedManyWithoutUserInput
     buses?: BusUncheckedCreateNestedManyWithoutUserInput
     otps?: OTPUncheckedCreateNestedManyWithoutUserInput
   }
@@ -16933,9 +15397,12 @@ export namespace Prisma {
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    drivers?: DriverUpdateManyWithoutUserNestedInput
+    userExtra?: UserExtraUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUpdateManyWithoutConductorNestedInput
     routes?: RouteUpdateManyWithoutUserNestedInput
-    conductors?: ConductorUpdateManyWithoutUserNestedInput
     buses?: BusUpdateManyWithoutUserNestedInput
     otps?: OTPUpdateManyWithoutUserNestedInput
   }
@@ -16951,9 +15418,12 @@ export namespace Prisma {
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    drivers?: DriverUncheckedUpdateManyWithoutUserNestedInput
+    userExtra?: UserExtraUncheckedUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUncheckedUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUncheckedUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUncheckedUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUncheckedUpdateManyWithoutConductorNestedInput
     routes?: RouteUncheckedUpdateManyWithoutUserNestedInput
-    conductors?: ConductorUncheckedUpdateManyWithoutUserNestedInput
     buses?: BusUncheckedUpdateManyWithoutUserNestedInput
     otps?: OTPUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -16992,6 +15462,100 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     company_name?: NullableStringFieldUpdateOperationsInput | string | null
     is_verified?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserExtraCreateInput = {
+    name?: string | null
+    license_number?: string | null
+    license_expiry?: Date | string | null
+    experience_years?: number
+    address?: string | null
+    emergency_contact?: string | null
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutUserExtraInput
+  }
+
+  export type UserExtraUncheckedCreateInput = {
+    id?: number
+    userId: number
+    name?: string | null
+    license_number?: string | null
+    license_expiry?: Date | string | null
+    experience_years?: number
+    address?: string | null
+    emergency_contact?: string | null
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type UserExtraUpdateInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    license_number?: NullableStringFieldUpdateOperationsInput | string | null
+    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    experience_years?: IntFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutUserExtraNestedInput
+  }
+
+  export type UserExtraUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    license_number?: NullableStringFieldUpdateOperationsInput | string | null
+    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    experience_years?: IntFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserExtraCreateManyInput = {
+    id?: number
+    userId: number
+    name?: string | null
+    license_number?: string | null
+    license_expiry?: Date | string | null
+    experience_years?: number
+    address?: string | null
+    emergency_contact?: string | null
+    active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type UserExtraUpdateManyMutationInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    license_number?: NullableStringFieldUpdateOperationsInput | string | null
+    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    experience_years?: IntFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserExtraUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    license_number?: NullableStringFieldUpdateOperationsInput | string | null
+    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    experience_years?: IntFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17164,14 +15728,9 @@ export namespace Prisma {
     isNot?: RouteWhereInput | null
   }
 
-  export type DriverNullableScalarRelationFilter = {
-    is?: DriverWhereInput | null
-    isNot?: DriverWhereInput | null
-  }
-
-  export type ConductorNullableScalarRelationFilter = {
-    is?: ConductorWhereInput | null
-    isNot?: ConductorWhereInput | null
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
   }
 
   export type TicketListRelationFilter = {
@@ -17431,149 +15990,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type BusListRelationFilter = {
-    every?: BusWhereInput
-    some?: BusWhereInput
-    none?: BusWhereInput
-  }
-
-  export type BusOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ConductorOrderByRelevanceInput = {
-    fields: ConductorOrderByRelevanceFieldEnum | ConductorOrderByRelevanceFieldEnum[]
-    sort: SortOrder
-    search: string
-  }
-
-  export type ConductorCountOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    name?: SortOrder
-    phone?: SortOrder
-    experience_years?: SortOrder
-    address?: SortOrder
-    emergency_contact?: SortOrder
-    active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type ConductorAvgOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    experience_years?: SortOrder
-  }
-
-  export type ConductorMaxOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    name?: SortOrder
-    phone?: SortOrder
-    experience_years?: SortOrder
-    address?: SortOrder
-    emergency_contact?: SortOrder
-    active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type ConductorMinOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    name?: SortOrder
-    phone?: SortOrder
-    experience_years?: SortOrder
-    address?: SortOrder
-    emergency_contact?: SortOrder
-    active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type ConductorSumOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    experience_years?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type DriverOrderByRelevanceInput = {
-    fields: DriverOrderByRelevanceFieldEnum | DriverOrderByRelevanceFieldEnum[]
-    sort: SortOrder
-    search: string
-  }
-
-  export type DriverCountOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    name?: SortOrder
-    phone?: SortOrder
-    license_number?: SortOrder
-    license_expiry?: SortOrder
-    experience_years?: SortOrder
-    address?: SortOrder
-    emergency_contact?: SortOrder
-    active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type DriverAvgOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    experience_years?: SortOrder
-  }
-
-  export type DriverMaxOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    name?: SortOrder
-    phone?: SortOrder
-    license_number?: SortOrder
-    license_expiry?: SortOrder
-    experience_years?: SortOrder
-    address?: SortOrder
-    emergency_contact?: SortOrder
-    active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type DriverMinOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    name?: SortOrder
-    phone?: SortOrder
-    license_number?: SortOrder
-    license_expiry?: SortOrder
-    experience_years?: SortOrder
-    address?: SortOrder
-    emergency_contact?: SortOrder
-    active?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
-  }
-
-  export type DriverSumOrderByAggregateInput = {
-    id?: SortOrder
-    user_id?: SortOrder
-    experience_years?: SortOrder
-  }
-
   export type DecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[]
@@ -17707,6 +16123,11 @@ export namespace Prisma {
     _max?: NestedEnumPackageStatusFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type EnumPOSStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.POSStatus | EnumPOSStatusFieldRefInput<$PrismaModel>
     in?: $Enums.POSStatus[]
@@ -17766,6 +16187,14 @@ export namespace Prisma {
   export type POSMachineSumOrderByAggregateInput = {
     id?: SortOrder
     bus_id?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumPOSStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -17865,6 +16294,16 @@ export namespace Prisma {
     gt?: InputJsonValue
     gte?: InputJsonValue
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type BusListRelationFilter = {
+    every?: BusWhereInput
+    some?: BusWhereInput
+    none?: BusWhereInput
+  }
+
+  export type BusOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type RouteOrderByRelevanceInput = {
@@ -18176,10 +16615,9 @@ export namespace Prisma {
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
-  export type DriverListRelationFilter = {
-    every?: DriverWhereInput
-    some?: DriverWhereInput
-    none?: DriverWhereInput
+  export type UserExtraNullableScalarRelationFilter = {
+    is?: UserExtraWhereInput | null
+    isNot?: UserExtraWhereInput | null
   }
 
   export type RouteListRelationFilter = {
@@ -18188,27 +16626,13 @@ export namespace Prisma {
     none?: RouteWhereInput
   }
 
-  export type ConductorListRelationFilter = {
-    every?: ConductorWhereInput
-    some?: ConductorWhereInput
-    none?: ConductorWhereInput
-  }
-
   export type OTPListRelationFilter = {
     every?: OTPWhereInput
     some?: OTPWhereInput
     none?: OTPWhereInput
   }
 
-  export type DriverOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type RouteOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ConductorOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -18277,6 +16701,66 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
+  export type UserExtraOrderByRelevanceInput = {
+    fields: UserExtraOrderByRelevanceFieldEnum | UserExtraOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type UserExtraCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    license_number?: SortOrder
+    license_expiry?: SortOrder
+    experience_years?: SortOrder
+    address?: SortOrder
+    emergency_contact?: SortOrder
+    active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type UserExtraAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    experience_years?: SortOrder
+  }
+
+  export type UserExtraMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    license_number?: SortOrder
+    license_expiry?: SortOrder
+    experience_years?: SortOrder
+    address?: SortOrder
+    emergency_contact?: SortOrder
+    active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type UserExtraMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    license_number?: SortOrder
+    license_expiry?: SortOrder
+    experience_years?: SortOrder
+    address?: SortOrder
+    emergency_contact?: SortOrder
+    active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type UserExtraSumOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    experience_years?: SortOrder
   }
 
   export type EnumOTPTypeFilter<$PrismaModel = never> = {
@@ -18354,16 +16838,16 @@ export namespace Prisma {
     connect?: RouteWhereUniqueInput
   }
 
-  export type DriverCreateNestedOneWithoutBusesInput = {
-    create?: XOR<DriverCreateWithoutBusesInput, DriverUncheckedCreateWithoutBusesInput>
-    connectOrCreate?: DriverCreateOrConnectWithoutBusesInput
-    connect?: DriverWhereUniqueInput
+  export type UserCreateNestedOneWithoutBusesDrivenInput = {
+    create?: XOR<UserCreateWithoutBusesDrivenInput, UserUncheckedCreateWithoutBusesDrivenInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBusesDrivenInput
+    connect?: UserWhereUniqueInput
   }
 
-  export type ConductorCreateNestedOneWithoutBusesInput = {
-    create?: XOR<ConductorCreateWithoutBusesInput, ConductorUncheckedCreateWithoutBusesInput>
-    connectOrCreate?: ConductorCreateOrConnectWithoutBusesInput
-    connect?: ConductorWhereUniqueInput
+  export type UserCreateNestedOneWithoutBusesConductedInput = {
+    create?: XOR<UserCreateWithoutBusesConductedInput, UserUncheckedCreateWithoutBusesConductedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBusesConductedInput
+    connect?: UserWhereUniqueInput
   }
 
   export type TicketCreateNestedManyWithoutBusInput = {
@@ -18490,24 +16974,24 @@ export namespace Prisma {
     update?: XOR<XOR<RouteUpdateToOneWithWhereWithoutBusesInput, RouteUpdateWithoutBusesInput>, RouteUncheckedUpdateWithoutBusesInput>
   }
 
-  export type DriverUpdateOneWithoutBusesNestedInput = {
-    create?: XOR<DriverCreateWithoutBusesInput, DriverUncheckedCreateWithoutBusesInput>
-    connectOrCreate?: DriverCreateOrConnectWithoutBusesInput
-    upsert?: DriverUpsertWithoutBusesInput
-    disconnect?: DriverWhereInput | boolean
-    delete?: DriverWhereInput | boolean
-    connect?: DriverWhereUniqueInput
-    update?: XOR<XOR<DriverUpdateToOneWithWhereWithoutBusesInput, DriverUpdateWithoutBusesInput>, DriverUncheckedUpdateWithoutBusesInput>
+  export type UserUpdateOneWithoutBusesDrivenNestedInput = {
+    create?: XOR<UserCreateWithoutBusesDrivenInput, UserUncheckedCreateWithoutBusesDrivenInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBusesDrivenInput
+    upsert?: UserUpsertWithoutBusesDrivenInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBusesDrivenInput, UserUpdateWithoutBusesDrivenInput>, UserUncheckedUpdateWithoutBusesDrivenInput>
   }
 
-  export type ConductorUpdateOneWithoutBusesNestedInput = {
-    create?: XOR<ConductorCreateWithoutBusesInput, ConductorUncheckedCreateWithoutBusesInput>
-    connectOrCreate?: ConductorCreateOrConnectWithoutBusesInput
-    upsert?: ConductorUpsertWithoutBusesInput
-    disconnect?: ConductorWhereInput | boolean
-    delete?: ConductorWhereInput | boolean
-    connect?: ConductorWhereUniqueInput
-    update?: XOR<XOR<ConductorUpdateToOneWithWhereWithoutBusesInput, ConductorUpdateWithoutBusesInput>, ConductorUncheckedUpdateWithoutBusesInput>
+  export type UserUpdateOneWithoutBusesConductedNestedInput = {
+    create?: XOR<UserCreateWithoutBusesConductedInput, UserUncheckedCreateWithoutBusesConductedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBusesConductedInput
+    upsert?: UserUpsertWithoutBusesConductedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBusesConductedInput, UserUpdateWithoutBusesConductedInput>, UserUncheckedUpdateWithoutBusesConductedInput>
   }
 
   export type TicketUpdateManyWithoutBusNestedInput = {
@@ -18658,206 +17142,6 @@ export namespace Prisma {
     deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutConductorsInput = {
-    create?: XOR<UserCreateWithoutConductorsInput, UserUncheckedCreateWithoutConductorsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutConductorsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type BusCreateNestedManyWithoutConductorInput = {
-    create?: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput> | BusCreateWithoutConductorInput[] | BusUncheckedCreateWithoutConductorInput[]
-    connectOrCreate?: BusCreateOrConnectWithoutConductorInput | BusCreateOrConnectWithoutConductorInput[]
-    createMany?: BusCreateManyConductorInputEnvelope
-    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-  }
-
-  export type TripCreateNestedManyWithoutConductorInput = {
-    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
-    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
-    createMany?: TripCreateManyConductorInputEnvelope
-    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-  }
-
-  export type BusUncheckedCreateNestedManyWithoutConductorInput = {
-    create?: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput> | BusCreateWithoutConductorInput[] | BusUncheckedCreateWithoutConductorInput[]
-    connectOrCreate?: BusCreateOrConnectWithoutConductorInput | BusCreateOrConnectWithoutConductorInput[]
-    createMany?: BusCreateManyConductorInputEnvelope
-    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-  }
-
-  export type TripUncheckedCreateNestedManyWithoutConductorInput = {
-    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
-    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
-    createMany?: TripCreateManyConductorInputEnvelope
-    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type UserUpdateOneRequiredWithoutConductorsNestedInput = {
-    create?: XOR<UserCreateWithoutConductorsInput, UserUncheckedCreateWithoutConductorsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutConductorsInput
-    upsert?: UserUpsertWithoutConductorsInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutConductorsInput, UserUpdateWithoutConductorsInput>, UserUncheckedUpdateWithoutConductorsInput>
-  }
-
-  export type BusUpdateManyWithoutConductorNestedInput = {
-    create?: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput> | BusCreateWithoutConductorInput[] | BusUncheckedCreateWithoutConductorInput[]
-    connectOrCreate?: BusCreateOrConnectWithoutConductorInput | BusCreateOrConnectWithoutConductorInput[]
-    upsert?: BusUpsertWithWhereUniqueWithoutConductorInput | BusUpsertWithWhereUniqueWithoutConductorInput[]
-    createMany?: BusCreateManyConductorInputEnvelope
-    set?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    disconnect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    delete?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    update?: BusUpdateWithWhereUniqueWithoutConductorInput | BusUpdateWithWhereUniqueWithoutConductorInput[]
-    updateMany?: BusUpdateManyWithWhereWithoutConductorInput | BusUpdateManyWithWhereWithoutConductorInput[]
-    deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
-  }
-
-  export type TripUpdateManyWithoutConductorNestedInput = {
-    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
-    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
-    upsert?: TripUpsertWithWhereUniqueWithoutConductorInput | TripUpsertWithWhereUniqueWithoutConductorInput[]
-    createMany?: TripCreateManyConductorInputEnvelope
-    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    update?: TripUpdateWithWhereUniqueWithoutConductorInput | TripUpdateWithWhereUniqueWithoutConductorInput[]
-    updateMany?: TripUpdateManyWithWhereWithoutConductorInput | TripUpdateManyWithWhereWithoutConductorInput[]
-    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
-  }
-
-  export type BusUncheckedUpdateManyWithoutConductorNestedInput = {
-    create?: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput> | BusCreateWithoutConductorInput[] | BusUncheckedCreateWithoutConductorInput[]
-    connectOrCreate?: BusCreateOrConnectWithoutConductorInput | BusCreateOrConnectWithoutConductorInput[]
-    upsert?: BusUpsertWithWhereUniqueWithoutConductorInput | BusUpsertWithWhereUniqueWithoutConductorInput[]
-    createMany?: BusCreateManyConductorInputEnvelope
-    set?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    disconnect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    delete?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    update?: BusUpdateWithWhereUniqueWithoutConductorInput | BusUpdateWithWhereUniqueWithoutConductorInput[]
-    updateMany?: BusUpdateManyWithWhereWithoutConductorInput | BusUpdateManyWithWhereWithoutConductorInput[]
-    deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
-  }
-
-  export type TripUncheckedUpdateManyWithoutConductorNestedInput = {
-    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
-    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
-    upsert?: TripUpsertWithWhereUniqueWithoutConductorInput | TripUpsertWithWhereUniqueWithoutConductorInput[]
-    createMany?: TripCreateManyConductorInputEnvelope
-    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    update?: TripUpdateWithWhereUniqueWithoutConductorInput | TripUpdateWithWhereUniqueWithoutConductorInput[]
-    updateMany?: TripUpdateManyWithWhereWithoutConductorInput | TripUpdateManyWithWhereWithoutConductorInput[]
-    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
-  }
-
-  export type UserCreateNestedOneWithoutDriversInput = {
-    create?: XOR<UserCreateWithoutDriversInput, UserUncheckedCreateWithoutDriversInput>
-    connectOrCreate?: UserCreateOrConnectWithoutDriversInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type BusCreateNestedManyWithoutDriverInput = {
-    create?: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput> | BusCreateWithoutDriverInput[] | BusUncheckedCreateWithoutDriverInput[]
-    connectOrCreate?: BusCreateOrConnectWithoutDriverInput | BusCreateOrConnectWithoutDriverInput[]
-    createMany?: BusCreateManyDriverInputEnvelope
-    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-  }
-
-  export type TripCreateNestedManyWithoutDriverInput = {
-    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
-    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
-    createMany?: TripCreateManyDriverInputEnvelope
-    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-  }
-
-  export type BusUncheckedCreateNestedManyWithoutDriverInput = {
-    create?: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput> | BusCreateWithoutDriverInput[] | BusUncheckedCreateWithoutDriverInput[]
-    connectOrCreate?: BusCreateOrConnectWithoutDriverInput | BusCreateOrConnectWithoutDriverInput[]
-    createMany?: BusCreateManyDriverInputEnvelope
-    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-  }
-
-  export type TripUncheckedCreateNestedManyWithoutDriverInput = {
-    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
-    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
-    createMany?: TripCreateManyDriverInputEnvelope
-    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-  }
-
-  export type UserUpdateOneRequiredWithoutDriversNestedInput = {
-    create?: XOR<UserCreateWithoutDriversInput, UserUncheckedCreateWithoutDriversInput>
-    connectOrCreate?: UserCreateOrConnectWithoutDriversInput
-    upsert?: UserUpsertWithoutDriversInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDriversInput, UserUpdateWithoutDriversInput>, UserUncheckedUpdateWithoutDriversInput>
-  }
-
-  export type BusUpdateManyWithoutDriverNestedInput = {
-    create?: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput> | BusCreateWithoutDriverInput[] | BusUncheckedCreateWithoutDriverInput[]
-    connectOrCreate?: BusCreateOrConnectWithoutDriverInput | BusCreateOrConnectWithoutDriverInput[]
-    upsert?: BusUpsertWithWhereUniqueWithoutDriverInput | BusUpsertWithWhereUniqueWithoutDriverInput[]
-    createMany?: BusCreateManyDriverInputEnvelope
-    set?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    disconnect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    delete?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    update?: BusUpdateWithWhereUniqueWithoutDriverInput | BusUpdateWithWhereUniqueWithoutDriverInput[]
-    updateMany?: BusUpdateManyWithWhereWithoutDriverInput | BusUpdateManyWithWhereWithoutDriverInput[]
-    deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
-  }
-
-  export type TripUpdateManyWithoutDriverNestedInput = {
-    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
-    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
-    upsert?: TripUpsertWithWhereUniqueWithoutDriverInput | TripUpsertWithWhereUniqueWithoutDriverInput[]
-    createMany?: TripCreateManyDriverInputEnvelope
-    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    update?: TripUpdateWithWhereUniqueWithoutDriverInput | TripUpdateWithWhereUniqueWithoutDriverInput[]
-    updateMany?: TripUpdateManyWithWhereWithoutDriverInput | TripUpdateManyWithWhereWithoutDriverInput[]
-    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
-  }
-
-  export type BusUncheckedUpdateManyWithoutDriverNestedInput = {
-    create?: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput> | BusCreateWithoutDriverInput[] | BusUncheckedCreateWithoutDriverInput[]
-    connectOrCreate?: BusCreateOrConnectWithoutDriverInput | BusCreateOrConnectWithoutDriverInput[]
-    upsert?: BusUpsertWithWhereUniqueWithoutDriverInput | BusUpsertWithWhereUniqueWithoutDriverInput[]
-    createMany?: BusCreateManyDriverInputEnvelope
-    set?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    disconnect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    delete?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
-    update?: BusUpdateWithWhereUniqueWithoutDriverInput | BusUpdateWithWhereUniqueWithoutDriverInput[]
-    updateMany?: BusUpdateManyWithWhereWithoutDriverInput | BusUpdateManyWithWhereWithoutDriverInput[]
-    deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
-  }
-
-  export type TripUncheckedUpdateManyWithoutDriverNestedInput = {
-    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
-    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
-    upsert?: TripUpsertWithWhereUniqueWithoutDriverInput | TripUpsertWithWhereUniqueWithoutDriverInput[]
-    createMany?: TripCreateManyDriverInputEnvelope
-    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
-    update?: TripUpdateWithWhereUniqueWithoutDriverInput | TripUpdateWithWhereUniqueWithoutDriverInput[]
-    updateMany?: TripUpdateManyWithWhereWithoutDriverInput | TripUpdateManyWithWhereWithoutDriverInput[]
-    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
-  }
-
   export type BusCreateNestedOneWithoutPackagesInput = {
     create?: XOR<BusCreateWithoutPackagesInput, BusUncheckedCreateWithoutPackagesInput>
     connectOrCreate?: BusCreateOrConnectWithoutPackagesInput
@@ -18918,6 +17202,10 @@ export namespace Prisma {
     connectOrCreate?: TicketCreateOrConnectWithoutPosMachineInput | TicketCreateOrConnectWithoutPosMachineInput[]
     createMany?: TicketCreateManyPosMachineInputEnvelope
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type EnumPOSStatusFieldUpdateOperationsInput = {
@@ -19144,16 +17432,16 @@ export namespace Prisma {
     connect?: RouteWhereUniqueInput
   }
 
-  export type DriverCreateNestedOneWithoutTripsInput = {
-    create?: XOR<DriverCreateWithoutTripsInput, DriverUncheckedCreateWithoutTripsInput>
-    connectOrCreate?: DriverCreateOrConnectWithoutTripsInput
-    connect?: DriverWhereUniqueInput
+  export type UserCreateNestedOneWithoutTripsDrivenInput = {
+    create?: XOR<UserCreateWithoutTripsDrivenInput, UserUncheckedCreateWithoutTripsDrivenInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTripsDrivenInput
+    connect?: UserWhereUniqueInput
   }
 
-  export type ConductorCreateNestedOneWithoutTripsInput = {
-    create?: XOR<ConductorCreateWithoutTripsInput, ConductorUncheckedCreateWithoutTripsInput>
-    connectOrCreate?: ConductorCreateOrConnectWithoutTripsInput
-    connect?: ConductorWhereUniqueInput
+  export type UserCreateNestedOneWithoutTripsConductedInput = {
+    create?: XOR<UserCreateWithoutTripsConductedInput, UserUncheckedCreateWithoutTripsConductedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTripsConductedInput
+    connect?: UserWhereUniqueInput
   }
 
   export type TicketCreateNestedManyWithoutTripInput = {
@@ -19204,24 +17492,24 @@ export namespace Prisma {
     update?: XOR<XOR<RouteUpdateToOneWithWhereWithoutTripsInput, RouteUpdateWithoutTripsInput>, RouteUncheckedUpdateWithoutTripsInput>
   }
 
-  export type DriverUpdateOneWithoutTripsNestedInput = {
-    create?: XOR<DriverCreateWithoutTripsInput, DriverUncheckedCreateWithoutTripsInput>
-    connectOrCreate?: DriverCreateOrConnectWithoutTripsInput
-    upsert?: DriverUpsertWithoutTripsInput
-    disconnect?: DriverWhereInput | boolean
-    delete?: DriverWhereInput | boolean
-    connect?: DriverWhereUniqueInput
-    update?: XOR<XOR<DriverUpdateToOneWithWhereWithoutTripsInput, DriverUpdateWithoutTripsInput>, DriverUncheckedUpdateWithoutTripsInput>
+  export type UserUpdateOneWithoutTripsDrivenNestedInput = {
+    create?: XOR<UserCreateWithoutTripsDrivenInput, UserUncheckedCreateWithoutTripsDrivenInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTripsDrivenInput
+    upsert?: UserUpsertWithoutTripsDrivenInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTripsDrivenInput, UserUpdateWithoutTripsDrivenInput>, UserUncheckedUpdateWithoutTripsDrivenInput>
   }
 
-  export type ConductorUpdateOneWithoutTripsNestedInput = {
-    create?: XOR<ConductorCreateWithoutTripsInput, ConductorUncheckedCreateWithoutTripsInput>
-    connectOrCreate?: ConductorCreateOrConnectWithoutTripsInput
-    upsert?: ConductorUpsertWithoutTripsInput
-    disconnect?: ConductorWhereInput | boolean
-    delete?: ConductorWhereInput | boolean
-    connect?: ConductorWhereUniqueInput
-    update?: XOR<XOR<ConductorUpdateToOneWithWhereWithoutTripsInput, ConductorUpdateWithoutTripsInput>, ConductorUncheckedUpdateWithoutTripsInput>
+  export type UserUpdateOneWithoutTripsConductedNestedInput = {
+    create?: XOR<UserCreateWithoutTripsConductedInput, UserUncheckedCreateWithoutTripsConductedInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTripsConductedInput
+    upsert?: UserUpsertWithoutTripsConductedInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTripsConductedInput, UserUpdateWithoutTripsConductedInput>, UserUncheckedUpdateWithoutTripsConductedInput>
   }
 
   export type TicketUpdateManyWithoutTripNestedInput = {
@@ -19280,11 +17568,38 @@ export namespace Prisma {
     deleteMany?: PackageScalarWhereInput | PackageScalarWhereInput[]
   }
 
-  export type DriverCreateNestedManyWithoutUserInput = {
-    create?: XOR<DriverCreateWithoutUserInput, DriverUncheckedCreateWithoutUserInput> | DriverCreateWithoutUserInput[] | DriverUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: DriverCreateOrConnectWithoutUserInput | DriverCreateOrConnectWithoutUserInput[]
-    createMany?: DriverCreateManyUserInputEnvelope
-    connect?: DriverWhereUniqueInput | DriverWhereUniqueInput[]
+  export type UserExtraCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserExtraCreateWithoutUserInput, UserExtraUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserExtraCreateOrConnectWithoutUserInput
+    connect?: UserExtraWhereUniqueInput
+  }
+
+  export type BusCreateNestedManyWithoutDriverInput = {
+    create?: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput> | BusCreateWithoutDriverInput[] | BusUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: BusCreateOrConnectWithoutDriverInput | BusCreateOrConnectWithoutDriverInput[]
+    createMany?: BusCreateManyDriverInputEnvelope
+    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+  }
+
+  export type BusCreateNestedManyWithoutConductorInput = {
+    create?: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput> | BusCreateWithoutConductorInput[] | BusUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: BusCreateOrConnectWithoutConductorInput | BusCreateOrConnectWithoutConductorInput[]
+    createMany?: BusCreateManyConductorInputEnvelope
+    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+  }
+
+  export type TripCreateNestedManyWithoutDriverInput = {
+    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
+    createMany?: TripCreateManyDriverInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+  }
+
+  export type TripCreateNestedManyWithoutConductorInput = {
+    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
+    createMany?: TripCreateManyConductorInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
   }
 
   export type RouteCreateNestedManyWithoutUserInput = {
@@ -19292,13 +17607,6 @@ export namespace Prisma {
     connectOrCreate?: RouteCreateOrConnectWithoutUserInput | RouteCreateOrConnectWithoutUserInput[]
     createMany?: RouteCreateManyUserInputEnvelope
     connect?: RouteWhereUniqueInput | RouteWhereUniqueInput[]
-  }
-
-  export type ConductorCreateNestedManyWithoutUserInput = {
-    create?: XOR<ConductorCreateWithoutUserInput, ConductorUncheckedCreateWithoutUserInput> | ConductorCreateWithoutUserInput[] | ConductorUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ConductorCreateOrConnectWithoutUserInput | ConductorCreateOrConnectWithoutUserInput[]
-    createMany?: ConductorCreateManyUserInputEnvelope
-    connect?: ConductorWhereUniqueInput | ConductorWhereUniqueInput[]
   }
 
   export type BusCreateNestedManyWithoutUserInput = {
@@ -19315,11 +17623,38 @@ export namespace Prisma {
     connect?: OTPWhereUniqueInput | OTPWhereUniqueInput[]
   }
 
-  export type DriverUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<DriverCreateWithoutUserInput, DriverUncheckedCreateWithoutUserInput> | DriverCreateWithoutUserInput[] | DriverUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: DriverCreateOrConnectWithoutUserInput | DriverCreateOrConnectWithoutUserInput[]
-    createMany?: DriverCreateManyUserInputEnvelope
-    connect?: DriverWhereUniqueInput | DriverWhereUniqueInput[]
+  export type UserExtraUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserExtraCreateWithoutUserInput, UserExtraUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserExtraCreateOrConnectWithoutUserInput
+    connect?: UserExtraWhereUniqueInput
+  }
+
+  export type BusUncheckedCreateNestedManyWithoutDriverInput = {
+    create?: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput> | BusCreateWithoutDriverInput[] | BusUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: BusCreateOrConnectWithoutDriverInput | BusCreateOrConnectWithoutDriverInput[]
+    createMany?: BusCreateManyDriverInputEnvelope
+    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+  }
+
+  export type BusUncheckedCreateNestedManyWithoutConductorInput = {
+    create?: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput> | BusCreateWithoutConductorInput[] | BusUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: BusCreateOrConnectWithoutConductorInput | BusCreateOrConnectWithoutConductorInput[]
+    createMany?: BusCreateManyConductorInputEnvelope
+    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+  }
+
+  export type TripUncheckedCreateNestedManyWithoutDriverInput = {
+    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
+    createMany?: TripCreateManyDriverInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+  }
+
+  export type TripUncheckedCreateNestedManyWithoutConductorInput = {
+    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
+    createMany?: TripCreateManyConductorInputEnvelope
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
   }
 
   export type RouteUncheckedCreateNestedManyWithoutUserInput = {
@@ -19327,13 +17662,6 @@ export namespace Prisma {
     connectOrCreate?: RouteCreateOrConnectWithoutUserInput | RouteCreateOrConnectWithoutUserInput[]
     createMany?: RouteCreateManyUserInputEnvelope
     connect?: RouteWhereUniqueInput | RouteWhereUniqueInput[]
-  }
-
-  export type ConductorUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<ConductorCreateWithoutUserInput, ConductorUncheckedCreateWithoutUserInput> | ConductorCreateWithoutUserInput[] | ConductorUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ConductorCreateOrConnectWithoutUserInput | ConductorCreateOrConnectWithoutUserInput[]
-    createMany?: ConductorCreateManyUserInputEnvelope
-    connect?: ConductorWhereUniqueInput | ConductorWhereUniqueInput[]
   }
 
   export type BusUncheckedCreateNestedManyWithoutUserInput = {
@@ -19354,18 +17682,70 @@ export namespace Prisma {
     set?: $Enums.Role
   }
 
-  export type DriverUpdateManyWithoutUserNestedInput = {
-    create?: XOR<DriverCreateWithoutUserInput, DriverUncheckedCreateWithoutUserInput> | DriverCreateWithoutUserInput[] | DriverUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: DriverCreateOrConnectWithoutUserInput | DriverCreateOrConnectWithoutUserInput[]
-    upsert?: DriverUpsertWithWhereUniqueWithoutUserInput | DriverUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: DriverCreateManyUserInputEnvelope
-    set?: DriverWhereUniqueInput | DriverWhereUniqueInput[]
-    disconnect?: DriverWhereUniqueInput | DriverWhereUniqueInput[]
-    delete?: DriverWhereUniqueInput | DriverWhereUniqueInput[]
-    connect?: DriverWhereUniqueInput | DriverWhereUniqueInput[]
-    update?: DriverUpdateWithWhereUniqueWithoutUserInput | DriverUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: DriverUpdateManyWithWhereWithoutUserInput | DriverUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: DriverScalarWhereInput | DriverScalarWhereInput[]
+  export type UserExtraUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserExtraCreateWithoutUserInput, UserExtraUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserExtraCreateOrConnectWithoutUserInput
+    upsert?: UserExtraUpsertWithoutUserInput
+    disconnect?: UserExtraWhereInput | boolean
+    delete?: UserExtraWhereInput | boolean
+    connect?: UserExtraWhereUniqueInput
+    update?: XOR<XOR<UserExtraUpdateToOneWithWhereWithoutUserInput, UserExtraUpdateWithoutUserInput>, UserExtraUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BusUpdateManyWithoutDriverNestedInput = {
+    create?: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput> | BusCreateWithoutDriverInput[] | BusUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: BusCreateOrConnectWithoutDriverInput | BusCreateOrConnectWithoutDriverInput[]
+    upsert?: BusUpsertWithWhereUniqueWithoutDriverInput | BusUpsertWithWhereUniqueWithoutDriverInput[]
+    createMany?: BusCreateManyDriverInputEnvelope
+    set?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    disconnect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    delete?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    update?: BusUpdateWithWhereUniqueWithoutDriverInput | BusUpdateWithWhereUniqueWithoutDriverInput[]
+    updateMany?: BusUpdateManyWithWhereWithoutDriverInput | BusUpdateManyWithWhereWithoutDriverInput[]
+    deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
+  }
+
+  export type BusUpdateManyWithoutConductorNestedInput = {
+    create?: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput> | BusCreateWithoutConductorInput[] | BusUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: BusCreateOrConnectWithoutConductorInput | BusCreateOrConnectWithoutConductorInput[]
+    upsert?: BusUpsertWithWhereUniqueWithoutConductorInput | BusUpsertWithWhereUniqueWithoutConductorInput[]
+    createMany?: BusCreateManyConductorInputEnvelope
+    set?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    disconnect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    delete?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    update?: BusUpdateWithWhereUniqueWithoutConductorInput | BusUpdateWithWhereUniqueWithoutConductorInput[]
+    updateMany?: BusUpdateManyWithWhereWithoutConductorInput | BusUpdateManyWithWhereWithoutConductorInput[]
+    deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
+  }
+
+  export type TripUpdateManyWithoutDriverNestedInput = {
+    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutDriverInput | TripUpsertWithWhereUniqueWithoutDriverInput[]
+    createMany?: TripCreateManyDriverInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutDriverInput | TripUpdateWithWhereUniqueWithoutDriverInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutDriverInput | TripUpdateManyWithWhereWithoutDriverInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
+  }
+
+  export type TripUpdateManyWithoutConductorNestedInput = {
+    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutConductorInput | TripUpsertWithWhereUniqueWithoutConductorInput[]
+    createMany?: TripCreateManyConductorInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutConductorInput | TripUpdateWithWhereUniqueWithoutConductorInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutConductorInput | TripUpdateManyWithWhereWithoutConductorInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
   }
 
   export type RouteUpdateManyWithoutUserNestedInput = {
@@ -19380,20 +17760,6 @@ export namespace Prisma {
     update?: RouteUpdateWithWhereUniqueWithoutUserInput | RouteUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: RouteUpdateManyWithWhereWithoutUserInput | RouteUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: RouteScalarWhereInput | RouteScalarWhereInput[]
-  }
-
-  export type ConductorUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ConductorCreateWithoutUserInput, ConductorUncheckedCreateWithoutUserInput> | ConductorCreateWithoutUserInput[] | ConductorUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ConductorCreateOrConnectWithoutUserInput | ConductorCreateOrConnectWithoutUserInput[]
-    upsert?: ConductorUpsertWithWhereUniqueWithoutUserInput | ConductorUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ConductorCreateManyUserInputEnvelope
-    set?: ConductorWhereUniqueInput | ConductorWhereUniqueInput[]
-    disconnect?: ConductorWhereUniqueInput | ConductorWhereUniqueInput[]
-    delete?: ConductorWhereUniqueInput | ConductorWhereUniqueInput[]
-    connect?: ConductorWhereUniqueInput | ConductorWhereUniqueInput[]
-    update?: ConductorUpdateWithWhereUniqueWithoutUserInput | ConductorUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ConductorUpdateManyWithWhereWithoutUserInput | ConductorUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ConductorScalarWhereInput | ConductorScalarWhereInput[]
   }
 
   export type BusUpdateManyWithoutUserNestedInput = {
@@ -19424,18 +17790,70 @@ export namespace Prisma {
     deleteMany?: OTPScalarWhereInput | OTPScalarWhereInput[]
   }
 
-  export type DriverUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<DriverCreateWithoutUserInput, DriverUncheckedCreateWithoutUserInput> | DriverCreateWithoutUserInput[] | DriverUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: DriverCreateOrConnectWithoutUserInput | DriverCreateOrConnectWithoutUserInput[]
-    upsert?: DriverUpsertWithWhereUniqueWithoutUserInput | DriverUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: DriverCreateManyUserInputEnvelope
-    set?: DriverWhereUniqueInput | DriverWhereUniqueInput[]
-    disconnect?: DriverWhereUniqueInput | DriverWhereUniqueInput[]
-    delete?: DriverWhereUniqueInput | DriverWhereUniqueInput[]
-    connect?: DriverWhereUniqueInput | DriverWhereUniqueInput[]
-    update?: DriverUpdateWithWhereUniqueWithoutUserInput | DriverUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: DriverUpdateManyWithWhereWithoutUserInput | DriverUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: DriverScalarWhereInput | DriverScalarWhereInput[]
+  export type UserExtraUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserExtraCreateWithoutUserInput, UserExtraUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserExtraCreateOrConnectWithoutUserInput
+    upsert?: UserExtraUpsertWithoutUserInput
+    disconnect?: UserExtraWhereInput | boolean
+    delete?: UserExtraWhereInput | boolean
+    connect?: UserExtraWhereUniqueInput
+    update?: XOR<XOR<UserExtraUpdateToOneWithWhereWithoutUserInput, UserExtraUpdateWithoutUserInput>, UserExtraUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BusUncheckedUpdateManyWithoutDriverNestedInput = {
+    create?: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput> | BusCreateWithoutDriverInput[] | BusUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: BusCreateOrConnectWithoutDriverInput | BusCreateOrConnectWithoutDriverInput[]
+    upsert?: BusUpsertWithWhereUniqueWithoutDriverInput | BusUpsertWithWhereUniqueWithoutDriverInput[]
+    createMany?: BusCreateManyDriverInputEnvelope
+    set?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    disconnect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    delete?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    update?: BusUpdateWithWhereUniqueWithoutDriverInput | BusUpdateWithWhereUniqueWithoutDriverInput[]
+    updateMany?: BusUpdateManyWithWhereWithoutDriverInput | BusUpdateManyWithWhereWithoutDriverInput[]
+    deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
+  }
+
+  export type BusUncheckedUpdateManyWithoutConductorNestedInput = {
+    create?: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput> | BusCreateWithoutConductorInput[] | BusUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: BusCreateOrConnectWithoutConductorInput | BusCreateOrConnectWithoutConductorInput[]
+    upsert?: BusUpsertWithWhereUniqueWithoutConductorInput | BusUpsertWithWhereUniqueWithoutConductorInput[]
+    createMany?: BusCreateManyConductorInputEnvelope
+    set?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    disconnect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    delete?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    connect?: BusWhereUniqueInput | BusWhereUniqueInput[]
+    update?: BusUpdateWithWhereUniqueWithoutConductorInput | BusUpdateWithWhereUniqueWithoutConductorInput[]
+    updateMany?: BusUpdateManyWithWhereWithoutConductorInput | BusUpdateManyWithWhereWithoutConductorInput[]
+    deleteMany?: BusScalarWhereInput | BusScalarWhereInput[]
+  }
+
+  export type TripUncheckedUpdateManyWithoutDriverNestedInput = {
+    create?: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput> | TripCreateWithoutDriverInput[] | TripUncheckedCreateWithoutDriverInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutDriverInput | TripCreateOrConnectWithoutDriverInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutDriverInput | TripUpsertWithWhereUniqueWithoutDriverInput[]
+    createMany?: TripCreateManyDriverInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutDriverInput | TripUpdateWithWhereUniqueWithoutDriverInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutDriverInput | TripUpdateManyWithWhereWithoutDriverInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
+  }
+
+  export type TripUncheckedUpdateManyWithoutConductorNestedInput = {
+    create?: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput> | TripCreateWithoutConductorInput[] | TripUncheckedCreateWithoutConductorInput[]
+    connectOrCreate?: TripCreateOrConnectWithoutConductorInput | TripCreateOrConnectWithoutConductorInput[]
+    upsert?: TripUpsertWithWhereUniqueWithoutConductorInput | TripUpsertWithWhereUniqueWithoutConductorInput[]
+    createMany?: TripCreateManyConductorInputEnvelope
+    set?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    disconnect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    delete?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    connect?: TripWhereUniqueInput | TripWhereUniqueInput[]
+    update?: TripUpdateWithWhereUniqueWithoutConductorInput | TripUpdateWithWhereUniqueWithoutConductorInput[]
+    updateMany?: TripUpdateManyWithWhereWithoutConductorInput | TripUpdateManyWithWhereWithoutConductorInput[]
+    deleteMany?: TripScalarWhereInput | TripScalarWhereInput[]
   }
 
   export type RouteUncheckedUpdateManyWithoutUserNestedInput = {
@@ -19450,20 +17868,6 @@ export namespace Prisma {
     update?: RouteUpdateWithWhereUniqueWithoutUserInput | RouteUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: RouteUpdateManyWithWhereWithoutUserInput | RouteUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: RouteScalarWhereInput | RouteScalarWhereInput[]
-  }
-
-  export type ConductorUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<ConductorCreateWithoutUserInput, ConductorUncheckedCreateWithoutUserInput> | ConductorCreateWithoutUserInput[] | ConductorUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: ConductorCreateOrConnectWithoutUserInput | ConductorCreateOrConnectWithoutUserInput[]
-    upsert?: ConductorUpsertWithWhereUniqueWithoutUserInput | ConductorUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: ConductorCreateManyUserInputEnvelope
-    set?: ConductorWhereUniqueInput | ConductorWhereUniqueInput[]
-    disconnect?: ConductorWhereUniqueInput | ConductorWhereUniqueInput[]
-    delete?: ConductorWhereUniqueInput | ConductorWhereUniqueInput[]
-    connect?: ConductorWhereUniqueInput | ConductorWhereUniqueInput[]
-    update?: ConductorUpdateWithWhereUniqueWithoutUserInput | ConductorUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: ConductorUpdateManyWithWhereWithoutUserInput | ConductorUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: ConductorScalarWhereInput | ConductorScalarWhereInput[]
   }
 
   export type BusUncheckedUpdateManyWithoutUserNestedInput = {
@@ -19492,6 +17896,20 @@ export namespace Prisma {
     update?: OTPUpdateWithWhereUniqueWithoutUserInput | OTPUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: OTPUpdateManyWithWhereWithoutUserInput | OTPUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: OTPScalarWhereInput | OTPScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutUserExtraInput = {
+    create?: XOR<UserCreateWithoutUserExtraInput, UserUncheckedCreateWithoutUserExtraInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserExtraInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutUserExtraNestedInput = {
+    create?: XOR<UserCreateWithoutUserExtraInput, UserUncheckedCreateWithoutUserExtraInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUserExtraInput
+    upsert?: UserUpsertWithoutUserExtraInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUserExtraInput, UserUpdateWithoutUserExtraInput>, UserUncheckedUpdateWithoutUserExtraInput>
   }
 
   export type UserCreateNestedOneWithoutOtpsInput = {
@@ -19748,19 +18166,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type NestedDecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[]
@@ -19805,11 +18210,24 @@ export namespace Prisma {
     _max?: NestedEnumPackageStatusFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedEnumPOSStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.POSStatus | EnumPOSStatusFieldRefInput<$PrismaModel>
     in?: $Enums.POSStatus[]
     notIn?: $Enums.POSStatus[]
     not?: NestedEnumPOSStatusFilter<$PrismaModel> | $Enums.POSStatus
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumPOSStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -19957,9 +18375,12 @@ export namespace Prisma {
     is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    drivers?: DriverCreateNestedManyWithoutUserInput
+    userExtra?: UserExtraCreateNestedOneWithoutUserInput
+    busesDriven?: BusCreateNestedManyWithoutDriverInput
+    busesConducted?: BusCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripCreateNestedManyWithoutConductorInput
     routes?: RouteCreateNestedManyWithoutUserInput
-    conductors?: ConductorCreateNestedManyWithoutUserInput
     otps?: OTPCreateNestedManyWithoutUserInput
   }
 
@@ -19974,9 +18395,12 @@ export namespace Prisma {
     is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    drivers?: DriverUncheckedCreateNestedManyWithoutUserInput
+    userExtra?: UserExtraUncheckedCreateNestedOneWithoutUserInput
+    busesDriven?: BusUncheckedCreateNestedManyWithoutDriverInput
+    busesConducted?: BusUncheckedCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripUncheckedCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripUncheckedCreateNestedManyWithoutConductorInput
     routes?: RouteUncheckedCreateNestedManyWithoutUserInput
-    conductors?: ConductorUncheckedCreateNestedManyWithoutUserInput
     otps?: OTPUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -20019,72 +18443,92 @@ export namespace Prisma {
     create: XOR<RouteCreateWithoutBusesInput, RouteUncheckedCreateWithoutBusesInput>
   }
 
-  export type DriverCreateWithoutBusesInput = {
+  export type UserCreateWithoutBusesDrivenInput = {
     name: string
+    email?: string | null
+    password?: string | null
     phone: string
-    license_number: string
-    license_expiry?: Date | string | null
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
+    role?: $Enums.Role
+    company_name?: string | null
+    is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    user: UserCreateNestedOneWithoutDriversInput
-    trips?: TripCreateNestedManyWithoutDriverInput
+    userExtra?: UserExtraCreateNestedOneWithoutUserInput
+    busesConducted?: BusCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripCreateNestedManyWithoutConductorInput
+    routes?: RouteCreateNestedManyWithoutUserInput
+    buses?: BusCreateNestedManyWithoutUserInput
+    otps?: OTPCreateNestedManyWithoutUserInput
   }
 
-  export type DriverUncheckedCreateWithoutBusesInput = {
+  export type UserUncheckedCreateWithoutBusesDrivenInput = {
     id?: number
-    user_id: number
     name: string
+    email?: string | null
+    password?: string | null
     phone: string
-    license_number: string
-    license_expiry?: Date | string | null
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
+    role?: $Enums.Role
+    company_name?: string | null
+    is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    trips?: TripUncheckedCreateNestedManyWithoutDriverInput
+    userExtra?: UserExtraUncheckedCreateNestedOneWithoutUserInput
+    busesConducted?: BusUncheckedCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripUncheckedCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripUncheckedCreateNestedManyWithoutConductorInput
+    routes?: RouteUncheckedCreateNestedManyWithoutUserInput
+    buses?: BusUncheckedCreateNestedManyWithoutUserInput
+    otps?: OTPUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type DriverCreateOrConnectWithoutBusesInput = {
-    where: DriverWhereUniqueInput
-    create: XOR<DriverCreateWithoutBusesInput, DriverUncheckedCreateWithoutBusesInput>
+  export type UserCreateOrConnectWithoutBusesDrivenInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBusesDrivenInput, UserUncheckedCreateWithoutBusesDrivenInput>
   }
 
-  export type ConductorCreateWithoutBusesInput = {
+  export type UserCreateWithoutBusesConductedInput = {
     name: string
+    email?: string | null
+    password?: string | null
     phone: string
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
+    role?: $Enums.Role
+    company_name?: string | null
+    is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    user: UserCreateNestedOneWithoutConductorsInput
-    trips?: TripCreateNestedManyWithoutConductorInput
+    userExtra?: UserExtraCreateNestedOneWithoutUserInput
+    busesDriven?: BusCreateNestedManyWithoutDriverInput
+    tripsDriven?: TripCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripCreateNestedManyWithoutConductorInput
+    routes?: RouteCreateNestedManyWithoutUserInput
+    buses?: BusCreateNestedManyWithoutUserInput
+    otps?: OTPCreateNestedManyWithoutUserInput
   }
 
-  export type ConductorUncheckedCreateWithoutBusesInput = {
+  export type UserUncheckedCreateWithoutBusesConductedInput = {
     id?: number
-    user_id: number
     name: string
+    email?: string | null
+    password?: string | null
     phone: string
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
+    role?: $Enums.Role
+    company_name?: string | null
+    is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    trips?: TripUncheckedCreateNestedManyWithoutConductorInput
+    userExtra?: UserExtraUncheckedCreateNestedOneWithoutUserInput
+    busesDriven?: BusUncheckedCreateNestedManyWithoutDriverInput
+    tripsDriven?: TripUncheckedCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripUncheckedCreateNestedManyWithoutConductorInput
+    routes?: RouteUncheckedCreateNestedManyWithoutUserInput
+    buses?: BusUncheckedCreateNestedManyWithoutUserInput
+    otps?: OTPUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type ConductorCreateOrConnectWithoutBusesInput = {
-    where: ConductorWhereUniqueInput
-    create: XOR<ConductorCreateWithoutBusesInput, ConductorUncheckedCreateWithoutBusesInput>
+  export type UserCreateOrConnectWithoutBusesConductedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBusesConductedInput, UserUncheckedCreateWithoutBusesConductedInput>
   }
 
   export type TicketCreateWithoutBusInput = {
@@ -20248,8 +18692,8 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     route: RouteCreateNestedOneWithoutTripsInput
-    driver?: DriverCreateNestedOneWithoutTripsInput
-    conductor?: ConductorCreateNestedOneWithoutTripsInput
+    driver?: UserCreateNestedOneWithoutTripsDrivenInput
+    conductor?: UserCreateNestedOneWithoutTripsConductedInput
     tickets?: TicketCreateNestedManyWithoutTripInput
     packages?: PackageCreateNestedManyWithoutTripInput
   }
@@ -20299,9 +18743,12 @@ export namespace Prisma {
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    drivers?: DriverUpdateManyWithoutUserNestedInput
+    userExtra?: UserExtraUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUpdateManyWithoutConductorNestedInput
     routes?: RouteUpdateManyWithoutUserNestedInput
-    conductors?: ConductorUpdateManyWithoutUserNestedInput
     otps?: OTPUpdateManyWithoutUserNestedInput
   }
 
@@ -20316,9 +18763,12 @@ export namespace Prisma {
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    drivers?: DriverUncheckedUpdateManyWithoutUserNestedInput
+    userExtra?: UserExtraUncheckedUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUncheckedUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUncheckedUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUncheckedUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUncheckedUpdateManyWithoutConductorNestedInput
     routes?: RouteUncheckedUpdateManyWithoutUserNestedInput
-    conductors?: ConductorUncheckedUpdateManyWithoutUserNestedInput
     otps?: OTPUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -20362,84 +18812,104 @@ export namespace Prisma {
     trips?: TripUncheckedUpdateManyWithoutRouteNestedInput
   }
 
-  export type DriverUpsertWithoutBusesInput = {
-    update: XOR<DriverUpdateWithoutBusesInput, DriverUncheckedUpdateWithoutBusesInput>
-    create: XOR<DriverCreateWithoutBusesInput, DriverUncheckedCreateWithoutBusesInput>
-    where?: DriverWhereInput
+  export type UserUpsertWithoutBusesDrivenInput = {
+    update: XOR<UserUpdateWithoutBusesDrivenInput, UserUncheckedUpdateWithoutBusesDrivenInput>
+    create: XOR<UserCreateWithoutBusesDrivenInput, UserUncheckedCreateWithoutBusesDrivenInput>
+    where?: UserWhereInput
   }
 
-  export type DriverUpdateToOneWithWhereWithoutBusesInput = {
-    where?: DriverWhereInput
-    data: XOR<DriverUpdateWithoutBusesInput, DriverUncheckedUpdateWithoutBusesInput>
+  export type UserUpdateToOneWithWhereWithoutBusesDrivenInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBusesDrivenInput, UserUncheckedUpdateWithoutBusesDrivenInput>
   }
 
-  export type DriverUpdateWithoutBusesInput = {
+  export type UserUpdateWithoutBusesDrivenInput = {
     name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
-    license_number?: StringFieldUpdateOperationsInput | string
-    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutDriversNestedInput
-    trips?: TripUpdateManyWithoutDriverNestedInput
+    userExtra?: UserExtraUpdateOneWithoutUserNestedInput
+    busesConducted?: BusUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUpdateManyWithoutConductorNestedInput
+    routes?: RouteUpdateManyWithoutUserNestedInput
+    buses?: BusUpdateManyWithoutUserNestedInput
+    otps?: OTPUpdateManyWithoutUserNestedInput
   }
 
-  export type DriverUncheckedUpdateWithoutBusesInput = {
+  export type UserUncheckedUpdateWithoutBusesDrivenInput = {
     id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
-    license_number?: StringFieldUpdateOperationsInput | string
-    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    trips?: TripUncheckedUpdateManyWithoutDriverNestedInput
+    userExtra?: UserExtraUncheckedUpdateOneWithoutUserNestedInput
+    busesConducted?: BusUncheckedUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUncheckedUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUncheckedUpdateManyWithoutConductorNestedInput
+    routes?: RouteUncheckedUpdateManyWithoutUserNestedInput
+    buses?: BusUncheckedUpdateManyWithoutUserNestedInput
+    otps?: OTPUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type ConductorUpsertWithoutBusesInput = {
-    update: XOR<ConductorUpdateWithoutBusesInput, ConductorUncheckedUpdateWithoutBusesInput>
-    create: XOR<ConductorCreateWithoutBusesInput, ConductorUncheckedCreateWithoutBusesInput>
-    where?: ConductorWhereInput
+  export type UserUpsertWithoutBusesConductedInput = {
+    update: XOR<UserUpdateWithoutBusesConductedInput, UserUncheckedUpdateWithoutBusesConductedInput>
+    create: XOR<UserCreateWithoutBusesConductedInput, UserUncheckedCreateWithoutBusesConductedInput>
+    where?: UserWhereInput
   }
 
-  export type ConductorUpdateToOneWithWhereWithoutBusesInput = {
-    where?: ConductorWhereInput
-    data: XOR<ConductorUpdateWithoutBusesInput, ConductorUncheckedUpdateWithoutBusesInput>
+  export type UserUpdateToOneWithWhereWithoutBusesConductedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBusesConductedInput, UserUncheckedUpdateWithoutBusesConductedInput>
   }
 
-  export type ConductorUpdateWithoutBusesInput = {
+  export type UserUpdateWithoutBusesConductedInput = {
     name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutConductorsNestedInput
-    trips?: TripUpdateManyWithoutConductorNestedInput
+    userExtra?: UserExtraUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUpdateManyWithoutDriverNestedInput
+    tripsDriven?: TripUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUpdateManyWithoutConductorNestedInput
+    routes?: RouteUpdateManyWithoutUserNestedInput
+    buses?: BusUpdateManyWithoutUserNestedInput
+    otps?: OTPUpdateManyWithoutUserNestedInput
   }
 
-  export type ConductorUncheckedUpdateWithoutBusesInput = {
+  export type UserUncheckedUpdateWithoutBusesConductedInput = {
     id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    trips?: TripUncheckedUpdateManyWithoutConductorNestedInput
+    userExtra?: UserExtraUncheckedUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUncheckedUpdateManyWithoutDriverNestedInput
+    tripsDriven?: TripUncheckedUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUncheckedUpdateManyWithoutConductorNestedInput
+    routes?: RouteUncheckedUpdateManyWithoutUserNestedInput
+    buses?: BusUncheckedUpdateManyWithoutUserNestedInput
+    otps?: OTPUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TicketUpsertWithWhereUniqueWithoutBusInput = {
@@ -20612,435 +19082,6 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Trip"> | Date | string
   }
 
-  export type UserCreateWithoutConductorsInput = {
-    name: string
-    email?: string | null
-    password?: string | null
-    phone: string
-    role?: $Enums.Role
-    company_name?: string | null
-    is_verified?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    drivers?: DriverCreateNestedManyWithoutUserInput
-    routes?: RouteCreateNestedManyWithoutUserInput
-    buses?: BusCreateNestedManyWithoutUserInput
-    otps?: OTPCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutConductorsInput = {
-    id?: number
-    name: string
-    email?: string | null
-    password?: string | null
-    phone: string
-    role?: $Enums.Role
-    company_name?: string | null
-    is_verified?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    drivers?: DriverUncheckedCreateNestedManyWithoutUserInput
-    routes?: RouteUncheckedCreateNestedManyWithoutUserInput
-    buses?: BusUncheckedCreateNestedManyWithoutUserInput
-    otps?: OTPUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutConductorsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutConductorsInput, UserUncheckedCreateWithoutConductorsInput>
-  }
-
-  export type BusCreateWithoutConductorInput = {
-    bus_number: string
-    capacity?: number
-    status?: $Enums.BusStatus
-    current_location?: string | null
-    fuel_level?: Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: Date | string | null
-    insurance_expiry?: Date | string | null
-    permit_expiry?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    user: UserCreateNestedOneWithoutBusesInput
-    route?: RouteCreateNestedOneWithoutBusesInput
-    driver?: DriverCreateNestedOneWithoutBusesInput
-    tickets?: TicketCreateNestedManyWithoutBusInput
-    packages?: PackageCreateNestedManyWithoutBusInput
-    dailyReports?: DailyReportCreateNestedManyWithoutBusInput
-    posMachines?: POSMachineCreateNestedManyWithoutBusInput
-    trips?: TripCreateNestedManyWithoutBusInput
-  }
-
-  export type BusUncheckedCreateWithoutConductorInput = {
-    id?: number
-    user_id: number
-    bus_number: string
-    capacity?: number
-    route_id?: number | null
-    driver_id?: number | null
-    status?: $Enums.BusStatus
-    current_location?: string | null
-    fuel_level?: Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: Date | string | null
-    insurance_expiry?: Date | string | null
-    permit_expiry?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
-    packages?: PackageUncheckedCreateNestedManyWithoutBusInput
-    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
-    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
-    trips?: TripUncheckedCreateNestedManyWithoutBusInput
-  }
-
-  export type BusCreateOrConnectWithoutConductorInput = {
-    where: BusWhereUniqueInput
-    create: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput>
-  }
-
-  export type BusCreateManyConductorInputEnvelope = {
-    data: BusCreateManyConductorInput | BusCreateManyConductorInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TripCreateWithoutConductorInput = {
-    start_time: Date | string
-    end_time?: Date | string | null
-    status?: $Enums.TripStatus
-    created_at?: Date | string
-    updated_at?: Date | string
-    bus: BusCreateNestedOneWithoutTripsInput
-    route: RouteCreateNestedOneWithoutTripsInput
-    driver?: DriverCreateNestedOneWithoutTripsInput
-    tickets?: TicketCreateNestedManyWithoutTripInput
-    packages?: PackageCreateNestedManyWithoutTripInput
-  }
-
-  export type TripUncheckedCreateWithoutConductorInput = {
-    id?: number
-    bus_id: number
-    route_id: number
-    start_time: Date | string
-    end_time?: Date | string | null
-    status?: $Enums.TripStatus
-    driver_id?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    tickets?: TicketUncheckedCreateNestedManyWithoutTripInput
-    packages?: PackageUncheckedCreateNestedManyWithoutTripInput
-  }
-
-  export type TripCreateOrConnectWithoutConductorInput = {
-    where: TripWhereUniqueInput
-    create: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput>
-  }
-
-  export type TripCreateManyConductorInputEnvelope = {
-    data: TripCreateManyConductorInput | TripCreateManyConductorInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type UserUpsertWithoutConductorsInput = {
-    update: XOR<UserUpdateWithoutConductorsInput, UserUncheckedUpdateWithoutConductorsInput>
-    create: XOR<UserCreateWithoutConductorsInput, UserUncheckedCreateWithoutConductorsInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutConductorsInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutConductorsInput, UserUncheckedUpdateWithoutConductorsInput>
-  }
-
-  export type UserUpdateWithoutConductorsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    company_name?: NullableStringFieldUpdateOperationsInput | string | null
-    is_verified?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    drivers?: DriverUpdateManyWithoutUserNestedInput
-    routes?: RouteUpdateManyWithoutUserNestedInput
-    buses?: BusUpdateManyWithoutUserNestedInput
-    otps?: OTPUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutConductorsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    company_name?: NullableStringFieldUpdateOperationsInput | string | null
-    is_verified?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    drivers?: DriverUncheckedUpdateManyWithoutUserNestedInput
-    routes?: RouteUncheckedUpdateManyWithoutUserNestedInput
-    buses?: BusUncheckedUpdateManyWithoutUserNestedInput
-    otps?: OTPUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type BusUpsertWithWhereUniqueWithoutConductorInput = {
-    where: BusWhereUniqueInput
-    update: XOR<BusUpdateWithoutConductorInput, BusUncheckedUpdateWithoutConductorInput>
-    create: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput>
-  }
-
-  export type BusUpdateWithWhereUniqueWithoutConductorInput = {
-    where: BusWhereUniqueInput
-    data: XOR<BusUpdateWithoutConductorInput, BusUncheckedUpdateWithoutConductorInput>
-  }
-
-  export type BusUpdateManyWithWhereWithoutConductorInput = {
-    where: BusScalarWhereInput
-    data: XOR<BusUpdateManyMutationInput, BusUncheckedUpdateManyWithoutConductorInput>
-  }
-
-  export type BusScalarWhereInput = {
-    AND?: BusScalarWhereInput | BusScalarWhereInput[]
-    OR?: BusScalarWhereInput[]
-    NOT?: BusScalarWhereInput | BusScalarWhereInput[]
-    id?: IntFilter<"Bus"> | number
-    user_id?: IntFilter<"Bus"> | number
-    bus_number?: StringFilter<"Bus"> | string
-    capacity?: IntFilter<"Bus"> | number
-    route_id?: IntNullableFilter<"Bus"> | number | null
-    driver_id?: IntNullableFilter<"Bus"> | number | null
-    conductor_id?: IntNullableFilter<"Bus"> | number | null
-    status?: EnumBusStatusFilter<"Bus"> | $Enums.BusStatus
-    current_location?: StringNullableFilter<"Bus"> | string | null
-    fuel_level?: DecimalNullableFilter<"Bus"> | Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: DateTimeNullableFilter<"Bus"> | Date | string | null
-    insurance_expiry?: DateTimeNullableFilter<"Bus"> | Date | string | null
-    permit_expiry?: DateTimeNullableFilter<"Bus"> | Date | string | null
-    created_at?: DateTimeFilter<"Bus"> | Date | string
-    updated_at?: DateTimeFilter<"Bus"> | Date | string
-  }
-
-  export type TripUpsertWithWhereUniqueWithoutConductorInput = {
-    where: TripWhereUniqueInput
-    update: XOR<TripUpdateWithoutConductorInput, TripUncheckedUpdateWithoutConductorInput>
-    create: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput>
-  }
-
-  export type TripUpdateWithWhereUniqueWithoutConductorInput = {
-    where: TripWhereUniqueInput
-    data: XOR<TripUpdateWithoutConductorInput, TripUncheckedUpdateWithoutConductorInput>
-  }
-
-  export type TripUpdateManyWithWhereWithoutConductorInput = {
-    where: TripScalarWhereInput
-    data: XOR<TripUpdateManyMutationInput, TripUncheckedUpdateManyWithoutConductorInput>
-  }
-
-  export type UserCreateWithoutDriversInput = {
-    name: string
-    email?: string | null
-    password?: string | null
-    phone: string
-    role?: $Enums.Role
-    company_name?: string | null
-    is_verified?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    routes?: RouteCreateNestedManyWithoutUserInput
-    conductors?: ConductorCreateNestedManyWithoutUserInput
-    buses?: BusCreateNestedManyWithoutUserInput
-    otps?: OTPCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutDriversInput = {
-    id?: number
-    name: string
-    email?: string | null
-    password?: string | null
-    phone: string
-    role?: $Enums.Role
-    company_name?: string | null
-    is_verified?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    routes?: RouteUncheckedCreateNestedManyWithoutUserInput
-    conductors?: ConductorUncheckedCreateNestedManyWithoutUserInput
-    buses?: BusUncheckedCreateNestedManyWithoutUserInput
-    otps?: OTPUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutDriversInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutDriversInput, UserUncheckedCreateWithoutDriversInput>
-  }
-
-  export type BusCreateWithoutDriverInput = {
-    bus_number: string
-    capacity?: number
-    status?: $Enums.BusStatus
-    current_location?: string | null
-    fuel_level?: Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: Date | string | null
-    insurance_expiry?: Date | string | null
-    permit_expiry?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    user: UserCreateNestedOneWithoutBusesInput
-    route?: RouteCreateNestedOneWithoutBusesInput
-    conductor?: ConductorCreateNestedOneWithoutBusesInput
-    tickets?: TicketCreateNestedManyWithoutBusInput
-    packages?: PackageCreateNestedManyWithoutBusInput
-    dailyReports?: DailyReportCreateNestedManyWithoutBusInput
-    posMachines?: POSMachineCreateNestedManyWithoutBusInput
-    trips?: TripCreateNestedManyWithoutBusInput
-  }
-
-  export type BusUncheckedCreateWithoutDriverInput = {
-    id?: number
-    user_id: number
-    bus_number: string
-    capacity?: number
-    route_id?: number | null
-    conductor_id?: number | null
-    status?: $Enums.BusStatus
-    current_location?: string | null
-    fuel_level?: Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: Date | string | null
-    insurance_expiry?: Date | string | null
-    permit_expiry?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
-    packages?: PackageUncheckedCreateNestedManyWithoutBusInput
-    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
-    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
-    trips?: TripUncheckedCreateNestedManyWithoutBusInput
-  }
-
-  export type BusCreateOrConnectWithoutDriverInput = {
-    where: BusWhereUniqueInput
-    create: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput>
-  }
-
-  export type BusCreateManyDriverInputEnvelope = {
-    data: BusCreateManyDriverInput | BusCreateManyDriverInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TripCreateWithoutDriverInput = {
-    start_time: Date | string
-    end_time?: Date | string | null
-    status?: $Enums.TripStatus
-    created_at?: Date | string
-    updated_at?: Date | string
-    bus: BusCreateNestedOneWithoutTripsInput
-    route: RouteCreateNestedOneWithoutTripsInput
-    conductor?: ConductorCreateNestedOneWithoutTripsInput
-    tickets?: TicketCreateNestedManyWithoutTripInput
-    packages?: PackageCreateNestedManyWithoutTripInput
-  }
-
-  export type TripUncheckedCreateWithoutDriverInput = {
-    id?: number
-    bus_id: number
-    route_id: number
-    start_time: Date | string
-    end_time?: Date | string | null
-    status?: $Enums.TripStatus
-    conductor_id?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    tickets?: TicketUncheckedCreateNestedManyWithoutTripInput
-    packages?: PackageUncheckedCreateNestedManyWithoutTripInput
-  }
-
-  export type TripCreateOrConnectWithoutDriverInput = {
-    where: TripWhereUniqueInput
-    create: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput>
-  }
-
-  export type TripCreateManyDriverInputEnvelope = {
-    data: TripCreateManyDriverInput | TripCreateManyDriverInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type UserUpsertWithoutDriversInput = {
-    update: XOR<UserUpdateWithoutDriversInput, UserUncheckedUpdateWithoutDriversInput>
-    create: XOR<UserCreateWithoutDriversInput, UserUncheckedCreateWithoutDriversInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutDriversInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutDriversInput, UserUncheckedUpdateWithoutDriversInput>
-  }
-
-  export type UserUpdateWithoutDriversInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    company_name?: NullableStringFieldUpdateOperationsInput | string | null
-    is_verified?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    routes?: RouteUpdateManyWithoutUserNestedInput
-    conductors?: ConductorUpdateManyWithoutUserNestedInput
-    buses?: BusUpdateManyWithoutUserNestedInput
-    otps?: OTPUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutDriversInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: StringFieldUpdateOperationsInput | string
-    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
-    company_name?: NullableStringFieldUpdateOperationsInput | string | null
-    is_verified?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    routes?: RouteUncheckedUpdateManyWithoutUserNestedInput
-    conductors?: ConductorUncheckedUpdateManyWithoutUserNestedInput
-    buses?: BusUncheckedUpdateManyWithoutUserNestedInput
-    otps?: OTPUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type BusUpsertWithWhereUniqueWithoutDriverInput = {
-    where: BusWhereUniqueInput
-    update: XOR<BusUpdateWithoutDriverInput, BusUncheckedUpdateWithoutDriverInput>
-    create: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput>
-  }
-
-  export type BusUpdateWithWhereUniqueWithoutDriverInput = {
-    where: BusWhereUniqueInput
-    data: XOR<BusUpdateWithoutDriverInput, BusUncheckedUpdateWithoutDriverInput>
-  }
-
-  export type BusUpdateManyWithWhereWithoutDriverInput = {
-    where: BusScalarWhereInput
-    data: XOR<BusUpdateManyMutationInput, BusUncheckedUpdateManyWithoutDriverInput>
-  }
-
-  export type TripUpsertWithWhereUniqueWithoutDriverInput = {
-    where: TripWhereUniqueInput
-    update: XOR<TripUpdateWithoutDriverInput, TripUncheckedUpdateWithoutDriverInput>
-    create: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput>
-  }
-
-  export type TripUpdateWithWhereUniqueWithoutDriverInput = {
-    where: TripWhereUniqueInput
-    data: XOR<TripUpdateWithoutDriverInput, TripUncheckedUpdateWithoutDriverInput>
-  }
-
-  export type TripUpdateManyWithWhereWithoutDriverInput = {
-    where: TripScalarWhereInput
-    data: XOR<TripUpdateManyMutationInput, TripUncheckedUpdateManyWithoutDriverInput>
-  }
-
   export type BusCreateWithoutPackagesInput = {
     bus_number: string
     capacity?: number
@@ -21054,8 +19095,8 @@ export namespace Prisma {
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutBusesInput
     route?: RouteCreateNestedOneWithoutBusesInput
-    driver?: DriverCreateNestedOneWithoutBusesInput
-    conductor?: ConductorCreateNestedOneWithoutBusesInput
+    driver?: UserCreateNestedOneWithoutBusesDrivenInput
+    conductor?: UserCreateNestedOneWithoutBusesConductedInput
     tickets?: TicketCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
     posMachines?: POSMachineCreateNestedManyWithoutBusInput
@@ -21097,8 +19138,8 @@ export namespace Prisma {
     updated_at?: Date | string
     bus: BusCreateNestedOneWithoutTripsInput
     route: RouteCreateNestedOneWithoutTripsInput
-    driver?: DriverCreateNestedOneWithoutTripsInput
-    conductor?: ConductorCreateNestedOneWithoutTripsInput
+    driver?: UserCreateNestedOneWithoutTripsDrivenInput
+    conductor?: UserCreateNestedOneWithoutTripsConductedInput
     tickets?: TicketCreateNestedManyWithoutTripInput
   }
 
@@ -21145,8 +19186,8 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutBusesNestedInput
     route?: RouteUpdateOneWithoutBusesNestedInput
-    driver?: DriverUpdateOneWithoutBusesNestedInput
-    conductor?: ConductorUpdateOneWithoutBusesNestedInput
+    driver?: UserUpdateOneWithoutBusesDrivenNestedInput
+    conductor?: UserUpdateOneWithoutBusesConductedNestedInput
     tickets?: TicketUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUpdateManyWithoutBusNestedInput
@@ -21194,8 +19235,8 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bus?: BusUpdateOneRequiredWithoutTripsNestedInput
     route?: RouteUpdateOneRequiredWithoutTripsNestedInput
-    driver?: DriverUpdateOneWithoutTripsNestedInput
-    conductor?: ConductorUpdateOneWithoutTripsNestedInput
+    driver?: UserUpdateOneWithoutTripsDrivenNestedInput
+    conductor?: UserUpdateOneWithoutTripsConductedNestedInput
     tickets?: TicketUpdateManyWithoutTripNestedInput
   }
 
@@ -21226,8 +19267,8 @@ export namespace Prisma {
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutBusesInput
     route?: RouteCreateNestedOneWithoutBusesInput
-    driver?: DriverCreateNestedOneWithoutBusesInput
-    conductor?: ConductorCreateNestedOneWithoutBusesInput
+    driver?: UserCreateNestedOneWithoutBusesDrivenInput
+    conductor?: UserCreateNestedOneWithoutBusesConductedInput
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
@@ -21330,8 +19371,8 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutBusesNestedInput
     route?: RouteUpdateOneWithoutBusesNestedInput
-    driver?: DriverUpdateOneWithoutBusesNestedInput
-    conductor?: ConductorUpdateOneWithoutBusesNestedInput
+    driver?: UserUpdateOneWithoutBusesDrivenNestedInput
+    conductor?: UserUpdateOneWithoutBusesConductedNestedInput
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
@@ -21389,8 +19430,8 @@ export namespace Prisma {
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutBusesInput
     route?: RouteCreateNestedOneWithoutBusesInput
-    driver?: DriverCreateNestedOneWithoutBusesInput
-    conductor?: ConductorCreateNestedOneWithoutBusesInput
+    driver?: UserCreateNestedOneWithoutBusesDrivenInput
+    conductor?: UserCreateNestedOneWithoutBusesConductedInput
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     posMachines?: POSMachineCreateNestedManyWithoutBusInput
@@ -21448,8 +19489,8 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutBusesNestedInput
     route?: RouteUpdateOneWithoutBusesNestedInput
-    driver?: DriverUpdateOneWithoutBusesNestedInput
-    conductor?: ConductorUpdateOneWithoutBusesNestedInput
+    driver?: UserUpdateOneWithoutBusesDrivenNestedInput
+    conductor?: UserUpdateOneWithoutBusesConductedNestedInput
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUpdateManyWithoutBusNestedInput
@@ -21488,8 +19529,11 @@ export namespace Prisma {
     is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    drivers?: DriverCreateNestedManyWithoutUserInput
-    conductors?: ConductorCreateNestedManyWithoutUserInput
+    userExtra?: UserExtraCreateNestedOneWithoutUserInput
+    busesDriven?: BusCreateNestedManyWithoutDriverInput
+    busesConducted?: BusCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripCreateNestedManyWithoutConductorInput
     buses?: BusCreateNestedManyWithoutUserInput
     otps?: OTPCreateNestedManyWithoutUserInput
   }
@@ -21505,8 +19549,11 @@ export namespace Prisma {
     is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    drivers?: DriverUncheckedCreateNestedManyWithoutUserInput
-    conductors?: ConductorUncheckedCreateNestedManyWithoutUserInput
+    userExtra?: UserExtraUncheckedCreateNestedOneWithoutUserInput
+    busesDriven?: BusUncheckedCreateNestedManyWithoutDriverInput
+    busesConducted?: BusUncheckedCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripUncheckedCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripUncheckedCreateNestedManyWithoutConductorInput
     buses?: BusUncheckedCreateNestedManyWithoutUserInput
     otps?: OTPUncheckedCreateNestedManyWithoutUserInput
   }
@@ -21528,8 +19575,8 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutBusesInput
-    driver?: DriverCreateNestedOneWithoutBusesInput
-    conductor?: ConductorCreateNestedOneWithoutBusesInput
+    driver?: UserCreateNestedOneWithoutBusesDrivenInput
+    conductor?: UserCreateNestedOneWithoutBusesConductedInput
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
@@ -21576,8 +19623,8 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     bus: BusCreateNestedOneWithoutTripsInput
-    driver?: DriverCreateNestedOneWithoutTripsInput
-    conductor?: ConductorCreateNestedOneWithoutTripsInput
+    driver?: UserCreateNestedOneWithoutTripsDrivenInput
+    conductor?: UserCreateNestedOneWithoutTripsConductedInput
     tickets?: TicketCreateNestedManyWithoutTripInput
     packages?: PackageCreateNestedManyWithoutTripInput
   }
@@ -21627,8 +19674,11 @@ export namespace Prisma {
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    drivers?: DriverUpdateManyWithoutUserNestedInput
-    conductors?: ConductorUpdateManyWithoutUserNestedInput
+    userExtra?: UserExtraUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUpdateManyWithoutConductorNestedInput
     buses?: BusUpdateManyWithoutUserNestedInput
     otps?: OTPUpdateManyWithoutUserNestedInput
   }
@@ -21644,8 +19694,11 @@ export namespace Prisma {
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    drivers?: DriverUncheckedUpdateManyWithoutUserNestedInput
-    conductors?: ConductorUncheckedUpdateManyWithoutUserNestedInput
+    userExtra?: UserExtraUncheckedUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUncheckedUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUncheckedUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUncheckedUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUncheckedUpdateManyWithoutConductorNestedInput
     buses?: BusUncheckedUpdateManyWithoutUserNestedInput
     otps?: OTPUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -21664,6 +19717,27 @@ export namespace Prisma {
   export type BusUpdateManyWithWhereWithoutRouteInput = {
     where: BusScalarWhereInput
     data: XOR<BusUpdateManyMutationInput, BusUncheckedUpdateManyWithoutRouteInput>
+  }
+
+  export type BusScalarWhereInput = {
+    AND?: BusScalarWhereInput | BusScalarWhereInput[]
+    OR?: BusScalarWhereInput[]
+    NOT?: BusScalarWhereInput | BusScalarWhereInput[]
+    id?: IntFilter<"Bus"> | number
+    user_id?: IntFilter<"Bus"> | number
+    bus_number?: StringFilter<"Bus"> | string
+    capacity?: IntFilter<"Bus"> | number
+    route_id?: IntNullableFilter<"Bus"> | number | null
+    driver_id?: IntNullableFilter<"Bus"> | number | null
+    conductor_id?: IntNullableFilter<"Bus"> | number | null
+    status?: EnumBusStatusFilter<"Bus"> | $Enums.BusStatus
+    current_location?: StringNullableFilter<"Bus"> | string | null
+    fuel_level?: DecimalNullableFilter<"Bus"> | Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: DateTimeNullableFilter<"Bus"> | Date | string | null
+    insurance_expiry?: DateTimeNullableFilter<"Bus"> | Date | string | null
+    permit_expiry?: DateTimeNullableFilter<"Bus"> | Date | string | null
+    created_at?: DateTimeFilter<"Bus"> | Date | string
+    updated_at?: DateTimeFilter<"Bus"> | Date | string
   }
 
   export type TripUpsertWithWhereUniqueWithoutRouteInput = {
@@ -21695,8 +19769,8 @@ export namespace Prisma {
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutBusesInput
     route?: RouteCreateNestedOneWithoutBusesInput
-    driver?: DriverCreateNestedOneWithoutBusesInput
-    conductor?: ConductorCreateNestedOneWithoutBusesInput
+    driver?: UserCreateNestedOneWithoutBusesDrivenInput
+    conductor?: UserCreateNestedOneWithoutBusesConductedInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
     posMachines?: POSMachineCreateNestedManyWithoutBusInput
@@ -21764,8 +19838,8 @@ export namespace Prisma {
     updated_at?: Date | string
     bus: BusCreateNestedOneWithoutTripsInput
     route: RouteCreateNestedOneWithoutTripsInput
-    driver?: DriverCreateNestedOneWithoutTripsInput
-    conductor?: ConductorCreateNestedOneWithoutTripsInput
+    driver?: UserCreateNestedOneWithoutTripsDrivenInput
+    conductor?: UserCreateNestedOneWithoutTripsConductedInput
     packages?: PackageCreateNestedManyWithoutTripInput
   }
 
@@ -21812,8 +19886,8 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutBusesNestedInput
     route?: RouteUpdateOneWithoutBusesNestedInput
-    driver?: DriverUpdateOneWithoutBusesNestedInput
-    conductor?: ConductorUpdateOneWithoutBusesNestedInput
+    driver?: UserUpdateOneWithoutBusesDrivenNestedInput
+    conductor?: UserUpdateOneWithoutBusesConductedNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
     posMachines?: POSMachineUpdateManyWithoutBusNestedInput
@@ -21893,8 +19967,8 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bus?: BusUpdateOneRequiredWithoutTripsNestedInput
     route?: RouteUpdateOneRequiredWithoutTripsNestedInput
-    driver?: DriverUpdateOneWithoutTripsNestedInput
-    conductor?: ConductorUpdateOneWithoutTripsNestedInput
+    driver?: UserUpdateOneWithoutTripsDrivenNestedInput
+    conductor?: UserUpdateOneWithoutTripsConductedNestedInput
     packages?: PackageUpdateManyWithoutTripNestedInput
   }
 
@@ -21925,8 +19999,8 @@ export namespace Prisma {
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutBusesInput
     route?: RouteCreateNestedOneWithoutBusesInput
-    driver?: DriverCreateNestedOneWithoutBusesInput
-    conductor?: ConductorCreateNestedOneWithoutBusesInput
+    driver?: UserCreateNestedOneWithoutBusesDrivenInput
+    conductor?: UserCreateNestedOneWithoutBusesConductedInput
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
@@ -21994,72 +20068,92 @@ export namespace Prisma {
     create: XOR<RouteCreateWithoutTripsInput, RouteUncheckedCreateWithoutTripsInput>
   }
 
-  export type DriverCreateWithoutTripsInput = {
+  export type UserCreateWithoutTripsDrivenInput = {
     name: string
+    email?: string | null
+    password?: string | null
     phone: string
-    license_number: string
-    license_expiry?: Date | string | null
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
+    role?: $Enums.Role
+    company_name?: string | null
+    is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    user: UserCreateNestedOneWithoutDriversInput
-    buses?: BusCreateNestedManyWithoutDriverInput
+    userExtra?: UserExtraCreateNestedOneWithoutUserInput
+    busesDriven?: BusCreateNestedManyWithoutDriverInput
+    busesConducted?: BusCreateNestedManyWithoutConductorInput
+    tripsConducted?: TripCreateNestedManyWithoutConductorInput
+    routes?: RouteCreateNestedManyWithoutUserInput
+    buses?: BusCreateNestedManyWithoutUserInput
+    otps?: OTPCreateNestedManyWithoutUserInput
   }
 
-  export type DriverUncheckedCreateWithoutTripsInput = {
+  export type UserUncheckedCreateWithoutTripsDrivenInput = {
     id?: number
-    user_id: number
     name: string
+    email?: string | null
+    password?: string | null
     phone: string
-    license_number: string
-    license_expiry?: Date | string | null
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
+    role?: $Enums.Role
+    company_name?: string | null
+    is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    buses?: BusUncheckedCreateNestedManyWithoutDriverInput
+    userExtra?: UserExtraUncheckedCreateNestedOneWithoutUserInput
+    busesDriven?: BusUncheckedCreateNestedManyWithoutDriverInput
+    busesConducted?: BusUncheckedCreateNestedManyWithoutConductorInput
+    tripsConducted?: TripUncheckedCreateNestedManyWithoutConductorInput
+    routes?: RouteUncheckedCreateNestedManyWithoutUserInput
+    buses?: BusUncheckedCreateNestedManyWithoutUserInput
+    otps?: OTPUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type DriverCreateOrConnectWithoutTripsInput = {
-    where: DriverWhereUniqueInput
-    create: XOR<DriverCreateWithoutTripsInput, DriverUncheckedCreateWithoutTripsInput>
+  export type UserCreateOrConnectWithoutTripsDrivenInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTripsDrivenInput, UserUncheckedCreateWithoutTripsDrivenInput>
   }
 
-  export type ConductorCreateWithoutTripsInput = {
+  export type UserCreateWithoutTripsConductedInput = {
     name: string
+    email?: string | null
+    password?: string | null
     phone: string
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
+    role?: $Enums.Role
+    company_name?: string | null
+    is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    user: UserCreateNestedOneWithoutConductorsInput
-    buses?: BusCreateNestedManyWithoutConductorInput
+    userExtra?: UserExtraCreateNestedOneWithoutUserInput
+    busesDriven?: BusCreateNestedManyWithoutDriverInput
+    busesConducted?: BusCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripCreateNestedManyWithoutDriverInput
+    routes?: RouteCreateNestedManyWithoutUserInput
+    buses?: BusCreateNestedManyWithoutUserInput
+    otps?: OTPCreateNestedManyWithoutUserInput
   }
 
-  export type ConductorUncheckedCreateWithoutTripsInput = {
+  export type UserUncheckedCreateWithoutTripsConductedInput = {
     id?: number
-    user_id: number
     name: string
+    email?: string | null
+    password?: string | null
     phone: string
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
+    role?: $Enums.Role
+    company_name?: string | null
+    is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    buses?: BusUncheckedCreateNestedManyWithoutConductorInput
+    userExtra?: UserExtraUncheckedCreateNestedOneWithoutUserInput
+    busesDriven?: BusUncheckedCreateNestedManyWithoutDriverInput
+    busesConducted?: BusUncheckedCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripUncheckedCreateNestedManyWithoutDriverInput
+    routes?: RouteUncheckedCreateNestedManyWithoutUserInput
+    buses?: BusUncheckedCreateNestedManyWithoutUserInput
+    otps?: OTPUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type ConductorCreateOrConnectWithoutTripsInput = {
-    where: ConductorWhereUniqueInput
-    create: XOR<ConductorCreateWithoutTripsInput, ConductorUncheckedCreateWithoutTripsInput>
+  export type UserCreateOrConnectWithoutTripsConductedInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTripsConductedInput, UserUncheckedCreateWithoutTripsConductedInput>
   }
 
   export type TicketCreateWithoutTripInput = {
@@ -22176,8 +20270,8 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutBusesNestedInput
     route?: RouteUpdateOneWithoutBusesNestedInput
-    driver?: DriverUpdateOneWithoutBusesNestedInput
-    conductor?: ConductorUpdateOneWithoutBusesNestedInput
+    driver?: UserUpdateOneWithoutBusesDrivenNestedInput
+    conductor?: UserUpdateOneWithoutBusesConductedNestedInput
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
@@ -22246,84 +20340,104 @@ export namespace Prisma {
     buses?: BusUncheckedUpdateManyWithoutRouteNestedInput
   }
 
-  export type DriverUpsertWithoutTripsInput = {
-    update: XOR<DriverUpdateWithoutTripsInput, DriverUncheckedUpdateWithoutTripsInput>
-    create: XOR<DriverCreateWithoutTripsInput, DriverUncheckedCreateWithoutTripsInput>
-    where?: DriverWhereInput
+  export type UserUpsertWithoutTripsDrivenInput = {
+    update: XOR<UserUpdateWithoutTripsDrivenInput, UserUncheckedUpdateWithoutTripsDrivenInput>
+    create: XOR<UserCreateWithoutTripsDrivenInput, UserUncheckedCreateWithoutTripsDrivenInput>
+    where?: UserWhereInput
   }
 
-  export type DriverUpdateToOneWithWhereWithoutTripsInput = {
-    where?: DriverWhereInput
-    data: XOR<DriverUpdateWithoutTripsInput, DriverUncheckedUpdateWithoutTripsInput>
+  export type UserUpdateToOneWithWhereWithoutTripsDrivenInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTripsDrivenInput, UserUncheckedUpdateWithoutTripsDrivenInput>
   }
 
-  export type DriverUpdateWithoutTripsInput = {
+  export type UserUpdateWithoutTripsDrivenInput = {
     name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
-    license_number?: StringFieldUpdateOperationsInput | string
-    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutDriversNestedInput
-    buses?: BusUpdateManyWithoutDriverNestedInput
+    userExtra?: UserExtraUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUpdateManyWithoutConductorNestedInput
+    tripsConducted?: TripUpdateManyWithoutConductorNestedInput
+    routes?: RouteUpdateManyWithoutUserNestedInput
+    buses?: BusUpdateManyWithoutUserNestedInput
+    otps?: OTPUpdateManyWithoutUserNestedInput
   }
 
-  export type DriverUncheckedUpdateWithoutTripsInput = {
+  export type UserUncheckedUpdateWithoutTripsDrivenInput = {
     id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
-    license_number?: StringFieldUpdateOperationsInput | string
-    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    buses?: BusUncheckedUpdateManyWithoutDriverNestedInput
+    userExtra?: UserExtraUncheckedUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUncheckedUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUncheckedUpdateManyWithoutConductorNestedInput
+    tripsConducted?: TripUncheckedUpdateManyWithoutConductorNestedInput
+    routes?: RouteUncheckedUpdateManyWithoutUserNestedInput
+    buses?: BusUncheckedUpdateManyWithoutUserNestedInput
+    otps?: OTPUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type ConductorUpsertWithoutTripsInput = {
-    update: XOR<ConductorUpdateWithoutTripsInput, ConductorUncheckedUpdateWithoutTripsInput>
-    create: XOR<ConductorCreateWithoutTripsInput, ConductorUncheckedCreateWithoutTripsInput>
-    where?: ConductorWhereInput
+  export type UserUpsertWithoutTripsConductedInput = {
+    update: XOR<UserUpdateWithoutTripsConductedInput, UserUncheckedUpdateWithoutTripsConductedInput>
+    create: XOR<UserCreateWithoutTripsConductedInput, UserUncheckedCreateWithoutTripsConductedInput>
+    where?: UserWhereInput
   }
 
-  export type ConductorUpdateToOneWithWhereWithoutTripsInput = {
-    where?: ConductorWhereInput
-    data: XOR<ConductorUpdateWithoutTripsInput, ConductorUncheckedUpdateWithoutTripsInput>
+  export type UserUpdateToOneWithWhereWithoutTripsConductedInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTripsConductedInput, UserUncheckedUpdateWithoutTripsConductedInput>
   }
 
-  export type ConductorUpdateWithoutTripsInput = {
+  export type UserUpdateWithoutTripsConductedInput = {
     name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutConductorsNestedInput
-    buses?: BusUpdateManyWithoutConductorNestedInput
+    userExtra?: UserExtraUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUpdateManyWithoutDriverNestedInput
+    routes?: RouteUpdateManyWithoutUserNestedInput
+    buses?: BusUpdateManyWithoutUserNestedInput
+    otps?: OTPUpdateManyWithoutUserNestedInput
   }
 
-  export type ConductorUncheckedUpdateWithoutTripsInput = {
+  export type UserUncheckedUpdateWithoutTripsConductedInput = {
     id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: StringFieldUpdateOperationsInput | string
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    buses?: BusUncheckedUpdateManyWithoutConductorNestedInput
+    userExtra?: UserExtraUncheckedUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUncheckedUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUncheckedUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUncheckedUpdateManyWithoutDriverNestedInput
+    routes?: RouteUncheckedUpdateManyWithoutUserNestedInput
+    buses?: BusUncheckedUpdateManyWithoutUserNestedInput
+    otps?: OTPUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TicketUpsertWithWhereUniqueWithoutTripInput = {
@@ -22358,10 +20472,9 @@ export namespace Prisma {
     data: XOR<PackageUpdateManyMutationInput, PackageUncheckedUpdateManyWithoutTripInput>
   }
 
-  export type DriverCreateWithoutUserInput = {
-    name: string
-    phone: string
-    license_number: string
+  export type UserExtraCreateWithoutUserInput = {
+    name?: string | null
+    license_number?: string | null
     license_expiry?: Date | string | null
     experience_years?: number
     address?: string | null
@@ -22369,15 +20482,12 @@ export namespace Prisma {
     active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    buses?: BusCreateNestedManyWithoutDriverInput
-    trips?: TripCreateNestedManyWithoutDriverInput
   }
 
-  export type DriverUncheckedCreateWithoutUserInput = {
+  export type UserExtraUncheckedCreateWithoutUserInput = {
     id?: number
-    name: string
-    phone: string
-    license_number: string
+    name?: string | null
+    license_number?: string | null
     license_expiry?: Date | string | null
     experience_years?: number
     address?: string | null
@@ -22385,17 +20495,190 @@ export namespace Prisma {
     active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    buses?: BusUncheckedCreateNestedManyWithoutDriverInput
-    trips?: TripUncheckedCreateNestedManyWithoutDriverInput
   }
 
-  export type DriverCreateOrConnectWithoutUserInput = {
-    where: DriverWhereUniqueInput
-    create: XOR<DriverCreateWithoutUserInput, DriverUncheckedCreateWithoutUserInput>
+  export type UserExtraCreateOrConnectWithoutUserInput = {
+    where: UserExtraWhereUniqueInput
+    create: XOR<UserExtraCreateWithoutUserInput, UserExtraUncheckedCreateWithoutUserInput>
   }
 
-  export type DriverCreateManyUserInputEnvelope = {
-    data: DriverCreateManyUserInput | DriverCreateManyUserInput[]
+  export type BusCreateWithoutDriverInput = {
+    bus_number: string
+    capacity?: number
+    status?: $Enums.BusStatus
+    current_location?: string | null
+    fuel_level?: Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: Date | string | null
+    insurance_expiry?: Date | string | null
+    permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutBusesInput
+    route?: RouteCreateNestedOneWithoutBusesInput
+    conductor?: UserCreateNestedOneWithoutBusesConductedInput
+    tickets?: TicketCreateNestedManyWithoutBusInput
+    packages?: PackageCreateNestedManyWithoutBusInput
+    dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineCreateNestedManyWithoutBusInput
+    trips?: TripCreateNestedManyWithoutBusInput
+  }
+
+  export type BusUncheckedCreateWithoutDriverInput = {
+    id?: number
+    user_id: number
+    bus_number: string
+    capacity?: number
+    route_id?: number | null
+    conductor_id?: number | null
+    status?: $Enums.BusStatus
+    current_location?: string | null
+    fuel_level?: Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: Date | string | null
+    insurance_expiry?: Date | string | null
+    permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
+    packages?: PackageUncheckedCreateNestedManyWithoutBusInput
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
+    trips?: TripUncheckedCreateNestedManyWithoutBusInput
+  }
+
+  export type BusCreateOrConnectWithoutDriverInput = {
+    where: BusWhereUniqueInput
+    create: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput>
+  }
+
+  export type BusCreateManyDriverInputEnvelope = {
+    data: BusCreateManyDriverInput | BusCreateManyDriverInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BusCreateWithoutConductorInput = {
+    bus_number: string
+    capacity?: number
+    status?: $Enums.BusStatus
+    current_location?: string | null
+    fuel_level?: Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: Date | string | null
+    insurance_expiry?: Date | string | null
+    permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutBusesInput
+    route?: RouteCreateNestedOneWithoutBusesInput
+    driver?: UserCreateNestedOneWithoutBusesDrivenInput
+    tickets?: TicketCreateNestedManyWithoutBusInput
+    packages?: PackageCreateNestedManyWithoutBusInput
+    dailyReports?: DailyReportCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineCreateNestedManyWithoutBusInput
+    trips?: TripCreateNestedManyWithoutBusInput
+  }
+
+  export type BusUncheckedCreateWithoutConductorInput = {
+    id?: number
+    user_id: number
+    bus_number: string
+    capacity?: number
+    route_id?: number | null
+    driver_id?: number | null
+    status?: $Enums.BusStatus
+    current_location?: string | null
+    fuel_level?: Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: Date | string | null
+    insurance_expiry?: Date | string | null
+    permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutBusInput
+    packages?: PackageUncheckedCreateNestedManyWithoutBusInput
+    dailyReports?: DailyReportUncheckedCreateNestedManyWithoutBusInput
+    posMachines?: POSMachineUncheckedCreateNestedManyWithoutBusInput
+    trips?: TripUncheckedCreateNestedManyWithoutBusInput
+  }
+
+  export type BusCreateOrConnectWithoutConductorInput = {
+    where: BusWhereUniqueInput
+    create: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput>
+  }
+
+  export type BusCreateManyConductorInputEnvelope = {
+    data: BusCreateManyConductorInput | BusCreateManyConductorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TripCreateWithoutDriverInput = {
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    bus: BusCreateNestedOneWithoutTripsInput
+    route: RouteCreateNestedOneWithoutTripsInput
+    conductor?: UserCreateNestedOneWithoutTripsConductedInput
+    tickets?: TicketCreateNestedManyWithoutTripInput
+    packages?: PackageCreateNestedManyWithoutTripInput
+  }
+
+  export type TripUncheckedCreateWithoutDriverInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    conductor_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutTripInput
+    packages?: PackageUncheckedCreateNestedManyWithoutTripInput
+  }
+
+  export type TripCreateOrConnectWithoutDriverInput = {
+    where: TripWhereUniqueInput
+    create: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput>
+  }
+
+  export type TripCreateManyDriverInputEnvelope = {
+    data: TripCreateManyDriverInput | TripCreateManyDriverInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TripCreateWithoutConductorInput = {
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    created_at?: Date | string
+    updated_at?: Date | string
+    bus: BusCreateNestedOneWithoutTripsInput
+    route: RouteCreateNestedOneWithoutTripsInput
+    driver?: UserCreateNestedOneWithoutTripsDrivenInput
+    tickets?: TicketCreateNestedManyWithoutTripInput
+    packages?: PackageCreateNestedManyWithoutTripInput
+  }
+
+  export type TripUncheckedCreateWithoutConductorInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    tickets?: TicketUncheckedCreateNestedManyWithoutTripInput
+    packages?: PackageUncheckedCreateNestedManyWithoutTripInput
+  }
+
+  export type TripCreateOrConnectWithoutConductorInput = {
+    where: TripWhereUniqueInput
+    create: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput>
+  }
+
+  export type TripCreateManyConductorInputEnvelope = {
+    data: TripCreateManyConductorInput | TripCreateManyConductorInput[]
     skipDuplicates?: boolean
   }
 
@@ -22438,43 +20721,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ConductorCreateWithoutUserInput = {
-    name: string
-    phone: string
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    buses?: BusCreateNestedManyWithoutConductorInput
-    trips?: TripCreateNestedManyWithoutConductorInput
-  }
-
-  export type ConductorUncheckedCreateWithoutUserInput = {
-    id?: number
-    name: string
-    phone: string
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-    buses?: BusUncheckedCreateNestedManyWithoutConductorInput
-    trips?: TripUncheckedCreateNestedManyWithoutConductorInput
-  }
-
-  export type ConductorCreateOrConnectWithoutUserInput = {
-    where: ConductorWhereUniqueInput
-    create: XOR<ConductorCreateWithoutUserInput, ConductorUncheckedCreateWithoutUserInput>
-  }
-
-  export type ConductorCreateManyUserInputEnvelope = {
-    data: ConductorCreateManyUserInput | ConductorCreateManyUserInput[]
-    skipDuplicates?: boolean
-  }
-
   export type BusCreateWithoutUserInput = {
     bus_number: string
     capacity?: number
@@ -22487,8 +20733,8 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     route?: RouteCreateNestedOneWithoutBusesInput
-    driver?: DriverCreateNestedOneWithoutBusesInput
-    conductor?: ConductorCreateNestedOneWithoutBusesInput
+    driver?: UserCreateNestedOneWithoutBusesDrivenInput
+    conductor?: UserCreateNestedOneWithoutBusesConductedInput
     tickets?: TicketCreateNestedManyWithoutBusInput
     packages?: PackageCreateNestedManyWithoutBusInput
     dailyReports?: DailyReportCreateNestedManyWithoutBusInput
@@ -22555,38 +20801,104 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type DriverUpsertWithWhereUniqueWithoutUserInput = {
-    where: DriverWhereUniqueInput
-    update: XOR<DriverUpdateWithoutUserInput, DriverUncheckedUpdateWithoutUserInput>
-    create: XOR<DriverCreateWithoutUserInput, DriverUncheckedCreateWithoutUserInput>
+  export type UserExtraUpsertWithoutUserInput = {
+    update: XOR<UserExtraUpdateWithoutUserInput, UserExtraUncheckedUpdateWithoutUserInput>
+    create: XOR<UserExtraCreateWithoutUserInput, UserExtraUncheckedCreateWithoutUserInput>
+    where?: UserExtraWhereInput
   }
 
-  export type DriverUpdateWithWhereUniqueWithoutUserInput = {
-    where: DriverWhereUniqueInput
-    data: XOR<DriverUpdateWithoutUserInput, DriverUncheckedUpdateWithoutUserInput>
+  export type UserExtraUpdateToOneWithWhereWithoutUserInput = {
+    where?: UserExtraWhereInput
+    data: XOR<UserExtraUpdateWithoutUserInput, UserExtraUncheckedUpdateWithoutUserInput>
   }
 
-  export type DriverUpdateManyWithWhereWithoutUserInput = {
-    where: DriverScalarWhereInput
-    data: XOR<DriverUpdateManyMutationInput, DriverUncheckedUpdateManyWithoutUserInput>
+  export type UserExtraUpdateWithoutUserInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    license_number?: NullableStringFieldUpdateOperationsInput | string | null
+    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    experience_years?: IntFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type DriverScalarWhereInput = {
-    AND?: DriverScalarWhereInput | DriverScalarWhereInput[]
-    OR?: DriverScalarWhereInput[]
-    NOT?: DriverScalarWhereInput | DriverScalarWhereInput[]
-    id?: IntFilter<"Driver"> | number
-    user_id?: IntFilter<"Driver"> | number
-    name?: StringFilter<"Driver"> | string
-    phone?: StringFilter<"Driver"> | string
-    license_number?: StringFilter<"Driver"> | string
-    license_expiry?: DateTimeNullableFilter<"Driver"> | Date | string | null
-    experience_years?: IntFilter<"Driver"> | number
-    address?: StringNullableFilter<"Driver"> | string | null
-    emergency_contact?: StringNullableFilter<"Driver"> | string | null
-    active?: BoolFilter<"Driver"> | boolean
-    created_at?: DateTimeFilter<"Driver"> | Date | string
-    updated_at?: DateTimeFilter<"Driver"> | Date | string
+  export type UserExtraUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    license_number?: NullableStringFieldUpdateOperationsInput | string | null
+    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    experience_years?: IntFieldUpdateOperationsInput | number
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BusUpsertWithWhereUniqueWithoutDriverInput = {
+    where: BusWhereUniqueInput
+    update: XOR<BusUpdateWithoutDriverInput, BusUncheckedUpdateWithoutDriverInput>
+    create: XOR<BusCreateWithoutDriverInput, BusUncheckedCreateWithoutDriverInput>
+  }
+
+  export type BusUpdateWithWhereUniqueWithoutDriverInput = {
+    where: BusWhereUniqueInput
+    data: XOR<BusUpdateWithoutDriverInput, BusUncheckedUpdateWithoutDriverInput>
+  }
+
+  export type BusUpdateManyWithWhereWithoutDriverInput = {
+    where: BusScalarWhereInput
+    data: XOR<BusUpdateManyMutationInput, BusUncheckedUpdateManyWithoutDriverInput>
+  }
+
+  export type BusUpsertWithWhereUniqueWithoutConductorInput = {
+    where: BusWhereUniqueInput
+    update: XOR<BusUpdateWithoutConductorInput, BusUncheckedUpdateWithoutConductorInput>
+    create: XOR<BusCreateWithoutConductorInput, BusUncheckedCreateWithoutConductorInput>
+  }
+
+  export type BusUpdateWithWhereUniqueWithoutConductorInput = {
+    where: BusWhereUniqueInput
+    data: XOR<BusUpdateWithoutConductorInput, BusUncheckedUpdateWithoutConductorInput>
+  }
+
+  export type BusUpdateManyWithWhereWithoutConductorInput = {
+    where: BusScalarWhereInput
+    data: XOR<BusUpdateManyMutationInput, BusUncheckedUpdateManyWithoutConductorInput>
+  }
+
+  export type TripUpsertWithWhereUniqueWithoutDriverInput = {
+    where: TripWhereUniqueInput
+    update: XOR<TripUpdateWithoutDriverInput, TripUncheckedUpdateWithoutDriverInput>
+    create: XOR<TripCreateWithoutDriverInput, TripUncheckedCreateWithoutDriverInput>
+  }
+
+  export type TripUpdateWithWhereUniqueWithoutDriverInput = {
+    where: TripWhereUniqueInput
+    data: XOR<TripUpdateWithoutDriverInput, TripUncheckedUpdateWithoutDriverInput>
+  }
+
+  export type TripUpdateManyWithWhereWithoutDriverInput = {
+    where: TripScalarWhereInput
+    data: XOR<TripUpdateManyMutationInput, TripUncheckedUpdateManyWithoutDriverInput>
+  }
+
+  export type TripUpsertWithWhereUniqueWithoutConductorInput = {
+    where: TripWhereUniqueInput
+    update: XOR<TripUpdateWithoutConductorInput, TripUncheckedUpdateWithoutConductorInput>
+    create: XOR<TripCreateWithoutConductorInput, TripUncheckedCreateWithoutConductorInput>
+  }
+
+  export type TripUpdateWithWhereUniqueWithoutConductorInput = {
+    where: TripWhereUniqueInput
+    data: XOR<TripUpdateWithoutConductorInput, TripUncheckedUpdateWithoutConductorInput>
+  }
+
+  export type TripUpdateManyWithWhereWithoutConductorInput = {
+    where: TripScalarWhereInput
+    data: XOR<TripUpdateManyMutationInput, TripUncheckedUpdateManyWithoutConductorInput>
   }
 
   export type RouteUpsertWithWhereUniqueWithoutUserInput = {
@@ -22620,38 +20932,6 @@ export namespace Prisma {
     active?: BoolFilter<"Route"> | boolean
     created_at?: DateTimeFilter<"Route"> | Date | string
     updated_at?: DateTimeFilter<"Route"> | Date | string
-  }
-
-  export type ConductorUpsertWithWhereUniqueWithoutUserInput = {
-    where: ConductorWhereUniqueInput
-    update: XOR<ConductorUpdateWithoutUserInput, ConductorUncheckedUpdateWithoutUserInput>
-    create: XOR<ConductorCreateWithoutUserInput, ConductorUncheckedCreateWithoutUserInput>
-  }
-
-  export type ConductorUpdateWithWhereUniqueWithoutUserInput = {
-    where: ConductorWhereUniqueInput
-    data: XOR<ConductorUpdateWithoutUserInput, ConductorUncheckedUpdateWithoutUserInput>
-  }
-
-  export type ConductorUpdateManyWithWhereWithoutUserInput = {
-    where: ConductorScalarWhereInput
-    data: XOR<ConductorUpdateManyMutationInput, ConductorUncheckedUpdateManyWithoutUserInput>
-  }
-
-  export type ConductorScalarWhereInput = {
-    AND?: ConductorScalarWhereInput | ConductorScalarWhereInput[]
-    OR?: ConductorScalarWhereInput[]
-    NOT?: ConductorScalarWhereInput | ConductorScalarWhereInput[]
-    id?: IntFilter<"Conductor"> | number
-    user_id?: IntFilter<"Conductor"> | number
-    name?: StringFilter<"Conductor"> | string
-    phone?: StringFilter<"Conductor"> | string
-    experience_years?: IntFilter<"Conductor"> | number
-    address?: StringNullableFilter<"Conductor"> | string | null
-    emergency_contact?: StringNullableFilter<"Conductor"> | string | null
-    active?: BoolFilter<"Conductor"> | boolean
-    created_at?: DateTimeFilter<"Conductor"> | Date | string
-    updated_at?: DateTimeFilter<"Conductor"> | Date | string
   }
 
   export type BusUpsertWithWhereUniqueWithoutUserInput = {
@@ -22699,6 +20979,100 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"OTP"> | Date | string
   }
 
+  export type UserCreateWithoutUserExtraInput = {
+    name: string
+    email?: string | null
+    password?: string | null
+    phone: string
+    role?: $Enums.Role
+    company_name?: string | null
+    is_verified?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    busesDriven?: BusCreateNestedManyWithoutDriverInput
+    busesConducted?: BusCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripCreateNestedManyWithoutConductorInput
+    routes?: RouteCreateNestedManyWithoutUserInput
+    buses?: BusCreateNestedManyWithoutUserInput
+    otps?: OTPCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutUserExtraInput = {
+    id?: number
+    name: string
+    email?: string | null
+    password?: string | null
+    phone: string
+    role?: $Enums.Role
+    company_name?: string | null
+    is_verified?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    busesDriven?: BusUncheckedCreateNestedManyWithoutDriverInput
+    busesConducted?: BusUncheckedCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripUncheckedCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripUncheckedCreateNestedManyWithoutConductorInput
+    routes?: RouteUncheckedCreateNestedManyWithoutUserInput
+    buses?: BusUncheckedCreateNestedManyWithoutUserInput
+    otps?: OTPUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutUserExtraInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUserExtraInput, UserUncheckedCreateWithoutUserExtraInput>
+  }
+
+  export type UserUpsertWithoutUserExtraInput = {
+    update: XOR<UserUpdateWithoutUserExtraInput, UserUncheckedUpdateWithoutUserExtraInput>
+    create: XOR<UserCreateWithoutUserExtraInput, UserUncheckedCreateWithoutUserExtraInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUserExtraInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUserExtraInput, UserUncheckedUpdateWithoutUserExtraInput>
+  }
+
+  export type UserUpdateWithoutUserExtraInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    busesDriven?: BusUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUpdateManyWithoutConductorNestedInput
+    routes?: RouteUpdateManyWithoutUserNestedInput
+    buses?: BusUpdateManyWithoutUserNestedInput
+    otps?: OTPUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUserExtraInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    company_name?: NullableStringFieldUpdateOperationsInput | string | null
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    busesDriven?: BusUncheckedUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUncheckedUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUncheckedUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUncheckedUpdateManyWithoutConductorNestedInput
+    routes?: RouteUncheckedUpdateManyWithoutUserNestedInput
+    buses?: BusUncheckedUpdateManyWithoutUserNestedInput
+    otps?: OTPUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type UserCreateWithoutOtpsInput = {
     name: string
     email?: string | null
@@ -22709,9 +21083,12 @@ export namespace Prisma {
     is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    drivers?: DriverCreateNestedManyWithoutUserInput
+    userExtra?: UserExtraCreateNestedOneWithoutUserInput
+    busesDriven?: BusCreateNestedManyWithoutDriverInput
+    busesConducted?: BusCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripCreateNestedManyWithoutConductorInput
     routes?: RouteCreateNestedManyWithoutUserInput
-    conductors?: ConductorCreateNestedManyWithoutUserInput
     buses?: BusCreateNestedManyWithoutUserInput
   }
 
@@ -22726,9 +21103,12 @@ export namespace Prisma {
     is_verified?: boolean
     created_at?: Date | string
     updated_at?: Date | string
-    drivers?: DriverUncheckedCreateNestedManyWithoutUserInput
+    userExtra?: UserExtraUncheckedCreateNestedOneWithoutUserInput
+    busesDriven?: BusUncheckedCreateNestedManyWithoutDriverInput
+    busesConducted?: BusUncheckedCreateNestedManyWithoutConductorInput
+    tripsDriven?: TripUncheckedCreateNestedManyWithoutDriverInput
+    tripsConducted?: TripUncheckedCreateNestedManyWithoutConductorInput
     routes?: RouteUncheckedCreateNestedManyWithoutUserInput
-    conductors?: ConductorUncheckedCreateNestedManyWithoutUserInput
     buses?: BusUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -22758,9 +21138,12 @@ export namespace Prisma {
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    drivers?: DriverUpdateManyWithoutUserNestedInput
+    userExtra?: UserExtraUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUpdateManyWithoutConductorNestedInput
     routes?: RouteUpdateManyWithoutUserNestedInput
-    conductors?: ConductorUpdateManyWithoutUserNestedInput
     buses?: BusUpdateManyWithoutUserNestedInput
   }
 
@@ -22775,9 +21158,12 @@ export namespace Prisma {
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    drivers?: DriverUncheckedUpdateManyWithoutUserNestedInput
+    userExtra?: UserExtraUncheckedUpdateOneWithoutUserNestedInput
+    busesDriven?: BusUncheckedUpdateManyWithoutDriverNestedInput
+    busesConducted?: BusUncheckedUpdateManyWithoutConductorNestedInput
+    tripsDriven?: TripUncheckedUpdateManyWithoutDriverNestedInput
+    tripsConducted?: TripUncheckedUpdateManyWithoutConductorNestedInput
     routes?: RouteUncheckedUpdateManyWithoutUserNestedInput
-    conductors?: ConductorUncheckedUpdateManyWithoutUserNestedInput
     buses?: BusUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -23030,8 +21416,8 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     route?: RouteUpdateOneRequiredWithoutTripsNestedInput
-    driver?: DriverUpdateOneWithoutTripsNestedInput
-    conductor?: ConductorUpdateOneWithoutTripsNestedInput
+    driver?: UserUpdateOneWithoutTripsDrivenNestedInput
+    conductor?: UserUpdateOneWithoutTripsConductedNestedInput
     tickets?: TicketUpdateManyWithoutTripNestedInput
     packages?: PackageUpdateManyWithoutTripNestedInput
   }
@@ -23057,262 +21443,6 @@ export namespace Prisma {
     end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
     driver_id?: NullableIntFieldUpdateOperationsInput | number | null
-    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type BusCreateManyConductorInput = {
-    id?: number
-    user_id: number
-    bus_number: string
-    capacity?: number
-    route_id?: number | null
-    driver_id?: number | null
-    status?: $Enums.BusStatus
-    current_location?: string | null
-    fuel_level?: Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: Date | string | null
-    insurance_expiry?: Date | string | null
-    permit_expiry?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type TripCreateManyConductorInput = {
-    id?: number
-    bus_id: number
-    route_id: number
-    start_time: Date | string
-    end_time?: Date | string | null
-    status?: $Enums.TripStatus
-    driver_id?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type BusUpdateWithoutConductorInput = {
-    bus_number?: StringFieldUpdateOperationsInput | string
-    capacity?: IntFieldUpdateOperationsInput | number
-    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
-    current_location?: NullableStringFieldUpdateOperationsInput | string | null
-    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutBusesNestedInput
-    route?: RouteUpdateOneWithoutBusesNestedInput
-    driver?: DriverUpdateOneWithoutBusesNestedInput
-    tickets?: TicketUpdateManyWithoutBusNestedInput
-    packages?: PackageUpdateManyWithoutBusNestedInput
-    dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
-    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
-    trips?: TripUpdateManyWithoutBusNestedInput
-  }
-
-  export type BusUncheckedUpdateWithoutConductorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
-    bus_number?: StringFieldUpdateOperationsInput | string
-    capacity?: IntFieldUpdateOperationsInput | number
-    route_id?: NullableIntFieldUpdateOperationsInput | number | null
-    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
-    current_location?: NullableStringFieldUpdateOperationsInput | string | null
-    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
-    packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
-    dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
-    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
-    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
-  }
-
-  export type BusUncheckedUpdateManyWithoutConductorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
-    bus_number?: StringFieldUpdateOperationsInput | string
-    capacity?: IntFieldUpdateOperationsInput | number
-    route_id?: NullableIntFieldUpdateOperationsInput | number | null
-    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
-    current_location?: NullableStringFieldUpdateOperationsInput | string | null
-    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TripUpdateWithoutConductorInput = {
-    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
-    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    bus?: BusUpdateOneRequiredWithoutTripsNestedInput
-    route?: RouteUpdateOneRequiredWithoutTripsNestedInput
-    driver?: DriverUpdateOneWithoutTripsNestedInput
-    tickets?: TicketUpdateManyWithoutTripNestedInput
-    packages?: PackageUpdateManyWithoutTripNestedInput
-  }
-
-  export type TripUncheckedUpdateWithoutConductorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    bus_id?: IntFieldUpdateOperationsInput | number
-    route_id?: IntFieldUpdateOperationsInput | number
-    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
-    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    tickets?: TicketUncheckedUpdateManyWithoutTripNestedInput
-    packages?: PackageUncheckedUpdateManyWithoutTripNestedInput
-  }
-
-  export type TripUncheckedUpdateManyWithoutConductorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    bus_id?: IntFieldUpdateOperationsInput | number
-    route_id?: IntFieldUpdateOperationsInput | number
-    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
-    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type BusCreateManyDriverInput = {
-    id?: number
-    user_id: number
-    bus_number: string
-    capacity?: number
-    route_id?: number | null
-    conductor_id?: number | null
-    status?: $Enums.BusStatus
-    current_location?: string | null
-    fuel_level?: Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: Date | string | null
-    insurance_expiry?: Date | string | null
-    permit_expiry?: Date | string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type TripCreateManyDriverInput = {
-    id?: number
-    bus_id: number
-    route_id: number
-    start_time: Date | string
-    end_time?: Date | string | null
-    status?: $Enums.TripStatus
-    conductor_id?: number | null
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type BusUpdateWithoutDriverInput = {
-    bus_number?: StringFieldUpdateOperationsInput | string
-    capacity?: IntFieldUpdateOperationsInput | number
-    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
-    current_location?: NullableStringFieldUpdateOperationsInput | string | null
-    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutBusesNestedInput
-    route?: RouteUpdateOneWithoutBusesNestedInput
-    conductor?: ConductorUpdateOneWithoutBusesNestedInput
-    tickets?: TicketUpdateManyWithoutBusNestedInput
-    packages?: PackageUpdateManyWithoutBusNestedInput
-    dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
-    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
-    trips?: TripUpdateManyWithoutBusNestedInput
-  }
-
-  export type BusUncheckedUpdateWithoutDriverInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
-    bus_number?: StringFieldUpdateOperationsInput | string
-    capacity?: IntFieldUpdateOperationsInput | number
-    route_id?: NullableIntFieldUpdateOperationsInput | number | null
-    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
-    current_location?: NullableStringFieldUpdateOperationsInput | string | null
-    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
-    packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
-    dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
-    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
-    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
-  }
-
-  export type BusUncheckedUpdateManyWithoutDriverInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    user_id?: IntFieldUpdateOperationsInput | number
-    bus_number?: StringFieldUpdateOperationsInput | string
-    capacity?: IntFieldUpdateOperationsInput | number
-    route_id?: NullableIntFieldUpdateOperationsInput | number | null
-    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
-    current_location?: NullableStringFieldUpdateOperationsInput | string | null
-    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type TripUpdateWithoutDriverInput = {
-    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
-    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    bus?: BusUpdateOneRequiredWithoutTripsNestedInput
-    route?: RouteUpdateOneRequiredWithoutTripsNestedInput
-    conductor?: ConductorUpdateOneWithoutTripsNestedInput
-    tickets?: TicketUpdateManyWithoutTripNestedInput
-    packages?: PackageUpdateManyWithoutTripNestedInput
-  }
-
-  export type TripUncheckedUpdateWithoutDriverInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    bus_id?: IntFieldUpdateOperationsInput | number
-    route_id?: IntFieldUpdateOperationsInput | number
-    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
-    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
-    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    tickets?: TicketUncheckedUpdateManyWithoutTripNestedInput
-    packages?: PackageUncheckedUpdateManyWithoutTripNestedInput
-  }
-
-  export type TripUncheckedUpdateManyWithoutDriverInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    bus_id?: IntFieldUpdateOperationsInput | number
-    route_id?: IntFieldUpdateOperationsInput | number
-    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
-    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
     conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23430,8 +21560,8 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutBusesNestedInput
-    driver?: DriverUpdateOneWithoutBusesNestedInput
-    conductor?: ConductorUpdateOneWithoutBusesNestedInput
+    driver?: UserUpdateOneWithoutBusesDrivenNestedInput
+    conductor?: UserUpdateOneWithoutBusesConductedNestedInput
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
@@ -23485,8 +21615,8 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     bus?: BusUpdateOneRequiredWithoutTripsNestedInput
-    driver?: DriverUpdateOneWithoutTripsNestedInput
-    conductor?: ConductorUpdateOneWithoutTripsNestedInput
+    driver?: UserUpdateOneWithoutTripsDrivenNestedInput
+    conductor?: UserUpdateOneWithoutTripsConductedNestedInput
     tickets?: TicketUpdateManyWithoutTripNestedInput
     packages?: PackageUpdateManyWithoutTripNestedInput
   }
@@ -23659,16 +21789,60 @@ export namespace Prisma {
     delivered_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type DriverCreateManyUserInput = {
+  export type BusCreateManyDriverInput = {
     id?: number
-    name: string
-    phone: string
-    license_number: string
-    license_expiry?: Date | string | null
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
-    active?: boolean
+    user_id: number
+    bus_number: string
+    capacity?: number
+    route_id?: number | null
+    conductor_id?: number | null
+    status?: $Enums.BusStatus
+    current_location?: string | null
+    fuel_level?: Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: Date | string | null
+    insurance_expiry?: Date | string | null
+    permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BusCreateManyConductorInput = {
+    id?: number
+    user_id: number
+    bus_number: string
+    capacity?: number
+    route_id?: number | null
+    driver_id?: number | null
+    status?: $Enums.BusStatus
+    current_location?: string | null
+    fuel_level?: Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: Date | string | null
+    insurance_expiry?: Date | string | null
+    permit_expiry?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type TripCreateManyDriverInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    conductor_id?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type TripCreateManyConductorInput = {
+    id?: number
+    bus_id: number
+    route_id: number
+    start_time: Date | string
+    end_time?: Date | string | null
+    status?: $Enums.TripStatus
+    driver_id?: number | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -23681,18 +21855,6 @@ export namespace Prisma {
     base_fare: Decimal | DecimalJsLike | number | string
     per_km_rate: Decimal | DecimalJsLike | number | string
     stops: JsonNullValueInput | InputJsonValue
-    active?: boolean
-    created_at?: Date | string
-    updated_at?: Date | string
-  }
-
-  export type ConductorCreateManyUserInput = {
-    id?: number
-    name: string
-    phone: string
-    experience_years?: number
-    address?: string | null
-    emergency_contact?: string | null
     active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -23724,47 +21886,200 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
-  export type DriverUpdateWithoutUserInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    license_number?: StringFieldUpdateOperationsInput | string
-    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
+  export type BusUpdateWithoutDriverInput = {
+    bus_number?: StringFieldUpdateOperationsInput | string
+    capacity?: IntFieldUpdateOperationsInput | number
+    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
+    current_location?: NullableStringFieldUpdateOperationsInput | string | null
+    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    buses?: BusUpdateManyWithoutDriverNestedInput
-    trips?: TripUpdateManyWithoutDriverNestedInput
+    user?: UserUpdateOneRequiredWithoutBusesNestedInput
+    route?: RouteUpdateOneWithoutBusesNestedInput
+    conductor?: UserUpdateOneWithoutBusesConductedNestedInput
+    tickets?: TicketUpdateManyWithoutBusNestedInput
+    packages?: PackageUpdateManyWithoutBusNestedInput
+    dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
+    trips?: TripUpdateManyWithoutBusNestedInput
   }
 
-  export type DriverUncheckedUpdateWithoutUserInput = {
+  export type BusUncheckedUpdateWithoutDriverInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    license_number?: StringFieldUpdateOperationsInput | string
-    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
+    user_id?: IntFieldUpdateOperationsInput | number
+    bus_number?: StringFieldUpdateOperationsInput | string
+    capacity?: IntFieldUpdateOperationsInput | number
+    route_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
+    current_location?: NullableStringFieldUpdateOperationsInput | string | null
+    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    buses?: BusUncheckedUpdateManyWithoutDriverNestedInput
-    trips?: TripUncheckedUpdateManyWithoutDriverNestedInput
+    tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
+    packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
   }
 
-  export type DriverUncheckedUpdateManyWithoutUserInput = {
+  export type BusUncheckedUpdateManyWithoutDriverInput = {
     id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    license_number?: StringFieldUpdateOperationsInput | string
-    license_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
+    user_id?: IntFieldUpdateOperationsInput | number
+    bus_number?: StringFieldUpdateOperationsInput | string
+    capacity?: IntFieldUpdateOperationsInput | number
+    route_id?: NullableIntFieldUpdateOperationsInput | number | null
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
+    current_location?: NullableStringFieldUpdateOperationsInput | string | null
+    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BusUpdateWithoutConductorInput = {
+    bus_number?: StringFieldUpdateOperationsInput | string
+    capacity?: IntFieldUpdateOperationsInput | number
+    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
+    current_location?: NullableStringFieldUpdateOperationsInput | string | null
+    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBusesNestedInput
+    route?: RouteUpdateOneWithoutBusesNestedInput
+    driver?: UserUpdateOneWithoutBusesDrivenNestedInput
+    tickets?: TicketUpdateManyWithoutBusNestedInput
+    packages?: PackageUpdateManyWithoutBusNestedInput
+    dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUpdateManyWithoutBusNestedInput
+    trips?: TripUpdateManyWithoutBusNestedInput
+  }
+
+  export type BusUncheckedUpdateWithoutConductorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    bus_number?: StringFieldUpdateOperationsInput | string
+    capacity?: IntFieldUpdateOperationsInput | number
+    route_id?: NullableIntFieldUpdateOperationsInput | number | null
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
+    current_location?: NullableStringFieldUpdateOperationsInput | string | null
+    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutBusNestedInput
+    packages?: PackageUncheckedUpdateManyWithoutBusNestedInput
+    dailyReports?: DailyReportUncheckedUpdateManyWithoutBusNestedInput
+    posMachines?: POSMachineUncheckedUpdateManyWithoutBusNestedInput
+    trips?: TripUncheckedUpdateManyWithoutBusNestedInput
+  }
+
+  export type BusUncheckedUpdateManyWithoutConductorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
+    bus_number?: StringFieldUpdateOperationsInput | string
+    capacity?: IntFieldUpdateOperationsInput | number
+    route_id?: NullableIntFieldUpdateOperationsInput | number | null
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: EnumBusStatusFieldUpdateOperationsInput | $Enums.BusStatus
+    current_location?: NullableStringFieldUpdateOperationsInput | string | null
+    fuel_level?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    last_maintenance?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    insurance_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    permit_expiry?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TripUpdateWithoutDriverInput = {
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bus?: BusUpdateOneRequiredWithoutTripsNestedInput
+    route?: RouteUpdateOneRequiredWithoutTripsNestedInput
+    conductor?: UserUpdateOneWithoutTripsConductedNestedInput
+    tickets?: TicketUpdateManyWithoutTripNestedInput
+    packages?: PackageUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateWithoutDriverInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutTripNestedInput
+    packages?: PackageUncheckedUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateManyWithoutDriverInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    conductor_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TripUpdateWithoutConductorInput = {
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bus?: BusUpdateOneRequiredWithoutTripsNestedInput
+    route?: RouteUpdateOneRequiredWithoutTripsNestedInput
+    driver?: UserUpdateOneWithoutTripsDrivenNestedInput
+    tickets?: TicketUpdateManyWithoutTripNestedInput
+    packages?: PackageUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateWithoutConductorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickets?: TicketUncheckedUpdateManyWithoutTripNestedInput
+    packages?: PackageUncheckedUpdateManyWithoutTripNestedInput
+  }
+
+  export type TripUncheckedUpdateManyWithoutConductorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bus_id?: IntFieldUpdateOperationsInput | number
+    route_id?: IntFieldUpdateOperationsInput | number
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumTripStatusFieldUpdateOperationsInput | $Enums.TripStatus
+    driver_id?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -23811,45 +22126,6 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ConductorUpdateWithoutUserInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    buses?: BusUpdateManyWithoutConductorNestedInput
-    trips?: TripUpdateManyWithoutConductorNestedInput
-  }
-
-  export type ConductorUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    buses?: BusUncheckedUpdateManyWithoutConductorNestedInput
-    trips?: TripUncheckedUpdateManyWithoutConductorNestedInput
-  }
-
-  export type ConductorUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    experience_years?: IntFieldUpdateOperationsInput | number
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    emergency_contact?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type BusUpdateWithoutUserInput = {
     bus_number?: StringFieldUpdateOperationsInput | string
     capacity?: IntFieldUpdateOperationsInput | number
@@ -23862,8 +22138,8 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     route?: RouteUpdateOneWithoutBusesNestedInput
-    driver?: DriverUpdateOneWithoutBusesNestedInput
-    conductor?: ConductorUpdateOneWithoutBusesNestedInput
+    driver?: UserUpdateOneWithoutBusesDrivenNestedInput
+    conductor?: UserUpdateOneWithoutBusesConductedNestedInput
     tickets?: TicketUpdateManyWithoutBusNestedInput
     packages?: PackageUpdateManyWithoutBusNestedInput
     dailyReports?: DailyReportUpdateManyWithoutBusNestedInput
