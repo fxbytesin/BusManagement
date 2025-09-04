@@ -45,23 +45,88 @@ router.post("/create", authenticateToken, posController.createPOSMachine);
 
 /**
  * @swagger
- * /api/pos/all:
- *   get:
- *     summary: Get all POS machines including their assigned bus
+ * /api/pos/list:
+ *   post:
+ *     summary: Get all POS machines including their assigned bus (with search, pagination, and sorting)
  *     tags: [POSMachine]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               search:
+ *                 type: string
+ *                 description: Search by POS serial number
+ *                 example: "POS123"
+ *               limit:
+ *                 type: integer
+ *                 default: 10
+ *                 description: Number of results per page
+ *               page:
+ *                 type: integer
+ *                 default: 1
+ *                 description: Page number
+ *               order:
+ *                 type: string
+ *                 enum: [ASC, DESC]
+ *                 default: ASC
+ *                 description: Sort order
+ *               orderColumn:
+ *                 type: string
+ *                 enum: [created_at, serial_number, status]
+ *                 default: created_at
+ *                 description: Column to sort by
  *     responses:
  *       200:
- *         description: List of POS machines with bus info
+ *         description: List of POS machines with bus info and pagination
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       serial_no:
+ *                         type: string
+ *                       status:
+ *                         type: string
+ *                       created_at:
+ *                         type: string
+ *                         format: date-time
+ *                       bus:
+ *                         type: object
+ *                         nullable: true
+ *                         properties:
+ *                           id:
+ *                             type: integer
+ *                           bus_number:
+ *                             type: string
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                     page:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *       404:
+ *         description: No POS machines found for the given search
+ *       500:
+ *         description: Internal server error
  */
-router.get("/all", authenticateToken, posController.getAllPOSMachines);
+router.post("/list", authenticateToken, posController.getAllPOSMachines);
 
 /**
  * @swagger

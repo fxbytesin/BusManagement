@@ -11,40 +11,88 @@ const conductorController=require("../controllers/conductorController");
 
 /**
  * @swagger
- * /api/conductor:
- *   get:
- *     summary: Get all conductors for the logged-in user
+ * /api/conductor/list:
+ *   post:
+ *     summary: Get all conductors for the logged-in user with search, pagination, and sorting
  *     tags: [Conductor]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               search:
+ *                 type: string
+ *                 description: Search by name, phone, or email
+ *                 example: "John"
+ *               limit:
+ *                 type: integer
+ *                 default: 10
+ *                 description: Number of results per page
+ *               page:
+ *                 type: integer
+ *                 default: 1
+ *                 description: Page number
+ *               order:
+ *                 type: string
+ *                 enum: [ASC, DESC]
+ *                 default: ASC
+ *                 description: Sort order
+ *               orderColumn:
+ *                 type: string
+ *                 enum: [created_at, name, email, phone]
+ *                 default: created_at
+ *                 description: Column to sort by
  *     responses:
  *       200:
- *         description: List of conductors
+ *         description: List of conductors with pagination
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *                   phone:
- *                     type: string
- *                   experience_years:
- *                     type: integer
- *                   address:
- *                     type: string
- *                   emergency_contact:
- *                     type: string
- *                   active:
- *                     type: boolean
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *                       phone:
+ *                         type: string
+ *                       email:
+ *                         type: string
+ *                       experience_years:
+ *                         type: integer
+ *                       address:
+ *                         type: string
+ *                       emergency_contact:
+ *                         type: string
+ *                       active:
+ *                         type: boolean
+ *                       created_at:
+ *                         type: string
+ *                         format: date-time
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                     page:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     totalPages:
+ *                       type: integer
+ *       500:
+ *         description: Internal server error
  */
-
-/* Get all conductors */
-router.get('/', authenticateToken, conductorController.getAllConductor);
+router.post('/list', authenticateToken, conductorController.getAllConductor);
 
 /**
  * @swagger
@@ -154,6 +202,5 @@ router.put('/:id', authenticateToken, conductorController.updateConductor );
  *         description: Conductor not found
  */
 router.delete('/:id', authenticateToken, conductorController.deleteConductor);
-
 
 module.exports = router;

@@ -1,19 +1,63 @@
 const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
-// Get all conductors for the current user
+
 exports.getAllConductor = async (req, res) => {
   try {
+    const {
+      search = "",
+      limit = 10,
+      page = 1,
+      order = "ASC",
+      orderColumn = "created_at"
+    } = req.body;
+
+    const take = Number(limit);
+    const skip = (Number(page) - 1) * take;
+
+    // ✅ Ensure valid order
+    const sortOrder = order && order.toUpperCase() === "DESC" ? "desc" : "asc";
+
+    // ✅ Allow only safe columns
+    const validColumns = ["created_at", "name", "email", "phone"];
+    const sortColumn = validColumns.includes(orderColumn) ? orderColumn : "created_at";
+
+
+       const whereCondition = {
+      // user_id: req.user.id,
+      ...(search
+        ? {
+            OR: [
+              { name: { contains: search } },
+              { phone: { contains: search } },
+            ]
+          }
+        : {})
+    };
     const conductors = await prisma.conductor.findMany({
-      where: { user_id: req.user.id },
-      orderBy: { created_at: 'desc' }
+      where: whereCondition,
+      orderBy: { [sortColumn]: sortOrder },
+      skip,
+      take
     });
-    res.json(conductors);
+
+    const totalCount = await prisma.conductor.count({ where: whereCondition });
+
+    res.json({
+      data: conductors,
+      pagination: {
+        total: totalCount,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(totalCount / take)
+      }
+    });
   } catch (error) {
-    console.error('Error fetching conductors:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching conductors:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-}
+};
+
 
 //Create Conductor
 exports.createConductor = async (req, res) => {

@@ -1,46 +1,103 @@
 const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
-exports.getAllBuses=async (req, res) => {
+exports.getAllBuses = async (req, res) => {
   try {
-    const buses = await prisma.bus.findMany({
-      where: { user_id: req.user.id },
-      include: {
-        route: {
-          select: {
-            name: true,
-            code: true
-          }
-        },
-        driver: {
-          select: {
-            name: true
-          }
-        },
-        conductor: {
-          select: {
-            name: true
-          }
-        }
-      },
-      orderBy: { created_at: 'desc' }
-    });
+    const {
+      search = "",
+      limit = 10,
+      page = 1,
+      order = "ASC",
+      orderColumn = "created_at"
+    } = req.body; // ← read from body since you're posting JSON
 
-    // Format the response to match the original structure
+    const take = Number(limit) || 10;
+    const pageNum = Number(page) || 1;
+    const skip = (pageNum - 1) * take;
+
+    // ✅ sort order
+    const sortOrder = String(order).toUpperCase() === "DESC" ? "desc" : "asc";
+
+    // ✅ allowed columns (flat + relations via aliases)
+    const validFlatCols = ["created_at", "bus_number", "updated_at"];
+    const validRelCols  = ["route_name", "driver_name", "conductor_name"];
+
+    const sortColumn =
+      (orderColumn && (validFlatCols.includes(orderColumn) || validRelCols.includes(orderColumn)))
+        ? orderColumn
+        : "created_at";
+
+    // ✅ build orderBy correctly (relations need nested format)
+    let orderBy;
+    if (validFlatCols.includes(sortColumn)) {
+      orderBy = { [sortColumn]: sortOrder };
+    } else if (sortColumn === "route_name") {
+      orderBy = { route: { name: sortOrder } };
+    } else if (sortColumn === "driver_name") {
+      orderBy = { driver: { name: sortOrder } };
+    } else if (sortColumn === "conductor_name") {
+      orderBy = { conductor: { name: sortOrder } };
+    } else {
+      orderBy = { created_at: sortOrder };
+    }
+
+    const term = (search ?? "").trim();
+
+    // ✅ search (no `mode` since your setup errored on it)
+    const whereCondition = {
+      ...(req.user?.id ? { user_id: req.user.id } : {}), // keep if you need per-user data
+      ...(term
+        ? {
+            OR: [
+              { bus_number: { contains: term } },
+              { route: { name: { contains: term } } },
+              { route: { code: { contains: term } } },
+              { driver: { name: { contains: term } } },
+              { conductor: { name: { contains: term } } }
+            ]
+          }
+        : {})
+    };
+
+    const [buses, totalCount] = await Promise.all([
+      prisma.bus.findMany({
+        where: whereCondition,
+        include: {
+          route: { select: { name: true, code: true } },
+          driver: { select: { name: true } },
+          conductor: { select: { name: true } }
+        },
+        orderBy,
+        skip,
+        take
+      }),
+      prisma.bus.count({ where: whereCondition })
+    ]);
+
     const formattedBuses = buses.map(bus => ({
       ...bus,
-      route_name: bus.route?.name || null,
-      route_code: bus.route?.code || null,
-      driver_name: bus.driver?.name || null,
-      conductor_name: bus.conductor?.name || null
+      route_name: bus.route?.name ?? null,
+      route_code: bus.route?.code ?? null,
+      driver_name: bus.driver?.name ?? null,
+      conductor_name: bus.conductor?.name ?? null
     }));
 
-    res.json(formattedBuses);
+    res.json({
+      data: formattedBuses,
+      pagination: {
+        total: totalCount,
+        page: pageNum,
+        limit: take,
+        totalPages: Math.ceil(totalCount / take)
+      }
+    });
   } catch (error) {
-    console.error('Error fetching buses:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching buses:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-}
+};
+
+
 
 exports.createBus = async (req, res) => {
   try {

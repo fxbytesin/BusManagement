@@ -1070,7 +1070,7 @@ const BusManagementSoftware = () => {
       case "posMachine":
         return (
             <div className="p-6">
-            <div className="flex justify-between items-center mb-6">
+            {/* <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-semibold">{t("posMachine")}</h3>
               <button
                 onClick={() => setShowModalPos(true)}
@@ -1079,7 +1079,7 @@ const BusManagementSoftware = () => {
                 <Plus className="w-5 h-5" />
                 <span>{t("addPOSMachine")}</span>
               </button>
-            </div>
+            </div> */}
             <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
               <PosMachine
                 showModalPos={showModalPos}
@@ -1091,16 +1091,6 @@ const BusManagementSoftware = () => {
       case "trip":
         return (
           <div className="p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-semibold">{t("trip")}</h3>
-              <button
-                onClick={() => setShowTrip(true)}
-                className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700"
-              >
-                <Plus className="w-5 h-5" />
-                <span>{t("addTrip")}</span>
-              </button>
-            </div>
             <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
               <Trip
                 buses={buses}
@@ -1232,8 +1222,20 @@ const BusManagementSoftware = () => {
           />
           <CustomRoute path='/registration' element={<Registration />} />
           <CustomRoute path='/ticketview' element={<TicketView />} />
-        </Routes>
-      </BrowserRouter>
+          <CustomRoute
+            path='/trips/:tripid'
+            element={<TicketSystem
+            t={t}
+              currentPage={currentPage}
+              currentLanguage={currentLanguage}  
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+              setCurrentPage={setCurrentPage}
+              setCurrentLanguage={setCurrentLanguage}
+            />} />
+
+  </Routes>
+</BrowserRouter>
     </>
   );
 };

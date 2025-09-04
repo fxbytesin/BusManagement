@@ -2,6 +2,8 @@ import { Bus, Edit, Plus, Trash2,Loader, } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ApiService from '../../services/api';
 import TicketView from './TicketView';
+import SortColumn from './SortColumn';
+import DataPagination from './DataPagination';
 
  // Bus Management Page
 const BusManagementPage = (
@@ -25,41 +27,160 @@ const BusManagementPage = (
   const [busId, setBusId] = useState(0)
   const [loading, setLoading] = useState(true); 
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        setLoading(true);
-        const response = await ApiService.getBus();      
-        setBuses(response.data)
 
-        const route = await ApiService.getRoutes();      
-        setRoutes(route.data)
+  const [search, setSearch] = useState("");
+  const [sortDescriptor, setSortDescriptor] = useState({
+    column: "name",
+    direction: "ASC",
+  }); 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
 
-        const driver = await ApiService.getDriver();      
-        setDrivers(driver.data)
 
-        const conductor = await ApiService.getConductor();      
-        setConductors(conductor.data)
-
-      } catch (err) {
-      }
-      finally {
-        setLoading(false);
-      }
+  const getBusData = async () => {
+    const body = {
+      search : search,
+      limit: 10,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
     }
-    getData()
+    try {
+      setLoading(true);
+      const response = await ApiService.getBus(body);      
+      setBuses(response?.data?.data)
+      setTotalPages(response?.data?.pagination?.totalPages)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+  
+
+  const getRoutesData = async () => {
+    const body = {
+      search : search,
+      limit: 10,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      setLoading(true);
+      const response = await ApiService.getRoutes(body);      
+      setRoutes(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+  
+  const getDriverData = async () => {
+    const body = {
+      search : search,
+      limit: 10,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      setLoading(true);
+      const response = await ApiService.getDriver(body);      
+      setDrivers(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+  
+  const getConductorData = async () => {
+    const body = {
+      search : search,
+      limit: 10,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      setLoading(true);
+      const response = await ApiService.getConductor(body);      
+      setConductors(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      setLoading(false);
+    }
+}
+
+
+  useEffect(() => {
+    getBusData()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setBuses])
+  }, [setBuses,search,page,sortDescriptor])
+
+  useEffect(() => {
+    getRoutesData()
+    getDriverData()
+    getConductorData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   const functionClick = (id) => {
     setBusId(id)
     setShowComponent(false)
   }
+
+  const handleChange = (e) => {
+    setSearch(e.target.value); 
+  }
+
+  const handleSorting = (column) => {
+    setSortDescriptor((prevDescriptor) => {
+      if (prevDescriptor.column === column) {
+        return {
+          ...prevDescriptor,
+          direction:
+            prevDescriptor.direction === "ASC"
+              ? "DESC"
+              : "ASC",
+        };
+      } else {
+        return {
+          column: column,
+          direction: "DESC",
+        };
+      }
+    });
+  };
+  
+
+  const handlePageChange = (page) => {
+    setPage(page); // Update the page state variable to the specified page number
+  };
   return (
       showComponent ? (
-        <div className="p-6">
+      <div className="p-6">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold">{t("busManagement")}</h3>
+
+          <div className='flex'>
+            <form class="flex max-w-lg mx-auto mr-6">   
+              <input type="text" id="voice-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+               onChange={handleChange}
+              />
+       
+          </form>
           <button
             onClick={() => {
               setModalType("add-bus");
@@ -70,6 +191,7 @@ const BusManagementPage = (
             <Plus className="w-5 h-5" />
             <span>{t("addNewBus")}</span>
           </button>
+          </div>
         </div>
     
         {buses?.length === 0 ? (
@@ -94,26 +216,86 @@ const BusManagementPage = (
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("busNumber")}
+                    <th
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      onClick={() => handleSorting("bus_number")}
+                    >
+                      <div className='flex'>
+                      {t("busNumber")}
+                        <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="bus_number"
+                      />
+                      </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("route")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    onClick={() => handleSorting("route_id")}
+                    >                      
+                      <div className='flex'>
+                      {t("route")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="route_id"
+                        />
+                      </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("driver")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                     onClick={() => handleSorting("driver_id")}
+                    >
+                      <div className='flex'>
+                      {t("driver")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="driver_id"
+                        />
+                      </div>
+
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("conductor")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    onClick={() => handleSorting("conductor_id")}
+                    >                      
+                      <div className='flex'>
+                      {t("conductor")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="conductor_id"
+                        />
+                      </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("capacity")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                     onClick={() => handleSorting("capacity")}
+                    >
+                      <div className='flex'>
+                      {t("capacity")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="capacity"
+                        />
+                      </div>
+
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("status")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                     onClick={() => handleSorting("status")}
+                    >
+                      <div className='flex'>
+                      {t("status")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="status"
+                        />
+                      </div>
+
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("current location")}
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      onClick={() => handleSorting("current_location")}
+                    >
+                      <div className='flex'>
+                      {t("current location")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="current_location"
+                        />
+                      </div>
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {t("Ticket View")}
@@ -139,14 +321,13 @@ const BusManagementPage = (
           {bus.bus_number}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          {routes.find((r) => r.id === bus.route_id)?.name || t("notAssigned")}
+          {bus.route_name}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          {drivers.find((d) => d.id === bus.driver_id)?.name || t("notAssigned")}
+          {bus.driver_name}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          {conductors.find((c) => c.id === bus.conductor_id)?.name ||
-            t("notAssigned")}
+        {bus.conductor_name}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">{bus.capacity}</td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -195,15 +376,22 @@ const BusManagementPage = (
     ))
   ) : (
     <tr>
-      <td colSpan={9} className="py-10 text-center text-gray-500 italic">
-        {t("noDataFound")}
+      <td colSpan={9} className="py-10 text-center text-gray-500">
+        {t("No Data Found")}
       </td>
     </tr>
   )}
 </tbody>
 
             
-            </table>
+              </table>
+              {buses && buses.length > 0 && (
+                  <DataPagination
+                    onPageChange={handlePageChange}
+                    totalPages={totalPages}
+                    currentPage={page}
+                  />
+                )}
           </div>
         )}
       </div>

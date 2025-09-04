@@ -1,4 +1,4 @@
-import { BarChart3, Bus, Home, MapPin, Printer, Route, Settings, User, Users, X,Box,Package, Navigation } from 'lucide-react';
+import { BarChart3, Bus, Home, MapPin, Route, Settings, User, Users, X,Box,Package, Navigation } from 'lucide-react';
 
 const NavigationComponent = ({
     currentLanguage,
@@ -16,7 +16,6 @@ const NavigationComponent = ({
       { id: "drivers", label: t("driverManagement"), icon: User },
       { id: "conductors", label: t("conductorManagement"), icon: Users },
       { id: "live-tracking", label: t("liveTracking"), icon: MapPin },
-      { id: "ticketing", label: t("ticketing"), icon: Printer },
       { id: "reports", label: t("reports"), icon: BarChart3 },
       { id: "settings", label: t("settings"), icon: Settings },
       { id: "posMachine", label: t("posMachine"), icon: Box },
@@ -28,7 +27,7 @@ const NavigationComponent = ({
       <div
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-indigo-900 text-white transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 h-[966px]`}
       >
         <div className="flex items-center justify-between p-4 border-b border-indigo-800">
           <h1 className="text-xl font-bold">{t("appName")}</h1>

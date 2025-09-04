@@ -1,18 +1,66 @@
 const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
-exports.getAllRoutes= async (req, res) => {
+exports.getAllRoutes = async (req, res) => {
   try {
+    const {
+      search = "",
+      limit = 10,
+      page = 1,
+      order = "ASC",
+      orderColumn = "created_at"
+    } = req.body;
+
+    const take = Number(limit);
+    const skip = (Number(page) - 1) * take;
+
+    // ✅ Ensure valid sort order
+    const sortOrder = order && order.toUpperCase() === "DESC" ? "desc" : "asc";
+
+    // ✅ Allow only safe columns (adjust based on your schema)
+    const validColumns = ["created_at", "name", "code"];
+    const sortColumn = validColumns.includes(orderColumn) ? orderColumn : "created_at";
+
+    // ✅ Build search filter
+    const whereCondition = {
+      user_id: req.user.id,
+      ...(search
+        ? {
+            OR: [
+              { name: { contains: search} },
+              { code: { contains: search} }
+            ]
+          }
+        : {})
+    };
+
+    console.log("whereCondition:", JSON.stringify(whereCondition, null, 2));
+
+    // ✅ Fetch routes
     const routes = await prisma.route.findMany({
-      where: { user_id: req.user.id },
-      orderBy: { created_at: 'desc' }
+      where: whereCondition,
+      orderBy: { [sortColumn]: sortOrder },
+      skip,
+      take
     });
-    res.json(routes);
+
+    const totalCount = await prisma.route.count({ where: whereCondition });
+
+    res.json({
+      data: routes,
+      pagination: {
+        total: totalCount,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(totalCount / take)
+      }
+    });
   } catch (error) {
-    console.error('Error fetching routes:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching routes:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-}
+};
+
 
 exports.createRoute=async (req, res) => {
   try {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middlewares/authMiddleware');
-const dashboardController=require('../controllers/dashboardController')
+const dashboardController = require('../controllers/dashboardController');
 
 /**
  * @swagger
@@ -12,129 +12,155 @@ const dashboardController=require('../controllers/dashboardController')
 
 /**
  * @swagger
- * /api/dashboard/stats:
+ * /api/dashboard/analytics:
  *   get:
- *     summary: Get dashboard overview and bus-specific stats for a given period
+ *     summary: Get analytics report for trips, occupancy, and revenue
  *     tags: [Dashboard]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - name: period
- *         in: query
- *         description: Period to filter stats by (daily, weekly, monthly, yearly)
- *         required: false
- *         schema:
- *           type: string
- *           enum: [daily, weekly, monthly, yearly]
- *           default: daily
  *     responses:
  *       200:
- *         description: Dashboard statistics overview for the specified period
+ *         description: Analytics data for trips completed, tickets generated, occupancy rate, and revenue
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 overview:
+ *                 tripsAndTickets:
  *                   type: object
  *                   properties:
- *                     total_buses:
- *                       type: integer
- *                     active_buses:
- *                       type: integer
- *                     today_revenue:
- *                       type: number
- *                     today_passengers:
- *                       type: integer
- *                     today_packages:
- *                       type: integer
- *                 buses:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       bus_number:
- *                         type: string
- *                       status:
- *                         type: string
- *                       capacity:
- *                         type: integer
- *                       current_location:
- *                         type: string
- *                       route_name:
- *                         type: string
- *                       today_passengers:
- *                         type: integer
- *                       today_revenue:
- *                         type: number
- *                       today_packages:
- *                         type: integer
- *                       occupancy_rate:
- *                         type: number
- *                         description: Percentage of seat occupancy (0-100)
- *       400:
- *         description: Invalid period parameter
+ *                     daily:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           bus_id:
+ *                             type: integer
+ *                           bus_number:
+ *                             type: string
+ *                           trips_completed:
+ *                             type: integer
+ *                           tickets_generated:
+ *                             type: integer
+ *                     weekly:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/TripsAndTickets'
+ *                     monthly:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/TripsAndTickets'
+ *                     yearly:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/TripsAndTickets'
+ *                 occupancyRate:
+ *                   type: object
+ *                   properties:
+ *                     daily:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           bus_id:
+ *                             type: integer
+ *                           bus_number:
+ *                             type: string
+ *                           capacity:
+ *                             type: integer
+ *                           booked_seats:
+ *                             type: integer
+ *                           occupancy_rate:
+ *                             type: number
+ *                             format: float
+ *                     weekly:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/OccupancyRate'
+ *                     monthly:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/OccupancyRate'
+ *                     yearly:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/OccupancyRate'
+ *                 revenue:
+ *                   type: object
+ *                   properties:
+ *                     daily:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           bus_id:
+ *                             type: integer
+ *                           bus_number:
+ *                             type: string
+ *                           revenue:
+ *                             type: number
+ *                             format: float
+ *                     weekly:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Revenue'
+ *                     monthly:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Revenue'
+ *                     yearly:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Revenue'
  *       401:
  *         description: Unauthorized - Missing or invalid token
  *       500:
  *         description: Internal server error
- */
-router.get('/stats', authenticateToken, dashboardController.getdashboardStatistics);
-
-
-/**
- * @swagger
- * /api/dashboard/revenue:
- *   get:
- *     summary: Get revenue report between dates, optionally filtered by bus
- *     tags: [Dashboard]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - name: startDate
- *         in: query
- *         required: true
- *         description: Start date in YYYY-MM-DD format
- *         schema:
- *           type: string
- *           format: date
- *       - name: endDate
- *         in: query
- *         required: true
- *         description: End date in YYYY-MM-DD format
- *         schema:
- *           type: string
- *           format: date
- *       - name: busId
- *         in: query
- *         required: false
- *         description: Optional bus ID to filter revenue report
- *         schema:
+ *
+ * components:
+ *   schemas:
+ *     TripsAndTickets:
+ *       type: object
+ *       properties:
+ *         bus_id:
  *           type: integer
- *     responses:
- *       200:
- *         description: Revenue report data
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   date:
- *                     type: string
- *                     format: date
- *                   ticket_revenue:
- *                     type: number
- *                   package_revenue:
- *                     type: number
- *                   total_tickets:
- *                     type: integer
- *                   total_packages:
- *                     type: integer
+ *         bus_number:
+ *           type: string
+ *         trips_completed:
+ *           type: integer
+ *         tickets_generated:
+ *           type: integer
+ *     OccupancyRate:
+ *       type: object
+ *       properties:
+ *         bus_id:
+ *           type: integer
+ *         bus_number:
+ *           type: string
+ *         capacity:
+ *           type: integer
+ *         booked_seats:
+ *           type: integer
+ *         occupancy_rate:
+ *           type: number
+ *           format: float
+ *     Revenue:
+ *       type: object
+ *       properties:
+ *         bus_id:
+ *           type: integer
+ *         bus_number:
+ *           type: string
+ *         revenue:
+ *           type: number
+ *           format: float
  */
-router.get('/revenue', authenticateToken, dashboardController.getRevenueReport );
+
+router.get(
+  '/analytics',
+  authenticateToken,
+  dashboardController.getTripsCompletedReport
+);
+
 
 module.exports = router;

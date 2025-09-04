@@ -1,6 +1,7 @@
 import { Edit, Loader, Plus, Route, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import  ApiService from '../../services/api'
+import DataPagination from './DataPagination';
 // Route Management Page
 const RouteManagement = (
   {
@@ -13,20 +14,49 @@ const RouteManagement = (
     setRoutes
   }
 ) => {
-  const[loader,setLoader] = useState(true)
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await ApiService.getRoutes();      
-        setRoutes(response.data)
-      } catch (err) {
-      }
-      finally {
-        setLoader(false)
-   }
+  const [loader, setLoader] = useState(true)
+  const [search, setSearch] = useState("");
+  const [sortDescriptor, setSortDescriptor] = useState({
+    column: "name",
+    direction: "ASC",
+  }); 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
+
+
+  const getData = async () => {
+    const body = {
+      search : search,
+      limit: 4,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
     }
+    try {
+      const response = await ApiService.getRoutes(body);      
+      setRoutes(response.data?.data)
+      setTotalPages(response?.data?.pagination?.totalPages)
+    } catch (err) {
+    }
+    finally {
+      setLoader(false)
+ }
+  }
+
+  useEffect(() => {
     getData()
-  }, [setRoutes])
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search,page,sortDescriptor])
+
+
+  const handleChange = (e) => {
+    setSearch(e.target.value); 
+  }
+
+
+  const handlePageChange = (page) => {
+    setPage(page); // Update the page state variable to the specified page number
+  };
   
   return loader ? (
     <div className="flex justify-center items-center w-full">
@@ -35,7 +65,15 @@ const RouteManagement = (
   ) : (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-semibold">{t("routeManagement")}</h3>
+          <h3 className="text-xl font-semibold">{t("routeManagement")}</h3>
+          
+          <div className='flex'>
+          <form className="flex max-w-lg mx-auto mr-6">   
+              <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+               onChange={handleChange}
+              />
+       
+          </form>
         <button
           onClick={() => {
             setModalType("add-route");
@@ -45,7 +83,8 @@ const RouteManagement = (
         >
           <Plus className="w-5 h-5" />
           <span>{t("addNewRoute")}</span>
-        </button>
+            </button>
+            </div>
       </div>
   
       {routes?.length === 0 ? (
@@ -145,7 +184,15 @@ const RouteManagement = (
             </div>
           ))}
         </div>
-      )}
+        )}
+        
+        {routes && routes.length > 0 && (
+                  <DataPagination
+                    onPageChange={handlePageChange}
+                    totalPages={totalPages}
+                    currentPage={page}
+                  />
+                )}
     </div>
   );  
 };

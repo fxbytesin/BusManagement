@@ -107,20 +107,21 @@ const Parcel = ({
           }
         } catch (err) {
           console.error("Error:", err);
-          alert(err.message || "Something went wrong, please try again ❌");
+          alert(err.message || "Something went wrong, please try again");
         }
       };
       
-    useEffect(() => {
-        const getData = async () => {
-          try {
-            const response = await ApiService.getBus();      
-            setBuses(response.data)
+  useEffect(() => {
+      
+        // const getData = async () => {
+        //   try {
+        //     const response = await ApiService.getBus();      
+        //     setBuses(response.data)
 
-          } catch (err) {
-          }
-        }
-        getData()
+        //   } catch (err) {
+        //   }
+        // }
+        // getData()
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (

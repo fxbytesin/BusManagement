@@ -6,80 +6,85 @@ function generateTicketNumber() {
   return 'TKT-' + Date.now().toString().slice(-6);
 }
 
-// Create ticket controller with full validation including trip
 exports.createTicket = async (req, res) => {
   try {
     const {
       trip_id,
-      bus_id,
       from_stop,
       to_stop,
       fare,
-      journey_date,
       payment_mode,
       pos_machine_id,
       seat_no
     } = req.body;
 
-    // Validate required fields
-    if (!bus_id || !trip_id || !from_stop || !to_stop || !fare || !journey_date || !pos_machine_id) {
+    if (!trip_id) {
+      return res.status(400).json({ error: 'trip_id is required in the request body' });
+    }
+
+    const tripId = parseInt(trip_id);
+    if (isNaN(tripId)) {
+      return res.status(400).json({ error: 'Invalid trip_id' });
+    }
+
+    // Validate required fields except journey_date
+    if (!from_stop || !to_stop || !fare || !pos_machine_id) {
       return res.status(400).json({
-        error: 'bus_id, trip_id, from_stop, to_stop, fare, journey_date, and pos_machine_id are required.'
+        error: 'from_stop, to_stop, fare, and pos_machine_id are required.'
       });
     }
 
-    // Validate bus exists
-    const bus = await prisma.bus.findUnique({ where: { id: bus_id }, select: { capacity: true } });
-    if (!bus) {
-      return res.status(404).json({ error: 'Bus not found' });
-    }
+    // Fetch trip & validate
+    const trip = await prisma.trip.findUnique({
+      where: { id: tripId },
+      include: { bus: true }
+    });
 
-    // Validate trip exists & matches bus
-    const trip = await prisma.trip.findUnique({ where: { id: trip_id } });
     if (!trip) {
       return res.status(404).json({ error: 'Trip not found' });
     }
 
     if (trip.status === 'COMPLETED' || trip.status === 'CANCELLED') {
-  return res.status(400).json({ error: `Cannot create ticket: Trip is ${trip.status.toLowerCase()}` });
-  }
-
-    if (trip.bus_id !== bus_id) {
-      return res.status(400).json({ error: 'Trip does not belong to the specified bus' });
+      return res.status(400).json({ error: `Cannot create ticket: Trip is ${trip.status.toLowerCase()}` });
     }
+
+    const bus = trip.bus;
+    if (!bus) {
+      return res.status(400).json({ error: 'Bus info missing for trip' });
+    }
+
+    // Use trip.start_time as journey_date
+    const journeyDate = trip.start_time;
 
     // Validate seat_no if provided
     if (seat_no !== undefined && seat_no !== null) {
       if (seat_no <= 0 || seat_no > bus.capacity) {
-        return res.status(400).json({ error: `Invalid seat_no. Bus capacity is ${bus.capacity}` });
+        return res.status(400).json({ error: `Seat number must be between 1 and ${bus.capacity}` });
       }
 
-      // Check seat availability for trip and date
       const existingTicket = await prisma.ticket.findFirst({
         where: {
-          trip_id,
-          journey_date: new Date(journey_date),
+          trip_id: tripId,
+          journey_date: journeyDate,
           seat_no,
           status: { not: 'cancelled' }
         }
       });
       if (existingTicket) {
-        return res.status(400).json({ error: `Seat number ${seat_no} is already booked for this trip on the selected date.` });
+        return res.status(400).json({ error: `Seat number ${seat_no} is already booked for this trip.` });
       }
     }
 
-    // Validate POS machine existence
+    // Validate POS machine
     const posMachine = await prisma.pOSMachine.findUnique({ where: { id: pos_machine_id } });
     if (!posMachine) {
       return res.status(404).json({ error: 'POS machine not found' });
     }
 
-    // Validate fare (positive)
+    // Validate fare and payment mode
     if (fare <= 0) {
       return res.status(400).json({ error: 'Fare must be a positive number' });
     }
-
-    // Validate payment_mode
     const validPaymentModes = ['cash', 'online'];
     if (payment_mode && !validPaymentModes.includes(payment_mode)) {
       return res.status(400).json({ error: `Invalid payment_mode, must be one of: ${validPaymentModes.join(', ')}` });
@@ -89,13 +94,13 @@ exports.createTicket = async (req, res) => {
 
     const newTicket = await prisma.ticket.create({
       data: {
-        bus_id,
-        trip_id,
+        trip_id: tripId,
+        bus_id: bus.id,
         ticket_number,
         from_stop,
         to_stop,
         fare,
-        journey_date: new Date(journey_date),
+        journey_date: journeyDate,
         payment_mode: payment_mode || 'cash',
         pos_machine_id,
         seat_no: seat_no || null,
@@ -109,6 +114,8 @@ exports.createTicket = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
 
 
 // Get tickets for a specific trip with optional journey_date filter
@@ -173,22 +180,15 @@ exports.viewTicket = async (req, res) => {
 };
 
 
-// Get allocated seats for a trip on a specific date
+// Get allocated seats for a trip (all dates)
 exports.getAllocatedSeatsByTrip = async (req, res) => {
   try {
     const tripId = parseInt(req.params.tripId);
-    const { date } = req.query;
-
     if (isNaN(tripId)) return res.status(400).json({ error: 'Invalid trip ID' });
-    if (!date) return res.status(400).json({ error: 'Journey date is required' });
-
-    const journeyDate = new Date(date);
-    if (isNaN(journeyDate.getTime())) return res.status(400).json({ error: 'Invalid date format' });
 
     const tickets = await prisma.ticket.findMany({
       where: {
         trip_id: tripId,
-        journey_date: journeyDate,
         status: { not: 'cancelled' },
         seat_no: { not: null }
       },
@@ -206,56 +206,39 @@ exports.getAllocatedSeatsByTrip = async (req, res) => {
 };
 
 
-// Get allocated seats and ticket count grouped by trip for a date
-exports.getAllocatedSeatsAndTicketCountPerTrip = async (req, res) => {
+exports.getTripsByBus = async (req, res) => {
   try {
-    const { date } = req.query;
+    const { bus_id, journey_date } = req.query;
 
-    if (!date) return res.status(400).json({ error: 'Please provide the date query parameter in YYYY-MM-DD format' });
+    if (!bus_id) {
+      return res.status(400).json({ error: 'bus_id is required' });
+    }
 
-    const journeyDate = new Date(date);
-    if (isNaN(journeyDate.getTime())) return res.status(400).json({ error: 'Invalid date format' });
+    const tripFilter = {
+      bus_id: Number(bus_id),
+    };
 
-    // Get ticket counts per trip
-    const ticketsCount = await prisma.ticket.groupBy({
-      by: ['trip_id'],
-      _count: { id: true },
-      where: {
-        journey_date: journeyDate,
-        status: { not: 'cancelled' }
-      }
-    });
+    if (journey_date) {
+      const dateObj = new Date(journey_date);
+      // Filter trips happening on the specific date
+      tripFilter.journey_date = dateObj;
+    }
 
-    // Get allocated seat numbers per trip
-    const allocatedSeatsRaw = await prisma.ticket.findMany({
-      where: {
-        journey_date: journeyDate,
-        status: { not: 'cancelled' },
-        seat_no: { not: null }
-      },
+    // Get trips matching bus_id (and optional journey_date)
+    const trips = await prisma.trip.findMany({
+      where: tripFilter,
       select: {
-        trip_id: true,
-        seat_no: true
+        id: true,
+        departure_time: true,
+        arrival_time: true,
+        journey_date: true,
+        status: true,
       },
-      orderBy: { seat_no: 'asc' }
     });
 
-    const allocatedSeats = {};
-    allocatedSeatsRaw.forEach(({ trip_id, seat_no }) => {
-      if (!allocatedSeats[trip_id]) allocatedSeats[trip_id] = [];
-      allocatedSeats[trip_id].push(seat_no);
-    });
-
-    const result = ticketsCount.map(tc => ({
-      trip_id: tc.trip_id,
-      tickets_issued: tc._count.id,
-      allocated_seats: allocatedSeats[tc.trip_id] || []
-    }));
-
-    res.json(result);
-
+    return res.status(200).json(trips);
   } catch (error) {
-    console.error('Error fetching allocated seats and ticket counts per trip:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error fetching trips:', error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
