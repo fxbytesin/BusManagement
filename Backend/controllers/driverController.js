@@ -22,7 +22,7 @@ exports.getAllDriver = async (req, res) => {
     const sortColumn = validColumns.includes(orderColumn) ? orderColumn : "created_at";
 
     // ✅ Search filter
-    const whereCondition = {
+      const whereCondition = {
       // user_id: req.user.id,
       ...(search
         ? {
@@ -33,7 +33,6 @@ exports.getAllDriver = async (req, res) => {
           }
         : {})
     };
-
     console.log(whereCondition,"whereConditionwhereConditionwhereCondition")
     const drivers = await prisma.driver.findMany({
       where: whereCondition,
@@ -43,13 +42,6 @@ exports.getAllDriver = async (req, res) => {
     });
 
     const totalCount = await prisma.driver.count({ where: whereCondition });
-
-    // ✅ If search is provided but no results found → return error
-    if (search && totalCount === 0) {
-      return res.status(404).json({
-        error: `No drivers found matching "${search}"`
-      });
-    }
 
     res.json({
       data: drivers,

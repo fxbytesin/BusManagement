@@ -28,21 +28,20 @@ const busController=require('../controllers/busController')
  *               search:
  *                 type: string
  *                 description: Search by bus number, route name/code, driver or conductor name
+ *                 example: "BUS101"
  *               limit:
  *                 type: integer
  *                 default: 10
- *                 minimum: 1
  *                 description: Number of results per page
  *               page:
  *                 type: integer
  *                 default: 1
- *                 minimum: 1
  *                 description: Page number
  *               order:
  *                 type: string
  *                 enum: [ASC, DESC]
  *                 default: ASC
- *                 description: Sort order (ASC for ascending, DESC for descending)
+ *                 description: Sort order
  *               orderColumn:
  *                 type: string
  *                 default: created_at

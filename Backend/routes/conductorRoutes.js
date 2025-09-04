@@ -11,44 +11,41 @@ const conductorController=require("../controllers/conductorController");
 
 /**
  * @swagger
- * /api/conductor:
- *   get:
+ * /api/conductor/list:
+ *   post:
  *     summary: Get all conductors for the logged-in user with search, pagination, and sorting
  *     tags: [Conductor]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: search
- *         schema:
- *           type: string
- *         description: Search by name, phone, or email
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Number of results per page
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           default: 1
- *         description: Page number
- *       - in: query
- *         name: order
- *         schema:
- *           type: string
- *           enum: [ASC, DESC]
- *           default: ASC
- *         description: Sort order
- *       - in: query
- *         name: orderColumn
- *         schema:
- *           type: string
- *           enum: [created_at, name, email, phone]
- *           default: created_at
- *         description: Column to sort by
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               search:
+ *                 type: string
+ *                 description: Search by name, phone, or email
+ *                 example: "John"
+ *               limit:
+ *                 type: integer
+ *                 default: 10
+ *                 description: Number of results per page
+ *               page:
+ *                 type: integer
+ *                 default: 1
+ *                 description: Page number
+ *               order:
+ *                 type: string
+ *                 enum: [ASC, DESC]
+ *                 default: ASC
+ *                 description: Sort order
+ *               orderColumn:
+ *                 type: string
+ *                 enum: [created_at, name, email, phone]
+ *                 default: created_at
+ *                 description: Column to sort by
  *     responses:
  *       200:
  *         description: List of conductors with pagination
@@ -95,8 +92,7 @@ const conductorController=require("../controllers/conductorController");
  *       500:
  *         description: Internal server error
  */
-
-router.post('/', authenticateToken, conductorController.getAllConductor);
+router.post('/list', authenticateToken, conductorController.getAllConductor);
 
 /**
  * @swagger
@@ -206,6 +202,5 @@ router.put('/:id', authenticateToken, conductorController.updateConductor );
  *         description: Conductor not found
  */
 router.delete('/:id', authenticateToken, conductorController.deleteConductor);
-
 
 module.exports = router;

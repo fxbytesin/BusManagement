@@ -13,8 +13,8 @@ const routeController=require('../controllers/routeController')
 
 /**
  * @swagger
- * /api/routes:
- *   get:
+ * /api/routes/list:
+ *   post:
  *     summary: Get all routes belonging to authenticated user with search, pagination, and sorting
  *     tags: [Route]
  *     security:
@@ -90,7 +90,8 @@ const routeController=require('../controllers/routeController')
  *         description: Internal server error
  */
 
-router.post('/', authenticateToken, routeController.getAllRoutes);
+
+router.post('/list', authenticateToken, routeController.getAllRoutes);
 
 /**
  * @swagger

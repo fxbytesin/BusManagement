@@ -45,44 +45,41 @@ router.post("/create", authenticateToken, posController.createPOSMachine);
 
 /**
  * @swagger
- * /api/pos/all:
- *   get:
+ * /api/pos/list:
+ *   post:
  *     summary: Get all POS machines including their assigned bus (with search, pagination, and sorting)
  *     tags: [POSMachine]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: search
- *         schema:
- *           type: string
- *         description: Search by POS serial number
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Number of results per page
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           default: 1
- *         description: Page number
- *       - in: query
- *         name: order
- *         schema:
- *           type: string
- *           enum: [ASC, DESC]
- *           default: ASC
- *         description: Sort order
- *       - in: query
- *         name: orderColumn
- *         schema:
- *           type: string
- *           enum: [created_at, serial_number, status]
- *           default: created_at
- *         description: Column to sort by
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               search:
+ *                 type: string
+ *                 description: Search by POS serial number
+ *                 example: "POS123"
+ *               limit:
+ *                 type: integer
+ *                 default: 10
+ *                 description: Number of results per page
+ *               page:
+ *                 type: integer
+ *                 default: 1
+ *                 description: Page number
+ *               order:
+ *                 type: string
+ *                 enum: [ASC, DESC]
+ *                 default: ASC
+ *                 description: Sort order
+ *               orderColumn:
+ *                 type: string
+ *                 enum: [created_at, serial_number, status]
+ *                 default: created_at
+ *                 description: Column to sort by
  *     responses:
  *       200:
  *         description: List of POS machines with bus info and pagination
@@ -129,8 +126,7 @@ router.post("/create", authenticateToken, posController.createPOSMachine);
  *       500:
  *         description: Internal server error
  */
-
-router.post("/all", authenticateToken, posController.getAllPOSMachines);
+router.post("/list", authenticateToken, posController.getAllPOSMachines);
 
 /**
  * @swagger
