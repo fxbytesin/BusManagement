@@ -130,7 +130,36 @@ export const messages = {
     routeUpdated: "रूट सफलतापूर्वक अपडेट किया गया",
     driverAdded: "ड्राइवर सफलतापूर्वक जोड़ा गया",
     conductorAdded: "कंडक्टर सफलतापूर्वक जोड़ा गया",
+
+    // Dashboard Graph Labels
+    ticketsIssued: "जारी किए गए टिकट",
+    tripsCompleted: "पूर्ण यात्राएँ",
+    revenueCollected: "संग्रहित राजस्व",
+    occupancyRate: "आक्यूपेंसी दर",
+    Daily: "दैनिक",
+    Weekly: "साप्ताहिक",
+    Monthly: "मासिक",
+    Yearly: "वार्षिक",
+
+    // Header
+    buses: "बसें",
+    routes: "मार्ग",
+    drivers: "चालक",
+    conductors: "कंडक्टर",
+    livetracking: "लाइव ट्रैकिंग",
+
+    // Trip
+    trip: "यात्रा",
+    addTrip: "यात्रा जोड़ें",
+
+    // posMachine
+    posMachine: "पीओएस मशीन",
+    addPOSMachine: "पीओएस मशीन जोड़ें",
+
+    // parcel
+    parcel: "पार्सल"
   },
+
 
   en: {
     // Navigation & Headers
@@ -260,5 +289,34 @@ export const messages = {
     routeUpdated: "Route updated successfully",
     driverAdded: "Driver added successfully",
     conductorAdded: "Conductor added successfully",
+
+    // Dashboard Graph Labels
+    Daily: "Daily",
+    Weekly: "Weekly",
+    Monthly: "Monthly",
+    Yearly: "Yearly",
+    ticketsIssued: "ticketsIssued",
+    tripsCompleted: "tripsCompleted",
+    revenueCollected: "revenueCollected",
+    occupancyRate: "occupancyRate",
+
+    // Header
+    buses: "Buses",
+    routes: "Routes",
+    drivers: "Drivers",
+    conductors: "Conductors",
+    livetracking: "Live Tracking",
+
+    // Trip
+    trip: "Trip",
+    addTrip: "Add Trip",
+
+    // posMachine
+    posMachine: "POS Machine",
+    addPOSMachine: "Add POS Machine",
+
+    // parcel
+    parcel: "Parcel"
   },
+
 };

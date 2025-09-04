@@ -92,11 +92,11 @@ const ApiService = {
     }
   },
 
-  getRoutes: async () => {
+  getRoutes: async (body) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/routes`, {
+      const response = await axios.post(`${API_URL}/routes/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -186,11 +186,11 @@ const ApiService = {
       };
     }
   },
-  getBus: async () => {
+  getBus: async (body) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/bus`, {
+      const response = await axios.post(`${API_URL}/bus/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -279,11 +279,11 @@ const ApiService = {
       };
     }
   },
-  getDriver: async () => {
+  getDriver: async (body) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/drivers`, {
+      const response = await axios.post(`${API_URL}/drivers/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -374,11 +374,11 @@ const ApiService = {
     }
   },
 
-  getConductor: async () => {
+  getConductor: async (body) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/conductor`, {
+      const response = await axios.post(`${API_URL}/conductor/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -469,11 +469,33 @@ const ApiService = {
     }
   },
 
+  // getDashboard: async () => {
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     // Get token from localStorage or wherever you're storing it
+  //     const response = await axios.get(`${API_URL}/dashboard/stats`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "application/json", // optional but recommended
+  //       },
+  //     });
+
+  //     return {
+  //       success: true,
+  //       data: response.data,
+  //     };
+  //   } catch (error) {
+  //     return {
+  //       success: false,
+  //       error: error.response?.data || error.message,
+  //     };
+  //   }
+  // },
   getDashboard: async () => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/dashboard/stats`, {
+      const response = await axios.get(`${API_URL}/dashboard/trips-completed`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -515,11 +537,11 @@ const ApiService = {
     }
   },
 
-  getPos: async () => {
+  getPos: async (body) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/pos/all`, {
+      const response = await axios.post(`${API_URL}/pos/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -565,12 +587,16 @@ const ApiService = {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.post(`${API_URL}/ticket`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json", // optional but recommended
-        },
-      });
+      const response = await axios.post(
+        `${API_URL}/ticket/create-ticket`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json", // optional but recommended
+          },
+        }
+      );
 
       return {
         success: true,
@@ -594,6 +620,173 @@ const ApiService = {
           "Content-Type": "application/json", // optional but recommended
         },
       });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  createTrip: async (data) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.post(`${API_URL}/trip`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  getTrip: async (body) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.post(`${API_URL}/trip/list`, body, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  updateTrip: async (obj, id) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // Destructure ID from object, remove it from payload
+
+      const response = await axios.put(`${API_URL}/trip/${id}`, obj, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  deleteTrip: async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.delete(`${API_URL}/trip/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  createParcel: async (data) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.post(`${API_URL}/package`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  getTicketSpecificTrip: async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.get(`${API_URL}/ticket/trip/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // optional but recommended
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+
+  getBookedTicket: async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Get token from localStorage or wherever you're storing it
+      const response = await axios.get(
+        `${API_URL}/ticket/allocated-seats/trip/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json", // optional but recommended
+          },
+        }
+      );
 
       return {
         success: true,
