@@ -89,8 +89,6 @@ const routeController=require('../controllers/routeController')
  *       500:
  *         description: Internal server error
  */
-
-
 router.post('/list', authenticateToken, routeController.getAllRoutes);
 
 /**

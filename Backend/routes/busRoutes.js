@@ -131,19 +131,25 @@ router.post('/list', authenticateToken, busController.getAllBuses);
  *             properties:
  *               bus_number:
  *                 type: string
+ *                 description: "Unique bus number"
  *               capacity:
  *                 type: integer
- *               route_id:
- *                 type: integer
- *               driver_id:
- *                 type: integer
- *               conductor_id:
- *                 type: integer
- *               status:
+ *                 description: "Seating capacity"
+ *               last_maintenance:
  *                 type: string
- *                 enum: [running, stopped, maintenance]
- *               current_location:
+ *                 format: date
+ *                 example: "2025-09-04"
+ *                 description: "Date of last maintenance in YYYY-MM-DD format"
+ *               insurance_expiry:
  *                 type: string
+ *                 format: date
+ *                 example: "2026-03-20"
+ *                 description: "Insurance expiry date in YYYY-MM-DD format"
+ *               permit_expiry:
+ *                 type: string
+ *                 format: date
+ *                 example: "2025-12-01"
+ *                 description: "Permit expiry date in YYYY-MM-DD format"
  *     responses:
  *       201:
  *         description: Bus created successfully
@@ -168,7 +174,7 @@ router.post('/', authenticateToken, busController.createBus);
  *         schema:
  *           type: integer
  *     requestBody:
- *       description: Fields to update
+ *       description: Fields to update (only specified fields will be updated)
  *       required: true
  *       content:
  *         application/json:
@@ -177,19 +183,25 @@ router.post('/', authenticateToken, busController.createBus);
  *             properties:
  *               bus_number:
  *                 type: string
+ *                 description: "Unique bus number"
  *               capacity:
  *                 type: integer
- *               route_id:
- *                 type: integer
- *               driver_id:
- *                 type: integer
- *               conductor_id:
- *                 type: integer
- *               status:
+ *                 description: "Seating capacity"
+ *               last_maintenance:
  *                 type: string
- *                 enum: [running, stopped, maintenance]
- *               current_location:
+ *                 format: date
+ *                 example: "2025-09-04"
+ *                 description: "Last maintenance date (YYYY-MM-DD format)"
+ *               insurance_expiry:
  *                 type: string
+ *                 format: date
+ *                 example: "2026-03-20"
+ *                 description: "Insurance expiry date (YYYY-MM-DD format)"
+ *               permit_expiry:
+ *                 type: string
+ *                 format: date
+ *                 example: "2025-12-01"
+ *                 description: "Permit expiry date (YYYY-MM-DD format)"
  *     responses:
  *       200:
  *         description: Bus updated successfully
