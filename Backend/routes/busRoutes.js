@@ -12,43 +12,41 @@ const busController=require('../controllers/busController')
 
 /**
  * @swagger
- * /api/bus:
- *   get:
+ * /api/bus/list:
+ *   post:
  *     summary: Get all buses with search, pagination, and sorting
  *     tags: [Bus]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: search
- *         schema:
- *           type: string
- *         description: Search by bus number, route name/code, driver or conductor name
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Number of results per page
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           default: 1
- *         description: Page number
- *       - in: query
- *         name: order
- *         schema:
- *           type: string
- *           enum: [ASC, DESC]
- *           default: ASC
- *         description: Sort order
- *       - in: query
- *         name: orderColumn
- *         schema:
- *           type: string
- *           default: created_at
- *         description: Column to sort by
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               search:
+ *                 type: string
+ *                 description: Search by bus number, route name/code, driver or conductor name
+ *               limit:
+ *                 type: integer
+ *                 default: 10
+ *                 minimum: 1
+ *                 description: Number of results per page
+ *               page:
+ *                 type: integer
+ *                 default: 1
+ *                 minimum: 1
+ *                 description: Page number
+ *               order:
+ *                 type: string
+ *                 enum: [ASC, DESC]
+ *                 default: ASC
+ *                 description: Sort order (ASC for ascending, DESC for descending)
+ *               orderColumn:
+ *                 type: string
+ *                 default: created_at
+ *                 description: Column to sort by
  *     responses:
  *       200:
  *         description: List of buses with related info and pagination
@@ -92,11 +90,26 @@ const busController=require('../controllers/busController')
  *                       type: integer
  *                     totalPages:
  *                       type: integer
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  */
-
-router.post('/', authenticateToken, busController.getAllBuses);
+router.post('/list', authenticateToken, busController.getAllBuses);
 
 /**
  * @swagger

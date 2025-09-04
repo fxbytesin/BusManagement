@@ -90,7 +90,6 @@ const routeController=require('../controllers/routeController')
  *         description: Internal server error
  */
 
-
 router.post('/', authenticateToken, routeController.getAllRoutes);
 
 /**
