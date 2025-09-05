@@ -15,12 +15,12 @@ const NavigationComponent = ({
       { id: "routes", label: t("routeManagement"), icon: Route },
       { id: "drivers", label: t("driverManagement"), icon: User },
       { id: "conductors", label: t("conductorManagement"), icon: Users },
+      { id: "trip", label: t("trip"), icon: Navigation },
       { id: "live-tracking", label: t("liveTracking"), icon: MapPin },
+      { id: "posMachine", label: t("posMachine"), icon: Box },
+      { id: "parcel", label: t("parcel"), icon: Package },
       { id: "reports", label: t("reports"), icon: BarChart3 },
       { id: "settings", label: t("settings"), icon: Settings },
-      { id: "posMachine", label: t("posMachine"), icon: Box },
-      { id: "trip", label: t("trip"), icon: Navigation },
-      { id: "parcel", label: t("parcel"), icon: Package },
     ];
 
     return (

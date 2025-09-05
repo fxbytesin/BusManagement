@@ -4,6 +4,7 @@ import { Edit, Trash2, SquareEqual, Plus } from 'lucide-react';
 import TicketSystem from './TicketSystem';
 import DataPagination from './DataPagination';
 import SortColumn from './SortColumn';
+import ToastMessage from './ToastMessage';
 const Trip = ({
   buses,
   routes,
@@ -40,6 +41,9 @@ const Trip = ({
   }); 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [errors, setErrors] = useState({});
+  const [toastMessage, setToastMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
   
   const getData = async () => {
     const body = {
@@ -51,7 +55,7 @@ const Trip = ({
     }
     try {
       const response = await ApiService.getTrip(body);
-      if (response?.success === true) {                 
+      if (response?.success === true) {         
         setTrip(response?.data?.data)
         setTotalPages(response?.data?.pagination?.totalPages)
       }
@@ -64,7 +68,11 @@ const Trip = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search,page,sortDescriptor])
 
-
+  useEffect(() => {
+    if (!showTrip) {
+    setErrors({})
+  }
+},[showTrip])
   const getBusData = async () => {
     const body = {
       search : search,
@@ -84,7 +92,7 @@ const Trip = ({
     finally {
     }
   }
-  
+
 
   const getRoutesData = async () => {
     const body = {
@@ -162,18 +170,31 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let newErrors = {};
+  
     if (!tripForm.bus_id) {
-      alert("Please select a bus");
-      return;
+      newErrors.bus_id = "Bus is required.";
     }
     if (!tripForm.route_id) {
-      alert("Please select a route");
-      return;
+      newErrors.route_id = "Route is required.";
     }
-    if (!tripForm.start_time || !tripForm.end_time) {
-      alert("Please select start and end time");
-      return;
+    if (!tripForm.driver_id) {
+      newErrors.driver_id = "Driver is required.";
     }
+    if (!tripForm.conductor_id) {
+      newErrors.conductor_id = "Base fare is required.";
+    }
+    if (!tripForm.start_time) {
+      newErrors.start_time = "Km rate is required.";
+    }
+      if (!tripForm.end_time) {
+      newErrors.end_time = "Km rate is required.";
+    }
+    
+    setErrors(newErrors);
+  
+    // Stop if errors exist
+    if (Object.keys(newErrors).length > 0) return;
 
     if (isPost) {
       const payload = {
@@ -188,7 +209,9 @@ useEffect(() => {
       const response = await ApiService.createTrip(payload)
       if (response?.data) {
         getData()
-        alert("Trip saved successfully");
+        setToastMessage("Trip Add Successfully");
+        setShowToast(true)
+        setTimeout(() => setShowToast(false), 3000);
       }
 
     }
@@ -207,7 +230,9 @@ useEffect(() => {
 
       const response = await ApiService.updateTrip(payload, editId);
       if (response?.success === true) {
-        alert("Trip Updated successfully ");
+        setToastMessage("Trip Update Successfully");
+        setShowToast(true)
+        setTimeout(() => setShowToast(false), 3000);
         getData()
       }
       else {
@@ -234,6 +259,9 @@ useEffect(() => {
       const response = await ApiService.deleteTrip(obj?.id);
       if (response?.data?.message === "Trip deleted successfully") {
         // remove deleted trip from UI              
+        setShowToast(true)
+        setToastMessage("Pos Machine Deleted Successfully")
+        setTimeout(() => setShowToast(false), 3000);
         setTrip((prevTrips) => prevTrips.filter((trip) => trip.id !== obj.id));
       }
     } catch (error) {
@@ -317,8 +345,12 @@ useEffect(() => {
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.bus_id}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setTripForm({ ...tripForm, bus_id: e.target.value })
+                    if (errors.bus_id) {
+                      setErrors({ ...errors, bus_id: "" });
+                    }
+                  }
                   }
                 >
                   <option value="">{t("busNumber")}</option>
@@ -328,6 +360,9 @@ useEffect(() => {
                     </option>
                   ))}
                 </select>
+                {errors.bus_id && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.bus_id}</p>
+                )}
               </div>
 
               <div>
@@ -337,8 +372,12 @@ useEffect(() => {
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.route_id}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setTripForm({ ...tripForm, route_id: e.target.value })
+                    if (errors.route_id) {
+                      setErrors({ ...errors, route_id: "" });
+                    }
+                  }
                   }
                 >
                   <option value="">{t("selectRoute")}</option>
@@ -348,6 +387,9 @@ useEffect(() => {
                     </option>
                   ))}
                 </select>
+                {errors.route_id && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.route_id}</p>
+                )}
               </div>
 
               <div>
@@ -357,8 +399,12 @@ useEffect(() => {
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.driver_id}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setTripForm({ ...tripForm, driver_id: e.target.value })
+                    if (errors.driver_id) {
+                      setErrors({ ...errors, driver_id: "" });
+                    }
+                  }
                   }
                 >
                   <option value="">{t("selectDriver")}</option>
@@ -368,6 +414,9 @@ useEffect(() => {
                     </option>
                   ))}
                 </select>
+                {errors.driver_id && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.driver_id}</p>
+                )}
               </div>
 
               <div>
@@ -377,8 +426,12 @@ useEffect(() => {
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.conductor_id}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setTripForm({ ...tripForm, conductor_id: e.target.value })
+                    if (errors.conductor_id) {
+                      setErrors({ ...errors, conductor_id: "" });
+                    }
+                  }
                   }
                 >
                   <option value="">{t("selectConductor")}</option>
@@ -388,6 +441,9 @@ useEffect(() => {
                     </option>
                   ))}
                 </select>
+                {errors.conductor_id && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.conductor_id}</p>
+                )}
               </div>
 
 
@@ -399,10 +455,14 @@ useEffect(() => {
                   type="datetime-local"
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.start_time}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setTripForm({ ...tripForm, start_time: e.target.value })
                   }
+                  }
                 />
+                  {errors.start_time && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.start_time}</p>
+                )}
               </div>
 
               <div>
@@ -413,10 +473,14 @@ useEffect(() => {
                   type="datetime-local"
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.end_time}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setTripForm({ ...tripForm, end_time: e.target.value })
                   }
+                  }
                 />
+                    {errors.end_time && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.end_time}</p>
+                )}
               </div>
 
 
@@ -546,12 +610,13 @@ useEffect(() => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {trip?.map((trip) => (
+              {trip && trip.length > 0 ? (
+                trip.map((trip) => (
                   <tr key={trip.id}>
                     <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
                       {trip.bus_number}
                     </td>
-
+            
                     <td className="px-6 py-4 whitespace-nowrap text-left">
                       {trip?.conductor_name}
                     </td>
@@ -564,18 +629,17 @@ useEffect(() => {
                     <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
                       {trip?.start_time
                         ? new Date(trip.start_time).toLocaleString("en-IN", {
-                          dateStyle: "medium",
-                          timeStyle: "short",
-                        })
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                          })
                         : ""}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-
                       {trip?.end_time
-                        ? new Date(trip.start_time).toLocaleString("en-IN", {
-                          dateStyle: "medium",
-                          timeStyle: "short",
-                        })
+                        ? new Date(trip.end_time).toLocaleString("en-IN", {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                          })
                         : ""}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
@@ -598,19 +662,31 @@ useEffect(() => {
                           <Trash2 className="w-4 h-4" />
                         </button>
                         <button>
-                          <SquareEqual className="w-4 h-4"
-                          onClick={() => {
-                            setShowTicket(false);
-                            setSelectedTripId(trip.id);
-                            setBusCapacity(trip?.bus_capacity)
-                          }}                      
+                          <SquareEqual
+                            className="w-4 h-4"
+                            onClick={() => {
+                              setShowTicket(false);
+                              setSelectedTripId(trip.id);
+                              setBusCapacity(trip?.bus_capacity);
+                            }}
                           />
                         </button>
                       </div>
                     </td>
                   </tr>
-                ))}
-              </tbody>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="8"
+                    className="px-6 py-4 text-center text-gray-500 font-medium"
+                  >
+                    No Data Found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+            
               </table>
               {conductors && conductors.length > 0 && (
                 <DataPagination
@@ -619,6 +695,13 @@ useEffect(() => {
                   currentPage={page}
                 />
               )}
+              {showToast && (
+                <ToastMessage
+                setShowToast={setShowToast}
+                toastMessage={toastMessage}
+              />
+           )
+           }
               </div>
           ) : (
               <div>

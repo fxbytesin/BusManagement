@@ -25,6 +25,7 @@ import PosMachine from './components/pages/PosMachine';
 import TicketView from './components/pages/TicketView';
 import Trip from './components/pages/Trip';
 import Parcel from './components/pages/Parcel';
+import ToastMessage from './components/pages/ToastMessage';
 const BusManagementSoftware = () => {
   // Language State
   const [currentLanguage, setCurrentLanguage] = useState("hi");
@@ -45,15 +46,17 @@ const BusManagementSoftware = () => {
   const [conductors, setConductors] = useState([]);
   const [liveTracking, setLiveTracking] = useState([])
   const [dashboard, setDashboard] = useState([])
+  const [toastMessage, setToastMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [errors, setErrors] = useState({});
+
   // Form States
   const [busForm, setBusForm] = useState({
     bus_number: "",
     capacity: 45,
-    route_id: "",
-    driver_id: "",
-    conductor_id: "",
-    status: "stopped",
-    current_location: ""
+    last_maintenance: "",
+    insurance_expiry: "",
+    permit_expiry: "",
   });
 
   const [routeForm, setRouteForm] = useState({
@@ -89,21 +92,36 @@ const BusManagementSoftware = () => {
   const [showTrip, setShowTrip] = useState(false)
 
   // CRUD Operations for Buses
-  const handleAddBus = async () => {
-    if (!busForm.bus_number || !busForm.route_id) {
-      alert(t("fillAllFields"));
-      return;
+  const handleAddBus = async (e) => {
+    e.preventDefault();
+    let newErrors = {};
+  
+    if (!busForm.bus_number.trim()) {
+      newErrors.bus_number = "Bus Number is required.";
     }
+  
+    if (!busForm.insurance_expiry) {
+      newErrors.insurance_expiry = "Insurance Date is required.";
+    }
+    if (!busForm.last_maintenance) {
+      newErrors.last_maintenance = "Maintenance Date is required.";
+    }
+    if (!busForm.permit_expiry) {
+      newErrors.permit_expiry = "Permit Date is required.";
+    }
+  
+    setErrors(newErrors);
+  
+    // Stop if errors exist
+    if (Object.keys(newErrors).length > 0) return;
 
     //Implement Add APi
-    const response = await ApiService.addBus({
-      ...busForm,
-      route_id: parseInt(busForm.route_id, 10) || null,
-      driver_id: parseInt(busForm.driver_id, 10) || null,
-      conductor_id: parseInt(busForm.conductor_id, 10) || null
-    });
+    const response = await ApiService.addBus(busForm);
 
     if (response.success === true) {
+      setToastMessage("Bus Added Successfully");
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 3000);
       setBuses([...buses, response.data]);
     }
 
@@ -111,27 +129,66 @@ const BusManagementSoftware = () => {
     setBusForm({
       bus_number: "",
       capacity: 45,
-      route_id: "",
-      driver_id: "",
-      conductor_id: "",
-      status: "stopped",
+      last_maintenance: "",
+      insurance_expiry: "",
+      permit_expiry: "",
     });
     setShowModal(false);
   };
-
+  const formatDate = (date) => {
+    if (!date) return "";
+    return new Date(date).toISOString().split("T")[0]; // YYYY-MM-DD
+  };
   const handleEditBus = (bus) => {
-    setBusForm(bus);
+    setBusForm({
+      ...bus,
+      last_maintenance: formatDate(bus.last_maintenance),
+      permit_expiry: formatDate(bus.permit_expiry),
+      insurance_expiry: formatDate(bus.insurance_expiry),
+    });
     setEditingItem(bus);
     setModalType("edit-bus");
     setShowModal(true);
   };
 
-  const handleUpdateBus = () => {
-    ApiService.updateBus({
+  const handleUpdateBus = async () => {    
+    const formatDate = (date) => {
+      if (!date) return null;
+      return new Date(date).toISOString().split("T")[0];
+    };
+    let newErrors = {};
+  
+    if (!busForm.bus_number.trim()) {
+      newErrors.bus_number = "Bus Number is required.";
+    }
+  
+    if (!busForm.insurance_expiry) {
+      newErrors.insurance_expiry = "Insurance Date is required.";
+    }
+    if (!busForm.last_maintenance) {
+      newErrors.last_maintenance = "Maintenance Date is required.";
+    }
+    if (!busForm.permit_expiry) {
+      newErrors.permit_expiry = "Permit Date is required.";
+    }
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+
+    const payload = {
       ...busForm,
-      route_id: parseInt(busForm.route_id, 10) || null,
-      driver_id: parseInt(busForm.driver_id, 10) || null
-    })
+      last_maintenance: formatDate(busForm.last_maintenance),
+      permit_expiry: formatDate(busForm.permit_expiry),
+      insurance_expiry: formatDate(busForm.insurance_expiry),
+    };
+    
+    const response = await ApiService.updateBus(payload);
+
+    if (response.success === true) {
+      setToastMessage("Bus Updated Successfully");
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 3000);
+    }
+    
     setBuses(
       buses.map((bus) =>
         bus.id === editingItem.id
@@ -142,10 +199,9 @@ const BusManagementSoftware = () => {
     setBusForm({
       bus_number: "",
       capacity: 45,
-      route_id: "",
-      driver_id: "",
-      conductor_id: "",
-      status: "stopped",
+      last_maintenance: "",
+      insurance_expiry: "",
+      permit_expiry: "",
     });
     setEditingItem(null);
     setShowModal(false);
@@ -156,7 +212,6 @@ const BusManagementSoftware = () => {
       const response = await ApiService.deleteBus(busId); // Wait for delete to finish  
       if (response?.data?.message === 'Bus deleted successfully') {
         // eslint-disable-next-line no-unused-vars
-        const response = await ApiService.getBus();
       }
 
     } catch (error) {
@@ -167,10 +222,31 @@ const BusManagementSoftware = () => {
 
   // CRUD Operations for Routes
   const handleAddRoute = async () => {
-    if (!routeForm.name || !routeForm.code || !routeForm.distance) {
-      alert(t("fillAllFields"));
-      return;
+
+    let newErrors = {};
+  
+    if (!routeForm.name.trim()) {
+      newErrors.name = "Route Name is required.";
     }
+    if (!routeForm.code.trim()) {
+      newErrors.code = "Code is required.";
+    }
+    if (!routeForm.distance.trim()) {
+      newErrors.distance = "Distance is required.";
+    }
+    if (!routeForm.base_fare.trim()) {
+      newErrors.base_fare = "Base fare is required.";
+    }
+    if (!routeForm.per_km_rate.trim()) {
+      newErrors.per_km_rate = "Km rate is required.";
+    }
+    
+    setErrors(newErrors);
+  
+    // Stop if errors exist
+    if (Object.keys(newErrors).length > 0) return;
+
+
     const newRoute = {
       id: `route-${Date.now()}`,
       ...routeForm,
@@ -185,7 +261,9 @@ const BusManagementSoftware = () => {
     //Implement Add api
     const response = await ApiService.addRoutes(routeForm)
     if (response.success === true) {
-
+      setToastMessage("Route Add Successfully");
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 3000);
       setRoutes([...routes, response.data])
     }
     setRouteForm({
@@ -212,34 +290,61 @@ const BusManagementSoftware = () => {
     setShowModal(true);
   };
 
-  const handleUpdateRoute = () => {
-    ApiService.updateRoutes(routeForm)
-    setRoutes(
-      routes.map((route) =>
-        route.id === editingItem.id
-          ? {
-            ...route,
-            ...routeForm,
-            distance: parseFloat(routeForm.distance),
-            base_fare: parseFloat(routeForm.base_fare),
-            per_km_rate: parseFloat(routeForm.per_km_rate),
-            stops: routeForm.stops.filter((stop) => stop.trim() !== ""),
-            updatedAt: new Date().toISOString(),
-          }
-          : route
-      )
-    );
-    setRouteForm({
-      name: "",
-      code: "",
-      distance: "",
-      stops: [""],
-      base_fare: "",
-      per_km_rate: "",
-      active: true,
-    });
-    setEditingItem(null);
-    setShowModal(false);
+  const handleUpdateRoute = async() => {
+    let newErrors = {};
+  
+    if (!routeForm.name.trim()) {
+      newErrors.name = "Route Name is required.";
+    }
+    if (!routeForm.code.trim()) {
+      newErrors.code = "Code is required.";
+    }
+    if (!routeForm.distance) {
+      newErrors.distance = "Distance is required.";
+    }
+    if (!routeForm.base_fare) {
+      newErrors.base_fare = "Base fare is required.";
+    }
+    if (!routeForm.per_km_rate) {
+      newErrors.per_km_rate = "Km rate is required.";
+    }
+    
+    setErrors(newErrors);
+  
+    // Stop if errors exist
+    if (Object.keys(newErrors).length > 0) return;
+    const response = await ApiService.updateRoutes(routeForm)
+    if (response?.success === true) {
+      setToastMessage("Route Update Successfully");
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 3000);
+      setRoutes(
+        routes.map((route) =>
+          route.id === editingItem.id
+            ? {
+              ...route,
+              ...routeForm,
+              distance: parseFloat(routeForm.distance),
+              base_fare: parseFloat(routeForm.base_fare),
+              per_km_rate: parseFloat(routeForm.per_km_rate),
+              stops: routeForm.stops.filter((stop) => stop.trim() !== ""),
+              updatedAt: new Date().toISOString(),
+            }
+            : route
+        )
+      );
+      setRouteForm({
+        name: "",
+        code: "",
+        distance: "",
+        stops: [""],
+        base_fare: "",
+        per_km_rate: "",
+        active: true,
+      });
+      setEditingItem(null);
+      setShowModal(false);
+         }    
   };
 
   const handleDeleteRoute = (routeId) => {
@@ -389,12 +494,19 @@ const BusManagementSoftware = () => {
               <input
                 type="text"
                 value={busForm.bus_number}
-                onChange={(e) =>
+                onChange={(e) => {
                   setBusForm({ ...busForm, bus_number: e.target.value })
+                     if (errors.bus_number) {
+                        setErrors({ ...errors, bus_number: "" });
+                      }
+                }
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder={t("busNumberPlaceholder")}
               />
+                {errors.bus_number && (
+                  <p className="text-red-500 text-sm mt-1">{errors.bus_number}</p>
+                )}
             </div>
 
             <div>
@@ -414,94 +526,73 @@ const BusManagementSoftware = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("route")} *
-              </label>
-              <select
-                value={busForm.route_id}
-                onChange={(e) =>
-                  setBusForm({ ...busForm, route_id: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">{t("selectRoute")}</option>
-                {routes?.map((route) => (
-                  <option key={route.id} value={route.id}>
-                    {route.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("driver")}
-              </label>
-              <select
-                value={busForm.driver_id}
-                onChange={(e) =>
-                  setBusForm({ ...busForm, driver_id: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">{t("selectDriver")}</option>
-                {drivers?.map((driver) => (
-                  <option key={driver.id} value={driver.id}>
-                    {driver.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("conductor")}
-              </label>
-              <select
-                value={busForm.conductor_id}
-                onChange={(e) =>
-                  setBusForm({ ...busForm, conductor_id: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">{t("selectConductor")}</option>
-                {conductors?.map((conductor) => (
-                  <option key={conductor.id} value={conductor.id}>
-                    {conductor.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("status")}
-              </label>
-              <select
-                value={busForm.status}
-                onChange={(e) =>
-                  setBusForm({ ...busForm, status: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="stopped">{t("stopped")}</option>
-                <option value="running">{t("running")}</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("CurrentLocation")} *
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                {t("Last Maintenance")} *
               </label>
               <input
-                type="text"
-                value={busForm.current_location}
-                onChange={(e) =>
-                  setBusForm({ ...busForm, current_location: e.target.value })
+                type="date"
+                value={busForm.last_maintenance}
+                onChange={(e) => {
+                  setBusForm({ ...busForm, last_maintenance: e.target.value })
+                  if (errors.last_maintenance) {
+                    setErrors({ ...errors, last_maintenance: "" });
+                  }
+                }
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder={t("Indore")}
+                min="1"
+                max="100"
               />
+                {errors.last_maintenance && (
+                  <p className="text-red-500 text-sm mt-1">{errors.last_maintenance}</p>
+                )}
+            </div>
+
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {t("Insurance Expiry")} *
+              </label>
+              <input
+                type="date"
+                value={busForm.insurance_expiry}
+                onChange={(e) => {
+                  setBusForm({ ...busForm, insurance_expiry: e.target.value })
+                  if (errors.insurance_expiry) {
+                    setErrors({ ...errors, insurance_expiry: "" });
+                  }
+                }
+                }
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                min="1"
+                max="100"
+              />
+                {errors.insurance_expiry && (
+                  <p className="text-red-500 text-sm mt-1">{errors.insurance_expiry}</p>
+                )}
+            </div>
+
+            <div>
+               <label className="block text-sm font-medium text-gray-700 mb-1">
+                {t("Permit Expiry")} *
+              </label>
+              <input
+                type="date"
+                value={busForm.permit_expiry}
+                onChange={(e) => {
+                  setBusForm({ ...busForm, permit_expiry: e.target.value })
+                  if (errors.permit_expiry) {
+                    setErrors({ ...errors, permit_expiry: "" });
+                  }
+                }
+                }
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                min="1"
+                max="100"
+              />
+               {errors.permit_expiry && (
+                  <p className="text-red-500 text-sm mt-1">{errors.permit_expiry}</p>
+                )}
             </div>
 
             <div className="flex justify-end space-x-2 pt-4">
@@ -511,10 +602,9 @@ const BusManagementSoftware = () => {
                   setBusForm({
                     bus_number: "",
                     capacity: 45,
-                    route_id: "",
-                    driver_id: "",
-                    conductor_id: "",
-                    status: "stopped",
+                    last_maintenance: "",
+                    insurance_expiry: "",
+                    permit_expiry: "",
                   });
                   setEditingItem(null);
                 }}
@@ -543,12 +633,19 @@ const BusManagementSoftware = () => {
               <input
                 type="text"
                 value={routeForm.name}
-                onChange={(e) =>
+                onChange={(e) => {
                   setRouteForm({ ...routeForm, name: e.target.value })
+                  if (errors.name) {
+                    setErrors({ ...errors, name: "" });
+                  }
+                }
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 placeholder={t("routeNamePlaceholder")}
               />
+                 {errors.name && (
+                  <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                )}
             </div>
 
             <div>
@@ -558,15 +655,22 @@ const BusManagementSoftware = () => {
               <input
                 type="text"
                 value={routeForm.code}
-                onChange={(e) =>
+                onChange={(e) => {
                   setRouteForm({
                     ...routeForm,
                     code: e.target.value.toUpperCase(),
                   })
+                  if (errors.code) {
+                    setErrors({ ...errors, code: "" });
+                  }
+                }                
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 placeholder={t("routeCodePlaceholder")}
               />
+                 {errors.code && (
+                  <p className="text-red-500 text-sm mt-1">{errors.code}</p>
+                )}
             </div>
 
             <div>
@@ -576,13 +680,20 @@ const BusManagementSoftware = () => {
               <input
                 type="number"
                 value={routeForm.distance}
-                onChange={(e) =>
+                onChange={(e) => {
                   setRouteForm({ ...routeForm, distance: e.target.value })
+                  if (errors.distance) {
+                    setErrors({ ...errors, distance: "" });
+                  }
+                }
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 min="1"
                 step="0.1"
               />
+                 {errors.distance && (
+                  <p className="text-red-500 text-sm mt-1">{errors.distance}</p>
+                )}
             </div>
 
             <div>
@@ -592,13 +703,20 @@ const BusManagementSoftware = () => {
               <input
                 type="number"
                 value={routeForm.base_fare}
-                onChange={(e) =>
+                onChange={(e) => {
                   setRouteForm({ ...routeForm, base_fare: e.target.value })
+                  if (errors.base_fare) {
+                    setErrors({ ...errors, base_fare: "" });
+                  }
+                }
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 min="1"
                 step="0.1"
               />
+               {errors.base_fare && (
+                  <p className="text-red-500 text-sm mt-1">{errors.base_fare}</p>
+                )}
             </div>
 
             <div>
@@ -608,13 +726,20 @@ const BusManagementSoftware = () => {
               <input
                 type="number"
                 value={routeForm.per_km_rate}
-                onChange={(e) =>
+                onChange={(e) => {
                   setRouteForm({ ...routeForm, per_km_rate: e.target.value })
+                  if (errors.per_km_rate) {
+                    setErrors({ ...errors, per_km_rate: "" });
+                  }
+                }
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 min="0.1"
                 step="0.1"
               />
+               {errors.per_km_rate && (
+                  <p className="text-red-500 text-sm mt-1">{errors.per_km_rate}</p>
+                )}
             </div>
 
             <div>
@@ -1204,6 +1329,7 @@ const BusManagementSoftware = () => {
                         });
                         setDriverForm({ name: '', phone: '', license_number: '', experience_years: '' });
                         setConductorForm({ name: '', phone: '', experience_years: '' });
+                        setErrors({});
                       }}
                     >
                       {renderModalContent()}
@@ -1220,7 +1346,6 @@ const BusManagementSoftware = () => {
               )
             }
           />
-          <CustomRoute path='/registration' element={<Registration />} />
           <CustomRoute path='/ticketview' element={<TicketView />} />
           <CustomRoute
             path='/trips/:tripid'
@@ -1235,7 +1360,16 @@ const BusManagementSoftware = () => {
             />} />
 
   </Routes>
-</BrowserRouter>
+      </BrowserRouter>
+      
+
+      {showToast && (
+             <ToastMessage
+             setShowToast={setShowToast}
+             toastMessage={toastMessage}
+           />
+        )
+        }
     </>
   );
 };

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Loader, Printer } from "lucide-react";
 import ApiService from '../../services/api';
+import ToastMessage from './ToastMessage';
 
 const TicketSystem = (
   { 
@@ -23,29 +24,50 @@ const TicketSystem = (
   const [showModal, setShowModal] = useState(false);
   const [trip, setTrip] = useState([])
   const [loading, setLoading] = useState(true)
-  const [bookedTicket,setBookedTicket] = useState([])
+  const [bookedTicket, setBookedTicket] = useState([])
+  const [errors, setErrors] = useState({});
+    const [search, setSearch] = useState("");
+    const [sortDescriptor, setSortDescriptor] = useState({
+      column: "bus_number",
+      direction: "ASC",
+    }); 
+    const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(10);
+    const [toastMessage, setToastMessage] = useState("");
+    const [showToast, setShowToast] = useState(false);
 
   const handleSubmit = async () => {
-    const selectedBus = busData.find(
-      (bus) => bus.id === parseInt(ticketForm.bus_id, 10)
-    );
+      
+    let newErrors = {};
   
-    // Validation: seat number should not exceed bus capacity
-    if (selectedBus && parseInt(ticketForm.seat_no, 10) > selectedBus.capacity) {
-      alert(`Seat number cannot be more than ${selectedBus.capacity}`);
-      return;
-    }  
-
-    if (
-      !ticketForm.from_stop ||
-      !ticketForm.to_stop ||
-      !ticketForm.fare ||
-      !ticketForm.pos_machine_id ||
-      !ticketForm.seat_no
-    ) {
-      alert("Please select all fields");
-      return;
+    if (!ticketForm.from_stop) {
+      newErrors.from_stop = "Field Required";
     }
+    if (!ticketForm.to_stop) {
+      newErrors.to_stop = "Field Required";
+    }
+    if (!ticketForm.fare) {
+      newErrors.fare = "Fare is required.";
+    }
+    if (!ticketForm.journey_date) {
+      newErrors.journey_date = "Journey Date is required.";
+    }
+    if (!ticketForm.bus_id) {
+      newErrors.bus_id = "Bus Number is required.";
+    }
+
+    if (!ticketForm.pos_machine_id) {
+      newErrors.pos_machine_id = "POS is required.";
+    }
+    if (!ticketForm.seat_no) {
+      newErrors.seat_no = "Seat No is required.";
+    }
+     
+    setErrors(newErrors);
+  
+    // Stop if errors exist
+    if (Object.keys(newErrors).length > 0) return;
+    
     const payload = {
       fare: parseFloat(ticketForm.fare),
       pos_machine_id: parseInt(ticketForm.pos_machine_id, 10),
@@ -58,7 +80,9 @@ const TicketSystem = (
   
     const response = await ApiService.createTicket(payload)    
     if (response?.success) {
-      alert("Ticket Created Successfully")     
+      setToastMessage("Ticket Add Successfully");
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 3000);
       getTrip()
       getBookTrips()
     }
@@ -97,19 +121,33 @@ const TicketSystem = (
     }
   }
 
-     const getData = async () => {
+  const getData = async () => {
+    const body = {
+      search : search,
+      limit: 10,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
       try {
-        const response = await ApiService.getBus();      
-        setBuses(response?.data)
+        const response = await ApiService.getBus(body);      
+        setBuses(response?.data?.data)
       } catch (err) {
       }
     }
 
   useEffect(() => {
+    const body = {
+      search : search,
+      limit: 10,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
     const getMachineData = async () => {
       try {
-        const response = await ApiService.getPos();      
-        setMachineData(response?.data)
+        const response = await ApiService.getPos(body);      
+        setMachineData(response?.data?.data)
       } catch (err) {
       }
     }
@@ -161,66 +199,95 @@ const TicketSystem = (
           <div className="bg-white rounded-lg shadow-sm border p-6">
           {/* From Stop */}
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">From Stop *</label>
+            <label className="block text-sm font-medium mb-1 text-left">From Stop *</label>
             <input
               type="text"
               value={ticketForm.from_stop}
-              onChange={(e) =>
-                setTicketForm({ ...ticketForm, from_stop: e.target.value })
+                        onChange={(e) => {
+                          setTicketForm({ ...ticketForm, from_stop: e.target.value })
+                          if (errors.from_stop) {
+                            setErrors({ ...errors, from_stop: "" });
+                          }
+              }
               }
               className="w-full p-2 border rounded-md"
               placeholder="Indore"
-            />
+                      />
+                         {errors.from_stop && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.from_stop}</p>
+                )}
           </div>
   
           {/* To Stop */}
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">To Stop *</label>
+            <label className="block text-sm font-medium mb-1 text-left">To Stop *</label>
             <input
               type="text"
               value={ticketForm.to_stop}
-              onChange={(e) =>
-                setTicketForm({ ...ticketForm, to_stop: e.target.value })
+                        onChange={(e) => {
+                          setTicketForm({ ...ticketForm, to_stop: e.target.value })
+                          if (errors.to_stop) {
+                            setErrors({ ...errors, to_stop: "" });
+                          }
+              }
               }
               className="w-full p-2 border rounded-md"
               placeholder="Dewas"
-            />
+                      />
+                                   {errors.to_stop && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.to_stop}</p>
+                )}
           </div>
   
           {/* Fare */}
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Fare *</label>
+            <label className="block text-sm font-medium mb-1 text-left">Fare *</label>
             <input
               type="number"
               value={ticketForm.fare}
-              onChange={(e) =>
-                setTicketForm({ ...ticketForm, fare: e.target.value })
+                        onChange={(e) => {
+                          setTicketForm({ ...ticketForm, fare: e.target.value })
+                          if (errors.fare) {
+                            setErrors({ ...errors, fare: "" });
+                          }
+              }
               }
               className="w-full p-2 border rounded-md"
               placeholder="60"
-            />
+                      />
+                                          {errors.fare && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.fare}</p>
+                )}
           </div>
   
           {/* Journey Date */}
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Journey Date *</label>
+            <label className="block text-sm font-medium mb-1 text-left">Journey Date *</label>
             <input
               type="date"
               value={ticketForm.journey_date}
-              onChange={(e) =>
-                setTicketForm({ ...ticketForm, journey_date: e.target.value })
+                        onChange={(e) => {
+                          setTicketForm({ ...ticketForm, journey_date: e.target.value })
+                          if (errors.journey_date) {
+                            setErrors({ ...errors, journey_date: "" });
+                          }
+              }
               }
               className="w-full p-2 border rounded-md"
-            />
+                      />
+                                                 {errors.journey_date && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.journey_date}</p>
+                )}
           </div>
   
           {/* Payment Mode */}
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Payment Mode *</label>
+            <label className="block text-sm font-medium mb-1 text-left">Payment Mode *</label>
             <select
               value={ticketForm.payment_mode}
-              onChange={(e) =>
-                setTicketForm({ ...ticketForm, payment_mode: e.target.value })
+                        onChange={(e) => {
+                          setTicketForm({ ...ticketForm, payment_mode: e.target.value })
+              }
               }
               className="w-full p-2 border rounded-md"
             >
@@ -229,12 +296,16 @@ const TicketSystem = (
           </div>
   
           <div className="mb-4">
-    <label className="block text-sm font-medium mb-1">Bus Number *</label>
+    <label className="block text-sm font-medium mb-1 text-left">Bus Number *</label>
     <select
-      className="w-full p-2 border rounded-md"
+      className="w-full p-2 border rounded-md text-left"
       value={ticketForm.bus_id}
-      onChange={(e) =>
-        setTicketForm({ ...ticketForm, bus_id: e.target.value })
+                        onChange={(e) => {
+                          setTicketForm({ ...ticketForm, bus_id: e.target.value })
+                          if (errors.bus_id) {
+                            setErrors({ ...errors, bus_id: "" });
+                          }
+      }
       }
     >
       <option value="" disabled>
@@ -245,18 +316,25 @@ const TicketSystem = (
           {item?.bus_number}
         </option>
       ))}
-    </select>
+                      </select>
+                      {errors.bus_id && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.bus_id}</p>
+                )}
   </div>
   
           
   
     <div className="mb-4">
-    <label className="block text-sm font-medium mb-1">Pos Number *</label>
+    <label className="block text-sm font-medium mb-1 text-left">Pos Number *</label>
     <select
-      className="w-full p-2 border rounded-md"
+      className="w-full p-2 border rounded-md text-left"
       value={ticketForm.pos_machine_id}
-      onChange={(e) =>
-        setTicketForm({ ...ticketForm, pos_machine_id: e.target.value })
+                        onChange={(e) => {
+                          setTicketForm({ ...ticketForm, pos_machine_id: e.target.value })
+                          if (errors.pos_machine_id) {
+                            setErrors({ ...errors, pos_machine_id: "" });
+                          }
+      }
       }
     >
       <option value="" disabled>
@@ -267,28 +345,22 @@ const TicketSystem = (
           {item?.serial_no}
         </option>
       ))}
-    </select>
+                      </select>
+                      {errors.pos_machine_id && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.pos_machine_id}</p>
+                )}
   </div>
-          {/* Seat No */}
-          {/* <div className="mb-6">
-            <label className="block text-sm font-medium mb-1">Seat No *</label>
-            <input
-              type="text"
-              value={ticketForm.seat_no}
-              onChange={(e) =>
-                setTicketForm({ ...ticketForm, seat_no: e.target.value })
-              }
-              className="w-full p-2 border rounded-md"
-              placeholder="20"
-            />
-          </div> */}
                     
-                    <div className="mb-6">
-  <label className="block text-sm font-medium mb-1">Seat No *</label>
+  <div className="mb-6">
+  <label className="block text-sm font-medium mb-1 text-left">Seat No *</label>
   <select
     value={ticketForm.seat_no}
-    onChange={(e) =>
-      setTicketForm({ ...ticketForm, seat_no: e.target.value })
+                        onChange={(e) => {
+                          setTicketForm({ ...ticketForm, seat_no: e.target.value })
+                          if (errors.seat_no) {
+                            setErrors({ ...errors, seat_no: "" });
+                          }
+    }
     }
     className="w-full p-2 border rounded-md"
   >
@@ -301,7 +373,10 @@ const TicketSystem = (
         {seat} {bookedTicket.includes(seat) ? " (Booked)" : ""}
       </option>
     ))}
-  </select>
+                      </select>
+                      {errors.seat_no && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.seat_no}</p>
+                )}
 </div>
 
 
@@ -400,7 +475,13 @@ const TicketSystem = (
               }
         </table>
       </div>
-
+      {showToast && (
+             <ToastMessage
+             setShowToast={setShowToast}
+             toastMessage={toastMessage}
+           />
+        )
+        }
       </div>
     </div>
   );
