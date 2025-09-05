@@ -236,7 +236,6 @@ useEffect(() => {
         getData()
       }
       else {
-        alert("Trip Updated Fail ");
       }
     }
 
