@@ -2,6 +2,7 @@ import { Edit, Loader, Plus, Route, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import  ApiService from '../../services/api'
 import DataPagination from './DataPagination';
+import ConfirmDelete from './ConfirmDelete';
 // Route Management Page
 const RouteManagement = (
   {
@@ -16,13 +17,15 @@ const RouteManagement = (
 ) => {
   const [loader, setLoader] = useState(true)
   const [search, setSearch] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [sortDescriptor, setSortDescriptor] = useState({
     column: "name",
     direction: "ASC",
   }); 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const getData = async () => {
     const body = {
@@ -127,7 +130,10 @@ const RouteManagement = (
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => handleDeleteRoute(route.id)}
+                      onClick={() => {
+                        setSelectedId(route.id);
+                        setOpen(true);
+                      }}
                     className="text-red-600 hover:text-red-900 p-1"
                     title={t("delete")}
                   >
@@ -192,7 +198,21 @@ const RouteManagement = (
                     totalPages={totalPages}
                     currentPage={page}
                   />
-                )}
+        )}
+        
+           {open && (
+                        <ConfirmDelete
+                          onConfirm={() => {
+                            handleDeleteRoute(selectedId); 
+                            setOpen(false);
+                            setSelectedId(null);
+                          }}
+                          onCancel={() => {
+                            setOpen(false);
+                            setSelectedId(null);
+                          }}
+                        />
+                      )}
     </div>
   );  
 };

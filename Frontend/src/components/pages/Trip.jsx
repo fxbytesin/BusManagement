@@ -227,7 +227,6 @@ const Trip = ({
         getData()
       }
       else {
-        alert("Trip Updated Fail ");
       }
     }
 

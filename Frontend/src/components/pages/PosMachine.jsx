@@ -4,6 +4,7 @@ import { Loader, Plus, Trash2 } from 'lucide-react';
 import DataPagination from './DataPagination';
 import SortColumn from './SortColumn';
 import ToastMessage from './ToastMessage';
+import ConfirmDelete from './ConfirmDelete';
 
 const PosMachine = ({
     showModalPos,
@@ -26,7 +27,9 @@ const PosMachine = ({
   const [errors, setErrors] = useState({});
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
     
     const handleSubmit = async(e) => {
       let newErrors = {};
@@ -91,9 +94,10 @@ const PosMachine = ({
       if (!showModalPos) {
       setErrors({})
     }
-  },[showModalPos])
+    }, [showModalPos])
+  
     
-    const handleDeletePos = async (id) => {
+  const handleDeletePos = async (id) => {      
         try {
           const response = await ApiService.deletePos(id);
           if (response.success) {
@@ -103,11 +107,8 @@ const PosMachine = ({
             setToastMessage(response.data.message)
             setTimeout(() => setShowToast(false), 3000);
           } else {
-            alert("Failed to delete POS machine");
           }
         } catch (error) {
-          console.error("Error deleting POS:", error);
-          alert("Something went wrong. Please try again.");
         }
   };  
   
@@ -293,13 +294,8 @@ const PosMachine = ({
               className="text-red-600 hover:text-red-900"
               title="delete"
               onClick={() => {
-                if (
-                  window.confirm(
-                    "Are you sure you want to delete this POS machine?"
-                  )
-                ) {
-                  handleDeletePos(pos?.id);
-                }
+                setSelectedId(pos.id); // store id of item to delete
+                setOpen(true);
               }}
             >
               <Trash2 className="w-4 h-4" />
@@ -333,7 +329,21 @@ const PosMachine = ({
                     totalPages={totalPages}
                     currentPage={page}
                   />
-                )}
+        )}
+    {open && (
+  <ConfirmDelete
+    onConfirm={() => {
+      handleDeletePos(selectedId); 
+      setOpen(false);
+      setSelectedId(null);
+    }}
+    onCancel={() => {
+      setOpen(false);
+      setSelectedId(null);
+    }}
+  />
+)}
+
 </div>
     </div>
   );

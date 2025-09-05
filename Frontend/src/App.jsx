@@ -18,7 +18,6 @@ import { Route as CustomRoute } from 'react-router-dom';
 import Login from './components/Login';
 import ApiService from './services/api'
 import TicketSystem from './components/pages/TicketSystem';
-import Registration from './components/Registration';
 import PosMachine from './components/pages/PosMachine';
 import TicketView from './components/pages/TicketView';
 import Trip from './components/pages/Trip';
@@ -50,6 +49,7 @@ const BusManagementSoftware = () => {
   const [errors, setErrors] = useState({});
   const [drivers, setDrivers] = useState([]);
   const [conductors, setConductors] = useState([]);
+
 
   // Form States
   const [busForm, setBusForm] = useState({
@@ -205,6 +205,9 @@ const BusManagementSoftware = () => {
       const response = await ApiService.deleteBus(busId); // Wait for delete to finish  
       if (response?.data?.message === 'Bus deleted successfully') {
         // eslint-disable-next-line no-unused-vars
+        setShowToast(true)
+        setToastMessage(response.data.message)
+        setTimeout(() => setShowToast(false), 3000);
       }
 
     } catch (error) {
@@ -340,15 +343,14 @@ const BusManagementSoftware = () => {
     }
   };
 
-  const handleDeleteRoute = (routeId) => {
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm(t("confirmDeleteRoute"))) {
-      // eslint-disable-next-line no-unused-vars
-      const response = ApiService.deleteRoutes(routeId)
-      if ("Route deleted successfully") {
+  const handleDeleteRoute = async(routeId) => {
+    const response = await ApiService.deleteRoutes(routeId)    
+      if (response?.success === true) {
+        setShowToast(true)
+        setToastMessage(response.data.message)
+        setTimeout(() => setShowToast(false), 3000);
         setRoutes(routes.filter((route) => route.id !== routeId));
       }
-    }
   };
 
   // CRUD Operations for Drivers
@@ -1025,10 +1027,11 @@ const BusManagementSoftware = () => {
           t={t}
           users={users}
           handleEditBus={handleEditBus}
-          handleDeleteBus={handleDeleteBus}
           setBuses={setBuses}
           setUsers={setUsers}
           setRoutes={setRoutes}
+          setConductors={setConductors}
+          handleDeleteBus={handleDeleteBus}
         />;
       case "routes":
         return <RouteManagement
@@ -1096,17 +1099,7 @@ const BusManagementSoftware = () => {
         );
       case "posMachine":
         return (
-          <div className="p-6">
-            {/* <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-semibold">{t("posMachine")}</h3>
-              <button
-                onClick={() => setShowModalPos(true)}
-                className="bg-orange-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-700"
-              >
-                <Plus className="w-5 h-5" />
-                <span>{t("addPOSMachine")}</span>
-              </button>
-            </div> */}
+            <div className="p-6">
             <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
               <PosMachine
                 showModalPos={showModalPos}
@@ -1259,14 +1252,14 @@ const BusManagementSoftware = () => {
         </Routes>
       </BrowserRouter>
 
-
       {showToast && (
-        <ToastMessage
-          setShowToast={setShowToast}
-          toastMessage={toastMessage}
-        />
-      )
+             <ToastMessage
+             setShowToast={setShowToast}
+             toastMessage={toastMessage}
+           />
+        )
       }
+      
     </>
   );
 };

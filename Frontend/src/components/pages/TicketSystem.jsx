@@ -20,19 +20,21 @@ const TicketSystem = (
     trip_id : ""
   });
   const [busData, setBuses] = useState([])
-  const [machineData,setMachineData] = useState([])
+  const [machineData,setMachineData] = useState([]) 
   const [showModal, setShowModal] = useState(false);
   const [trip, setTrip] = useState([])
   const [loading, setLoading] = useState(true)
   const [bookedTicket, setBookedTicket] = useState([])
   const [errors, setErrors] = useState({});
-    const [search, setSearch] = useState("");
+  // eslint-disable-next-line no-unused-vars
+  const [search, setSearch] = useState("");
+  // eslint-disable-next-line no-unused-vars
     const [sortDescriptor, setSortDescriptor] = useState({
       column: "bus_number",
       direction: "ASC",
     }); 
-    const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10);
+// eslint-disable-next-line no-unused-vars
+const [page, setPage] = useState(1);
     const [toastMessage, setToastMessage] = useState("");
     const [showToast, setShowToast] = useState(false);
 
