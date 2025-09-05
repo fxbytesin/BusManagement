@@ -109,24 +109,15 @@ const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard 
             </button>
             <button
               onClick={() => {
-                setModalType("add-driver");
+                setModalType("add-user");
                 setShowModal(true);
               }}
               className="bg-purple-600 text-white p-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-purple-700"
             >
               <Plus className="w-5 h-5" />
-              <span>{t("addNewDriver")}</span>
+              <span>{t("addNewUser")}</span>
             </button>
-            <button
-              onClick={() => {
-                setModalType("add-conductor");
-                setShowModal(true);
-              }}
-              className="bg-orange-600 text-white p-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-orange-700"
-            >
-              <Plus className="w-5 h-5" />
-              <span>{t("addNewConductor")}</span>
-            </button>
+           
           </div>
         </div>
 

@@ -8,11 +8,12 @@ const UserManagement = ({
   setModalType,
   setShowModal,
   t,
-  drivers,
+  users,
   buses,
-  user,
-  handleEditDriver,
-  handleDeleteDriver
+  setBuses,
+  setUsers,
+  handleEditUser,
+  handleDeleteUser
 }) => {
   const [loading, setLoading] = useState(true); 
   const [search, setSearch] = useState("");
@@ -33,8 +34,8 @@ const UserManagement = ({
         orderColumn : sortDescriptor.column
       }
       setLoading(true)
-      const response = await ApiService.getDriver(body);      
-      setUser(response?.data?.data || [])
+      const response = await ApiService.getUser(body);      
+      setUsers(response?.data?.data || [])
       setTotalPages(response?.data?.pagination?.totalPages)
     } catch (err) {
     }
@@ -90,7 +91,7 @@ const UserManagement = ({
           </form>
       <button
         onClick={() => {
-          setModalType("add-driver");
+          setModalType("add-user");
           setShowModal(true);
         }}
         className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700"
@@ -101,7 +102,7 @@ const UserManagement = ({
           </div>
     </div>
 
-    {Array.isArray(drivers) && drivers.length === 0 ? (
+    {Array.isArray(users) && users.length === 0 ? (
       <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
         <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -195,48 +196,58 @@ const UserManagement = ({
                     </div>
                   </td>
                 </tr>
-                ) : drivers.length > 0 ? (
+                ) : users.length > 0 ? (
                   <tbody className="bg-white divide-y divide-gray-200">
-                  {drivers?.map((driver) => {
+                  {users?.map((user) => {
                     return (
-                      <tr key={driver.id}>
+                      <tr key={user.id}>
+                        {/* Name */}
                         <td className="px-6 py-4 whitespace-nowrap font-medium">
-                          {driver.name}
+                          {user.name}
                         </td>
+                
+                        {/* Phone */}
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {driver.phone}
+                          {user.phone}
                         </td>
+                
+                        {/* Role */}
+                        <td className="px-6 py-4 whitespace-nowrap capitalize">
+                          {user.role}
+                        </td>
+                
+                        {/* License Number → केवल driver के लिए */}
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {driver.role}
+                          {user.role === "driver" ? user.userExtra?.license_number || "-" : "-"}
                         </td>
+                
+                        {/* Experience Years */}
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {driver.license_number}
+                          {user.userExtra?.experience_years ?? "-"}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {driver.experience_years}
-                        </td>
+                
+                        {/* Actions */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center space-x-2">
+                            {/* Edit Button */}
                             <button
                               className="text-blue-600 hover:text-blue-900"
-                              onClick={()=>handleEditDriver(driver)}
+                              onClick={() => handleEditUser(user)}
                               title={t("edit")}
                             >
                               <Edit className="w-4 h-4" />
                             </button>
+                
+                            {/* Delete Button */}
                             <button
                               onClick={() => {
                                 // eslint-disable-next-line no-restricted-globals
                                 if (confirm(t("confirmDeleteUser"))) {
-                                  handleDeleteDriver(driver.id)
-                                  setUser(
-                                    drivers.filter((d) => d.id !== driver.id)
-                                  );
+                                  handleDeleteUser(user.id);
+                                  setUsers(users.filter((d) => d.id !== user.id));
                                   setBuses(
                                     buses?.map((bus) =>
-                                      bus.userId === user.id
-                                        ? { ...bus, userId: "" }
-                                        : bus
+                                      bus.userId === user.id ? { ...bus, userId: "" } : bus
                                     )
                                   );
                                 }
@@ -252,6 +263,7 @@ const UserManagement = ({
                     );
                   })}
                 </tbody>
+                
                   ) : (
                     <tr>
                     <td
@@ -264,7 +276,7 @@ const UserManagement = ({
                   )
               }
             </table>
-            {drivers && drivers.length > 0 && (
+            {users && users.length > 0 && (
                   <DataPagination
                     onPageChange={handlePageChange}
                     totalPages={totalPages}

@@ -101,71 +101,37 @@ exports.getAllBuses = async (req, res) => {
 
 exports.createBus = async (req, res) => {
   try {
-    const { bus_number, capacity, route_id, driver_id, conductor_id, status, current_location } = req.body;
+    const { bus_number, capacity, last_maintenance, insurance_expiry, permit_expiry } = req.body;
 
+    // Basic validation
     if (!bus_number || !capacity) {
       return res.status(400).json({ error: 'Bus number and capacity are required' });
     }
 
-    // Validate bus_number uniqueness
+    // Ensure bus_number is unique
     const existingBus = await prisma.bus.findUnique({ where: { bus_number } });
     if (existingBus) {
       return res.status(400).json({ error: 'Bus number already exists' });
     }
 
-    // Validate route existence if given
-    if (route_id) {
-      const route = await prisma.route.findUnique({ where: { id: route_id } });
-      if (!route) {
-        return res.status(404).json({ error: 'Route not found' });
-      }
+    // Validate dates if provided
+    const validateDate = (date) => (date ? !isNaN(Date.parse(date)) : true);
+    if (!validateDate(last_maintenance) || !validateDate(insurance_expiry) || !validateDate(permit_expiry)) {
+      return res.status(400).json({ error: 'One or more dates are invalid' });
     }
 
-    // Validate driver existence if given
-    if (driver_id) {
-      const driver = await prisma.driver.findUnique({ where: { id: driver_id } });
-      if (!driver) {
-        return res.status(404).json({ error: 'Driver not found' });
-      }
-    }
-
-    // Validate conductor existence if given
-    if (conductor_id) {
-      const conductor = await prisma.conductor.findUnique({ where: { id: conductor_id } });
-      if (!conductor) {
-        return res.status(404).json({ error: 'Conductor not found' });
-      }
-    }
-
-    // All validations passed; create bus
+    // Create new bus entry with only the given fields
     const newBus = await prisma.bus.create({
       data: {
         user_id: req.user.id,
         bus_number,
         capacity,
-        route_id: route_id || null,
-        driver_id: driver_id || null,
-        conductor_id: conductor_id || null,
-        status: status || 'stopped',
-        current_location: current_location || 'डिपो में'
-      },
-      include: {
-        route: { select: { name: true } },
-        driver: { select: { name: true } },
-        conductor: { select: { name: true } }
+        last_maintenance: last_maintenance ? new Date(last_maintenance) : null,
+        insurance_expiry: insurance_expiry ? new Date(insurance_expiry) : null,
+        permit_expiry: permit_expiry ? new Date(permit_expiry) : null,
       }
     });
-
-    // Format the response for frontend
-    const formattedBus = {
-      ...newBus,
-      route_name: newBus.route?.name || null,
-      driver_name: newBus.driver?.name || null,
-      conductor_name: newBus.conductor?.name || null
-    };
-
-    res.status(201).json(formattedBus);
-
+    res.status(201).json(newBus);
   } catch (error) {
     console.error('Error creating bus:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -173,67 +139,61 @@ exports.createBus = async (req, res) => {
 };
 
 
+
 exports.updateBus = async (req, res) => {
   try {
     const busId = parseInt(req.params.id);
-    const { bus_number, capacity, route_id, driver_id, conductor_id, status, current_location } = req.body;
+    const { bus_number, capacity, last_maintenance, insurance_expiry, permit_expiry } = req.body;
 
-    // If a route is provided, check if exists
-    if (route_id) {
-      const route = await prisma.route.findUnique({ where: { id: route_id } });
-      if (!route) {
-        return res.status(404).json({ error: 'Route not found' });
-      }
-    }
-    // If a driver is provided, check if exists
-    if (driver_id) {
-      const driver = await prisma.driver.findUnique({ where: { id: driver_id } });
-      if (!driver) {
-        return res.status(404).json({ error: 'Driver not found' });
-      }
-    }
-    // If a conductor is provided, check if exists
-    if (conductor_id) {
-      const conductor = await prisma.conductor.findUnique({ where: { id: conductor_id } });
-      if (!conductor) {
-        return res.status(404).json({ error: 'Conductor not found' });
-      }
+    if (!bus_number || !capacity) {
+      return res.status(400).json({ error: 'Bus number and capacity are required' });
     }
 
-    // Now update the bus (all FKs were validated)
-    const updatedBus = await prisma.bus.update({
-      where: { id: busId },
-      data: {
-        bus_number,
-        capacity,
-        route_id: route_id || null,
-        driver_id: driver_id || null,
-        conductor_id: conductor_id || null,
-        status: status || 'stopped',
-        current_location: current_location || 'डिपो में'
-      },
-      include: {
-        route: { select: { name: true } },
-        driver: { select: { name: true } },
-        conductor: { select: { name: true } }
-      }
-    });
+    // Check if another bus with this number exists (excluding the one being updated)
+    const existingBus = await prisma.bus.findUnique({ where: { bus_number } });
+    if (existingBus && existingBus.id !== busId) {
+      return res.status(400).json({ error: 'Bus number already exists' });
+    }
 
-    // Format the response for frontend
-    const formattedBus = {
-      ...updatedBus,
-      route_name: updatedBus.route?.name || null,
-      driver_name: updatedBus.driver?.name || null,
-      conductor_name: updatedBus.conductor?.name || null
+    // Date-only validation (YYYY-MM-DD)
+    const validateDateOnly = (date) => {
+      if (!date) return true;
+      // Accepts only YYYY-MM-DD
+      const re = /^\d{4}-\d{2}-\d{2}$/;
+      return re.test(date) && !isNaN(new Date(date).getTime());
     };
 
-    res.status(200).json(formattedBus);
+    if (
+      !validateDateOnly(last_maintenance) ||
+      !validateDateOnly(insurance_expiry) ||
+      !validateDateOnly(permit_expiry)
+    ) {
+      return res.status(400).json({ error: 'One or more dates are invalid (YYYY-MM-DD format required)' });
+    }
+
+    // Build update object; only set fields that are present
+    const updateObj = {
+      bus_number,
+      capacity,
+      last_maintenance: last_maintenance ? new Date(last_maintenance) : undefined,
+      insurance_expiry: insurance_expiry ? new Date(insurance_expiry) : undefined,
+      permit_expiry: permit_expiry ? new Date(permit_expiry) : undefined,
+    };
+
+    // Update bus
+    const updatedBus = await prisma.bus.update({
+      where: { id: busId },
+      data: updateObj,
+    });
+
+    res.status(200).json(updatedBus);
 
   } catch (error) {
     console.error('Error updating bus:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 exports.deleteBus=async (req, res) => {
