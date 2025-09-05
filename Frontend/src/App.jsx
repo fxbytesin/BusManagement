@@ -8,8 +8,6 @@ import {
 import DashboardPage from './components/pages/Dashboard';
 import BusManagementPage from './components/pages/BusManagement';
 import RouteManagement from './components/pages/RouteManagement';
-import DriverManagement from './components/pages/DriverManagement';
-import ConductorManagement from './components/pages/ConductorManagement';
 import LiveTracking from './components/pages/LiveTracking';
 import Header from './components/ Header';
 import NavigationComponent from './components/Navigation';
@@ -25,6 +23,8 @@ import PosMachine from './components/pages/PosMachine';
 import TicketView from './components/pages/TicketView';
 import Trip from './components/pages/Trip';
 import Parcel from './components/pages/Parcel';
+import UserManagement from "./components/pages/UserManagement";
+
 const BusManagementSoftware = () => {
   // Language State
   const [currentLanguage, setCurrentLanguage] = useState("hi");
@@ -53,7 +53,8 @@ const BusManagementSoftware = () => {
     driver_id: "",
     conductor_id: "",
     status: "stopped",
-    current_location: ""
+    current_location: "",
+    user_id: ""
   });
 
   const [routeForm, setRouteForm] = useState({
@@ -84,6 +85,17 @@ const BusManagementSoftware = () => {
     emergency_contact: ""
   });
 
+
+  const [userForm, setUserForm] = useState({
+    name: "",
+    phone: "",
+    license_number: "",
+    experience_years: "",
+    license_expiry: "",
+    address: "",
+    emergency_contact: ""
+  });
+
   const [isLogin, setIsLogin] = useState(true)
   const [showModalPos, setShowModalPos] = useState(false);
   const [showTrip, setShowTrip] = useState(false)
@@ -100,7 +112,8 @@ const BusManagementSoftware = () => {
       ...busForm,
       route_id: parseInt(busForm.route_id, 10) || null,
       driver_id: parseInt(busForm.driver_id, 10) || null,
-      conductor_id: parseInt(busForm.conductor_id, 10) || null
+      conductor_id: parseInt(busForm.conductor_id, 10) || null,
+      user_id: parseInt(busForm.user_id, 10) || null
     });
 
     if (response.success === true) {
@@ -114,6 +127,7 @@ const BusManagementSoftware = () => {
       route_id: "",
       driver_id: "",
       conductor_id: "",
+      user_id: "",
       status: "stopped",
     });
     setShowModal(false);
@@ -130,7 +144,8 @@ const BusManagementSoftware = () => {
     ApiService.updateBus({
       ...busForm,
       route_id: parseInt(busForm.route_id, 10) || null,
-      driver_id: parseInt(busForm.driver_id, 10) || null
+      driver_id: parseInt(busForm.driver_id, 10) || null,
+      user_id: parseInt(busForm.user_id, 10) || null,
     })
     setBuses(
       buses.map((bus) =>
@@ -145,6 +160,7 @@ const BusManagementSoftware = () => {
       route_id: "",
       driver_id: "",
       conductor_id: "",
+      user_id: "",
       status: "stopped",
     });
     setEditingItem(null);
@@ -514,6 +530,7 @@ const BusManagementSoftware = () => {
                     route_id: "",
                     driver_id: "",
                     conductor_id: "",
+                    user_id: "",
                     status: "stopped",
                   });
                   setEditingItem(null);
@@ -695,7 +712,7 @@ const BusManagementSoftware = () => {
           </div>
         );
 
-      case "add-driver":
+      case "add-user":
       case "edit-driver":
         return (
           <div className="space-y-4">
@@ -956,6 +973,8 @@ const BusManagementSoftware = () => {
         return t("addDriverTitle");
       case "add-conductor":
         return t("addConductorTitle");
+      case "add-user":
+        return t("addUserTitle");
       default:
         return "";
     }
@@ -1000,8 +1019,8 @@ const BusManagementSoftware = () => {
           handleDeleteRoute={handleDeleteRoute}
           setRoutes={setRoutes}
         />;
-      case "drivers":
-        return <DriverManagement
+      case "user":
+        return <UserManagement
           setModalType={setModalType}
           setShowModal={setShowModal}
           t={t}
@@ -1011,19 +1030,6 @@ const BusManagementSoftware = () => {
           setDrivers={setDrivers}
           handleEditDriver={handleEditDriver}
           handleDeleteDriver={handleDeleteDriver}
-        />;
-      case "conductors":
-        return <ConductorManagement
-          conductors={conductors}
-          setModalType={setModalType}
-          setShowModal={setShowModal}
-          t={t}
-          buses={buses}
-          setConductors={setConductors}
-          setBuses={setBuses}
-          setDrivers={setDrivers}
-          handleEditConstructor={handleEditConstructor}
-          handleDeleteConductor={handleDeleteConductor}
         />;
       case "live-tracking":
         return <LiveTracking
@@ -1069,7 +1075,7 @@ const BusManagementSoftware = () => {
         );
       case "posMachine":
         return (
-            <div className="p-6">
+          <div className="p-6">
             {/* <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-semibold">{t("posMachine")}</h3>
               <button
@@ -1112,11 +1118,11 @@ const BusManagementSoftware = () => {
         );
 
       case "parcel":
-        return ( <div className="p-6">
+        return (<div className="p-6">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-semibold">{t("parcel")}</h3>
             <button
-               onClick={() => setShowParcel(true)}
+              onClick={() => setShowParcel(true)}
               className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700"
             >
               <Plus className="w-5 h-5" />
@@ -1124,15 +1130,15 @@ const BusManagementSoftware = () => {
             </button>
           </div>
 
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-              <Parcel
-                buses={buses}
-                setBuses={setBuses}
-                setShowParcel={setShowParcel}
-                showParcel={showParcel}
-              />
-            </div>
+          <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+            <Parcel
+              buses={buses}
+              setBuses={setBuses}
+              setShowParcel={setShowParcel}
+              showParcel={showParcel}
+            />
           </div>
+        </div>
         );
       default:
         return <DashboardPage
@@ -1225,17 +1231,17 @@ const BusManagementSoftware = () => {
           <CustomRoute
             path='/trips/:tripid'
             element={<TicketSystem
-            t={t}
+              t={t}
               currentPage={currentPage}
-              currentLanguage={currentLanguage}  
+              currentLanguage={currentLanguage}
               sidebarOpen={sidebarOpen}
               setSidebarOpen={setSidebarOpen}
               setCurrentPage={setCurrentPage}
               setCurrentLanguage={setCurrentLanguage}
             />} />
 
-  </Routes>
-</BrowserRouter>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 };

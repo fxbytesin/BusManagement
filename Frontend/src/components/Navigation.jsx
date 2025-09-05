@@ -13,8 +13,7 @@ const NavigationComponent = ({
       { id: "dashboard", label: t("dashboard"), icon: Home },
       { id: "buses", label: t("busManagement"), icon: Bus },
       { id: "routes", label: t("routeManagement"), icon: Route },
-      { id: "drivers", label: t("driverManagement"), icon: User },
-      { id: "conductors", label: t("conductorManagement"), icon: Users },
+      { id: "user", label: t("userManagement"), icon: Users },
       { id: "live-tracking", label: t("liveTracking"), icon: MapPin },
       { id: "reports", label: t("reports"), icon: BarChart3 },
       { id: "settings", label: t("settings"), icon: Settings },
@@ -27,7 +26,7 @@ const NavigationComponent = ({
       <div
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-indigo-900 text-white transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 h-[966px]`}
+        } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 `}
       >
         <div className="flex items-center justify-between p-4 border-b border-indigo-800">
           <h1 className="text-xl font-bold">{t("appName")}</h1>
