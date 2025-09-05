@@ -33,7 +33,6 @@ exports.getAllDriver = async (req, res) => {
           }
         : {})
     };
-    console.log(whereCondition,"whereConditionwhereConditionwhereCondition")
     const drivers = await prisma.driver.findMany({
       where: whereCondition,
       orderBy: { [sortColumn]: sortOrder },
@@ -57,9 +56,6 @@ exports.getAllDriver = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
-
-
 
 exports.createDriver = async (req, res) => {
   try {
