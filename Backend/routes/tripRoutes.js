@@ -14,12 +14,12 @@ const tripController = require("../controllers/tripController");
  * @swagger
  * /api/trip:
  *   post:
- *     summary: Create a Trip
+ *     summary: Create a Trip (auth required)
  *     tags: [Trip]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
- *       description: Trip details
+ *       description: Trip details to create
  *       required: true
  *       content:
  *         application/json:
@@ -44,19 +44,44 @@ const tripController = require("../controllers/tripController");
  *                 type: string
  *                 format: date-time
  *                 example: "2025-08-29T12:00:00Z"
- *               status:
- *                 type: string
- *                 example: "SCHEDULED"
- *                 enum: [SCHEDULED, RUNNING, COMPLETED, CANCELLED]
  *               driver_id:
  *                 type: integer
+ *                 description: User ID with role 'driver'
  *               conductor_id:
  *                 type: integer
+ *                 description: User ID with role 'conductor'
  *     responses:
  *       201:
  *         description: Trip created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 bus_id:
+ *                   type: integer
+ *                 route_id:
+ *                   type: integer
+ *                 start_time:
+ *                   type: string
+ *                   format: date-time
+ *                 end_time:
+ *                   type: string
+ *                   format: date-time
+ *                   nullable: true
+ *                 status:
+ *                   type: string
+ *                   enum: [SCHEDULED, RUNNING, COMPLETED, CANCELLED]
+ *                 driver_id:
+ *                   type: integer
+ *                   nullable: true
+ *                 conductor_id:
+ *                   type: integer
+ *                   nullable: true
  *       400:
- *         description: Validation error
+ *         description: Validation error (e.g., overlap or missing fields)
  */
 router.post("/", authenticateToken, tripController.createTrip);
 
@@ -176,7 +201,7 @@ router.get("/:id", authenticateToken, tripController.getTripById);
  * @swagger
  * /api/trip/{id}:
  *   put:
- *     summary: Update Trip
+ *     summary: Update a Trip by ID (auth required)
  *     tags: [Trip]
  *     security:
  *       - bearerAuth: []
@@ -188,8 +213,8 @@ router.get("/:id", authenticateToken, tripController.getTripById);
  *         schema:
  *           type: integer
  *     requestBody:
- *       description: Trip fields to update
- *       required: truegetAllTrips
+ *       description: Fields to update in trip
+ *       required: true
  *       content:
  *         application/json:
  *           schema:
@@ -210,13 +235,17 @@ router.get("/:id", authenticateToken, tripController.getTripById);
  *                 enum: [SCHEDULED, RUNNING, COMPLETED, CANCELLED]
  *               driver_id:
  *                 type: integer
+ *                 description: User ID with role 'driver'
  *               conductor_id:
  *                 type: integer
+ *                 description: User ID with role 'conductor'
  *     responses:
  *       200:
  *         description: Trip updated successfully
+ *         content:
+ *           application/json:
  *       400:
- *         description: Validation error
+ *         description: Validation error (e.g., overlap or invalid input)
  *       404:
  *         description: Trip not found
  */

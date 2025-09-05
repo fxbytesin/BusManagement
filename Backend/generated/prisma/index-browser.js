@@ -138,34 +138,6 @@ exports.Prisma.BusScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
-exports.Prisma.ConductorScalarFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  name: 'name',
-  phone: 'phone',
-  experience_years: 'experience_years',
-  address: 'address',
-  emergency_contact: 'emergency_contact',
-  active: 'active',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-};
-
-exports.Prisma.DriverScalarFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  name: 'name',
-  phone: 'phone',
-  license_number: 'license_number',
-  license_expiry: 'license_expiry',
-  experience_years: 'experience_years',
-  address: 'address',
-  emergency_contact: 'emergency_contact',
-  active: 'active',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-};
-
 exports.Prisma.PackageScalarFieldEnum = {
   id: 'id',
   bus_id: 'bus_id',
@@ -268,6 +240,20 @@ exports.Prisma.UserScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.UserExtraScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  license_number: 'license_number',
+  license_expiry: 'license_expiry',
+  experience_years: 'experience_years',
+  address: 'address',
+  emergency_contact: 'emergency_contact',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.OTPScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
@@ -295,21 +281,6 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.BusOrderByRelevanceFieldEnum = {
   bus_number: 'bus_number',
   current_location: 'current_location'
-};
-
-exports.Prisma.ConductorOrderByRelevanceFieldEnum = {
-  name: 'name',
-  phone: 'phone',
-  address: 'address',
-  emergency_contact: 'emergency_contact'
-};
-
-exports.Prisma.DriverOrderByRelevanceFieldEnum = {
-  name: 'name',
-  phone: 'phone',
-  license_number: 'license_number',
-  address: 'address',
-  emergency_contact: 'emergency_contact'
 };
 
 exports.Prisma.PackageOrderByRelevanceFieldEnum = {
@@ -357,6 +328,13 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   password: 'password',
   phone: 'phone',
   company_name: 'company_name'
+};
+
+exports.Prisma.UserExtraOrderByRelevanceFieldEnum = {
+  name: 'name',
+  license_number: 'license_number',
+  address: 'address',
+  emergency_contact: 'emergency_contact'
 };
 
 exports.Prisma.OTPOrderByRelevanceFieldEnum = {
@@ -421,8 +399,6 @@ exports.OTPType = exports.$Enums.OTPType = {
 
 exports.Prisma.ModelName = {
   Bus: 'Bus',
-  Conductor: 'Conductor',
-  Driver: 'Driver',
   Package: 'Package',
   POSMachine: 'POSMachine',
   DailyReport: 'DailyReport',
@@ -430,6 +406,7 @@ exports.Prisma.ModelName = {
   Ticket: 'Ticket',
   Trip: 'Trip',
   User: 'User',
+  UserExtra: 'UserExtra',
   OTP: 'OTP'
 };
 

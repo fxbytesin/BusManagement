@@ -21,40 +21,6 @@ CREATE TABLE `Bus` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Conductor` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `user_id` INTEGER NOT NULL,
-    `name` VARCHAR(100) NOT NULL,
-    `phone` VARCHAR(15) NOT NULL,
-    `experience_years` INTEGER NOT NULL DEFAULT 0,
-    `address` TEXT NULL,
-    `emergency_contact` VARCHAR(15) NULL,
-    `active` BOOLEAN NOT NULL DEFAULT true,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updated_at` DATETIME(3) NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Driver` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `user_id` INTEGER NOT NULL,
-    `name` VARCHAR(100) NOT NULL,
-    `phone` VARCHAR(15) NOT NULL,
-    `license_number` VARCHAR(50) NOT NULL,
-    `license_expiry` DATETIME(3) NULL,
-    `experience_years` INTEGER NOT NULL DEFAULT 0,
-    `address` TEXT NULL,
-    `emergency_contact` VARCHAR(15) NULL,
-    `active` BOOLEAN NOT NULL DEFAULT true,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updated_at` DATETIME(3) NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `Package` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `bus_id` INTEGER NOT NULL,
@@ -185,6 +151,24 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `UserExtra` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` INTEGER NOT NULL,
+    `name` VARCHAR(100) NULL,
+    `license_number` VARCHAR(50) NULL,
+    `license_expiry` DATETIME(3) NULL,
+    `experience_years` INTEGER NOT NULL DEFAULT 0,
+    `address` TEXT NULL,
+    `emergency_contact` VARCHAR(15) NULL,
+    `active` BOOLEAN NOT NULL DEFAULT true,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `UserExtra_userId_key`(`userId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `OTP` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `user_id` INTEGER NOT NULL,
@@ -204,16 +188,10 @@ ALTER TABLE `Bus` ADD CONSTRAINT `Bus_user_id_fkey` FOREIGN KEY (`user_id`) REFE
 ALTER TABLE `Bus` ADD CONSTRAINT `Bus_route_id_fkey` FOREIGN KEY (`route_id`) REFERENCES `Route`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Bus` ADD CONSTRAINT `Bus_driver_id_fkey` FOREIGN KEY (`driver_id`) REFERENCES `Driver`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Bus` ADD CONSTRAINT `Bus_driver_id_fkey` FOREIGN KEY (`driver_id`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Bus` ADD CONSTRAINT `Bus_conductor_id_fkey` FOREIGN KEY (`conductor_id`) REFERENCES `Conductor`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Conductor` ADD CONSTRAINT `Conductor_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Driver` ADD CONSTRAINT `Driver_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Bus` ADD CONSTRAINT `Bus_conductor_id_fkey` FOREIGN KEY (`conductor_id`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Package` ADD CONSTRAINT `Package_bus_id_fkey` FOREIGN KEY (`bus_id`) REFERENCES `Bus`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -246,10 +224,13 @@ ALTER TABLE `Trip` ADD CONSTRAINT `Trip_bus_id_fkey` FOREIGN KEY (`bus_id`) REFE
 ALTER TABLE `Trip` ADD CONSTRAINT `Trip_route_id_fkey` FOREIGN KEY (`route_id`) REFERENCES `Route`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Trip` ADD CONSTRAINT `Trip_driver_id_fkey` FOREIGN KEY (`driver_id`) REFERENCES `Driver`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Trip` ADD CONSTRAINT `Trip_driver_id_fkey` FOREIGN KEY (`driver_id`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Trip` ADD CONSTRAINT `Trip_conductor_id_fkey` FOREIGN KEY (`conductor_id`) REFERENCES `Conductor`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `Trip` ADD CONSTRAINT `Trip_conductor_id_fkey` FOREIGN KEY (`conductor_id`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `UserExtra` ADD CONSTRAINT `UserExtra_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `OTP` ADD CONSTRAINT `OTP_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
