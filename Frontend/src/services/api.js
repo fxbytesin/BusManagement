@@ -257,11 +257,11 @@ const ApiService = {
     }
   },
 
-  addDriver: async (data) => {
+  addUser: async (data) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.post(`${API_URL}/drivers`, data, {
+      const response = await axios.post(`${API_URL}/user/create`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -279,11 +279,11 @@ const ApiService = {
       };
     }
   },
-  getDriver: async (body) => {
+  getUser: async (body) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.post(`${API_URL}/drivers/list`, body, {
+      const response = await axios.post(`${API_URL}/user/list`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -302,14 +302,14 @@ const ApiService = {
     }
   },
 
-  updateDriver: async (obj) => {
+  updateUser: async (obj) => {
     try {
       const token = localStorage.getItem("token");
 
       // Destructure ID from object, remove it from payload
       const { id, ...body } = obj;
 
-      const response = await axios.put(`${API_URL}/drivers/${id}`, body, {
+      const response = await axios.put(`${API_URL}/user/${id}`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -328,106 +328,11 @@ const ApiService = {
     }
   },
 
-  deleteDriver: async (id) => {
+  deleteUser: async (id) => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.delete(`${API_URL}/drivers/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json", // optional but recommended
-        },
-      });
-
-      return {
-        success: true,
-        data: response.data,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data || error.message,
-      };
-    }
-  },
-
-  addConductor: async (data) => {
-    try {
-      const token = localStorage.getItem("token");
-      // Get token from localStorage or wherever you're storing it
-      const response = await axios.post(`${API_URL}/conductor`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json", // optional but recommended
-        },
-      });
-
-      return {
-        success: true,
-        data: response.data,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data || error.message,
-      };
-    }
-  },
-
-  getConductor: async (body) => {
-    try {
-      const token = localStorage.getItem("token");
-      // Get token from localStorage or wherever you're storing it
-      const response = await axios.post(`${API_URL}/conductor/list`, body, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json", // optional but recommended
-        },
-      });
-
-      return {
-        success: true,
-        data: response.data,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data || error.message,
-      };
-    }
-  },
-
-  updateConstructor: async (obj) => {
-    try {
-      const token = localStorage.getItem("token");
-
-      // Destructure ID from object, remove it from payload
-      const { id, ...body } = obj;
-
-      const response = await axios.put(`${API_URL}/conductor/${id}`, body, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      return {
-        success: true,
-        data: response.data,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data || error.message,
-      };
-    }
-  },
-
-  deleteContuctor: async (id) => {
-    try {
-      const token = localStorage.getItem("token");
-      // Get token from localStorage or wherever you're storing it
-      const response = await axios.delete(`${API_URL}/conductor/${id}`, {
+      const response = await axios.delete(`${API_URL}/user/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -469,33 +374,11 @@ const ApiService = {
     }
   },
 
-  // getDashboard: async () => {
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     // Get token from localStorage or wherever you're storing it
-  //     const response = await axios.get(`${API_URL}/dashboard/stats`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "application/json", // optional but recommended
-  //       },
-  //     });
-
-  //     return {
-  //       success: true,
-  //       data: response.data,
-  //     };
-  //   } catch (error) {
-  //     return {
-  //       success: false,
-  //       error: error.response?.data || error.message,
-  //     };
-  //   }
-  // },
   getDashboard: async () => {
     try {
       const token = localStorage.getItem("token");
       // Get token from localStorage or wherever you're storing it
-      const response = await axios.get(`${API_URL}/dashboard/trips-completed`, {
+      const response = await axios.get(`${API_URL}/dashboard/analytics`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // optional but recommended
@@ -797,6 +680,30 @@ const ApiService = {
         success: false,
         error: error.response?.data || error.message,
       };
+    }
+  },
+
+  getDriver: async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/user/drivers/dropdown`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return { success: true, data: response.data };
+    } catch (error) {
+      return { success: false, error: error.response?.data || error.message };
+    }
+  },
+  
+  getConductor: async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/user/conductors/dropdown`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return { success: true, data: response.data };
+    } catch (error) {
+      return { success: false, error: error.response?.data || error.message };
     }
   },
 };

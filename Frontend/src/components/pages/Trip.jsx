@@ -14,9 +14,9 @@ const Trip = ({
   setBuses,
   setRoutes,
   setDrivers,
-  setConductors,
   showTrip,
-  setShowTrip
+  setShowTrip,
+  setConductors
 }) => {
 
   const [tripForm, setTripForm] = useState({
@@ -31,31 +31,31 @@ const Trip = ({
   const [trip, setTrip] = useState([])
   const [isPost, setIsPost] = useState(true)
   const [editId, setEditId] = useState(0)
-  const [showTicket, setShowTicket] = useState(true) 
+  const [showTicket, setShowTicket] = useState(true)
   const [selectedTripId, setSelectedTripId] = useState(null);
   const [busCapacity, setBusCapacity] = useState(0)
   const [search, setSearch] = useState("");
   const [sortDescriptor, setSortDescriptor] = useState({
     column: "bus_number",
     direction: "ASC",
-  }); 
+  });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
   const [errors, setErrors] = useState({});
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
-  
+
   const getData = async () => {
     const body = {
-      search : search,
+      search: search,
       limit: 10,
       page: page,
       order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
+      orderColumn: sortDescriptor.column
     }
     try {
       const response = await ApiService.getTrip(body);
-      if (response?.success === true) {         
+      if (response?.success === true) {
         setTrip(response?.data?.data)
         setTotalPages(response?.data?.pagination?.totalPages)
       }
@@ -66,28 +66,28 @@ const Trip = ({
   useEffect(() => {
     getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search,page,sortDescriptor])
+  }, [search, page, sortDescriptor])
 
   useEffect(() => {
     if (!showTrip) {
-    setErrors({})
-  }
-},[showTrip])
+      setErrors({})
+    }
+  }, [showTrip])
   const getBusData = async () => {
     const body = {
-      search : search,
+      search: search,
       limit: 10,
       page: page,
       order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
+      orderColumn: sortDescriptor.column
     }
     try {
-      const response = await ApiService.getBus(body);      
+      const response = await ApiService.getBus(body);
       setBuses(response?.data?.data)
       setTotalPages(response?.data?.pagination?.totalPages)
     }
     catch (err) {
-      
+
     }
     finally {
     }
@@ -96,69 +96,60 @@ const Trip = ({
 
   const getRoutesData = async () => {
     const body = {
-      search : search,
+      search: search,
       limit: 10,
       page: page,
       order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
+      orderColumn: sortDescriptor.column
     }
     try {
-      const response = await ApiService.getRoutes(body);      
+      const response = await ApiService.getRoutes(body);
       setRoutes(response?.data?.data)
     }
     catch (err) {
-      
+
     }
     finally {
-      
+
     }
   }
-  
+
   const getDriverData = async () => {
-    const body = {
-      search : search,
-      limit: 10,
-      page: page,
-      order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
-    }
     try {
-      const response = await ApiService.getDriver(body);      
-      setDrivers(response?.data?.data)
-    }
-    catch (err) {
+      const response = await ApiService.getDriver();
+      if (response?.success === true && Array.isArray(response.data)) {
       
+        setDrivers(response.data);
+      } else {
+        setDrivers([]);
+      }
+    } catch (err) {
+      setDrivers([]);
     }
-    finally {
-    }
-  }
+  };
   
   const getConductorData = async () => {
-    const body = {
-      search : search,
-      limit: 10,
-      page: page,
-      order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
-    }
     try {
-      const response = await ApiService.getConductor(body);      
-      setConductors(response?.data?.data)
+      const response = await ApiService.getConductor();
+      if (response?.success === true && Array.isArray(response.data)) {
+     
+        setConductors(response.data);
+      } else {
+        setConductors([]);
+      }
+    } catch (err) {
+      setConductors([]);
     }
-    catch (err) {
-      
-    }
-    finally {
-    }
-}
+  };
+  
 
-useEffect(() => {
-  getRoutesData()
-  getDriverData()
-  getConductorData()
-  getBusData()
-// eslint-disable-next-line react-hooks/exhaustive-deps
-},[])
+  useEffect(() => {
+    getRoutesData()
+    getDriverData()
+    getConductorData()
+    getBusData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const status = [
     "SCHEDULED",
@@ -171,7 +162,7 @@ useEffect(() => {
     e.preventDefault();
 
     let newErrors = {};
-  
+
     if (!tripForm.bus_id) {
       newErrors.bus_id = "Bus is required.";
     }
@@ -187,12 +178,12 @@ useEffect(() => {
     if (!tripForm.start_time) {
       newErrors.start_time = "Km rate is required.";
     }
-      if (!tripForm.end_time) {
+    if (!tripForm.end_time) {
       newErrors.end_time = "Km rate is required.";
     }
-    
+
     setErrors(newErrors);
-  
+
     // Stop if errors exist
     if (Object.keys(newErrors).length > 0) return;
 
@@ -275,7 +266,7 @@ useEffect(() => {
     return date.toISOString().slice(0, 16);
   };
 
-  const handleEdit = (obj) => {    
+  const handleEdit = (obj) => {
     setTripForm({
       bus_id: obj.bus_id,
       route_id: obj.route_id,
@@ -306,7 +297,7 @@ useEffect(() => {
   }
 
   const handleChange = (e) => {
-    setSearch(e.target.value); 
+    setSearch(e.target.value);
   }
   const handlePageChange = (page) => {
     setPage(page); // Update the page state variable to the specified page number
@@ -331,7 +322,7 @@ useEffect(() => {
     });
   };
   return (
-    
+
     showTrip ?
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
@@ -390,60 +381,62 @@ useEffect(() => {
                   <p className="text-red-500 text-sm mt-1 text-left">{errors.route_id}</p>
                 )}
               </div>
-
+              {/* Driver Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Driver")}
+                  {t("Driver")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.driver_id}
                   onChange={(e) => {
-                    setTripForm({ ...tripForm, driver_id: e.target.value })
+                    setTripForm({ ...tripForm, driver_id: e.target.value });
                     if (errors.driver_id) {
                       setErrors({ ...errors, driver_id: "" });
                     }
-                  }
-                  }
+                  }}
                 >
                   <option value="">{t("selectDriver")}</option>
-                  {drivers?.map((driver) => (
-                    <option key={driver.id} value={driver.id}>
-                      {driver.name}
-                    </option>
-                  ))}
+                  {Array.isArray(drivers) &&
+                    drivers.map((driver) => (
+                      <option key={driver.id} value={driver.id}>
+                        {driver.name}
+                      </option>
+                    ))}
                 </select>
                 {errors.driver_id && (
                   <p className="text-red-500 text-sm mt-1 text-left">{errors.driver_id}</p>
                 )}
               </div>
 
+              {/* Conductor Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Conductor")}
+                  {t("Conductor")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.conductor_id}
                   onChange={(e) => {
-                    setTripForm({ ...tripForm, conductor_id: e.target.value })
+                    setTripForm({ ...tripForm, conductor_id: e.target.value });
                     if (errors.conductor_id) {
                       setErrors({ ...errors, conductor_id: "" });
                     }
-                  }
-                  }
+                  }}
                 >
                   <option value="">{t("selectConductor")}</option>
-                  {conductors?.map((conductor) => (
-                    <option key={conductor.id} value={conductor.id}>
-                      {conductor.name}
-                    </option>
-                  ))}
+                  {Array.isArray(conductors) &&
+                    conductors.map((conductor) => (
+                      <option key={conductor.id} value={conductor.id}>
+                        {conductor.name}
+                      </option>
+                    ))}
                 </select>
                 {errors.conductor_id && (
                   <p className="text-red-500 text-sm mt-1 text-left">{errors.conductor_id}</p>
                 )}
               </div>
+
 
 
               <div>
@@ -459,7 +452,7 @@ useEffect(() => {
                   }
                   }
                 />
-                  {errors.start_time && (
+                {errors.start_time && (
                   <p className="text-red-500 text-sm mt-1 text-left">{errors.start_time}</p>
                 )}
               </div>
@@ -477,7 +470,7 @@ useEffect(() => {
                   }
                   }
                 />
-                    {errors.end_time && (
+                {errors.end_time && (
                   <p className="text-red-500 text-sm mt-1 text-left">{errors.end_time}</p>
                 )}
               </div>
@@ -528,164 +521,164 @@ useEffect(() => {
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-semibold ml-5">{t("trip")}</h3>
 
-             <div className='flex'>
-                <form className="flex max-w-lg mx-auto mr-6 mt-[19px]">   
-                   <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
-                   onChange={handleChange}
-                />
-         
-                  </form>
-                <button
-                 onClick={() => setShowTrip(true)}
-                 className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700 mr-5 mt-5"
-                 >
-              <Plus className="w-5 h-5" />
-              <span>{t("addTrip")}</span>
-                </button>
-            </div>
+                <div className='flex'>
+                  <form className="flex max-w-lg mx-auto mr-6 mt-[19px]">
+                    <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+                      onChange={handleChange}
+                    />
 
-          </div>
-            <table className="w-full">           
-              <thead className="bg-gray-50">
-                <tr>
+                  </form>
+                  <button
+                    onClick={() => setShowTrip(true)}
+                    className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700 mr-5 mt-5"
+                  >
+                    <Plus className="w-5 h-5" />
+                    <span>{t("addTrip")}</span>
+                  </button>
+                </div>
+
+              </div>
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("bus_id")}
+                      onClick={() => handleSorting("bus_id")}
                     >
                       {("Bus Number")}
                       <SortColumn
-                      sortDescriptor={sortDescriptor}
-                      name="bus_id"
+                        sortDescriptor={sortDescriptor}
+                        name="bus_id"
                       />
-                  </th>
+                    </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("conductor_id")}
+                      onClick={() => handleSorting("conductor_id")}
                     >
                       <div className='flex'>
-                      {("Conductor Name")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="conductor_id"
+                        {("Conductor Name")}
+                        <SortColumn
+                          sortDescriptor={sortDescriptor}
+                          name="conductor_id"
                         />
-                        </div>
-                  </th>
+                      </div>
+                    </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("driver_id")}
+                      onClick={() => handleSorting("driver_id")}
                     >
                       <div className='flex'>
-                      {("Driver Name")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="driver_id"
+                        {("Driver Name")}
+                        <SortColumn
+                          sortDescriptor={sortDescriptor}
+                          name="driver_id"
                         />
-                        </div>
-                  </th>
+                      </div>
+                    </th>
 
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("route_id")}
-                    >  
+                      onClick={() => handleSorting("route_id")}
+                    >
                       <div className='flex'>
-                      {("Route")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="route_id"
+                        {("Route")}
+                        <SortColumn
+                          sortDescriptor={sortDescriptor}
+                          name="route_id"
                         />
                       </div>
-                      
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("Start Time")}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("End Time")}
-                  </th>
 
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("Status")}
-                  </th>
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {("Start Time")}
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {("End Time")}
+                    </th>
 
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("Action")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-              {trip && trip.length > 0 ? (
-                trip.map((trip) => (
-                  <tr key={trip.id}>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                      {trip.bus_number}
-                    </td>
-            
-                    <td className="px-6 py-4 whitespace-nowrap text-left">
-                      {trip?.conductor_name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                      {trip?.driver_name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                      {trip?.route_name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                      {trip?.start_time
-                        ? new Date(trip.start_time).toLocaleString("en-IN", {
-                            dateStyle: "medium",
-                            timeStyle: "short",
-                          })
-                        : ""}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                      {trip?.end_time
-                        ? new Date(trip.end_time).toLocaleString("en-IN", {
-                            dateStyle: "medium",
-                            timeStyle: "short",
-                          })
-                        : ""}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                      {trip?.status}
-                    </td>
-                    <td>
-                      <div className="flex items-center space-x-2">
-                        <button
-                          className="text-blue-600 hover:text-blue-900"
-                          title={t("edit")}
-                          onClick={() => handleEdit(trip)}
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          className="text-red-600 hover:text-red-900"
-                          title={t("delete")}
-                          onClick={() => handleDelete(trip)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                        <button>
-                          <SquareEqual
-                            className="w-4 h-4"
-                            onClick={() => {
-                              setShowTicket(false);
-                              setSelectedTripId(trip.id);
-                              setBusCapacity(trip?.bus_capacity);
-                            }}
-                          />
-                        </button>
-                      </div>
-                    </td>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {("Status")}
+                    </th>
+
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {("Action")}
+                    </th>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="8"
-                    className="px-6 py-4 text-center text-gray-500 font-medium"
-                  >
-                    No Data Found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-            
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {trip && trip.length > 0 ? (
+                    trip.map((trip) => (
+                      <tr key={trip.id}>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip.bus_number}
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-left">
+                          {trip?.conductor_name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip?.driver_name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip?.route_name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip?.start_time
+                            ? new Date(trip.start_time).toLocaleString("en-IN", {
+                              dateStyle: "medium",
+                              timeStyle: "short",
+                            })
+                            : ""}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip?.end_time
+                            ? new Date(trip.end_time).toLocaleString("en-IN", {
+                              dateStyle: "medium",
+                              timeStyle: "short",
+                            })
+                            : ""}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip?.status}
+                        </td>
+                        <td>
+                          <div className="flex items-center space-x-2">
+                            <button
+                              className="text-blue-600 hover:text-blue-900"
+                              title={t("edit")}
+                              onClick={() => handleEdit(trip)}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              className="text-red-600 hover:text-red-900"
+                              title={t("delete")}
+                              onClick={() => handleDelete(trip)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                            <button>
+                              <SquareEqual
+                                className="w-4 h-4"
+                                onClick={() => {
+                                  setShowTicket(false);
+                                  setSelectedTripId(trip.id);
+                                  setBusCapacity(trip?.bus_capacity);
+                                }}
+                              />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="8"
+                        className="px-6 py-4 text-center text-gray-500 font-medium"
+                      >
+                        No Data Found
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+
               </table>
               {conductors && conductors.length > 0 && (
                 <DataPagination
@@ -696,20 +689,20 @@ useEffect(() => {
               )}
               {showToast && (
                 <ToastMessage
-                setShowToast={setShowToast}
-                toastMessage={toastMessage}
-              />
-           )
-           }
-              </div>
-          ) : (
-              <div>
-                <TicketSystem
-                  tripId={selectedTripId}
-                  busCapacity={busCapacity}
+                  setShowToast={setShowToast}
+                  toastMessage={toastMessage}
                 />
-              </div>
-          )}          
+              )
+              }
+            </div>
+          ) : (
+            <div>
+              <TicketSystem
+                tripId={selectedTripId}
+                busCapacity={busCapacity}
+              />
+            </div>
+          )}
         </div>
       )
   )
