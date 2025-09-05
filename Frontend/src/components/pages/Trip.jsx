@@ -437,8 +437,6 @@ const Trip = ({
                 )}
               </div>
 
-
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   {t("Start Time")}
@@ -474,7 +472,6 @@ const Trip = ({
                   <p className="text-red-500 text-sm mt-1 text-left">{errors.end_time}</p>
                 )}
               </div>
-
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
@@ -515,10 +512,10 @@ const Trip = ({
         </div>
       </div>
       : (
-        <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+        <div >
           {showTicket ? (
-            <div>
-              <div className="flex justify-between items-center mb-6">
+            <div className="p-6">
+            <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-semibold ml-5">{t("trip")}</h3>
 
                 <div className='flex'>
@@ -538,6 +535,7 @@ const Trip = ({
                 </div>
 
               </div>
+              <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -680,6 +678,7 @@ const Trip = ({
                 </tbody>
 
               </table>
+              </div>
               {conductors && conductors.length > 0 && (
                 <DataPagination
                   onPageChange={handlePageChange}

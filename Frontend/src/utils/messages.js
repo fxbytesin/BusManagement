@@ -72,8 +72,7 @@ export const messages = {
     // Confirmations & Alerts
     confirmDeleteBus: "क्या आप वाकई इस बस को डिलीट करना चाहते हैं?",
     confirmDeleteRoute: "क्या आप वाकई इस रूट को डिलीट करना चाहते हैं?",
-    confirmDeleteDriver: "क्या आप वाकई इस ड्राइवर को डिलीट करना चाहते हैं?",
-    confirmDeleteConductor: "क्या आप वाकई इस कंडक्टर को डिलीट करना चाहते हैं?",
+    confirmDeleteUser: "क्या आप वाकई इस उपयोगकर्ता को हटाना चाहते हैं?",
     fillAllFields: "कृपया सभी आवश्यक फील्ड भरें",
 
     // Table Headers
@@ -114,6 +113,11 @@ export const messages = {
     requiredField: "यह फील्ड आवश्यक है",
     invalidPhone: "कृपया वैध फोन नंबर दर्ज करें",
     invalidNumber: "कृपया वैध संख्या दर्ज करें",
+    licenseNumberRequired: "लाइसेंस नंबर आवश्यक है",
+    licenseExpiryRequired: "लाइसेंस समाप्ति तिथि आवश्यक है",
+    nameRequired: "नाम आवश्यक है",
+    phoneRequired: "फ़ोन आवश्यक है",
+    phoneMustBe10Digits: "फ़ोन नंबर 10 अंकों का होना चाहिए",
 
     // Additional Form Labels
     selectRoute: "रूट चुनें",
@@ -127,8 +131,7 @@ export const messages = {
     busUpdated: "बस सफलतापूर्वक अपडेट की गई",
     routeAdded: "रूट सफलतापूर्वक जोड़ा गया",
     routeUpdated: "रूट सफलतापूर्वक अपडेट किया गया",
-    driverAdded: "ड्राइवर सफलतापूर्वक जोड़ा गया",
-    conductorAdded: "कंडक्टर सफलतापूर्वक जोड़ा गया",
+    userAdded: "उपयोगकर्ता सफलतापूर्वक जोड़ा गया",
 
     // Dashboard Graph Labels
     ticketsIssued: "जारी किए गए टिकट",
@@ -232,8 +235,7 @@ export const messages = {
     // Confirmations & Alerts
     confirmDeleteBus: "Are you sure you want to delete this bus?",
     confirmDeleteRoute: "Are you sure you want to delete this route?",
-    confirmDeleteDriver: "Are you sure you want to delete this driver?",
-    confirmDeleteConductor: "Are you sure you want to delete this conductor?",
+    confirmDeleteUser: "Are you sure you want to delete this user?",
     fillAllFields: "Please fill all required fields",
 
     // Table Headers
@@ -273,6 +275,11 @@ export const messages = {
     requiredField: "This field is required",
     invalidPhone: "Please enter a valid phone number",
     invalidNumber: "Please enter a valid number",
+    licenseNumberRequired: "License Number is required",
+    licenseExpiryRequired: "License Expiry date is required",
+    nameRequired: "Name is required",
+    phoneRequired: "Phone is required",
+    phoneMustBe10Digits: "Phone Number must be 10 Digits",
 
     // Additional Form Labels
     selectRoute: "Select Route",
@@ -289,8 +296,7 @@ export const messages = {
     busUpdated: "Bus updated successfully",
     routeAdded: "Route added successfully",
     routeUpdated: "Route updated successfully",
-    driverAdded: "Driver added successfully",
-    conductorAdded: "Conductor added successfully",
+    userAdded: "User added successfully",
     role: "Role",
     licenseNumber: "License number",
     licenseExpiry: "License Expiry",

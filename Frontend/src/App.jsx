@@ -343,14 +343,14 @@ const BusManagementSoftware = () => {
     }
   };
 
-  const handleDeleteRoute = async(routeId) => {
-    const response = await ApiService.deleteRoutes(routeId)    
-      if (response?.success === true) {
-        setShowToast(true)
-        setToastMessage(response.data.message)
-        setTimeout(() => setShowToast(false), 3000);
-        setRoutes(routes.filter((route) => route.id !== routeId));
-      }
+  const handleDeleteRoute = async (routeId) => {
+    const response = await ApiService.deleteRoutes(routeId)
+    if (response?.success === true) {
+      setShowToast(true)
+      setToastMessage(response.data.message)
+      setTimeout(() => setShowToast(false), 3000);
+      setRoutes(routes.filter((route) => route.id !== routeId));
+    }
   };
 
   // CRUD Operations for Drivers
@@ -365,6 +365,7 @@ const BusManagementSoftware = () => {
     } else if (!/^\d{10}$/.test(userForm.phone)) {
       newErrors.phone = t("phoneMustBe10Digits");
     }
+
 
     // Only required if role = driver
     if (userForm.role === "driver") {
@@ -1099,7 +1100,7 @@ const BusManagementSoftware = () => {
         );
       case "posMachine":
         return (
-            <div className="p-6">
+          <div className="p-6">
             <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
               <PosMachine
                 showModalPos={showModalPos}
@@ -1110,22 +1111,17 @@ const BusManagementSoftware = () => {
         );
       case "trip":
         return (
-          <div className="p-6">
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-              <Trip
-                buses={buses}
-                routes={routes}
-                drivers={drivers}
-                conductors={conductors}
-                setDrivers={setDrivers}
-                setConductors={setConductors}
-                t={t}
-                showTrip={showTrip}
-                setShowTrip={setShowTrip}
-              />
-
-            </div>
-          </div>
+          <Trip
+            buses={buses}
+            routes={routes}
+            drivers={drivers}
+            conductors={conductors}
+            setDrivers={setDrivers}
+            setConductors={setConductors}
+            t={t}
+            showTrip={showTrip}
+            setShowTrip={setShowTrip}
+          />
         );
 
       case "parcel":
@@ -1253,13 +1249,13 @@ const BusManagementSoftware = () => {
       </BrowserRouter>
 
       {showToast && (
-             <ToastMessage
-             setShowToast={setShowToast}
-             toastMessage={toastMessage}
-           />
-        )
+        <ToastMessage
+          setShowToast={setShowToast}
+          toastMessage={toastMessage}
+        />
+      )
       }
-      
+
     </>
   );
 };
