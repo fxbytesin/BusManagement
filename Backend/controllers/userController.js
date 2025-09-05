@@ -239,3 +239,33 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+// List driver names and IDs (dropdown)
+exports.getDriverDropdown = async (req, res) => {
+  try {
+    const drivers = await prisma.user.findMany({
+      where: { role: "driver" },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+    res.json(drivers);
+  } catch (error) {
+    console.error('Error fetching drivers:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// List conductor names and IDs (dropdown)
+exports.getConductorDropdown = async (req, res) => {
+  try {
+    const conductors = await prisma.user.findMany({
+      where: { role: "conductor" },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+    res.json(conductors);
+  } catch (error) {
+    console.error('Error fetching conductors:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};

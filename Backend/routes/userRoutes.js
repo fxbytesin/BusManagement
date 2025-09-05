@@ -244,4 +244,51 @@ router.put('/user/:id', authenticateToken, userController.updateUser);
  */
 router.delete('/user/:id', authenticateToken, userController.deleteUser);
 
+/**
+ * @swagger
+ * /api/user/drivers/dropdown:
+ *   get:
+ *     summary: Get dropdown list of drivers (id and name)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Array of driver objects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id: { type: integer }
+ *                   name: { type: string }
+ */
+router.get('/drivers/dropdown', authenticateToken, userController.getDriverDropdown);
+
+/**
+ * @swagger
+ * /api/user/conductors/dropdown:
+ *   get:
+ *     summary: Get dropdown list of conductors (id and name)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Array of conductor objects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id: { type: integer }
+ *                   name: { type: string }
+ */
+router.get('/conductors/dropdown', authenticateToken, userController.getConductorDropdown);
+
+
 module.exports = router;
