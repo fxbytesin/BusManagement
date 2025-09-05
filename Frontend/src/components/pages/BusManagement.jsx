@@ -227,41 +227,7 @@ const BusManagementPage = (
                         name="bus_number"
                       />
                       </div>
-                  </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("route_id")}
-                    >                      
-                      <div className='flex'>
-                      {t("route")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="route_id"
-                        />
-                      </div>
-                  </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                     onClick={() => handleSorting("driver_id")}
-                    >
-                      <div className='flex'>
-                      {t("driver")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="driver_id"
-                        />
-                      </div>
-
-                  </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("conductor_id")}
-                    >                      
-                      <div className='flex'>
-                      {t("conductor")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="conductor_id"
-                        />
-                      </div>
-                  </th>
+                    </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                      onClick={() => handleSorting("capacity")}
                     >
@@ -273,30 +239,45 @@ const BusManagementPage = (
                         />
                       </div>
 
-                  </th>
+                    </th>
+                    
+
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                     onClick={() => handleSorting("status")}
-                    >
+                     onClick={() => handleSorting("insurance_expiry")}
+                    >                      
                       <div className='flex'>
-                      {t("status")}
+                      {t("Insurance Expiry")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
-                        name="status"
+                        name="insurance_expiry"
+                        />
+                      </div>
+                    </th>
+                    
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                     onClick={() => handleSorting("permit_expiry")}
+                    >
+                      <div className='flex'>
+                      {t("Permit Expiry")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="permit_expiry"
                         />
                       </div>
 
-                      </th>
+                  </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      onClick={() => handleSorting("current_location")}
-                    >
+                    onClick={() => handleSorting("last_maintenance")}
+                    >                      
                       <div className='flex'>
-                      {t("current location")}
+                      {t("Last Maintenance")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
-                        name="current_location"
+                        name="last_maintenance"
                         />
                       </div>
-                      </th>
+                  </th>
+              
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     {t("Ticket View")}
                   </th>
@@ -321,28 +302,17 @@ const BusManagementPage = (
           {bus.bus_number}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          {bus.route_name}
+          {bus.capacity}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          {bus.driver_name}
+        {new Date(bus.insurance_expiry).toLocaleDateString("en-US")}
+
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-        {bus.conductor_name}
+          {new Date(bus.permit_expiry).toLocaleDateString("en-US")}
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">{bus.capacity}</td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <span
-            className={`px-2 py-1 rounded-full text-xs ${
-              bus.status === "running"
-                ? "bg-green-100 text-green-800"
-                : "bg-yellow-100 text-yellow-800"
-            }`}
-          >
-            {t(bus.status)}
-          </span>
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap font-medium">
-          {bus.current_location}
+          {new Date(bus.last_maintenance).toLocaleDateString("en-US")}
         </td>
         <td
           className="px-6 py-4 whitespace-nowrap font-medium cursor-pointer"
