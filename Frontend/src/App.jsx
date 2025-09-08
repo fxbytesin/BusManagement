@@ -343,14 +343,14 @@ const BusManagementSoftware = () => {
     }
   };
 
-  const handleDeleteRoute = async(routeId) => {
-    const response = await ApiService.deleteRoutes(routeId)    
-      if (response?.success === true) {
-        setShowToast(true)
-        setToastMessage(response.data.message)
-        setTimeout(() => setShowToast(false), 3000);
-        setRoutes(routes.filter((route) => route.id !== routeId));
-      }
+  const handleDeleteRoute = async (routeId) => {
+    const response = await ApiService.deleteRoutes(routeId)
+    if (response?.success === true) {
+      setShowToast(true)
+      setToastMessage(response.data.message)
+      setTimeout(() => setShowToast(false), 3000);
+      setRoutes(routes.filter((route) => route.id !== routeId));
+    }
   };
 
   // CRUD Operations for Drivers
@@ -360,6 +360,16 @@ const BusManagementSoftware = () => {
     if (!userForm.name.trim()) {
       newErrors.name = t("nameRequired");
     }
+    if (!userForm.experience_years.trim()) {
+      newErrors.experience_years = t("experienceYearRequired");
+    }
+    if (!userForm.emergency_contact.trim()) {
+      newErrors.emergency_contact = t("emergencyContactRequired");
+    }
+    if (!userForm.address.trim()) {
+      newErrors.address = t("addressRequired");
+    }
+    
     if (!userForm.phone.trim()) {
       newErrors.phone = t("phoneRequired");
     } else if (!/^\d{10}$/.test(userForm.phone)) {
@@ -421,6 +431,15 @@ const BusManagementSoftware = () => {
 
     if (!userForm.name.trim()) {
       newErrors.name = t("nameRequired");
+    }
+    if (!userForm.experience_years.trim()) {
+      newErrors.experience_years = t("experienceYearRequired");
+    }
+    if (!userForm.emergency_contact.trim()) {
+      newErrors.emergency_contact = t("emergencyContactRequired");
+    }
+    if (!userForm.address.trim()) {
+      newErrors.address = t("addressRequired");
     }
     if (!userForm.phone.trim()) {
       newErrors.phone = t("phoneRequired");
@@ -512,7 +531,7 @@ const BusManagementSoftware = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("Last Maintenance")} *
+                {t("lastMaintenance")} *
               </label>
               <input
                 type="date"
@@ -536,7 +555,7 @@ const BusManagementSoftware = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("Insurance Expiry")} *
+                {t("insuranceExpiry")} *
               </label>
               <input
                 type="date"
@@ -559,7 +578,7 @@ const BusManagementSoftware = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("Permit Expiry")} *
+                {t("permitExpiry")} *
               </label>
               <input
                 type="date"
@@ -683,7 +702,7 @@ const BusManagementSoftware = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("base_fare")} ({t("rupees")}) *
+                {t("baseFare")} ({t("rupees")}) *
               </label>
               <input
                 type="number"
@@ -706,7 +725,7 @@ const BusManagementSoftware = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("per_km_rate")} ({t("rupees")}) *
+                {t("perKmRate")} ({t("rupees")}) *
               </label>
               <input
                 type="number"
@@ -841,7 +860,7 @@ const BusManagementSoftware = () => {
             {/* Emergency Contact */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("Emergency_Contact")}
+                {t("emergencyContact")} *
               </label>
               <input
                 type="text"
@@ -852,12 +871,13 @@ const BusManagementSoftware = () => {
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 placeholder="9123456789"
               />
+               {errors.name && <p className="text-red-500 text-sm">{errors.emergency_contact}</p>}
             </div>
 
             {/* Address */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("Address")}
+                {t("address")} *
               </label>
               <input
                 type="text"
@@ -868,12 +888,13 @@ const BusManagementSoftware = () => {
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 placeholder="Delhi"
               />
+              {errors.name && <p className="text-red-500 text-sm">{errors.address}</p>}
             </div>
 
             {/* Experience */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("experience_years")}
+                {t("experienceYears")} 
               </label>
               <input
                 type="number"
@@ -887,6 +908,7 @@ const BusManagementSoftware = () => {
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 placeholder="5"
               />
+               {errors.name && <p className="text-red-500 text-sm">{errors.experience_years}</p>}
             </div>
 
             {/* Role (Dropdown) */}
@@ -1099,8 +1121,8 @@ const BusManagementSoftware = () => {
         );
       case "posMachine":
         return (
-            <div className="p-6">
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+          <div className="p-6">
+            <div className="bg-white rounded-lg shadow-sm p-8 text-center">
               <PosMachine
                 showModalPos={showModalPos}
                 setShowModalPos={setShowModalPos}
@@ -1110,24 +1132,19 @@ const BusManagementSoftware = () => {
         );
       case "trip":
         return (
-          <div className="p-6">
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-              <Trip
-                buses={buses}
-                routes={routes}
-                drivers={drivers}
-                conductors={conductors}
-                setDrivers={setDrivers}
-                setConductors={setConductors}
-                t={t}
-                showTrip={showTrip}
-                setShowTrip={setShowTrip}
-                setBuses={setBuses}
-                setRoutes={setRoutes}
-              />
-
-            </div>
-          </div>
+          <Trip
+            buses={buses}
+            routes={routes}
+            drivers={drivers}
+            conductors={conductors}
+            setDrivers={setDrivers}
+            setConductors={setConductors}
+            t={t}
+            showTrip={showTrip}
+            setShowTrip={setShowTrip}
+            setBuses={setBuses}
+            setRoutes={setRoutes}
+          />
         );
 
       case "parcel":
@@ -1255,13 +1272,13 @@ const BusManagementSoftware = () => {
       </BrowserRouter>
 
       {showToast && (
-             <ToastMessage
-             setShowToast={setShowToast}
-             toastMessage={toastMessage}
-           />
-        )
+        <ToastMessage
+          setShowToast={setShowToast}
+          toastMessage={toastMessage}
+        />
+      )
       }
-      
+
     </>
   );
 };

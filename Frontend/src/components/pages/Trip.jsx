@@ -399,7 +399,7 @@ const Trip = ({
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Bus")} *
+                  {t("bus")} *
                 </label>
                 <select
   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -431,7 +431,7 @@ const Trip = ({
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Route")} *
+                  {t("route")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -458,7 +458,7 @@ const Trip = ({
               {/* Driver Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Driver")} *
+                  {t("driver")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -486,7 +486,7 @@ const Trip = ({
               {/* Conductor Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Conductor")} *
+                  {t("conductor")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -511,11 +511,9 @@ const Trip = ({
                 )}
               </div>
 
-
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Start Time")}
+                  {t("startTime")}
                 </label>
                 <input
                   type="datetime-local"
@@ -533,7 +531,7 @@ const Trip = ({
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("End Time")}
+                  {t("endTime")}
                 </label>
                 <input
                   type="datetime-local"
@@ -549,10 +547,9 @@ const Trip = ({
                 )}
               </div>
 
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Status")}
+                  {t("status")}
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -589,15 +586,15 @@ const Trip = ({
         </div>
       </div>
       : (
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div>
           {showTicket ? (
-            <div>
-              <div className="flex justify-between items-center mb-6">
+            <div className="p-6">
+            <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-semibold ml-5">{t("trip")}</h3>
 
                 <div className='flex'>
                   <form className="flex max-w-lg mx-auto mr-6 mt-[19px]">
-                    <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+                    <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder={t("searchPlaceholder")}
                       onChange={handleChange}
                     />
 
@@ -612,34 +609,35 @@ const Trip = ({
                 </div>
 
               </div>
+              <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("bus_id")}
                     >
-                      {("Bus Number")}
+                      {t("busNumber")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="bus_id"
                       />
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("conductor_id")}
                     >
                       <div className='flex'>
-                        {("Conductor Name")}
+                        {t("conductorName")}
                         <SortColumn
                           sortDescriptor={sortDescriptor}
                           name="conductor_id"
                         />
                       </div>
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("driver_id")}
                     >
                       <div className='flex'>
-                        {("Driver Name")}
+                        {t("driverName")}
                         <SortColumn
                           sortDescriptor={sortDescriptor}
                           name="driver_id"
@@ -647,11 +645,11 @@ const Trip = ({
                       </div>
                     </th>
 
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("route_id")}
                     >
                       <div className='flex'>
-                        {("Route")}
+                        {t("route")}
                         <SortColumn
                           sortDescriptor={sortDescriptor}
                           name="route_id"
@@ -659,19 +657,19 @@ const Trip = ({
                       </div>
 
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("Start Time")}
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("startTime")}
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("End Time")}
-                    </th>
-
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("Status")}
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("endTime")}
                     </th>
 
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("Action")}
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("status")}
+                    </th>
+
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("actions")}
                     </th>
                   </tr>
                 </thead>
@@ -777,6 +775,7 @@ const Trip = ({
                 </tbody>
 
               </table>
+              </div>
               {conductors && conductors.length > 0 && (
                 <DataPagination
                   onPageChange={handlePageChange}
@@ -818,6 +817,7 @@ const Trip = ({
           ) : (
             <div>
               <TicketSystem
+                t={t}
                 tripId={selectedTripId}
                 busCapacity={busCapacity}
               />

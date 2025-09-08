@@ -4,7 +4,6 @@ import ApiService from '../../services/api';
 import TicketView from './TicketView';
 import SortColumn from './SortColumn';
 import DataPagination from './DataPagination';
-import ConfirmDelete from './ConfirmDelete';
 
  // Bus Management Page
 const BusManagementPage = (
@@ -13,9 +12,15 @@ const BusManagementPage = (
     setModalType,
     setShowModal,
     t,
+    routes,
+    conductors,
+    drivers,
     handleEditBus,
     handleDeleteBus,
     setBuses,
+    setRoutes,
+    setDrivers,
+    setConductors
   }
 ) => {
     // eslint-disable-next-line no-unused-vars
@@ -32,8 +37,7 @@ const BusManagementPage = (
   }); 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-  const [open, setOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
+
 
   const getBusData = async () => {
     const body = {
@@ -57,12 +61,10 @@ const BusManagementPage = (
     }
   }
 
-
   useEffect(() => {
     getBusData()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setBuses,search,page,sortDescriptor])
-
 
 
   const handleChange = (e) => {
@@ -92,7 +94,6 @@ const BusManagementPage = (
   const handlePageChange = (page) => {
     setPage(page); // Update the page state variable to the specified page number
   };
-
   return (
       showComponent ? (
       <div className="p-6">
@@ -100,8 +101,9 @@ const BusManagementPage = (
           <h3 className="text-xl font-semibold">{t("busManagement")}</h3>
 
           <div className='flex'>
-            <form className="flex max-w-lg mx-auto mr-6">   
-              <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+            <form class="flex max-w-lg mx-auto mr-6">   
+              <input type="text" id="voice-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder={t("searchPlaceholder")}
+
                onChange={handleChange}
               />
        
@@ -111,7 +113,7 @@ const BusManagementPage = (
               setModalType("add-bus");
               setShowModal(true);
             }}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700"
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-500"
           >
             <Plus className="w-5 h-5" />
             <span>{t("addNewBus")}</span>
@@ -131,7 +133,7 @@ const BusManagementPage = (
                 setModalType("add-bus");
                 setShowModal(true);
               }}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+              className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-500"
             >
               {t("addNewBus")}
             </button>
@@ -142,22 +144,22 @@ const BusManagementPage = (
               <thead className="bg-gray-50">
                 <tr>
                     <th
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("bus_number")}
                     >
                       <div className='flex'>
-                      {t("Bus Number")}
+                      {t("busNumber")}
                         <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="bus_number"
                       />
                       </div>
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                      onClick={() => handleSorting("capacity")}
                     >
                       <div className='flex'>
-                      {t("Capacity")}
+                      {t("capacity")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="capacity"
@@ -167,11 +169,11 @@ const BusManagementPage = (
                     </th>
                     
 
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                      onClick={() => handleSorting("insurance_expiry")}
                     >                      
                       <div className='flex'>
-                      {t("Insurance Expiry")}
+                      {t("insuranceExpiry")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="insurance_expiry"
@@ -179,11 +181,11 @@ const BusManagementPage = (
                       </div>
                     </th>
                     
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                      onClick={() => handleSorting("permit_expiry")}
                     >
                       <div className='flex'>
-                      {t("Permit Expiry")}
+                      {t("permitExpiry")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="permit_expiry"
@@ -191,19 +193,21 @@ const BusManagementPage = (
                       </div>
 
                   </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                     onClick={() => handleSorting("last_maintenance")}
                     >                      
                       <div className='flex'>
-                      {t("Last Maintenance")}
+                      {t("lastMaintenance")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="last_maintenance"
                         />
                       </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("Actions")}
+              
+                    
+                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    {t("actions")}
                   </th>
                 </tr>
                 </thead>
@@ -235,6 +239,7 @@ const BusManagementPage = (
         <td className="px-6 py-4 whitespace-nowrap">
           {new Date(bus.last_maintenance).toLocaleDateString("en-US")}
         </td>
+      
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center space-x-2">
             <button
@@ -245,10 +250,11 @@ const BusManagementPage = (
               <Edit className="w-4 h-4" />
             </button>
             <button
-             onClick={() => {
-              setSelectedId(bus.id);
-              setOpen(true);
-            }}
+              onClick={() => {
+                if (window.confirm(t("confirmDeleteBus"))) {
+                  handleDeleteBus(bus.id);
+                }
+              }}
               className="text-red-600 hover:text-red-900"
               title={t("delete")}
             >
@@ -265,7 +271,9 @@ const BusManagementPage = (
       </td>
     </tr>
   )}
-</tbody>     
+</tbody>
+
+            
               </table>
               {buses && buses.length > 0 && (
                   <DataPagination
@@ -273,20 +281,6 @@ const BusManagementPage = (
                     totalPages={totalPages}
                     currentPage={page}
                   />
-              )}
-              
-                {open && (
-                <ConfirmDelete
-                  onConfirm={() => {
-                    handleDeleteBus(selectedId); 
-                    setOpen(false);
-                    setSelectedId(null);
-                  }}
-                  onCancel={() => {
-                    setOpen(false);
-                    setSelectedId(null);
-                  }}
-                />
                 )}
           </div>
         )}
