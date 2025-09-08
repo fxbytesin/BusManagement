@@ -3,36 +3,54 @@ import {
   Bus,
   Users,
   IndianRupee,
-  Package,
-  Plus
+  Plus,
 } from "lucide-react";
-import { useEffect } from 'react';
-import ApiService from '../../services/api';
+import { useEffect } from "react";
+import ApiService from "../../services/api";
+import DashboardGraphs from "./DashboardGraph";
 
 const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard }) => {
   useEffect(() => {
     const getData = async () => {
       try {
         const response = await ApiService.getDashboard();
-        setDashboard(response?.data)
+        setDashboard(response?.data);
       } catch (err) {
+        console.error(err);
       }
-    }
-    getData()
+    };
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
+
+  // 🟢 Today data (daily)
+  const todayRevenue = dashboard?.revenue?.daily?.reduce(
+    (sum, bus) => sum + Number(bus.revenue || 0),
+    0
+  );
+
+  const todayPassengers = dashboard?.tripsAndTickets?.daily?.reduce(
+    (sum, bus) => sum + Number(bus.tickets_generated || 0),
+    0
+  );
+
+  const activeBuses = dashboard?.tripsAndTickets?.daily?.filter(
+    (bus) => bus.trips_completed > 0
+  ).length;
+
+  const totalBuses = dashboard?.tripsAndTickets?.daily?.length || 0;
+
   return (
     <div className="p-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600 text-sm">{t("todayRevenue")}</p>
               <p className="text-3xl font-bold text-green-600">
                 {t("rupees")}
-                {/* {totalRevenue.toLocaleString()} */}
-                {dashboard?.overview?.today_revenue}
+                {todayRevenue}
               </p>
             </div>
             <IndianRupee className="w-12 h-12 text-green-500" />
@@ -44,7 +62,7 @@ const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard 
             <div>
               <p className="text-gray-600 text-sm">{t("totalPassengers")}</p>
               <p className="text-3xl font-bold text-blue-600">
-                {dashboard?.overview?.today_passengers}
+                {todayPassengers}
               </p>
             </div>
             <Users className="w-12 h-12 text-blue-500" />
@@ -56,22 +74,10 @@ const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard 
             <div>
               <p className="text-gray-600 text-sm">{t("activeBuses")}</p>
               <p className="text-3xl font-bold text-purple-600">
-                {dashboard?.overview?.active_buses}/ {dashboard?.overview?.total_buses}
+                {activeBuses} / {totalBuses}
               </p>
             </div>
             <Bus className="w-12 h-12 text-purple-500" />
-          </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm">{t("packages")}</p>
-              <p className="text-3xl font-bold text-orange-600">
-                {dashboard?.overview?.today_packages}
-              </p>
-            </div>
-            <Package className="w-12 h-12 text-orange-500" />
           </div>
         </div>
       </div>
@@ -103,24 +109,15 @@ const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard 
             </button>
             <button
               onClick={() => {
-                setModalType("add-driver");
+                setModalType("add-user");
                 setShowModal(true);
               }}
               className="bg-purple-600 text-white p-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-purple-700"
             >
               <Plus className="w-5 h-5" />
-              <span>{t("addNewDriver")}</span>
+              <span>{t("addNewUser")}</span>
             </button>
-            <button
-              onClick={() => {
-                setModalType("add-conductor");
-                setShowModal(true);
-              }}
-              className="bg-orange-600 text-white p-3 rounded-lg flex items-center justify-center space-x-2 hover:bg-orange-700"
-            >
-              <Plus className="w-5 h-5" />
-              <span>{t("addNewConductor")}</span>
-            </button>
+           
           </div>
         </div>
 
@@ -128,30 +125,26 @@ const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard 
           <h3 className="text-lg font-semibold mb-4">
             {t("todayBusStatus")}
           </h3>
-
           <div className="space-y-3">
-            {dashboard?.buses?.map((bus) => (
+            {dashboard?.revenue?.daily?.map((bus, idx) => (
               <div
-                key={bus.id}
+                key={idx}
                 className="flex items-center justify-between py-2 border-b last:border-b-0"
               >
                 <div>
                   <p className="font-medium">{bus.bus_number}</p>
-                  <p className="text-sm text-gray-600">{bus.route_name}
+                  <p className="text-sm text-gray-600">
+                    {t("capacity")}: {bus.capacity || "-"} |{" "}
+                    {t("bookedSeats")}: {bus.booked_seats || 0}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm">
                     {t("rupees")}
-                    {bus.today_revenue || 0}
+                    {bus.revenue || 0}
                   </p>
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs ${bus.status === "running"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                      }`}
-                  >
-                    {t(bus.status)}
+                  <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                    {t("occupancy")}: {bus.occupancy_rate || "0"}%
                   </span>
                 </div>
               </div>
@@ -159,8 +152,11 @@ const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard 
           </div>
         </div>
       </div>
+
+      {/* Graphs Section */}
+      <DashboardGraphs t={t} />
     </div>
   );
 };
 
-export default DashboardPage
+export default DashboardPage;
