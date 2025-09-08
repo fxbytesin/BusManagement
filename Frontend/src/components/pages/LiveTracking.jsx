@@ -42,16 +42,16 @@ const LiveTracking = (
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
                 {t("busNumber")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
                 {t("route")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
                 {t("totalPassengers")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
                 {t("status")}
               </th>
             </tr>

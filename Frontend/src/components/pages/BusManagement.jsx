@@ -206,7 +206,7 @@ const BusManagementPage = (
               <thead className="bg-gray-50">
                 <tr>
                   <th
-                    className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                    className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                     onClick={() => handleSorting("bus_number")}
                   >
                     <div className='flex'>
@@ -217,7 +217,7 @@ const BusManagementPage = (
                       />
                     </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                     onClick={() => handleSorting("capacity")}
                   >
                     <div className='flex'>
@@ -231,7 +231,7 @@ const BusManagementPage = (
                   </th>
 
 
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                     onClick={() => handleSorting("insurance_expiry")}
                   >
                     <div className='flex'>
@@ -243,7 +243,7 @@ const BusManagementPage = (
                     </div>
                   </th>
 
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                     onClick={() => handleSorting("permit_expiry")}
                   >
                     <div className='flex'>
@@ -255,7 +255,7 @@ const BusManagementPage = (
                     </div>
 
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                     onClick={() => handleSorting("last_maintenance")}
                   >
                     <div className='flex'>
@@ -268,7 +268,7 @@ const BusManagementPage = (
                   </th>
 
 
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
                     {t("actions")}
                   </th>
                 </tr>
