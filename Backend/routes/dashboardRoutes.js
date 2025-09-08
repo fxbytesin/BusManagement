@@ -162,5 +162,4 @@ router.get(
   dashboardController.getTripsCompletedReport
 );
 
-
 module.exports = router;

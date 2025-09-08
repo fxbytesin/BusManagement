@@ -7,7 +7,11 @@
     "prisma:merge": "node prisma/merge-prisma.js",
     "prisma:dev": "npm run prisma:merge && npx prisma migrate dev",
     "prisma:generate": "npm run prisma:merge && npx prisma generate",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "seed": "node prisma/seed.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +19,7 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^6.13.0",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

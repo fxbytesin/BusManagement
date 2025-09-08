@@ -22,10 +22,9 @@ const TicketView = ({
         ticketDetail(busId)
     }
 }, [busId])
-console.log("busticketDetails",busticketDetails);
 return (
     <div>
-               <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+          <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>

@@ -87,6 +87,7 @@ const routeController=require('../controllers/routeController')
  */
 router.post('/list', authenticateToken, routeController.getAllRoutes);
 
+
 /**
  * @swagger
  * /api/routes:
