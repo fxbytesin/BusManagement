@@ -416,14 +416,25 @@ const BusManagementSoftware = () => {
 
 
   const handleEditUser = (user) => {
-    const d = new Date(user.license_expiry);
-    const license_expiry = d.toISOString().split("T")[0];
-    user.license_expiry = license_expiry
-    setUserForm(user);
+    let license_expiry = "";
+  
+    // Only format if a valid date exists
+    if (user.license_expiry) {
+      const d = new Date(user.license_expiry);
+      if (!isNaN(d.getTime())) {
+        license_expiry = d.toISOString().split("T")[0];
+      }
+    }
+  
+    setUserForm({
+      ...user,
+      license_expiry, // safe formatted value or empty string
+    });
     setEditingItem(user);
     setModalType("edit-user");
     setShowModal(true);
   };
+  
 
 
   const handleUpdateUser = async () => {
@@ -1122,12 +1133,13 @@ const BusManagementSoftware = () => {
       case "posMachine":
         return (
           <div className="p-6">
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+        
               <PosMachine
                 showModalPos={showModalPos}
                 setShowModalPos={setShowModalPos}
+                t={t}
               />
-            </div>
+         
           </div>
         );
       case "trip":

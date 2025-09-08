@@ -47,6 +47,7 @@ const UserManagement = ({
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     getData();
@@ -74,7 +75,7 @@ const UserManagement = ({
 
   const handlePageChange = (newPage) => setPage(newPage);
 
-  // 🔴Confirm delete handler
+  // Confirm delete handler
   const confirmDelete = () => {
     handleDeleteUser(deleteUserId);
     setUsers(users.filter((d) => d.id !== deleteUserId));

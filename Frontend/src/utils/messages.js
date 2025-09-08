@@ -165,6 +165,7 @@ export const messages = {
     // posMachine
     posMachine: "पीओएस मशीन",
     addPOSMachine: "पीओएस मशीन जोड़ें",
+    serialNo: "सीरियल नंबर",
 
     // parcel
     parcel: "पार्सल",
@@ -383,6 +384,7 @@ export const messages = {
     // posMachine
     posMachine: "POS Machine",
     addPOSMachine: "Add POS Machine",
+    serialNo: "Serial No",
 
     // parcel
     parcel: "Parcel",
