@@ -357,35 +357,39 @@ const BusManagementSoftware = () => {
   const handleAddUser = async () => {
     let newErrors = {};
 
-    if (!userForm.name.trim()) {
-      newErrors.name = t("nameRequired");
-    }
-    if (!userForm.experience_years.trim()) {
-      newErrors.experience_years = t("experienceYearRequired");
-    }
-    if (!userForm.emergency_contact.trim()) {
-      newErrors.emergency_contact = t("emergencyContactRequired");
-    }
-    if (!userForm.address.trim()) {
-      newErrors.address = t("addressRequired");
-    }
-    
-    if (!userForm.phone.trim()) {
-      newErrors.phone = t("phoneRequired");
-    } else if (!/^\d{10}$/.test(userForm.phone)) {
-      newErrors.phone = t("phoneMustBe10Digits");
-    }
+if (!(userForm.name || "").trim()) {
+  newErrors.name = t("nameRequired");
+}
 
-    // Only required if role = driver
-    if (userForm.role === "driver") {
-      if (!userForm.license_number.trim()) {
-        newErrors.license_number = t("licenseNumberRequired");
-      }
-      if (!userForm.license_expiry) {
-        newErrors.license_expiry = t("licenseExpiryRequired");
-      }
-    }
+if (!(userForm.experience_years || "").trim()) {
+  newErrors.experience_years = t("experienceYearRequired");
+}
 
+if (!(userForm.emergency_contact || "").trim()) {
+  newErrors.emergency_contact = t("emergencyContactRequired");
+}
+
+if (!(userForm.address || "").trim()) {
+  newErrors.address = t("addressRequired");
+}
+
+if (!(userForm.phone || "").trim()) {
+  newErrors.phone = t("phoneRequired");
+}
+
+if (userForm.phone && !/^\d{10}$/.test(userForm.phone)) {
+  newErrors.phone = t("phoneMustBe10Digits");
+}
+
+// Only required if role = driver
+if (userForm.role === "driver") {
+  if (!(userForm.license_number || "").trim()) {
+    newErrors.license_number = t("licenseNumberRequired");
+  }
+  if (!userForm.license_expiry) {
+    newErrors.license_expiry = t("licenseExpiryRequired");
+  }
+}
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
@@ -399,6 +403,7 @@ const BusManagementSoftware = () => {
       setToastMessage("User Added Successfully");
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
+      setErrors({}); 
     }
 
     setUserForm({
@@ -412,12 +417,13 @@ const BusManagementSoftware = () => {
       role: "",
     });
     setShowModal(false);
+    setEditingItem(null);
   };
 
 
   const handleEditUser = (user) => {
     let license_expiry = "";
-  
+
     // Only format if a valid date exists
     if (user.license_expiry) {
       const d = new Date(user.license_expiry);
@@ -425,7 +431,7 @@ const BusManagementSoftware = () => {
         license_expiry = d.toISOString().split("T")[0];
       }
     }
-  
+
     setUserForm({
       ...user,
       license_expiry, // safe formatted value or empty string
@@ -434,32 +440,39 @@ const BusManagementSoftware = () => {
     setModalType("edit-user");
     setShowModal(true);
   };
-  
+
 
 
   const handleUpdateUser = async () => {
     let newErrors = {};
 
-    if (!userForm.name.trim()) {
+    if (!(userForm.name || "").trim()) {
       newErrors.name = t("nameRequired");
     }
-    if (!userForm.experience_years.trim()) {
+    
+    if (!(userForm.experience_years || "").trim()) {
       newErrors.experience_years = t("experienceYearRequired");
     }
-    if (!userForm.emergency_contact.trim()) {
+    
+    if (!(userForm.emergency_contact || "").trim()) {
       newErrors.emergency_contact = t("emergencyContactRequired");
     }
-    if (!userForm.address.trim()) {
+    
+    if (!(userForm.address || "").trim()) {
       newErrors.address = t("addressRequired");
     }
-    if (!userForm.phone.trim()) {
+    
+    if (!(userForm.phone || "").trim()) {
       newErrors.phone = t("phoneRequired");
-    } else if (!/^\d{10}$/.test(userForm.phone)) {
+    }
+    
+    if (userForm.phone && !/^\d{10}$/.test(userForm.phone)) {
       newErrors.phone = t("phoneMustBe10Digits");
     }
-
+    
+    // Only required if role = driver
     if (userForm.role === "driver") {
-      if (!userForm.license_number.trim()) {
+      if (!(userForm.license_number || "").trim()) {
         newErrors.license_number = t("licenseNumberRequired");
       }
       if (!userForm.license_expiry) {
@@ -484,6 +497,7 @@ const BusManagementSoftware = () => {
       setUsers(users.map((item) => (item.id === userForm.id ? payload : item)));
       setToastMessage("User Updated Successfully");
       setShowToast(true);
+      setErrors({}); 
       setTimeout(() => setShowToast(false), 3000);
     }
 
@@ -847,7 +861,12 @@ const BusManagementSoftware = () => {
               <input
                 type="text"
                 value={userForm.name}
-                onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
+                onChange={(e) => {
+                  setUserForm({ ...userForm, name: e.target.value });
+                  if (errors.name) {
+                    setErrors({ ...errors, name: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               />
               {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
@@ -861,7 +880,12 @@ const BusManagementSoftware = () => {
               <input
                 type="tel"
                 value={userForm.phone}
-                onChange={(e) => setUserForm({ ...userForm, phone: e.target.value })}
+                onChange={(e) => {
+                  setUserForm({ ...userForm, phone: e.target.value });
+                  if (errors.phone) {
+                    setErrors({ ...errors, phone: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 placeholder={t("phoneNumberPlaceholder")}
               />
@@ -876,13 +900,16 @@ const BusManagementSoftware = () => {
               <input
                 type="text"
                 value={userForm.emergency_contact}
-                onChange={(e) =>
-                  setUserForm({ ...userForm, emergency_contact: e.target.value })
-                }
+                onChange={(e) => {
+                  setUserForm({ ...userForm, emergency_contact: e.target.value  });
+                  if (errors.emergency_contact) {
+                    setErrors({ ...errors, emergency_contact: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 placeholder="9123456789"
               />
-               {errors.name && <p className="text-red-500 text-sm">{errors.emergency_contact}</p>}
+              {errors.emergency_contact && <p className="text-red-500 text-sm">{errors.emergency_contact}</p>}
             </div>
 
             {/* Address */}
@@ -893,33 +920,36 @@ const BusManagementSoftware = () => {
               <input
                 type="text"
                 value={userForm.address}
-                onChange={(e) =>
-                  setUserForm({ ...userForm, address: e.target.value })
-                }
+                onChange={(e) => {
+                  setUserForm({ ...userForm, address: e.target.value  });
+                  if (errors.address) {
+                    setErrors({ ...errors, address: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 placeholder="Delhi"
               />
-              {errors.name && <p className="text-red-500 text-sm">{errors.address}</p>}
+              {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
             </div>
 
             {/* Experience */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("experienceYears")} 
+                {t("experienceYears")}
               </label>
               <input
                 type="number"
                 value={userForm.experience_years}
-                onChange={(e) =>
-                  setUserForm({
-                    ...userForm,
-                    experience_years: e.target.value,
-                  })
-                }
+                onChange={(e) => {
+                  setUserForm({ ...userForm, experience_years: e.target.value  });
+                  if (errors.experience_years) {
+                    setErrors({ ...errors, experience_years: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 placeholder="5"
               />
-               {errors.name && <p className="text-red-500 text-sm">{errors.experience_years}</p>}
+              {errors.experience_years && <p className="text-red-500 text-sm">{errors.experience_years}</p>}
             </div>
 
             {/* Role (Dropdown) */}
@@ -929,7 +959,12 @@ const BusManagementSoftware = () => {
               </label>
               <select
                 value={userForm.role}
-                onChange={(e) => setUserForm({ ...userForm, role: e.target.value })}
+                onChange={(e) => {
+                  setUserForm({ ...userForm, role: e.target.value  });
+                  if (errors.role) {
+                    setErrors({ ...errors, role: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               >
                 <option value="">{t("selectRole")}</option>
@@ -950,9 +985,12 @@ const BusManagementSoftware = () => {
                   <input
                     type="text"
                     value={userForm.license_number}
-                    onChange={(e) =>
-                      setUserForm({ ...userForm, license_number: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setUserForm({ ...userForm, license_number: e.target.value  });
+                      if (errors.license_number) {
+                        setErrors({ ...errors, license_number: "" });
+                      }
+                    }}
                     className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                     placeholder={t("licenseNumber")}
                     required={userForm.role === "driver"}
@@ -970,9 +1008,12 @@ const BusManagementSoftware = () => {
                   <input
                     type="date"
                     value={userForm.license_expiry}
-                    onChange={(e) =>
-                      setUserForm({ ...userForm, license_expiry: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setUserForm({ ...userForm, license_expiry: e.target.value  });
+                      if (errors.license_expiry) {
+                        setErrors({ ...errors, license_expiry: "" });
+                      }
+                    }}
                     className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                     required={userForm.role === "driver"}
                   />
@@ -999,6 +1040,7 @@ const BusManagementSoftware = () => {
                     role: "",
                   });
                   setEditingItem(null);
+                  setErrors({});   
                 }}
                 className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
               >
@@ -1133,13 +1175,13 @@ const BusManagementSoftware = () => {
       case "posMachine":
         return (
           <div className="p-6">
-        
-              <PosMachine
-                showModalPos={showModalPos}
-                setShowModalPos={setShowModalPos}
-                t={t}
-              />
-         
+
+            <PosMachine
+              showModalPos={showModalPos}
+              setShowModalPos={setShowModalPos}
+              t={t}
+            />
+
           </div>
         );
       case "trip":
@@ -1247,7 +1289,16 @@ const BusManagementSoftware = () => {
                           per_km_rate: '',
                           active: true,
                         });
-                        setUserForm({ name: '', phone: '', license_number: '', experience_years: '' });
+                        setUserForm({
+                          name: "",
+                          phone: "",
+                          license_number: "",
+                          license_expiry: "",
+                          experience_years: "",
+                          address: "",
+                          emergency_contact: "",
+                          role: "",
+                        });
                         setErrors({});
                       }}
                     >
