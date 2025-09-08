@@ -120,6 +120,15 @@ export const messages = {
     experienceYearRequired: "अनुभव का वर्ष आवश्यक है",
     emergencyContactRequired: "आपातकालीन संपर्क आवश्यक है",
     addressRequired: "पता आवश्यक है",
+    busNumRequired: "बस नंबर आवश्यक है",
+    insurance_expiry: "बीमा समाप्ति तिथि आवश्यक है",
+    last_maintenance: "रखरखाव की तिथि आवश्यक है",
+    permit_expiry: "परमिट की तिथि आवश्यक है",
+    routeName: "मार्ग का नाम आवश्यक है",
+    routeCode: "कोड आवश्यक है",
+    routeDistance: "दूरी आवश्यक है",
+    baseFareRequired: "मूल किराया आवश्यक है",
+    routeKm: "प्रति किलोमीटर दर आवश्यक है",
 
     // Additional Form Labels
     selectRoute: "रूट चुनें",
@@ -216,9 +225,8 @@ export const messages = {
     bookTicket: "टिकट बुक करें",
     ticketAddedSuccessfully: "टिकट सफलतापूर्वक जोड़ा गया",
     ticketNumber: "टिकट नंबर",
-    noDataFound: "कोई डेटा नहीं मिला"
+    noDataFound: "कोई डेटा नहीं मिला",
   },
-
 
   en: {
     // Navigation & Headers
@@ -321,7 +329,6 @@ export const messages = {
     addRouteTitle: "Add New Route",
     editRouteTitle: "Edit Route",
 
-
     // Validation Messages
     requiredField: "This field is required",
     invalidPhone: "Please enter a valid phone number",
@@ -334,6 +341,15 @@ export const messages = {
     experienceYearRequired: "Experience Year is required",
     emergencyContactRequired: "Emergency Contact is required",
     addressRequired: "Address is required",
+    busNumRequired: "Bus Number is required.",
+    insurance_expiry: "Insurance Date is required.",
+    last_maintenance: "Maintenance Date is required.",
+    permit_expiry: "Permit Date is required.",
+    routeName: "Route Name is required.",
+    routeCode: "Code is required.",
+    routeDistance: "Distance is required.",
+    baseFareRequired: "Base fare is required.",
+    routeKm: "Km rate is required.",
 
     // Additional Form Labels
     selectRoute: "Select Route",
@@ -354,7 +370,6 @@ export const messages = {
     role: "Role",
     licenseNumber: "License number",
     licenseExpiry: "License Expiry",
-
 
     // Dashboard Graph Labels
     Daily: "Daily",
@@ -436,8 +451,6 @@ export const messages = {
     bookTicket: "Book Ticket",
     ticketAddedSuccessfully: "Ticket Added Successfully",
     ticketNumber: "Ticket Number",
-    noDataFound: "No Data Found"
-
+    noDataFound: "No Data Found",
   },
-
 };

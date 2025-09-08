@@ -90,17 +90,17 @@ const BusManagementSoftware = () => {
     let newErrors = {};
 
     if (!busForm.bus_number.trim()) {
-      newErrors.bus_number = "Bus Number is required.";
+      newErrors.bus_number = t("busNumRequired");
     }
 
     if (!busForm.insurance_expiry) {
-      newErrors.insurance_expiry = "Insurance Date is required.";
+      newErrors.insurance_expiry = t("insurance_expiry");
     }
     if (!busForm.last_maintenance) {
-      newErrors.last_maintenance = "Maintenance Date is required.";
+      newErrors.last_maintenance = t("last_maintenance");
     }
     if (!busForm.permit_expiry) {
-      newErrors.permit_expiry = "Permit Date is required.";
+      newErrors.permit_expiry = t("permit_expiry");
     }
 
     setErrors(newErrors);
@@ -152,17 +152,17 @@ const BusManagementSoftware = () => {
     let newErrors = {};
 
     if (!busForm.bus_number.trim()) {
-      newErrors.bus_number = "Bus Number is required.";
+      newErrors.bus_number = t("busNumRequired");
     }
 
     if (!busForm.insurance_expiry) {
-      newErrors.insurance_expiry = "Insurance Date is required.";
+      newErrors.insurance_expiry = t("insurance_expiry");
     }
     if (!busForm.last_maintenance) {
-      newErrors.last_maintenance = "Maintenance Date is required.";
+      newErrors.last_maintenance = t("last_maintenance");
     }
     if (!busForm.permit_expiry) {
-      newErrors.permit_expiry = "Permit Date is required.";
+      newErrors.permit_expiry = t("permit_expiry");
     }
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
@@ -222,19 +222,19 @@ const BusManagementSoftware = () => {
     let newErrors = {};
 
     if (!routeForm.name.trim()) {
-      newErrors.name = "Route Name is required.";
+      newErrors.name = t("routeName");
     }
     if (!routeForm.code.trim()) {
-      newErrors.code = "Code is required.";
+      newErrors.code = t("routeCode");
     }
     if (!routeForm.distance.trim()) {
-      newErrors.distance = "Distance is required.";
+      newErrors.distance = t("routeDistance");
     }
     if (!routeForm.base_fare.trim()) {
-      newErrors.base_fare = "Base fare is required.";
+      newErrors.base_fare = t("baseFareRequired");
     }
     if (!routeForm.per_km_rate.trim()) {
-      newErrors.per_km_rate = "Km rate is required.";
+      newErrors.per_km_rate = t("routeKm");
     }
 
     setErrors(newErrors);
@@ -290,19 +290,19 @@ const BusManagementSoftware = () => {
     let newErrors = {};
 
     if (!routeForm.name.trim()) {
-      newErrors.name = "Route Name is required.";
+      newErrors.name = t("routeName");
     }
     if (!routeForm.code.trim()) {
-      newErrors.code = "Code is required.";
+      newErrors.code = t("routeCode");
     }
     if (!routeForm.distance) {
-      newErrors.distance = "Distance is required.";
+      newErrors.distance = t("routeDistance");
     }
     if (!routeForm.base_fare) {
-      newErrors.base_fare = "Base fare is required.";
+      newErrors.base_fare = t("baseFareRequired");
     }
     if (!routeForm.per_km_rate) {
-      newErrors.per_km_rate = "Km rate is required.";
+      newErrors.per_km_rate = t("routeKm");
     }
 
     setErrors(newErrors);
