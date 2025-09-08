@@ -58,7 +58,11 @@ const LiveTracking = (
               </thead>
               
               {loading ? (
-                <Loader/>
+                  <tr>
+                   <td colSpan={4} className="py-10 text-center">
+                     <Loader className="w-6 h-6 animate-spin mx-auto text-gray-500" />
+                   </td>
+                 </tr>
               ) : liveTracking.length > 0 ? (
                 <tbody className="bg-white divide-y divide-gray-200">
                 {liveTracking?.map((tracking) => {

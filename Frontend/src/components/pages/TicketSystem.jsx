@@ -176,11 +176,7 @@ const [page, setPage] = useState(1);
   }
     
   return (
-    <div className='flex'>
-      <div>
-      
-      </div>      
-
+    <div className='flex'>     
       <div className='w-full'>
         <div>
           
@@ -415,6 +411,9 @@ const [page, setPage] = useState(1);
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {("Ticket Number")}
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {("Seat No")}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {("From Stop")}
@@ -447,6 +446,9 @@ const [page, setPage] = useState(1);
                       <tr key={trip.id}>
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
                           {trip.ticket_number}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip.seat_no}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-left">
                           {trip.from_stop}

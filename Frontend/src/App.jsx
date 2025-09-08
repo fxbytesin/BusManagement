@@ -1122,6 +1122,8 @@ const BusManagementSoftware = () => {
                 t={t}
                 showTrip={showTrip}
                 setShowTrip={setShowTrip}
+                setBuses={setBuses}
+                setRoutes={setRoutes}
               />
 
             </div>
