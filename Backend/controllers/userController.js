@@ -10,23 +10,33 @@ exports.getUsersByRole = async (req, res) => {
       page = 1,
       order = "ASC",
       orderColumn = "created_at"
-    } = req.query;
+    } = req.body; // 👉 if you're using GET, change this to req.query
  
     const take = Number(limit);
     const skip = (Number(page) - 1) * take;
-    const sortOrder = order.toUpperCase() === "DESC" ? "desc" : "asc";
-    const validColumns = ["created_at", "name", "email", "phone"];
-    const sortColumn = validColumns.includes(orderColumn) ? orderColumn : "created_at";
  
+    // ✅ Ensure valid sort order
+    const sortOrder = order && order.toUpperCase() === "DESC" ? "desc" : "asc";
+ 
+    // ✅ Allow only safe columns
+    const validColumns = ["created_at", "name", "email", "phone"];
+    const sortColumn = validColumns.includes(orderColumn)
+      ? orderColumn
+      : "created_at";
+ 
+    // ✅ Build search filter (all are String fields in your schema)
     const whereCondition = search
       ? {
           OR: [
-            { name: { contains: search, mode: 'insensitive' } },
-            { phone: { contains: search, mode: 'insensitive' } }
+            { name: { contains: search } },
+            { phone: { contains: search } },
           ]
         }
       : {};
  
+    console.log("whereCondition:", JSON.stringify(whereCondition, null, 2));
+ 
+    // ✅ Fetch users
     const users = await prisma.user.findMany({
       where: whereCondition,
       include: { userExtra: true },
@@ -35,6 +45,7 @@ exports.getUsersByRole = async (req, res) => {
       take
     });
  
+    // ✅ Count total
     const totalCount = await prisma.user.count({ where: whereCondition });
  
     res.json({
@@ -42,7 +53,7 @@ exports.getUsersByRole = async (req, res) => {
       pagination: {
         total: totalCount,
         page: Number(page),
-        limit: take,
+        limit: Number(limit),
         totalPages: Math.ceil(totalCount / take)
       }
     });
@@ -51,7 +62,6 @@ exports.getUsersByRole = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 exports.createUser = async (req, res) => {
   try {
     const currentUserRole = req.user?.role; 
