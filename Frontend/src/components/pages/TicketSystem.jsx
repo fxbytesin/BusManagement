@@ -6,7 +6,8 @@ import ToastMessage from './ToastMessage';
 const TicketSystem = (
   { 
     tripId,
-    busCapacity
+    busCapacity,
+    t
   }) => {
   const [ticketForm, setTicketForm] = useState({
     from_stop: "",
@@ -177,313 +178,214 @@ const [page, setPage] = useState(1);
     
   return (
     <div className='flex'>
-      <div>
-      
-      </div>      
-
       <div className='w-full'>
-        <div>
-          
         <div className="flex justify-between items-center mb-6">
-       <h3 className="text-xl font-semibold mb-6 ml-5 mt-5">{("Ticketing")}</h3>
-
-         <button
-           onClick={() => setShowModal(true)}
-           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 mb-6 mr-5 mt-5"
-            >
-            Create Ticket
-        </button>
+          <h3 className="text-xl font-semibold mb-6 ml-5 mt-5">{t("ticketing")}</h3>
+          <button
+            onClick={() => setShowModal(true)}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 mb-6 mr-5 mt-5"
+          >
+            {t("createTicket")}
+          </button>
         </div>
-        {
-        showModal && (
+
+        {showModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-         <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
-          <div className="bg-white rounded-lg shadow-sm border p-6">
-          {/* From Stop */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1 text-left">From Stop *</label>
-            <input
-              type="text"
-              value={ticketForm.from_stop}
-                        onChange={(e) => {
-                          setTicketForm({ ...ticketForm, from_stop: e.target.value })
-                          if (errors.from_stop) {
-                            setErrors({ ...errors, from_stop: "" });
-                          }
-              }
-              }
-              className="w-full p-2 border rounded-md"
-              placeholder="Indore"
-                      />
-                         {errors.from_stop && (
-                  <p className="text-red-500 text-sm mt-1 text-left">{errors.from_stop}</p>
-                )}
-          </div>
-  
-          {/* To Stop */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1 text-left">To Stop *</label>
-            <input
-              type="text"
-              value={ticketForm.to_stop}
-                        onChange={(e) => {
-                          setTicketForm({ ...ticketForm, to_stop: e.target.value })
-                          if (errors.to_stop) {
-                            setErrors({ ...errors, to_stop: "" });
-                          }
-              }
-              }
-              className="w-full p-2 border rounded-md"
-              placeholder="Dewas"
-                      />
-                                   {errors.to_stop && (
-                  <p className="text-red-500 text-sm mt-1 text-left">{errors.to_stop}</p>
-                )}
-          </div>
-  
-          {/* Fare */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1 text-left">Fare *</label>
-            <input
-              type="number"
-              value={ticketForm.fare}
-                        onChange={(e) => {
-                          setTicketForm({ ...ticketForm, fare: e.target.value })
-                          if (errors.fare) {
-                            setErrors({ ...errors, fare: "" });
-                          }
-              }
-              }
-              className="w-full p-2 border rounded-md"
-              placeholder="60"
-                      />
-                                          {errors.fare && (
-                  <p className="text-red-500 text-sm mt-1 text-left">{errors.fare}</p>
-                )}
-          </div>
-  
-          {/* Journey Date */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1 text-left">Journey Date *</label>
-            <input
-              type="date"
-              value={ticketForm.journey_date}
-                        onChange={(e) => {
-                          setTicketForm({ ...ticketForm, journey_date: e.target.value })
-                          if (errors.journey_date) {
-                            setErrors({ ...errors, journey_date: "" });
-                          }
-              }
-              }
-              className="w-full p-2 border rounded-md"
-                      />
-                                                 {errors.journey_date && (
-                  <p className="text-red-500 text-sm mt-1 text-left">{errors.journey_date}</p>
-                )}
-          </div>
-  
-          {/* Payment Mode */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1 text-left">Payment Mode *</label>
-            <select
-              value={ticketForm.payment_mode}
-                        onChange={(e) => {
-                          setTicketForm({ ...ticketForm, payment_mode: e.target.value })
-              }
-              }
-              className="w-full p-2 border rounded-md"
-            >
-              <option value="cash">Cash</option>
-            </select>
-          </div>
-  
-          <div className="mb-4">
-    <label className="block text-sm font-medium mb-1 text-left">Bus Number *</label>
-    <select
-      className="w-full p-2 border rounded-md text-left"
-      value={ticketForm.bus_id}
-                        onChange={(e) => {
-                          setTicketForm({ ...ticketForm, bus_id: e.target.value })
-                          if (errors.bus_id) {
-                            setErrors({ ...errors, bus_id: "" });
-                          }
-      }
-      }
-    >
-      <option value="" disabled>
-        Select Bus Number
-      </option>
-      {busData?.map((item) => (
-        <option key={item.id} value={item.id}>
-          {item?.bus_number}
-        </option>
-      ))}
-                      </select>
-                      {errors.bus_id && (
-                  <p className="text-red-500 text-sm mt-1 text-left">{errors.bus_id}</p>
-                )}
-  </div>
-  
-          
-  
-    <div className="mb-4">
-    <label className="block text-sm font-medium mb-1 text-left">Pos Number *</label>
-    <select
-      className="w-full p-2 border rounded-md text-left"
-      value={ticketForm.pos_machine_id}
-                        onChange={(e) => {
-                          setTicketForm({ ...ticketForm, pos_machine_id: e.target.value })
-                          if (errors.pos_machine_id) {
-                            setErrors({ ...errors, pos_machine_id: "" });
-                          }
-      }
-      }
-    >
-      <option value="" disabled>
-        Select Pos Number
-      </option>
-      {machineData?.map((item) => (
-        <option key={item.id} value={item.id}>
-          {item?.serial_no}
-        </option>
-      ))}
-                      </select>
-                      {errors.pos_machine_id && (
-                  <p className="text-red-500 text-sm mt-1 text-left">{errors.pos_machine_id}</p>
-                )}
-  </div>
-                    
-  <div className="mb-6">
-  <label className="block text-sm font-medium mb-1 text-left">Seat No *</label>
-  <select
-    value={ticketForm.seat_no}
-                        onChange={(e) => {
-                          setTicketForm({ ...ticketForm, seat_no: e.target.value })
-                          if (errors.seat_no) {
-                            setErrors({ ...errors, seat_no: "" });
-                          }
-    }
-    }
-    className="w-full p-2 border rounded-md"
-  >
-    <option value="" disabled>
-      Select Seat Number
-    </option>
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+              <div className="bg-white rounded-lg shadow-sm border p-6">
 
-    {Array.from({ length: busCapacity }, (_, i) => i + 1).map((seat) => (
-      <option key={seat} value={seat} disabled={bookedTicket.includes(seat)}>
-        {seat} {bookedTicket.includes(seat) ? " (Booked)" : ""}
-      </option>
-    ))}
-                      </select>
-                      {errors.seat_no && (
-                  <p className="text-red-500 text-sm mt-1 text-left">{errors.seat_no}</p>
-                )}
-</div>
+                {/* From Stop */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1 text-left">{t("fromStop")} *</label>
+                  <input
+                    type="text"
+                    value={ticketForm.from_stop}
+                    onChange={(e) => {
+                      setTicketForm({ ...ticketForm, from_stop: e.target.value });
+                      if (errors.from_stop) setErrors({ ...errors, from_stop: "" });
+                    }}
+                    className="w-full p-2 border rounded-md"
+                    placeholder={t("fromStopPlaceholder")}
+                  />
+                  {errors.from_stop && <p className="text-red-500 text-sm mt-1 text-left">{errors.from_stop}</p>}
+                </div>
 
+                {/* To Stop */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1 text-left">{t("toStop")} *</label>
+                  <input
+                    type="text"
+                    value={ticketForm.to_stop}
+                    onChange={(e) => {
+                      setTicketForm({ ...ticketForm, to_stop: e.target.value });
+                      if (errors.to_stop) setErrors({ ...errors, to_stop: "" });
+                    }}
+                    className="w-full p-2 border rounded-md"
+                    placeholder={t("toStopPlaceholder")}
+                  />
+                  {errors.to_stop && <p className="text-red-500 text-sm mt-1 text-left">{errors.to_stop}</p>}
+                </div>
 
+                {/* Fare */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1 text-left">{t("fare")} *</label>
+                  <input
+                    type="number"
+                    value={ticketForm.fare}
+                    onChange={(e) => {
+                      setTicketForm({ ...ticketForm, fare: e.target.value });
+                      if (errors.fare) setErrors({ ...errors, fare: "" });
+                    }}
+                    className="w-full p-2 border rounded-md"
+                    placeholder="60"
+                  />
+                  {errors.fare && <p className="text-red-500 text-sm mt-1 text-left">{errors.fare}</p>}
+                </div>
 
-  
-          {/* Actions */}
-          <div className="flex justify-end space-x-2">
-            <button
-              onClick={() =>handleClose()}
-              className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSubmit}
-              className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 flex items-center"
-            >
-              <Printer className="w-4 h-4 mr-2" />
-              Book Ticket
-            </button>
+                {/* Journey Date */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1 text-left">{t("journeyDate")} *</label>
+                  <input
+                    type="date"
+                    value={ticketForm.journey_date}
+                    onChange={(e) => {
+                      setTicketForm({ ...ticketForm, journey_date: e.target.value });
+                      if (errors.journey_date) setErrors({ ...errors, journey_date: "" });
+                    }}
+                    className="w-full p-2 border rounded-md"
+                  />
+                  {errors.journey_date && <p className="text-red-500 text-sm mt-1 text-left">{errors.journey_date}</p>}
+                </div>
+
+                {/* Payment Mode */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1 text-left">{t("paymentMode")} *</label>
+                  <select
+                    value={ticketForm.payment_mode}
+                    onChange={(e) => setTicketForm({ ...ticketForm, payment_mode: e.target.value })}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option value="cash">{t("cash")}</option>
+                  </select>
+                </div>
+
+                {/* Bus Number */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1 text-left">{t("busNumber")} *</label>
+                  <select
+                    className="w-full p-2 border rounded-md text-left"
+                    value={ticketForm.bus_id}
+                    onChange={(e) => {
+                      setTicketForm({ ...ticketForm, bus_id: e.target.value });
+                      if (errors.bus_id) setErrors({ ...errors, bus_id: "" });
+                    }}
+                  >
+                    <option value="" disabled>{t("selectBusNumber")}</option>
+                    {busData?.map(item => <option key={item.id} value={item.id}>{item?.bus_number}</option>)}
+                  </select>
+                  {errors.bus_id && <p className="text-red-500 text-sm mt-1 text-left">{errors.bus_id}</p>}
+                </div>
+
+                {/* POS Number */}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-1 text-left">{t("posNumber")} *</label>
+                  <select
+                    className="w-full p-2 border rounded-md text-left"
+                    value={ticketForm.pos_machine_id}
+                    onChange={(e) => {
+                      setTicketForm({ ...ticketForm, pos_machine_id: e.target.value });
+                      if (errors.pos_machine_id) setErrors({ ...errors, pos_machine_id: "" });
+                    }}
+                  >
+                    <option value="" disabled>{t("selectPosNumber")}</option>
+                    {machineData?.map(item => <option key={item.id} value={item.id}>{item?.serial_no}</option>)}
+                  </select>
+                  {errors.pos_machine_id && <p className="text-red-500 text-sm mt-1 text-left">{errors.pos_machine_id}</p>}
+                </div>
+
+                {/* Seat Number */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium mb-1 text-left">{t("seatNumber")} *</label>
+                  <select
+                    value={ticketForm.seat_no}
+                    onChange={(e) => {
+                      setTicketForm({ ...ticketForm, seat_no: e.target.value });
+                      if (errors.seat_no) setErrors({ ...errors, seat_no: "" });
+                    }}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option value="" disabled>{t("selectSeatNumber")}</option>
+                    {Array.from({ length: busCapacity }, (_, i) => i + 1).map(seat => (
+                      <option key={seat} value={seat} disabled={bookedTicket.includes(seat)}>
+                        {seat} {bookedTicket.includes(seat) ? `(${t("booked")})` : ""}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.seat_no && <p className="text-red-500 text-sm mt-1 text-left">{errors.seat_no}</p>}
+                </div>
+
+                {/* Actions */}
+                <div className="flex justify-end space-x-2">
+                  <button
+                    onClick={handleClose}
+                    className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-50"
+                  >
+                    {t("cancel")}
+                  </button>
+                  <button
+                    onClick={handleSubmit}
+                    className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 flex items-center"
+                  >
+                    <Printer className="w-4 h-4 mr-2" />
+                    {t("bookTicket")}
+                  </button>
+                </div>
+
+              </div>
             </div>
-            
           </div>
-          </div>
-        </div>
-        )
-      }
-      </div>
+        )}
 
+        {/* Tickets Table */}
+        <div className="bg-white rounded-lg shadow-sm border overflow-hidden w-full">
+          <table className="w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th>{t("ticketNumber")}</th>
+                <th>{t("fromStop")}</th>
+                <th>{t("toStop")}</th>
+                <th>{t("status")}</th>
+                <th>{t("paymentMode")}</th>
+              </tr>
+            </thead>
 
-      <div className="bg-white rounded-lg shadow-sm border overflow-hidden w-full">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {("Ticket Number")}
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {("From Stop")}
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {("To Stop")}
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {("Status")}
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {("Payment Mode")}
-              </th>
-            </tr>
-              </thead>
-              
-              {
-                loading ? (
-                  <tr>
-                  <td colSpan={9} className="py-10">
-                    <div className="flex justify-center items-center w-full">
-                      <Loader />
-                    </div>
-                  </td>
-                </tr>
-                ) : trip.length > 0 ? (
-                  <tbody className="bg-white divide-y divide-gray-200">
-                  {trip?.map((trip) => {
-                    return (
-                      <tr key={trip.id}>
-                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                          {trip.ticket_number}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-left">
-                          {trip.from_stop}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-left">
-                          {trip.to_stop}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-left">
-                          {trip.status}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-left">
-                          {trip.payment_mode}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-                  ) : (
-                    <tr>
-                    <td
-                      colSpan={9}
-                      className="py-10 text-center text-gray-500 italic"
-                    >
-                      {("No Data Found")}
-                    </td>
+            {loading ? (
+              <tr>
+                <td colSpan={9} className="py-10">
+                  <div className="flex justify-center items-center w-full"><Loader /></div>
+                </td>
+              </tr>
+            ) : trip.length > 0 ? (
+              <tbody className="bg-white divide-y divide-gray-200">
+                {trip.map(trip => (
+                  <tr key={trip.id}>
+                    <td>{trip.ticket_number}</td>
+                    <td>{trip.from_stop}</td>
+                    <td>{trip.to_stop}</td>
+                    <td>{trip.status}</td>
+                    <td>{trip.payment_mode}</td>
                   </tr>
-                  )
-              }
-        </table>
-      </div>
-      {showToast && (
-             <ToastMessage
-             setShowToast={setShowToast}
-             toastMessage={toastMessage}
-           />
-        )
-        }
+                ))}
+              </tbody>
+            ) : (
+              <tr>
+                <td colSpan={9} className="py-10 text-center text-gray-500 italic">{t("noDataFound")}</td>
+              </tr>
+            )}
+          </table>
+        </div>
+
+        {showToast && <ToastMessage setShowToast={setShowToast} toastMessage={toastMessage} />}
       </div>
     </div>
   );

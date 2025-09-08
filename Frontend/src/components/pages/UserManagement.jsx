@@ -97,7 +97,7 @@ const UserManagement = ({
               type="text"
               id="search"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-3 p-2.5"
-              placeholder={t("search") || "Search..."}
+              placeholder={t("searchPlaceholder")}
               onChange={handleChange}
             />
           </form>
@@ -118,7 +118,7 @@ const UserManagement = ({
       {Array.isArray(users) && users.length === 0 ? (
         <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
           <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-bold text-gray-900 mb-2">
             {t("noUserFound")}
           </h3>
           <p className="text-gray-500 mb-4">{t("addNewUser")}</p>
@@ -139,7 +139,7 @@ const UserManagement = ({
               <tr>
                 {/* Name */}
                 <th
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                   onClick={() => handleSorting("name")}
                 >
                   <div className="flex">
@@ -149,7 +149,7 @@ const UserManagement = ({
                 </th>
                 {/* Phone */}
                 <th
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                   onClick={() => handleSorting("phone")}
                 >
                   <div className="flex">
@@ -159,7 +159,7 @@ const UserManagement = ({
                 </th>
                 {/* Role */}
                 <th
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                   onClick={() => handleSorting("role")}
                 >
                   <div className="flex">
@@ -169,7 +169,7 @@ const UserManagement = ({
                 </th>
                 {/* License */}
                 <th
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                   onClick={() => handleSorting("license_number")}
                 >
                   <div className="flex">
@@ -182,7 +182,7 @@ const UserManagement = ({
                 </th>
                 {/* Experience */}
                 <th
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                   onClick={() => handleSorting("experience_years")}
                 >
                   <div className="flex">
@@ -194,7 +194,7 @@ const UserManagement = ({
                   </div>
                 </th>
                 {/* Actions */}
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                   {t("actions")}
                 </th>
               </tr>

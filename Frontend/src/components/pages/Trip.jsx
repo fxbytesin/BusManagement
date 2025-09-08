@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import ApiService from '../../services/api';
-import { Edit, Trash2, SquareEqual, Plus } from 'lucide-react';
+import { Edit, Trash2, SquareEqual, Plus,Start } from 'lucide-react';
 import TicketSystem from './TicketSystem';
 import DataPagination from './DataPagination';
 import SortColumn from './SortColumn';
 import ToastMessage from './ToastMessage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay,faStop } from '@fortawesome/free-solid-svg-icons';
+import ConfirmDialog from './ConfirmStatus';
 const Trip = ({
   buses,
   routes,
@@ -44,6 +47,13 @@ const Trip = ({
   const [errors, setErrors] = useState({});
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
+  const [showStatusModel, setShowStatusModel] = useState(false)
+  const [label, setLabel] = useState({
+    heading: "",
+    message: "",
+    button : ""
+  })
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const getData = async () => {
     const body = {
@@ -321,6 +331,50 @@ const Trip = ({
       }
     });
   };
+
+  const handleStatusChange = (id, type) => {
+    setSelectedTripId(id);
+    
+    if (type === "RUNNING") {
+      setShowStatusModel(true);
+      setLabel({
+        heading: "Start Trip",
+        message: "Are you sure you want to Start this Trip?",
+        button: "Start",
+      });
+      setSelectedStatus("RUNNING");
+    } else {
+      setShowStatusModel(true);
+      setLabel({
+        heading: "Complete Trip",
+        message: "Are you sure you want to Complete this Trip?",
+        button: "Complete",
+      });
+      setSelectedStatus("COMPLETED");
+    }
+  };
+
+
+  const confirmStatusChange = async () => {
+    const payload = { status: selectedStatus };  
+    try {
+      const response = await ApiService.updateTripStatus(payload, selectedTripId);
+      if (response.success === true) {
+        setToastMessage("Status Update Successfully");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+        getData();
+      } else {
+        alert("Failed to update status");
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      alert("Something went wrong. Please try again.");
+    }
+  
+    setShowStatusModel(false);
+  };
+  
   return (
 
     showTrip ?
@@ -330,7 +384,7 @@ const Trip = ({
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Bus")} *
+                  {t("bus")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -357,7 +411,7 @@ const Trip = ({
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Route")} *
+                  {t("route")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -384,7 +438,7 @@ const Trip = ({
               {/* Driver Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Driver")} *
+                  {t("driver")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -412,7 +466,7 @@ const Trip = ({
               {/* Conductor Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Conductor")} *
+                  {t("conductor")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -439,7 +493,7 @@ const Trip = ({
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Start Time")}
+                  {t("startTime")}
                 </label>
                 <input
                   type="datetime-local"
@@ -457,7 +511,7 @@ const Trip = ({
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("End Time")}
+                  {t("endTime")}
                 </label>
                 <input
                   type="datetime-local"
@@ -475,7 +529,7 @@ const Trip = ({
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Status")}
+                  {t("status")}
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -520,7 +574,7 @@ const Trip = ({
 
                 <div className='flex'>
                   <form className="flex max-w-lg mx-auto mr-6 mt-[19px]">
-                    <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+                    <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder={t("searchPlaceholder")}
                       onChange={handleChange}
                     />
 
@@ -539,31 +593,31 @@ const Trip = ({
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("bus_id")}
                     >
-                      {("Bus Number")}
+                      {t("busNumber")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="bus_id"
                       />
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("conductor_id")}
                     >
                       <div className='flex'>
-                        {("Conductor Name")}
+                        {t("conductorName")}
                         <SortColumn
                           sortDescriptor={sortDescriptor}
                           name="conductor_id"
                         />
                       </div>
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("driver_id")}
                     >
                       <div className='flex'>
-                        {("Driver Name")}
+                        {t("driverName")}
                         <SortColumn
                           sortDescriptor={sortDescriptor}
                           name="driver_id"
@@ -571,11 +625,11 @@ const Trip = ({
                       </div>
                     </th>
 
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("route_id")}
                     >
                       <div className='flex'>
-                        {("Route")}
+                        {t("route")}
                         <SortColumn
                           sortDescriptor={sortDescriptor}
                           name="route_id"
@@ -583,19 +637,19 @@ const Trip = ({
                       </div>
 
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("Start Time")}
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("startTime")}
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("End Time")}
-                    </th>
-
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("Status")}
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("endTime")}
                     </th>
 
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("Action")}
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("status")}
+                    </th>
+
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("actions")}
                     </th>
                   </tr>
                 </thead>
@@ -633,7 +687,7 @@ const Trip = ({
                             : ""}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                          {trip?.status}
+                        {trip?.status}
                         </td>
                         <td>
                           <div className="flex items-center space-x-2">
@@ -661,6 +715,24 @@ const Trip = ({
                                 }}
                               />
                             </button>
+                            <button
+                            
+                            >
+                              {trip.status === "SCHEDULED" && (
+                                <FontAwesomeIcon icon={faPlay} className="w-4 h-4 text-green-600 cursor-pointer hover:text-green-800"
+                                 onClick={()=> handleStatusChange(trip?.id,"RUNNING",)}
+                                /> 
+                              )
+                              }
+                              
+                              {trip?.status === "RUNNING" && (
+                               <FontAwesomeIcon icon={faStop} className="w-4 h-4 text-red-600 cursor-pointer hover:text-red-800"
+                                 onClick={()=> handleStatusChange(trip?.id,"Stop",)}
+                                 />
+                              )
+                              }
+                            
+                              </button>
                           </div>
                         </td>
                       </tr>
@@ -693,10 +765,20 @@ const Trip = ({
                 />
               )
               }
+              {showStatusModel && (
+                <ConfirmDialog
+                label={label}
+                  confirmColor="bg-green-600 hover:bg-green-700"
+                  onConfirm={confirmStatusChange} 
+                  onCancel={() => setShowStatusModel(false)}
+                />
+              )}
+              
             </div>
           ) : (
             <div>
               <TicketSystem
+                t={t}
                 tripId={selectedTripId}
                 busCapacity={busCapacity}
               />

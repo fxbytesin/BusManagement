@@ -5,32 +5,28 @@ const prisma = new PrismaClient();
 exports.getUsersByRole = async (req, res) => {
   try {
     const {
-      role,           // 'driver' or 'conductor'
       search = "",
       limit = 10,
       page = 1,
       order = "ASC",
       orderColumn = "created_at"
     } = req.body;
-
-    if (!['driver', 'conductor'].includes(role)) {
-      return res.status(400).json({ error: 'Invalid role specified' });
-    }
-
+ 
     const take = Number(limit);
     const skip = (Number(page) - 1) * take;
     const sortOrder = order.toUpperCase() === "DESC" ? "desc" : "asc";
     const validColumns = ["created_at", "name", "email", "phone"];
     const sortColumn = validColumns.includes(orderColumn) ? orderColumn : "created_at";
-
-    const whereCondition = {
-      role,
-      OR: search ? [
-        { name: { contains: search, mode: 'insensitive' } },
-        { phone: { contains: search, mode: 'insensitive' } }
-      ] : undefined
-    };
-
+ 
+    const whereCondition = search
+      ? {
+          OR: [
+            { name: { contains: search, mode: 'insensitive' } },
+            { phone: { contains: search, mode: 'insensitive' } }
+          ]
+        }
+      : {};
+ 
     const users = await prisma.user.findMany({
       where: whereCondition,
       include: { userExtra: true },
@@ -38,9 +34,9 @@ exports.getUsersByRole = async (req, res) => {
       skip,
       take
     });
-
+ 
     const totalCount = await prisma.user.count({ where: whereCondition });
-
+ 
     res.json({
       data: users,
       pagination: {
@@ -222,14 +218,21 @@ exports.updateUser = async (req, res) => {
 };
 
 
-// Delete user 
+// Delete user
 exports.deleteUser = async (req, res) => {
   try {
     const userId = parseInt(req.params.id);
+    console.log(userId, 'userid');
 
     const existingUser = await prisma.user.findUnique({ where: { id: userId } });
+
     if (!existingUser) {
       return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Prevent deletion if user is admin
+    if (existingUser.role === 'admin') {
+      return res.status(403).json({ error: 'Cannot delete user with admin role' });
     }
 
     await prisma.user.delete({ where: { id: userId } });
