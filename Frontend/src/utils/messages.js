@@ -183,6 +183,8 @@ export const messages = {
     emergencyContact: "आपातकालीन संपर्क",
     address: "पता",
     experienceYears: "अनुभव (वर्षों में)",
+    licenseExpiry: "लाइसेंस समाप्ति",
+    licenseNumber: "लाइसेंस नंबर",
 
     // Trip
     conductorName: "कंडक्टर का नाम",
