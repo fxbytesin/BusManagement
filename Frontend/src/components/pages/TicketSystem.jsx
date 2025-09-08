@@ -351,11 +351,11 @@ const [page, setPage] = useState(1);
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th>{t("ticketNumber")}</th>
-                <th>{t("fromStop")}</th>
-                <th>{t("toStop")}</th>
-                <th>{t("status")}</th>
-                <th>{t("paymentMode")}</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("ticketNumber")}</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("fromStop")}</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("toStop")}</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("status")}</th>
+                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("paymentMode")}</th>
               </tr>
             </thead>
 
