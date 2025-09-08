@@ -36,9 +36,9 @@ const PosMachine = ({
       let newErrors = {};
 
       if (!posForm.serial_no.trim()) {
-        newErrors.serial_no = "Serial No is required.";
+        newErrors.serial_no = t("serialNoRequired");
       } else if (!/^\d+$/.test(posForm.serial_no)) {
-        newErrors.serial_no = "Serial No must contain only numbers.";
+        newErrors.serial_no = t("serialNoNumeric");
       }
       
     

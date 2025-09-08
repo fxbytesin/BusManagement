@@ -129,6 +129,14 @@ export const messages = {
     routeDistance: "दूरी आवश्यक है",
     baseFareRequired: "मूल किराया आवश्यक है",
     routeKm: "प्रति किलोमीटर दर आवश्यक है",
+    driverRequired: "चालक आवश्यक है",
+    conductorRequired: "कंडक्टर आवश्यक है",
+    startTimeRequired: "प्रारंभ समय आवश्यक है",
+    endTimeRequired: "समाप्ति समय आवश्यक है",
+    fromTicketField: "प्रस्थान स्थान आवश्यक है",
+    posMachineRequired: "पीओएस आवश्यक है",
+    serialNoRequired: "सीरियल नंबर आवश्यक है",
+    serialNoNumeric: "सीरियल नंबर में केवल संख्याएँ होनी चाहिए",
 
     // Additional Form Labels
     selectRoute: "रूट चुनें",
@@ -350,6 +358,14 @@ export const messages = {
     routeDistance: "Distance is required.",
     baseFareRequired: "Base fare is required.",
     routeKm: "Km rate is required.",
+    driverRequired: "Driver is required",
+    conductorRequired: "Conductor is required",
+    startTimeRequired: "Start time is required",
+    endTimeRequired: "End time is required",
+    fromTicketField: "Field is Required",
+    posMachineRequired: "POS is required.",
+    serialNoRequired: "Serial No is required.",
+    serialNoNumeric: "Serial No must contain only numbers.",
 
     // Additional Form Labels
     selectRoute: "Select Route",

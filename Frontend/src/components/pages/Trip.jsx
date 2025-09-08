@@ -179,22 +179,22 @@ const Trip = ({
     let newErrors = {};
 
     if (!tripForm.bus_id) {
-      newErrors.bus_id = "Bus is required.";
+      newErrors.bus_id = t("busNumRequired");
     }
     if (!tripForm.route_id) {
-      newErrors.route_id = "Route is required.";
+      newErrors.route_id = t("routeName");
     }
     if (!tripForm.driver_id) {
-      newErrors.driver_id = "Driver is required.";
+      newErrors.driver_id = t("driverRequired");
     }
     if (!tripForm.conductor_id) {
-      newErrors.conductor_id = "Conductor is required.";
+      newErrors.conductor_id = t("conductorRequired");
     }
     if (!tripForm.start_time) {
-      newErrors.start_time = "Start time is required.";
+      newErrors.start_time = t("startTimeRequired");
     }
     if (!tripForm.end_time) {
-      newErrors.end_time = "End time is required.";
+      newErrors.end_time = t("endTimeRequired");
     }
 
     setErrors(newErrors);
@@ -215,22 +215,18 @@ const Trip = ({
       try {
         const response = await ApiService.createTrip(payload)
         if (response?.data) {
-          console.log("1");
           getData()
           setToastMessage("Trip Add Successfully");
           setShowToast(true)
           setTimeout(() => setShowToast(false), 3000);
         }
         else {
-          console.log("respo",response?.error?.error);
           setToastMessage(response?.error?.error);
           setShowToast(true)
           setTimeout(() => setShowToast(false), 3000);
 
         }
-        console.log("2");
       } catch (error) {
-        console.log("3");        
       }
     }
     else {
