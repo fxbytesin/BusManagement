@@ -694,7 +694,7 @@ const ApiService = {
       return { success: false, error: error.response?.data || error.message };
     }
   },
-  
+
   getConductor: async () => {
     try {
       const token = localStorage.getItem("token");
@@ -704,6 +704,31 @@ const ApiService = {
       return { success: true, data: response.data };
     } catch (error) {
       return { success: false, error: error.response?.data || error.message };
+    }
+  },
+
+  updateTripStatus: async (obj, id) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // Destructure ID from object, remove it from payload
+
+      const response = await axios.patch(`${API_URL}/trip/${id}/status`, obj, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
     }
   },
 };

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import ApiService from '../../services/api';
-import { Edit, Trash2, SquareEqual, Plus } from 'lucide-react';
+import { Edit, Trash2, SquareEqual, Plus,Start } from 'lucide-react';
 import TicketSystem from './TicketSystem';
 import DataPagination from './DataPagination';
 import SortColumn from './SortColumn';
 import ToastMessage from './ToastMessage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay,faStop } from '@fortawesome/free-solid-svg-icons';
+import ConfirmDialog from './ConfirmStatus';
 const Trip = ({
   buses,
   routes,
@@ -44,6 +47,13 @@ const Trip = ({
   const [errors, setErrors] = useState({});
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
+  const [showStatusModel, setShowStatusModel] = useState(false)
+  const [label, setLabel] = useState({
+    heading: "",
+    message: "",
+    button : ""
+  })
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const getData = async () => {
     const body = {
@@ -321,6 +331,50 @@ const Trip = ({
       }
     });
   };
+
+  const handleStatusChange = (id, type) => {
+    setSelectedTripId(id);
+    
+    if (type === "RUNNING") {
+      setShowStatusModel(true);
+      setLabel({
+        heading: "Start Trip",
+        message: "Are you sure you want to Start this Trip?",
+        button: "Start",
+      });
+      setSelectedStatus("RUNNING");
+    } else {
+      setShowStatusModel(true);
+      setLabel({
+        heading: "Complete Trip",
+        message: "Are you sure you want to Complete this Trip?",
+        button: "Complete",
+      });
+      setSelectedStatus("COMPLETED");
+    }
+  };
+
+
+  const confirmStatusChange = async () => {
+    const payload = { status: selectedStatus };  
+    try {
+      const response = await ApiService.updateTripStatus(payload, selectedTripId);
+      if (response.success === true) {
+        setToastMessage("Status Update Successfully");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+        getData();
+      } else {
+        alert("Failed to update status");
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      alert("Something went wrong. Please try again.");
+    }
+  
+    setShowStatusModel(false);
+  };
+  
   return (
 
     showTrip ?
@@ -635,7 +689,7 @@ const Trip = ({
                             : ""}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                          {trip?.status}
+                        {trip?.status}
                         </td>
                         <td>
                           <div className="flex items-center space-x-2">
@@ -663,6 +717,24 @@ const Trip = ({
                                 }}
                               />
                             </button>
+                            <button
+                            
+                            >
+                              {trip.status === "SCHEDULED" && (
+                                <FontAwesomeIcon icon={faPlay} className="w-4 h-4 text-green-600 cursor-pointer hover:text-green-800"
+                                 onClick={()=> handleStatusChange(trip?.id,"RUNNING",)}
+                                /> 
+                              )
+                              }
+                              
+                              {trip?.status === "RUNNING" && (
+                               <FontAwesomeIcon icon={faStop} className="w-4 h-4 text-red-600 cursor-pointer hover:text-red-800"
+                                 onClick={()=> handleStatusChange(trip?.id,"Stop",)}
+                                 />
+                              )
+                              }
+                            
+                              </button>
                           </div>
                         </td>
                       </tr>
@@ -694,6 +766,15 @@ const Trip = ({
                 />
               )
               }
+              {showStatusModel && (
+                <ConfirmDialog
+                label={label}
+                  confirmColor="bg-green-600 hover:bg-green-700"
+                  onConfirm={confirmStatusChange} 
+                  onCancel={() => setShowStatusModel(false)}
+                />
+              )}
+              
             </div>
           ) : (
             <div>

@@ -18,7 +18,9 @@ const BusManagementPage = (
     setBuses,
   }
 ) => {
+    // eslint-disable-next-line no-unused-vars
   const [showComponent, setShowComponent] = useState(true)
+    // eslint-disable-next-line no-unused-vars
   const [busId, setBusId] = useState(0)
   const [loading, setLoading] = useState(true); 
 
@@ -61,10 +63,7 @@ const BusManagementPage = (
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setBuses,search,page,sortDescriptor])
 
-  const functionClick = (id) => {
-    setBusId(id)
-    setShowComponent(false)
-  }
+
 
   const handleChange = (e) => {
     setSearch(e.target.value); 
