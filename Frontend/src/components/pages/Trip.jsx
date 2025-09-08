@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ApiService from '../../services/api';
-import { Edit, Trash2, SquareEqual, Plus,Start } from 'lucide-react';
+import { Edit, Trash2, SquareEqual, Plus,} from 'lucide-react';
 import TicketSystem from './TicketSystem';
 import DataPagination from './DataPagination';
 import SortColumn from './SortColumn';
@@ -8,6 +8,7 @@ import ToastMessage from './ToastMessage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay,faStop } from '@fortawesome/free-solid-svg-icons';
 import ConfirmDialog from './ConfirmStatus';
+import ConfirmDelete from './ConfirmDelete';
 const Trip = ({
   buses,
   routes,
@@ -54,6 +55,9 @@ const Trip = ({
     button : ""
   })
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [loader, setLoader] = useState(false)
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const getData = async () => {
     const body = {
@@ -72,7 +76,6 @@ const Trip = ({
     } catch (err) {
     }
   }
-
   useEffect(() => {
     getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,6 +87,7 @@ const Trip = ({
     }
   }, [showTrip])
   const getBusData = async () => {
+    setLoader(true)
     const body = {
       search: search,
       limit: 10,
@@ -100,6 +104,7 @@ const Trip = ({
 
     }
     finally {
+      setLoader(false)
     }
   }
 
@@ -174,22 +179,22 @@ const Trip = ({
     let newErrors = {};
 
     if (!tripForm.bus_id) {
-      newErrors.bus_id = "Bus is required.";
+      newErrors.bus_id = t("busNumRequired");
     }
     if (!tripForm.route_id) {
-      newErrors.route_id = "Route is required.";
+      newErrors.route_id = t("routeName");
     }
     if (!tripForm.driver_id) {
-      newErrors.driver_id = "Driver is required.";
+      newErrors.driver_id = t("driverRequired");
     }
     if (!tripForm.conductor_id) {
-      newErrors.conductor_id = "Base fare is required.";
+      newErrors.conductor_id = t("conductorRequired");
     }
     if (!tripForm.start_time) {
-      newErrors.start_time = "Km rate is required.";
+      newErrors.start_time = t("startTimeRequired");
     }
     if (!tripForm.end_time) {
-      newErrors.end_time = "Km rate is required.";
+      newErrors.end_time = t("endTimeRequired");
     }
 
     setErrors(newErrors);
@@ -207,14 +212,22 @@ const Trip = ({
         end_time: new Date(tripForm.end_time).toISOString(),
         status: tripForm.status,
       };
-      const response = await ApiService.createTrip(payload)
-      if (response?.data) {
-        getData()
-        setToastMessage("Trip Add Successfully");
-        setShowToast(true)
-        setTimeout(() => setShowToast(false), 3000);
-      }
+      try {
+        const response = await ApiService.createTrip(payload)
+        if (response?.data) {
+          getData()
+          setToastMessage("Trip Add Successfully");
+          setShowToast(true)
+          setTimeout(() => setShowToast(false), 3000);
+        }
+        else {
+          setToastMessage(response?.error?.error);
+          setShowToast(true)
+          setTimeout(() => setShowToast(false), 3000);
 
+        }
+      } catch (error) {
+      }
     }
     else {
 
@@ -252,17 +265,15 @@ const Trip = ({
     setShowTrip(false)
   };
 
-  const handleDelete = async (obj) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this trip?");
-    if (!confirmDelete) return; // 
+  const handleDelete = async (id) => {
     try {
-      const response = await ApiService.deleteTrip(obj?.id);
+      const response = await ApiService.deleteTrip(id);
       if (response?.data?.message === "Trip deleted successfully") {
         // remove deleted trip from UI              
         setShowToast(true)
-        setToastMessage("Pos Machine Deleted Successfully")
+        setToastMessage("Trip Deleted Successfully")
         setTimeout(() => setShowToast(false), 3000);
-        setTrip((prevTrips) => prevTrips.filter((trip) => trip.id !== obj.id));
+        setTrip((prevTrips) => prevTrips.filter((trip) => trip.id !== id));
       }
     } catch (error) {
     }
@@ -373,8 +384,8 @@ const Trip = ({
     }
   
     setShowStatusModel(false);
-  };
-  
+  };    
+    
   return (
 
     showTrip ?
@@ -384,26 +395,31 @@ const Trip = ({
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Bus")} *
+                  {t("bus")} *
                 </label>
                 <select
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={tripForm.bus_id}
-                  onChange={(e) => {
-                    setTripForm({ ...tripForm, bus_id: e.target.value })
-                    if (errors.bus_id) {
-                      setErrors({ ...errors, bus_id: "" });
-                    }
-                  }
-                  }
-                >
-                  <option value="">{t("busNumber")}</option>
-                  {buses?.map((buses) => (
-                    <option key={buses.id} value={buses.id}>
-                      {buses.bus_number}
-                    </option>
-                  ))}
-                </select>
+  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+  value={tripForm.bus_id}
+  onChange={(e) => {
+    setTripForm({ ...tripForm, bus_id: e.target.value });
+    if (errors.bus_id) {
+      setErrors({ ...errors, bus_id: "" });
+    }
+  }}
+>
+  <option value="">{t("busNumber")}</option>
+
+  {loader ? (
+    <option disabled>Loading...</option>
+  ) : (
+    buses?.map((bus) => (
+      <option key={bus.id} value={bus.id}>
+        {bus.bus_number}
+      </option>
+    ))
+  )}
+</select>
+
                 {errors.bus_id && (
                   <p className="text-red-500 text-sm mt-1 text-left">{errors.bus_id}</p>
                 )}
@@ -411,7 +427,7 @@ const Trip = ({
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Route")} *
+                  {t("route")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -438,7 +454,7 @@ const Trip = ({
               {/* Driver Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Driver")} *
+                  {t("driver")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -466,7 +482,7 @@ const Trip = ({
               {/* Conductor Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Conductor")} *
+                  {t("conductor")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -491,11 +507,9 @@ const Trip = ({
                 )}
               </div>
 
-
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Start Time")}
+                  {t("startTime")}
                 </label>
                 <input
                   type="datetime-local"
@@ -513,7 +527,7 @@ const Trip = ({
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("End Time")}
+                  {t("endTime")}
                 </label>
                 <input
                   type="datetime-local"
@@ -529,10 +543,9 @@ const Trip = ({
                 )}
               </div>
 
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Status")}
+                  {t("status")}
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -569,15 +582,15 @@ const Trip = ({
         </div>
       </div>
       : (
-        <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+        <div>
           {showTicket ? (
-            <div>
-              <div className="flex justify-between items-center mb-6">
+            <div className="p-6">
+            <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-semibold ml-5">{t("trip")}</h3>
 
                 <div className='flex'>
                   <form className="flex max-w-lg mx-auto mr-6 mt-[19px]">
-                    <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+                    <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder={t("searchPlaceholder")}
                       onChange={handleChange}
                     />
 
@@ -592,34 +605,35 @@ const Trip = ({
                 </div>
 
               </div>
+              <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("bus_id")}
                     >
-                      {("Bus Number")}
+                      {t("busNumber")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="bus_id"
                       />
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("conductor_id")}
                     >
                       <div className='flex'>
-                        {("Conductor Name")}
+                        {t("conductorName")}
                         <SortColumn
                           sortDescriptor={sortDescriptor}
                           name="conductor_id"
                         />
                       </div>
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("driver_id")}
                     >
                       <div className='flex'>
-                        {("Driver Name")}
+                        {t("driverName")}
                         <SortColumn
                           sortDescriptor={sortDescriptor}
                           name="driver_id"
@@ -627,11 +641,11 @@ const Trip = ({
                       </div>
                     </th>
 
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("route_id")}
                     >
                       <div className='flex'>
-                        {("Route")}
+                        {t("route")}
                         <SortColumn
                           sortDescriptor={sortDescriptor}
                           name="route_id"
@@ -639,19 +653,19 @@ const Trip = ({
                       </div>
 
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("Start Time")}
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("startTime")}
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("End Time")}
-                    </th>
-
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("Status")}
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("endTime")}
                     </th>
 
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {("Action")}
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("status")}
+                    </th>
+
+                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {t("actions")}
                     </th>
                   </tr>
                 </thead>
@@ -703,7 +717,12 @@ const Trip = ({
                             <button
                               className="text-red-600 hover:text-red-900"
                               title={t("delete")}
-                              onClick={() => handleDelete(trip)}
+                              // onClick={() => handleDelete(trip)}
+
+                              onClick={() => {
+                                setSelectedId(trip.id); // store id of item to delete
+                                setOpen(true);
+                              }}
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -752,6 +771,7 @@ const Trip = ({
                 </tbody>
 
               </table>
+              </div>
               {conductors && conductors.length > 0 && (
                 <DataPagination
                   onPageChange={handlePageChange}
@@ -774,11 +794,26 @@ const Trip = ({
                   onCancel={() => setShowStatusModel(false)}
                 />
               )}
+
+                  {open && (
+                <ConfirmDelete
+                  onConfirm={() => {
+                    handleDelete(selectedId); 
+                    setOpen(false);
+                    setSelectedId(null);
+                  }}
+                  onCancel={() => {
+                    setOpen(false);
+                    setSelectedId(null);
+                  }}
+                />
+              )}
               
             </div>
           ) : (
             <div>
               <TicketSystem
+                t={t}
                 tripId={selectedTripId}
                 busCapacity={busCapacity}
               />

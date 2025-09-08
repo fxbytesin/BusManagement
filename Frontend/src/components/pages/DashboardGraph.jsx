@@ -86,7 +86,7 @@ const DashboardGraphs = ({ t }) => {
                 <Bar
                   dataKey="tickets_generated"
                   fill="#8884d8"
-                  name={t("Tickets")}
+                  name={t("tickets")}
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -105,7 +105,7 @@ const DashboardGraphs = ({ t }) => {
                   type="monotone"
                   dataKey="trips_completed"
                   stroke="#82ca9d"
-                  name={t("Trips")}
+                  name={t("trips")}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -124,7 +124,7 @@ const DashboardGraphs = ({ t }) => {
                   type="monotone"
                   dataKey="revenue"
                   stroke="#8884d8"
-                  name={t("Revenue")}
+                  name={t("revenue")}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -142,7 +142,7 @@ const DashboardGraphs = ({ t }) => {
                 <Bar
                   dataKey="occupancy_rate"
                   fill="#FF8042"
-                  name={t("Occupancy %")}
+                  name={`${t("occupancy")} %`}
                 />
               </BarChart>
             </ResponsiveContainer>

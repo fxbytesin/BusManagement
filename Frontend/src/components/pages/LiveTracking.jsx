@@ -42,23 +42,27 @@ const LiveTracking = (
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                 {t("busNumber")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                 {t("route")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                 {t("totalPassengers")}
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                 {t("status")}
               </th>
             </tr>
               </thead>
               
               {loading ? (
-                <Loader/>
+                  <tr>
+                   <td colSpan={4} className="py-10 text-center">
+                     <Loader className="w-6 h-6 animate-spin mx-auto text-gray-500" />
+                   </td>
+                 </tr>
               ) : liveTracking.length > 0 ? (
                 <tbody className="bg-white divide-y divide-gray-200">
                 {liveTracking?.map((tracking) => {
