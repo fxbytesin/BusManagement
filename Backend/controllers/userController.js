@@ -10,7 +10,7 @@ exports.getUsersByRole = async (req, res) => {
       page = 1,
       order = "ASC",
       orderColumn = "created_at"
-    } = req.body;
+    } = req.query;
  
     const take = Number(limit);
     const skip = (Number(page) - 1) * take;
