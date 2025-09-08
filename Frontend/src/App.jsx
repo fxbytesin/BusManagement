@@ -361,7 +361,7 @@ if (!(userForm.name || "").trim()) {
   newErrors.name = t("nameRequired");
 }
 
-if (!(userForm.experience_years || "").trim()) {
+if (!userForm.experience_years && userForm.experience_years !== 0) {
   newErrors.experience_years = t("experienceYearRequired");
 }
 
@@ -433,16 +433,16 @@ if (userForm.role === "driver") {
     }
   
     setUserForm({
+      id: user.id || "",
       name: user.name || "",
       phone: user.phone || "",
       role: user.role || "",
-      license_number: user.userExtra?.license_number || "",
+      license_number: user.userExtra?.license_number ?? "",
       license_expiry,
-      experience_years: user.userExtra?.experience_years || "",
-      address: user.userExtra?.address || "",
-      emergency_contact: user.userExtra?.emergency_contact || "",
+      experience_years: user.userExtra?.experience_years?.toString() ?? "",
+      address: user.userExtra?.address ?? "",               
+      emergency_contact: user.userExtra?.emergency_contact ?? "", 
     });
-  
     setEditingItem(user);
     setModalType("edit-user");
     setShowModal(true);
@@ -457,7 +457,7 @@ if (userForm.role === "driver") {
       newErrors.name = t("nameRequired");
     }
     
-    if (!(userForm.experience_years || "").trim()) {
+    if (!userForm.experience_years && userForm.experience_years !== 0) {
       newErrors.experience_years = t("experienceYearRequired");
     }
     
@@ -491,6 +491,7 @@ if (userForm.role === "driver") {
     if (Object.keys(newErrors).length > 0) return;
 
     const payload = {
+      id: userForm.id,
       ...userForm,
       experience_years: parseInt(userForm.experience_years, 10) || 0,
       license_expiry: userForm.license_expiry
@@ -507,6 +508,7 @@ if (userForm.role === "driver") {
       setErrors({}); 
       setTimeout(() => setShowToast(false), 3000);
     }
+   
 
     setEditingItem(null);
     setShowModal(false);
