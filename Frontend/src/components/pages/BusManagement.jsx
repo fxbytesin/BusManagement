@@ -4,7 +4,6 @@ import ApiService from '../../services/api';
 import TicketView from './TicketView';
 import SortColumn from './SortColumn';
 import DataPagination from './DataPagination';
-import ConfirmDelete from './ConfirmDelete';
 
  // Bus Management Page
 const BusManagementPage = (
@@ -13,9 +12,15 @@ const BusManagementPage = (
     setModalType,
     setShowModal,
     t,
+    routes,
+    conductors,
+    drivers,
     handleEditBus,
     handleDeleteBus,
     setBuses,
+    setRoutes,
+    setDrivers,
+    setConductors
   }
 ) => {
   const [showComponent, setShowComponent] = useState(true)
@@ -30,8 +35,7 @@ const BusManagementPage = (
   }); 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-  const [open, setOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
+
 
   const getBusData = async () => {
     const body = {
@@ -54,12 +58,83 @@ const BusManagementPage = (
       setLoading(false);
     }
   }
+  
+
+  const getRoutesData = async () => {
+    const body = {
+      search : search,
+      limit: 10,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      setLoading(true);
+      const response = await ApiService.getRoutes(body);      
+      setRoutes(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+  
+  const getDriverData = async () => {
+    const body = {
+      search : search,
+      limit: 10,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      setLoading(true);
+      const response = await ApiService.getDriver(body);      
+      setDrivers(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      setLoading(false);
+    }
+  }
+  
+  const getConductorData = async () => {
+    const body = {
+      search : search,
+      limit: 10,
+      page: page,
+      order: sortDescriptor.direction,
+      orderColumn : sortDescriptor.column
+    }
+    try {
+      setLoading(true);
+      const response = await ApiService.getConductor(body);      
+      setConductors(response?.data?.data)
+    }
+    catch (err) {
+      
+    }
+    finally {
+      setLoading(false);
+    }
+}
 
 
   useEffect(() => {
     getBusData()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setBuses,search,page,sortDescriptor])
+
+  useEffect(() => {
+    getRoutesData()
+    getDriverData()
+    getConductorData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   const functionClick = (id) => {
     setBusId(id)
@@ -93,7 +168,6 @@ const BusManagementPage = (
   const handlePageChange = (page) => {
     setPage(page); // Update the page state variable to the specified page number
   };
-
   return (
       showComponent ? (
       <div className="p-6">
@@ -101,7 +175,7 @@ const BusManagementPage = (
           <h3 className="text-xl font-semibold">{t("busManagement")}</h3>
 
           <div className='flex'>
-            <form className="flex max-w-lg mx-auto mr-6">   
+            <form class="flex max-w-lg mx-auto mr-6">   
               <input type="text" id="voice-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
                onChange={handleChange}
               />
@@ -147,7 +221,7 @@ const BusManagementPage = (
                       onClick={() => handleSorting("bus_number")}
                     >
                       <div className='flex'>
-                      {t("Bus Number")}
+                      {t("busNumber")}
                         <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="bus_number"
@@ -158,7 +232,7 @@ const BusManagementPage = (
                      onClick={() => handleSorting("capacity")}
                     >
                       <div className='flex'>
-                      {t("Capacity")}
+                      {t("capacity")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="capacity"
@@ -203,8 +277,12 @@ const BusManagementPage = (
                         />
                       </div>
                   </th>
+              
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("Ticket View")}
+                  </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("Actions")}
+                    {t("actions")}
                   </th>
                 </tr>
                 </thead>
@@ -236,6 +314,12 @@ const BusManagementPage = (
         <td className="px-6 py-4 whitespace-nowrap">
           {new Date(bus.last_maintenance).toLocaleDateString("en-US")}
         </td>
+        <td
+          className="px-6 py-4 whitespace-nowrap font-medium cursor-pointer"
+          onClick={() => functionClick(bus?.id)}
+        >
+          Ticket Details
+        </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center space-x-2">
             <button
@@ -246,10 +330,11 @@ const BusManagementPage = (
               <Edit className="w-4 h-4" />
             </button>
             <button
-             onClick={() => {
-              setSelectedId(bus.id);
-              setOpen(true);
-            }}
+              onClick={() => {
+                if (window.confirm(t("confirmDeleteBus"))) {
+                  handleDeleteBus(bus.id);
+                }
+              }}
               className="text-red-600 hover:text-red-900"
               title={t("delete")}
             >
@@ -266,7 +351,9 @@ const BusManagementPage = (
       </td>
     </tr>
   )}
-</tbody>     
+</tbody>
+
+            
               </table>
               {buses && buses.length > 0 && (
                   <DataPagination
@@ -274,20 +361,6 @@ const BusManagementPage = (
                     totalPages={totalPages}
                     currentPage={page}
                   />
-              )}
-              
-                {open && (
-                <ConfirmDelete
-                  onConfirm={() => {
-                    handleDeleteBus(selectedId); 
-                    setOpen(false);
-                    setSelectedId(null);
-                  }}
-                  onCancel={() => {
-                    setOpen(false);
-                    setSelectedId(null);
-                  }}
-                />
                 )}
           </div>
         )}
