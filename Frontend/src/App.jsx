@@ -423,19 +423,26 @@ if (userForm.role === "driver") {
 
   const handleEditUser = (user) => {
     let license_expiry = "";
-
+  
     // Only format if a valid date exists
-    if (user.license_expiry) {
-      const d = new Date(user.license_expiry);
+    if (user.userExtra?.license_expiry) {
+      const d = new Date(user.userExtra.license_expiry);
       if (!isNaN(d.getTime())) {
         license_expiry = d.toISOString().split("T")[0];
       }
     }
-
+  
     setUserForm({
-      ...user,
-      license_expiry, // safe formatted value or empty string
+      name: user.name || "",
+      phone: user.phone || "",
+      role: user.role || "",
+      license_number: user.userExtra?.license_number || "",
+      license_expiry,
+      experience_years: user.userExtra?.experience_years || "",
+      address: user.userExtra?.address || "",
+      emergency_contact: user.userExtra?.emergency_contact || "",
     });
+  
     setEditingItem(user);
     setModalType("edit-user");
     setShowModal(true);
