@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ApiService from '../../services/api';
-import { Edit, Trash2, SquareEqual, Plus,Start } from 'lucide-react';
+import { Edit, Trash2, SquareEqual, Plus,} from 'lucide-react';
 import TicketSystem from './TicketSystem';
 import DataPagination from './DataPagination';
 import SortColumn from './SortColumn';
@@ -8,6 +8,7 @@ import ToastMessage from './ToastMessage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay,faStop } from '@fortawesome/free-solid-svg-icons';
 import ConfirmDialog from './ConfirmStatus';
+import ConfirmDelete from './ConfirmDelete';
 const Trip = ({
   buses,
   routes,
@@ -54,6 +55,9 @@ const Trip = ({
     button : ""
   })
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [loader, setLoader] = useState(false)
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const getData = async () => {
     const body = {
@@ -72,7 +76,6 @@ const Trip = ({
     } catch (err) {
     }
   }
-
   useEffect(() => {
     getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,6 +87,7 @@ const Trip = ({
     }
   }, [showTrip])
   const getBusData = async () => {
+    setLoader(true)
     const body = {
       search: search,
       limit: 10,
@@ -100,6 +104,7 @@ const Trip = ({
 
     }
     finally {
+      setLoader(false)
     }
   }
 
@@ -174,22 +179,22 @@ const Trip = ({
     let newErrors = {};
 
     if (!tripForm.bus_id) {
-      newErrors.bus_id = "Bus is required.";
+      newErrors.bus_id = t("busNumRequired");
     }
     if (!tripForm.route_id) {
-      newErrors.route_id = "Route is required.";
+      newErrors.route_id = t("routeName");
     }
     if (!tripForm.driver_id) {
-      newErrors.driver_id = "Driver is required.";
+      newErrors.driver_id = t("driverRequired");
     }
     if (!tripForm.conductor_id) {
-      newErrors.conductor_id = "Base fare is required.";
+      newErrors.conductor_id = t("conductorRequired");
     }
     if (!tripForm.start_time) {
-      newErrors.start_time = "Km rate is required.";
+      newErrors.start_time = t("startTimeRequired");
     }
     if (!tripForm.end_time) {
-      newErrors.end_time = "Km rate is required.";
+      newErrors.end_time = t("endTimeRequired");
     }
 
     setErrors(newErrors);
@@ -207,14 +212,22 @@ const Trip = ({
         end_time: new Date(tripForm.end_time).toISOString(),
         status: tripForm.status,
       };
-      const response = await ApiService.createTrip(payload)
-      if (response?.data) {
-        getData()
-        setToastMessage("Trip Add Successfully");
-        setShowToast(true)
-        setTimeout(() => setShowToast(false), 3000);
-      }
+      try {
+        const response = await ApiService.createTrip(payload)
+        if (response?.data) {
+          getData()
+          setToastMessage("Trip Add Successfully");
+          setShowToast(true)
+          setTimeout(() => setShowToast(false), 3000);
+        }
+        else {
+          setToastMessage(response?.error?.error);
+          setShowToast(true)
+          setTimeout(() => setShowToast(false), 3000);
 
+        }
+      } catch (error) {
+      }
     }
     else {
 
@@ -252,17 +265,15 @@ const Trip = ({
     setShowTrip(false)
   };
 
-  const handleDelete = async (obj) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this trip?");
-    if (!confirmDelete) return; // 
+  const handleDelete = async (id) => {
     try {
-      const response = await ApiService.deleteTrip(obj?.id);
+      const response = await ApiService.deleteTrip(id);
       if (response?.data?.message === "Trip deleted successfully") {
         // remove deleted trip from UI              
         setShowToast(true)
-        setToastMessage("Pos Machine Deleted Successfully")
+        setToastMessage("Trip Deleted Successfully")
         setTimeout(() => setShowToast(false), 3000);
-        setTrip((prevTrips) => prevTrips.filter((trip) => trip.id !== obj.id));
+        setTrip((prevTrips) => prevTrips.filter((trip) => trip.id !== id));
       }
     } catch (error) {
     }
@@ -373,8 +384,8 @@ const Trip = ({
     }
   
     setShowStatusModel(false);
-  };
-  
+  };    
+    
   return (
 
     showTrip ?
@@ -387,23 +398,28 @@ const Trip = ({
                   {t("bus")} *
                 </label>
                 <select
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={tripForm.bus_id}
-                  onChange={(e) => {
-                    setTripForm({ ...tripForm, bus_id: e.target.value })
-                    if (errors.bus_id) {
-                      setErrors({ ...errors, bus_id: "" });
-                    }
-                  }
-                  }
-                >
-                  <option value="">{t("busNumber")}</option>
-                  {buses?.map((buses) => (
-                    <option key={buses.id} value={buses.id}>
-                      {buses.bus_number}
-                    </option>
-                  ))}
-                </select>
+  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+  value={tripForm.bus_id}
+  onChange={(e) => {
+    setTripForm({ ...tripForm, bus_id: e.target.value });
+    if (errors.bus_id) {
+      setErrors({ ...errors, bus_id: "" });
+    }
+  }}
+>
+  <option value="">{t("busNumber")}</option>
+
+  {loader ? (
+    <option disabled>Loading...</option>
+  ) : (
+    buses?.map((bus) => (
+      <option key={bus.id} value={bus.id}>
+        {bus.bus_number}
+      </option>
+    ))
+  )}
+</select>
+
                 {errors.bus_id && (
                   <p className="text-red-500 text-sm mt-1 text-left">{errors.bus_id}</p>
                 )}
@@ -566,7 +582,7 @@ const Trip = ({
         </div>
       </div>
       : (
-        <div >
+        <div>
           {showTicket ? (
             <div className="p-6">
             <div className="flex justify-between items-center mb-6">
@@ -701,7 +717,12 @@ const Trip = ({
                             <button
                               className="text-red-600 hover:text-red-900"
                               title={t("delete")}
-                              onClick={() => handleDelete(trip)}
+                              // onClick={() => handleDelete(trip)}
+
+                              onClick={() => {
+                                setSelectedId(trip.id); // store id of item to delete
+                                setOpen(true);
+                              }}
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -771,6 +792,20 @@ const Trip = ({
                   confirmColor="bg-green-600 hover:bg-green-700"
                   onConfirm={confirmStatusChange} 
                   onCancel={() => setShowStatusModel(false)}
+                />
+              )}
+
+                  {open && (
+                <ConfirmDelete
+                  onConfirm={() => {
+                    handleDelete(selectedId); 
+                    setOpen(false);
+                    setSelectedId(null);
+                  }}
+                  onCancel={() => {
+                    setOpen(false);
+                    setSelectedId(null);
+                  }}
                 />
               )}
               

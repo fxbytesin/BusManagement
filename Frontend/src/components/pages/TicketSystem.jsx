@@ -44,26 +44,26 @@ const [page, setPage] = useState(1);
     let newErrors = {};
   
     if (!ticketForm.from_stop) {
-      newErrors.from_stop = "Field Required";
+      newErrors.from_stop = t("fromTicketField");
     }
     if (!ticketForm.to_stop) {
-      newErrors.to_stop = "Field Required";
+      newErrors.to_stop = t("fromTicketField");
     }
     if (!ticketForm.fare) {
-      newErrors.fare = "Fare is required.";
+      newErrors.fare = t("baseFareRequired");
     }
     if (!ticketForm.journey_date) {
-      newErrors.journey_date = "Journey Date is required.";
+      newErrors.journey_date = t("journeyDateRequired");
     }
     if (!ticketForm.bus_id) {
-      newErrors.bus_id = "Bus Number is required.";
+      newErrors.bus_id = t("busNumRequired");
     }
 
     if (!ticketForm.pos_machine_id) {
-      newErrors.pos_machine_id = "POS is required.";
+      newErrors.pos_machine_id = t("posMachineRequired");
     }
     if (!ticketForm.seat_no) {
-      newErrors.seat_no = "Seat No is required.";
+      newErrors.seat_no = t("seatNoRequired")
     }
      
     setErrors(newErrors);
@@ -163,7 +163,7 @@ const [page, setPage] = useState(1);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleClose = () => {
+  const handleClose = () => {    
     setTicketForm({
       from_stop: "",
       to_stop: "",
@@ -174,6 +174,7 @@ const [page, setPage] = useState(1);
       seat_no: "",
     })
     setShowModal(false)
+    setErrors({})
   }
     
   return (
