@@ -361,7 +361,7 @@ if (!(userForm.name || "").trim()) {
   newErrors.name = t("nameRequired");
 }
 
-if (!(userForm.experience_years || "").trim()) {
+if (!userForm.experience_years && userForm.experience_years !== 0) {
   newErrors.experience_years = t("experienceYearRequired");
 }
 
@@ -423,7 +423,7 @@ if (userForm.role === "driver") {
 
   const handleEditUser = (user) => {
     let license_expiry = "";
-  
+    
     // Only format if a valid date exists
     if (user.userExtra?.license_expiry) {
       const d = new Date(user.userExtra.license_expiry);
@@ -433,31 +433,28 @@ if (userForm.role === "driver") {
     }
   
     setUserForm({
+      id: user.id || "",
       name: user.name || "",
       phone: user.phone || "",
       role: user.role || "",
-      license_number: user.userExtra?.license_number || "",
+      license_number: user.userExtra?.license_number ?? "",
       license_expiry,
-      experience_years: user.userExtra?.experience_years || "",
-      address: user.userExtra?.address || "",
-      emergency_contact: user.userExtra?.emergency_contact || "",
+      experience_years: user.userExtra?.experience_years?.toString() ?? "",
+      address: user.userExtra?.address ?? "",               
+      emergency_contact: user.userExtra?.emergency_contact ?? "", 
     });
-  
-    setEditingItem(user);
     setModalType("edit-user");
     setShowModal(true);
   };
-
-
-
+  
   const handleUpdateUser = async () => {
     let newErrors = {};
-
+  
     if (!(userForm.name || "").trim()) {
       newErrors.name = t("nameRequired");
     }
     
-    if (!(userForm.experience_years || "").trim()) {
+    if (!userForm.experience_years && userForm.experience_years !== 0) {
       newErrors.experience_years = t("experienceYearRequired");
     }
     
@@ -486,32 +483,65 @@ if (userForm.role === "driver") {
         newErrors.license_expiry = t("licenseExpiryRequired");
       }
     }
-
+  
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
-
+  
+    // Prepare the payload according to your API structure
     const payload = {
-      ...userForm,
-      experience_years: parseInt(userForm.experience_years, 10) || 0,
-      license_expiry: userForm.license_expiry
-        ? new Date(userForm.license_expiry).toISOString().split("T")[0]
-        : null,
+      id: userForm.id,
+      name: userForm.name,
+      phone: userForm.phone,
+      role: userForm.role,
+      userExtra: {
+        license_number: userForm.license_number || "",
+        license_expiry: userForm.license_expiry 
+          ? new Date(userForm.license_expiry).toISOString().split("T")[0]
+          : null,
+        experience_years: parseInt(userForm.experience_years, 10) || 0,
+        address: userForm.address || "",
+        emergency_contact: userForm.emergency_contact || "",
+      }
     };
-
-    const response = await ApiService.updateUser(payload);
-
-    if (response.success === true) {
-      setUsers(users.map((item) => (item.id === userForm.id ? payload : item)));
-      setToastMessage("User Updated Successfully");
+  
+    try {
+      const response = await ApiService.updateUser(payload);
+  
+      if (response.success === true) {
+        // Update the users state with the new data
+        setUsers(users.map((user) => 
+          user.id === userForm.id 
+            ? { 
+                ...user, 
+                name: payload.name,
+                phone: payload.phone,
+                role: payload.role,
+                userExtra: payload.userExtra
+              } 
+            : user
+        ));
+        
+        setToastMessage("User Updated Successfully");
+        setShowToast(true);
+        setErrors({});
+        setTimeout(() => setShowToast(false), 3000);
+        
+        // Reset form and close modal
+        setEditingItem(null);
+        setShowModal(false);
+      } else {
+        // Handle API error
+        setToastMessage(response.message || "Failed to update user");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+      }
+    } catch (error) {
+      console.error("Update user error:", error);
+      setToastMessage("Error updating user");
       setShowToast(true);
-      setErrors({}); 
       setTimeout(() => setShowToast(false), 3000);
     }
-
-    setEditingItem(null);
-    setShowModal(false);
   };
-
   const handleDeleteUser = (id) => {
     ApiService.deleteUser(id)
   }
@@ -1054,11 +1084,11 @@ if (userForm.role === "driver") {
                 {t("cancel")}
               </button>
               <button
-                onClick={editingItem ? handleUpdateUser : handleAddUser}
-                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
-              >
-                {t("save")}
-              </button>
+          onClick={modalType === "edit-user" ? handleUpdateUser : handleAddUser}
+          className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+        >
+          {t("save")}
+        </button>
             </div>
           </div>
         );

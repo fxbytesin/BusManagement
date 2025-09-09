@@ -239,7 +239,7 @@ const PosMachine = ({
     {/* Table Head */}
     <thead className="bg-gray-100">
       <tr>
-              <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider"
+              <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                onClick={() => handleSorting("serial_no")}
               >
                 <div className='flex'>
@@ -250,10 +250,10 @@ const PosMachine = ({
                         />
                       </div>
         </th>
-        <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+        <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
         {t("status")}
             </th>
-            <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
        {t("actions")}
         </th>
       </tr>

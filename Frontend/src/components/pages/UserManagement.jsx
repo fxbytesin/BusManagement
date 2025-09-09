@@ -140,7 +140,7 @@ const UserManagement = ({
               <tr>
                 {/* Name */}
                 <th
-                  className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                   onClick={() => handleSorting("name")}
                 >
                   <div className="flex">
@@ -150,7 +150,7 @@ const UserManagement = ({
                 </th>
                 {/* Phone */}
                 <th
-                  className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                   onClick={() => handleSorting("phone")}
                 >
                   <div className="flex">
@@ -160,7 +160,7 @@ const UserManagement = ({
                 </th>
                 {/* Role */}
                 <th
-                  className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                   onClick={() => handleSorting("role")}
                 >
                   <div className="flex">
@@ -170,7 +170,7 @@ const UserManagement = ({
                 </th>
                 {/* License */}
                 <th
-                  className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                   onClick={() => handleSorting("license_number")}
                 >
                   <div className="flex">
@@ -183,7 +183,7 @@ const UserManagement = ({
                 </th>
                 {/* Experience */}
                 <th
-                  className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                   onClick={() => handleSorting("experience_years")}
                 >
                   <div className="flex">
@@ -195,7 +195,7 @@ const UserManagement = ({
                   </div>
                 </th>
                 {/* Actions */}
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
                   {t("actions")}
                 </th>
               </tr>

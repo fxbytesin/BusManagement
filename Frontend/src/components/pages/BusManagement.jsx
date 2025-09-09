@@ -99,7 +99,7 @@ const BusManagementPage = (
 
           <div className='flex'>
             <form class="flex max-w-lg mx-auto mr-6">
-              <input type="text" id="voice-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder={t("searchPlaceholder")}
+              <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder={t("searchPlaceholder")}
 
                 onChange={handleChange}
               />
@@ -141,7 +141,7 @@ const BusManagementPage = (
               <thead className="bg-gray-50">
                 <tr>
                   <th
-                    className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                    className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                     onClick={() => handleSorting("bus_number")}
                   >
                     <div className='flex'>
@@ -152,7 +152,7 @@ const BusManagementPage = (
                       />
                     </div>
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                     onClick={() => handleSorting("capacity")}
                   >
                     <div className='flex'>
@@ -166,7 +166,7 @@ const BusManagementPage = (
                   </th>
 
 
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                     onClick={() => handleSorting("insurance_expiry")}
                   >
                     <div className='flex'>
@@ -178,7 +178,7 @@ const BusManagementPage = (
                     </div>
                   </th>
 
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                     onClick={() => handleSorting("permit_expiry")}
                   >
                     <div className='flex'>
@@ -190,7 +190,7 @@ const BusManagementPage = (
                     </div>
 
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                  <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                     onClick={() => handleSorting("last_maintenance")}
                   >
                     <div className='flex'>
@@ -203,7 +203,7 @@ const BusManagementPage = (
                   </th>
 
 
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
                     {t("actions")}
                   </th>
                 </tr>

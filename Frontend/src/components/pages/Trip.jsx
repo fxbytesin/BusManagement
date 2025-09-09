@@ -609,7 +609,7 @@ const Trip = ({
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("bus_id")}
                     >
                       {t("busNumber")}
@@ -618,7 +618,7 @@ const Trip = ({
                         name="bus_id"
                       />
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("conductor_id")}
                     >
                       <div className='flex'>
@@ -629,7 +629,7 @@ const Trip = ({
                         />
                       </div>
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("driver_id")}
                     >
                       <div className='flex'>
@@ -641,7 +641,7 @@ const Trip = ({
                       </div>
                     </th>
 
-                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider"
+                    <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                       onClick={() => handleSorting("route_id")}
                     >
                       <div className='flex'>
@@ -653,18 +653,18 @@ const Trip = ({
                       </div>
 
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
                       {t("startTime")}
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
                       {t("endTime")}
                     </th>
 
-                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
                       {t("status")}
                     </th>
 
-                    <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
                       {t("actions")}
                     </th>
                   </tr>
