@@ -264,7 +264,7 @@ const BusManagementPage = (
                 ) : (
                   <tr>
                     <td colSpan={9} className="py-10 text-center text-gray-500">
-                      {t("No Data Found")}
+                      {t("noDataFound")}
                     </td>
                   </tr>
                 )}

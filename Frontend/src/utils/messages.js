@@ -236,6 +236,13 @@ export const messages = {
     ticketAddedSuccessfully: "टिकट सफलतापूर्वक जोड़ा गया",
     ticketNumber: "टिकट नंबर",
     noDataFound: "कोई डेटा नहीं मिला",
+
+    // report and setting 
+    reportsTitle: "रिपोर्ट्स",
+    reportsComingSoon: "यह फीचर जल्द ही उपलब्ध होगा",
+    settingsTitle: "सेटिंग्स",
+    settingsComingSoon: "यह फीचर जल्द ही उपलब्ध होगा"
+  
   },
 
   en: {
@@ -470,5 +477,11 @@ export const messages = {
     ticketAddedSuccessfully: "Ticket Added Successfully",
     ticketNumber: "Ticket Number",
     noDataFound: "No Data Found",
+
+    // report and setting 
+    reportsTitle: "Reports",
+    reportsComingSoon: "Reports coming soon",
+    settingsTitle: "Settings",
+    settingsComingSoon: "Settings coming soon"
   },
 };
