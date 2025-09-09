@@ -13,6 +13,7 @@ export const messages = {
     reports: "रिपोर्ट्स",
     settings: "सेटिंग्स",
     userManagement: "उपयोगकर्ता प्रबंधन",
+    user: "उपयोगकर्ता",
 
     // Dashboard Stats
     todayRevenue: "आज की कुल आय",
@@ -29,13 +30,12 @@ export const messages = {
     addNewUser: "नया उपयोगकर्ता जोड़ें",
     edit: "संपादित करें",
     delete: "डिलीट करें",
-    save: "सेव करें",
+    save: "जमा करें",
     cancel: "रद्द करें",
     close: "बंद करें",
 
     // Form Labels
     busNumber: "बस नंबर",
-    capacity: "कैपेसिटी",
     route: "रूट",
     driver: "ड्राइवर",
     conductor: "कंडक्टर",
@@ -72,12 +72,10 @@ export const messages = {
     // Confirmations & Alerts
     confirmDeleteBus: "क्या आप वाकई इस बस को डिलीट करना चाहते हैं?",
     confirmDeleteRoute: "क्या आप वाकई इस रूट को डिलीट करना चाहते हैं?",
-    confirmDeleteDriver: "क्या आप वाकई इस ड्राइवर को डिलीट करना चाहते हैं?",
-    confirmDeleteConductor: "क्या आप वाकई इस कंडक्टर को डिलीट करना चाहते हैं?",
+    confirmDeleteUser: "क्या आप वाकई इस उपयोगकर्ता को हटाना चाहते हैं?",
     fillAllFields: "कृपया सभी आवश्यक फील्ड भरें",
 
     // Table Headers
-    actions: "कार्रवाई",
     assignedBus: "असाइन्ड बस",
     currentLocation: "वर्तमान स्थिति",
     todayIncome: "आज की आय",
@@ -114,6 +112,31 @@ export const messages = {
     requiredField: "यह फील्ड आवश्यक है",
     invalidPhone: "कृपया वैध फोन नंबर दर्ज करें",
     invalidNumber: "कृपया वैध संख्या दर्ज करें",
+    licenseNumberRequired: "लाइसेंस नंबर आवश्यक है",
+    licenseExpiryRequired: "लाइसेंस समाप्ति तिथि आवश्यक है",
+    nameRequired: "नाम आवश्यक है",
+    phoneRequired: "फ़ोन आवश्यक है",
+    phoneMustBe10Digits: "फ़ोन नंबर 10 अंकों का होना चाहिए",
+    experienceYearRequired: "अनुभव का वर्ष आवश्यक है",
+    emergencyContactRequired: "आपातकालीन संपर्क आवश्यक है",
+    addressRequired: "पता आवश्यक है",
+    busNumRequired: "बस नंबर आवश्यक है",
+    insurance_expiry: "बीमा समाप्ति तिथि आवश्यक है",
+    last_maintenance: "रखरखाव की तिथि आवश्यक है",
+    permit_expiry: "परमिट की तिथि आवश्यक है",
+    routeName: "मार्ग का नाम आवश्यक है",
+    routeCode: "कोड आवश्यक है",
+    routeDistance: "दूरी आवश्यक है",
+    baseFareRequired: "मूल किराया आवश्यक है",
+    routeKm: "प्रति किलोमीटर दर आवश्यक है",
+    driverRequired: "चालक आवश्यक है",
+    conductorRequired: "कंडक्टर आवश्यक है",
+    startTimeRequired: "प्रारंभ समय आवश्यक है",
+    endTimeRequired: "समाप्ति समय आवश्यक है",
+    fromTicketField: "प्रस्थान स्थान आवश्यक है",
+    posMachineRequired: "पीओएस आवश्यक है",
+    serialNoRequired: "सीरियल नंबर आवश्यक है",
+    serialNoNumeric: "सीरियल नंबर में केवल संख्याएँ होनी चाहिए",
 
     // Additional Form Labels
     selectRoute: "रूट चुनें",
@@ -121,14 +144,15 @@ export const messages = {
     selectConductor: "कंडक्टर चुनें",
     addStop: "स्टॉप जोड़ें",
     removeStop: "स्टॉप हटाएं",
+    selectRole: "भूमिका चुनें",
 
     // Success Messages
     busAdded: "बस सफलतापूर्वक जोड़ी गई",
     busUpdated: "बस सफलतापूर्वक अपडेट की गई",
     routeAdded: "रूट सफलतापूर्वक जोड़ा गया",
     routeUpdated: "रूट सफलतापूर्वक अपडेट किया गया",
-    driverAdded: "ड्राइवर सफलतापूर्वक जोड़ा गया",
-    conductorAdded: "कंडक्टर सफलतापूर्वक जोड़ा गया",
+    userAdded: "उपयोगकर्ता सफलतापूर्वक जोड़ा गया",
+    role: "भूमिका",
 
     // Dashboard Graph Labels
     ticketsIssued: "जारी किए गए टिकट",
@@ -139,6 +163,10 @@ export const messages = {
     Weekly: "साप्ताहिक",
     Monthly: "मासिक",
     Yearly: "वार्षिक",
+    occupancy: "आकुलन",
+    revenue: "राजस्व",
+    trips: "यात्राएँ",
+    tickets: "टिकट",
 
     // Header
     buses: "बसें",
@@ -154,14 +182,68 @@ export const messages = {
     // posMachine
     posMachine: "पीओएस मशीन",
     addPOSMachine: "पीओएस मशीन जोड़ें",
+    serialNo: "सीरियल नंबर",
 
     // parcel
     parcel: "पार्सल",
 
-    // createTicket
-    createTicket: "टिकट बनाएँ"
-  },
+    // bus management
+    insuranceExpiry: "बीमा समाप्ति",
+    capacity: "क्षमता",
+    permitExpiry: "अनुमति समाप्ति",
+    lastMaintenance: "अंतिम रखरखाव",
+    ticketView: "टिकट दृश्य",
+    actions: "क्रियाएँ",
+    searchPlaceholder: "खोजें...",
 
+    // USER
+    emergencyContact: "आपातकालीन संपर्क",
+    address: "पता",
+    experienceYears: "अनुभव (वर्षों में)",
+    licenseExpiry: "लाइसेंस समाप्ति",
+    licenseNumber: "लाइसेंस नंबर",
+
+    // Trip
+    conductorName: "कंडक्टर का नाम",
+    driverName: "ड्राइवर का नाम",
+    startTime: "प्रारंभ समय",
+    endTime: "समाप्ति समय",
+    bus: "बस",
+    // Ticket
+    createTicket: "टिकट बनाएं",
+    fromStop: "प्रस्थान स्थान",
+    fromStopPlaceholder: "प्रस्थान स्थान दर्ज करें",
+    fromStopRequired: "प्रस्थान स्थान आवश्यक है",
+    toStop: "गंतव्य स्थान",
+    toStopPlaceholder: "गंतव्य स्थान दर्ज करें",
+    toStopRequired: "गंतव्य स्थान आवश्यक है",
+    fare: "किराया",
+    fareRequired: "किराया आवश्यक है",
+    journeyDate: "यात्रा की तिथि",
+    journeyDateRequired: "यात्रा की तिथि आवश्यक है",
+    paymentMode: "भुगतान का तरीका",
+    cash: "नकद",
+    busNumberRequired: "बस नंबर आवश्यक है",
+    selectBusNumber: "बस नंबर चुनें",
+    posNumber: "POS नंबर",
+    posRequired: "POS आवश्यक है",
+    selectPosNumber: "POS नंबर चुनें",
+    seatNumber: "सीट नंबर",
+    seatNoRequired: "सीट नंबर आवश्यक है",
+    selectSeatNumber: "सीट नंबर चुनें",
+    booked: "बुक किया गया",
+    bookTicket: "टिकट बुक करें",
+    ticketAddedSuccessfully: "टिकट सफलतापूर्वक जोड़ा गया",
+    ticketNumber: "टिकट नंबर",
+    noDataFound: "कोई डेटा नहीं मिला",
+
+    // report and setting 
+    reportsTitle: "रिपोर्ट्स",
+    reportsComingSoon: "यह फीचर जल्द ही उपलब्ध होगा",
+    settingsTitle: "सेटिंग्स",
+    settingsComingSoon: "यह फीचर जल्द ही उपलब्ध होगा"
+  
+  },
 
   en: {
     // Navigation & Headers
@@ -196,8 +278,6 @@ export const messages = {
     close: "Close",
 
     // Form Labels
-    busNumber: "Bus Number",
-    capacity: "Capacity",
     route: "Route",
     driver: "Driver",
     conductor: "Conductor",
@@ -232,12 +312,10 @@ export const messages = {
     // Confirmations & Alerts
     confirmDeleteBus: "Are you sure you want to delete this bus?",
     confirmDeleteRoute: "Are you sure you want to delete this route?",
-    confirmDeleteDriver: "Are you sure you want to delete this driver?",
-    confirmDeleteConductor: "Are you sure you want to delete this conductor?",
+    confirmDeleteUser: "Are you sure you want to delete this user?",
     fillAllFields: "Please fill all required fields",
 
     // Table Headers
-    actions: "Actions",
     assignedBus: "Assigned Bus",
     currentLocation: "Current Location",
     todayIncome: "Today's Income",
@@ -267,12 +345,36 @@ export const messages = {
     editBusTitle: "Edit Bus",
     addRouteTitle: "Add New Route",
     editRouteTitle: "Edit Route",
-  
 
     // Validation Messages
     requiredField: "This field is required",
     invalidPhone: "Please enter a valid phone number",
     invalidNumber: "Please enter a valid number",
+    licenseNumberRequired: "License Number is required",
+    licenseExpiryRequired: "License Expiry date is required",
+    nameRequired: "Name is required",
+    phoneRequired: "Phone is required",
+    phoneMustBe10Digits: "Phone Number must be 10 Digits",
+    experienceYearRequired: "Experience Year is required",
+    emergencyContactRequired: "Emergency Contact is required",
+    addressRequired: "Address is required",
+    busNumRequired: "Bus Number is required.",
+    insurance_expiry: "Insurance Date is required.",
+    last_maintenance: "Maintenance Date is required.",
+    permit_expiry: "Permit Date is required.",
+    routeName: "Route Name is required.",
+    routeCode: "Code is required.",
+    routeDistance: "Distance is required.",
+    baseFareRequired: "Base fare is required.",
+    routeKm: "Km rate is required.",
+    driverRequired: "Driver is required",
+    conductorRequired: "Conductor is required",
+    startTimeRequired: "Start time is required",
+    endTimeRequired: "End time is required",
+    fromTicketField: "Field is Required",
+    posMachineRequired: "POS is required.",
+    serialNoRequired: "Serial No is required.",
+    serialNoNumeric: "Serial No must contain only numbers.",
 
     // Additional Form Labels
     selectRoute: "Select Route",
@@ -289,12 +391,10 @@ export const messages = {
     busUpdated: "Bus updated successfully",
     routeAdded: "Route added successfully",
     routeUpdated: "Route updated successfully",
-    driverAdded: "Driver added successfully",
-    conductorAdded: "Conductor added successfully",
+    userAdded: "User added successfully",
     role: "Role",
     licenseNumber: "License number",
     licenseExpiry: "License Expiry",
-
 
     // Dashboard Graph Labels
     Daily: "Daily",
@@ -305,6 +405,10 @@ export const messages = {
     tripsCompleted: "Trips Completed",
     revenueCollected: "Revenue Collected",
     occupancyRate: "Occupancy Rate",
+    occupancy: "Occupancy",
+    revenue: "Revenue",
+    trips: "Trips",
+    tickets: "Tickets",
 
     // Header
     buses: "Buses",
@@ -320,12 +424,64 @@ export const messages = {
     // posMachine
     posMachine: "POS Machine",
     addPOSMachine: "Add POS Machine",
+    serialNo: "Serial No",
 
     // parcel
     parcel: "Parcel",
 
-    // createTicket
-    createTicket: "Create Ticket"
-  },
+    // bus management
+    insuranceExpiry: "Insurance Expiry",
+    capacity: "Capacity",
+    permitExpiry: "Permit Expiry",
+    lastMaintenance: "Last Maintenance",
+    ticketView: "Ticket View",
+    actions: "Actions",
+    searchPlaceholder: "Search...",
 
+    //  user
+    emergencyContact: "Emergency Contact",
+    address: "Address",
+    experienceYears: "Experience Years",
+
+    // Trip
+    conductorName: "Conductor Name",
+    driverName: "Driver Name",
+    startTime: "Start Time",
+    endTime: "End Time",
+    bus: "Bus",
+    // Ticket
+    createTicket: "Create Ticket",
+    fromStop: "From Stop",
+    fromStopPlaceholder: "Enter starting stop",
+    fromStopRequired: "From Stop is required",
+    toStop: "To Stop",
+    toStopPlaceholder: "Enter destination stop",
+    toStopRequired: "To Stop is required",
+    fare: "Fare",
+    fareRequired: "Fare is required",
+    journeyDate: "Journey Date",
+    journeyDateRequired: "Journey Date is required",
+    paymentMode: "Payment Mode",
+    cash: "Cash",
+    busNumber: "Bus Number",
+    busNumberRequired: "Bus Number is required",
+    selectBusNumber: "Select Bus Number",
+    posNumber: "POS Number",
+    posRequired: "POS is required",
+    selectPosNumber: "Select POS Number",
+    seatNumber: "Seat Number",
+    seatNoRequired: "Seat No is required",
+    selectSeatNumber: "Select Seat Number",
+    booked: "Booked",
+    bookTicket: "Book Ticket",
+    ticketAddedSuccessfully: "Ticket Added Successfully",
+    ticketNumber: "Ticket Number",
+    noDataFound: "No Data Found",
+
+    // report and setting 
+    reportsTitle: "Reports",
+    reportsComingSoon: "Reports coming soon",
+    settingsTitle: "Settings",
+    settingsComingSoon: "Settings coming soon"
+  },
 };
