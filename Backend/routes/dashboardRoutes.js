@@ -162,4 +162,40 @@ router.get(
   dashboardController.getTripsCompletedReport
 );
 
+/**
+ * @swagger
+ * /api/dashboard/active-buses-count:
+ *   get:
+ *     summary: Get the count of active buses (buses with a RUNNING trip) and total buses for the current user
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Active buses count and total buses for the current user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 active_buses_count:
+ *                   type: integer
+ *                   example: 4
+ *                   description: Number of buses currently active (with a RUNNING trip)
+ *                 total_buses:
+ *                   type: integer
+ *                   example: 10
+ *                   description: Total number of buses registered by the current user
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
+router.get(
+  '/active-buses-count',
+  authenticateToken,
+  dashboardController.getActiveBusesCount
+);
+
+
 module.exports = router;

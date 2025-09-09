@@ -20,7 +20,7 @@ exports.getUsersByRole = async (req, res) => {
  
     // ✅ Allow only safe columns
     const validColumns = ["created_at", "name", "email", "phone"];
-    const sortColumn = validColumns.includes(orderColumn)
+    const sortColumn = validColumns.includes(orderColumn) 
       ? orderColumn
       : "created_at";
  
