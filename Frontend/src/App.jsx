@@ -487,37 +487,29 @@ if (userForm.role === "driver") {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
   
-    // Prepare the payload according to your API structure
+    // Prepare the payload in flat structure (same as create)
     const payload = {
-      id: userForm.id,
+      id: userForm.id, // Only for update
       name: userForm.name,
       phone: userForm.phone,
       role: userForm.role,
-      userExtra: {
-        license_number: userForm.license_number || "",
-        license_expiry: userForm.license_expiry 
-          ? new Date(userForm.license_expiry).toISOString().split("T")[0]
-          : null,
-        experience_years: parseInt(userForm.experience_years, 10) || 0,
-        address: userForm.address || "",
-        emergency_contact: userForm.emergency_contact || "",
-      }
+      license_number: userForm.license_number || "",
+      license_expiry: userForm.license_expiry 
+        ? new Date(userForm.license_expiry).toISOString().split('T')[0]
+        : null,
+      experience_years: parseInt(userForm.experience_years, 10) || 0,
+      address: userForm.address || "",
+      emergency_contact: userForm.emergency_contact || "",
     };
   
     try {
       const response = await ApiService.updateUser(payload);
   
       if (response.success === true) {
-        // Update the users state with the new data
+        // Use the response data directly to update state
         setUsers(users.map((user) => 
           user.id === userForm.id 
-            ? { 
-                ...user, 
-                name: payload.name,
-                phone: payload.phone,
-                role: payload.role,
-                userExtra: payload.userExtra
-              } 
+            ? response.data // Use the complete response data
             : user
         ));
         
@@ -1083,7 +1075,7 @@ if (userForm.role === "driver") {
               >
                 {t("cancel")}
               </button>
-              <button
+               <button
           onClick={modalType === "edit-user" ? handleUpdateUser : handleAddUser}
           className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
         >
