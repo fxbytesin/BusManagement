@@ -177,3 +177,52 @@ exports.getTripsCompletedReport = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+exports.getActiveBusesCount = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Query 1: Count distinct buses with at least one RUNNING Trip for this user
+    const activeQuery = `
+      SELECT 
+        COUNT(DISTINCT t.bus_id) AS active_buses_count
+      FROM Trip t
+      INNER JOIN Bus b ON t.bus_id = b.id
+      WHERE t.status = 'RUNNING'
+        AND b.user_id = ?
+    `;
+    // Query 2: Total buses for this user
+    const totalBusQuery = `
+      SELECT 
+        COUNT(*) AS total_buses
+      FROM Bus
+      WHERE user_id = ?
+    `;
+
+    // Run both queries in parallel
+    const [activeResult, totalResult] = await Promise.all([
+      prisma.$queryRawUnsafe(activeQuery, userId),
+      prisma.$queryRawUnsafe(totalBusQuery, userId),
+    ]);
+
+    const active_buses_count =
+      Array.isArray(activeResult) && activeResult.length
+        ? Number(activeResult[0].active_buses_count) || 0
+        : 0;
+
+    const total_buses =
+      Array.isArray(totalResult) && totalResult.length
+        ? Number(totalResult[0].total_buses) || 0
+        : 0;
+
+    res.json({
+      active_buses_count,
+      total_buses
+    });
+  } catch (error) {
+    console.error('Error fetching active/total buses count:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
