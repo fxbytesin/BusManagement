@@ -2,6 +2,7 @@
 import React, {useState } from 'react';
 import ApiService from '../services/api';
 import ToastMessage from './pages/ToastMessage';
+import { Loader } from 'lucide-react';
 
 const LoginVerify = ({
     getNumber,
@@ -11,6 +12,7 @@ const LoginVerify = ({
   const [error, setError] = useState('');
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -26,6 +28,7 @@ const LoginVerify = ({
           otp : otp
       }      
     try {
+      setLoading(true)
       const response = await ApiService.verifyLogin(data);      
       if (response?.success === true) {
         setToastMessage(response?.data?.message);
@@ -33,9 +36,15 @@ const LoginVerify = ({
         setTimeout(() => setIsLogin(false), 1000);
         setTimeout(() => setShowToast(false), 3000);
       }
+      else {
+        setError('Invalid otp');
+      }
     } catch (err) {
       console.error(err);
       setError('Login failed. Please try again.');
+    }
+    finally {
+      setLoading(false)
     }
   };
 
@@ -64,12 +73,24 @@ const LoginVerify = ({
           </div>
 
           {/* Submit */}
-          <button
+          {/* <button
             type="submit"
             className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors"
           >
-         Enter otp
-          </button>
+            Enter otp
+          </button> */}
+          <button
+        type="submit"
+        disabled={loading} // 🔹 Disable when loading
+        className={`w-full text-white py-2 rounded-lg transition-colors flex items-center justify-center 
+          ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}`}
+      >
+        {loading ? (
+           <Loader />
+        ) : (
+          " Enter otp"
+        )}
+      </button>
         </form>
       </div>
 
