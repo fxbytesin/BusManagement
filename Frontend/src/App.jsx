@@ -1084,11 +1084,11 @@ if (userForm.role === "driver") {
                 {t("cancel")}
               </button>
               <button
-                onClick={editingItem ? handleUpdateUser : handleAddUser}
-                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
-              >
-                {t("save")}
-              </button>
+          onClick={modalType === "edit-user" ? handleUpdateUser : handleAddUser}
+          className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+        >
+          {t("save")}
+        </button>
             </div>
           </div>
         );
