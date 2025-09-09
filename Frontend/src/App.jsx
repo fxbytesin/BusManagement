@@ -1175,32 +1175,34 @@ if (userForm.role === "driver") {
             routes={routes}
           />
         );
-      case "reports":
-        return (
-          <div className="p-6">
-            <h3 className="text-xl font-semibold mb-6">{t("reports")}</h3>
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-              <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                रिपोर्ट्स
-              </h3>
-              <p className="text-gray-500">यह फीचर जल्द ही उपलब्ध होगा</p>
+        case "reports":
+          return (
+            <div className="p-6">
+              <h3 className="text-xl font-semibold mb-6">{t("reports")}</h3>
+              <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+                <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {t("reportsTitle")}
+                </h3>
+                <p className="text-gray-500">{t("reportsComingSoon")}</p>
+              </div>
             </div>
-          </div>
-        );
-      case "settings":
-        return (
-          <div className="p-6">
-            <h3 className="text-xl font-semibold mb-6">{t("settings")}</h3>
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-              <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                सेटिंग्स
-              </h3>
-              <p className="text-gray-500">यह फीचर जल्द ही उपलब्ध होगा</p>
+          );
+        
+        case "settings":
+          return (
+            <div className="p-6">
+              <h3 className="text-xl font-semibold mb-6">{t("settings")}</h3>
+              <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+                <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {t("settingsTitle")}
+                </h3>
+                <p className="text-gray-500">{t("settingsComingSoon")}</p>
+              </div>
             </div>
-          </div>
-        );
+          );
+        
       case "posMachine":
         return (
           <div className="p-6">
@@ -1239,7 +1241,7 @@ if (userForm.role === "driver") {
               className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700"
             >
               <Plus className="w-5 h-5" />
-              <span>{t("addParcel")}</span>
+              <span>{t("Add Parcel")}</span>
             </button>
           </div>
 
