@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import ApiService from '../../services/api';
-import { Edit, Trash2, SquareEqual, Plus } from 'lucide-react';
+import { Edit, Trash2, SquareEqual, Plus,Start } from 'lucide-react';
 import TicketSystem from './TicketSystem';
 import DataPagination from './DataPagination';
 import SortColumn from './SortColumn';
+import ToastMessage from './ToastMessage';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay,faStop } from '@fortawesome/free-solid-svg-icons';
+import ConfirmDialog from './ConfirmStatus';
 const Trip = ({
   buses,
   routes,
@@ -13,9 +17,9 @@ const Trip = ({
   setBuses,
   setRoutes,
   setDrivers,
-  setConductors,
   showTrip,
-  setShowTrip
+  setShowTrip,
+  setConductors
 }) => {
 
   const [tripForm, setTripForm] = useState({
@@ -30,28 +34,38 @@ const Trip = ({
   const [trip, setTrip] = useState([])
   const [isPost, setIsPost] = useState(true)
   const [editId, setEditId] = useState(0)
-  const [showTicket, setShowTicket] = useState(true) 
+  const [showTicket, setShowTicket] = useState(true)
   const [selectedTripId, setSelectedTripId] = useState(null);
   const [busCapacity, setBusCapacity] = useState(0)
   const [search, setSearch] = useState("");
   const [sortDescriptor, setSortDescriptor] = useState({
     column: "bus_number",
     direction: "ASC",
-  }); 
+  });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-  
+  const [errors, setErrors] = useState({});
+  const [toastMessage, setToastMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [showStatusModel, setShowStatusModel] = useState(false)
+  const [label, setLabel] = useState({
+    heading: "",
+    message: "",
+    button : ""
+  })
+  const [selectedStatus, setSelectedStatus] = useState("");
+
   const getData = async () => {
     const body = {
-      search : search,
+      search: search,
       limit: 10,
       page: page,
       order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
+      orderColumn: sortDescriptor.column
     }
     try {
       const response = await ApiService.getTrip(body);
-      if (response?.success === true) {                 
+      if (response?.success === true) {
         setTrip(response?.data?.data)
         setTotalPages(response?.data?.pagination?.totalPages)
       }
@@ -62,95 +76,90 @@ const Trip = ({
   useEffect(() => {
     getData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search,page,sortDescriptor])
+  }, [search, page, sortDescriptor])
 
-
+  useEffect(() => {
+    if (!showTrip) {
+      setErrors({})
+    }
+  }, [showTrip])
   const getBusData = async () => {
     const body = {
-      search : search,
+      search: search,
       limit: 10,
       page: page,
       order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
+      orderColumn: sortDescriptor.column
     }
     try {
-      const response = await ApiService.getBus(body);      
+      const response = await ApiService.getBus(body);
       setBuses(response?.data?.data)
       setTotalPages(response?.data?.pagination?.totalPages)
     }
     catch (err) {
-      
+
     }
     finally {
     }
   }
-  
+
 
   const getRoutesData = async () => {
     const body = {
-      search : search,
+      search: search,
       limit: 10,
       page: page,
       order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
+      orderColumn: sortDescriptor.column
     }
     try {
-      const response = await ApiService.getRoutes(body);      
+      const response = await ApiService.getRoutes(body);
       setRoutes(response?.data?.data)
     }
     catch (err) {
-      
+
     }
     finally {
-      
+
     }
   }
-  
+
   const getDriverData = async () => {
-    const body = {
-      search : search,
-      limit: 10,
-      page: page,
-      order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
-    }
     try {
-      const response = await ApiService.getDriver(body);      
-      setDrivers(response?.data?.data)
-    }
-    catch (err) {
+      const response = await ApiService.getDriver();
+      if (response?.success === true && Array.isArray(response.data)) {
       
+        setDrivers(response.data);
+      } else {
+        setDrivers([]);
+      }
+    } catch (err) {
+      setDrivers([]);
     }
-    finally {
-    }
-  }
+  };
   
   const getConductorData = async () => {
-    const body = {
-      search : search,
-      limit: 10,
-      page: page,
-      order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
-    }
     try {
-      const response = await ApiService.getConductor(body);      
-      setConductors(response?.data?.data)
+      const response = await ApiService.getConductor();
+      if (response?.success === true && Array.isArray(response.data)) {
+     
+        setConductors(response.data);
+      } else {
+        setConductors([]);
+      }
+    } catch (err) {
+      setConductors([]);
     }
-    catch (err) {
-      
-    }
-    finally {
-    }
-}
+  };
+  
 
-useEffect(() => {
-  getRoutesData()
-  getDriverData()
-  getConductorData()
-  getBusData()
-// eslint-disable-next-line react-hooks/exhaustive-deps
-},[])
+  useEffect(() => {
+    getRoutesData()
+    getDriverData()
+    getConductorData()
+    getBusData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const status = [
     "SCHEDULED",
@@ -162,18 +171,31 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let newErrors = {};
+
     if (!tripForm.bus_id) {
-      alert("Please select a bus");
-      return;
+      newErrors.bus_id = "Bus is required.";
     }
     if (!tripForm.route_id) {
-      alert("Please select a route");
-      return;
+      newErrors.route_id = "Route is required.";
     }
-    if (!tripForm.start_time || !tripForm.end_time) {
-      alert("Please select start and end time");
-      return;
+    if (!tripForm.driver_id) {
+      newErrors.driver_id = "Driver is required.";
     }
+    if (!tripForm.conductor_id) {
+      newErrors.conductor_id = "Base fare is required.";
+    }
+    if (!tripForm.start_time) {
+      newErrors.start_time = "Km rate is required.";
+    }
+    if (!tripForm.end_time) {
+      newErrors.end_time = "Km rate is required.";
+    }
+
+    setErrors(newErrors);
+
+    // Stop if errors exist
+    if (Object.keys(newErrors).length > 0) return;
 
     if (isPost) {
       const payload = {
@@ -188,7 +210,9 @@ useEffect(() => {
       const response = await ApiService.createTrip(payload)
       if (response?.data) {
         getData()
-        alert("Trip saved successfully");
+        setToastMessage("Trip Add Successfully");
+        setShowToast(true)
+        setTimeout(() => setShowToast(false), 3000);
       }
 
     }
@@ -207,11 +231,12 @@ useEffect(() => {
 
       const response = await ApiService.updateTrip(payload, editId);
       if (response?.success === true) {
-        alert("Trip Updated successfully ");
+        setToastMessage("Trip Update Successfully");
+        setShowToast(true)
+        setTimeout(() => setShowToast(false), 3000);
         getData()
       }
       else {
-        alert("Trip Updated Fail ");
       }
     }
 
@@ -234,6 +259,9 @@ useEffect(() => {
       const response = await ApiService.deleteTrip(obj?.id);
       if (response?.data?.message === "Trip deleted successfully") {
         // remove deleted trip from UI              
+        setShowToast(true)
+        setToastMessage("Pos Machine Deleted Successfully")
+        setTimeout(() => setShowToast(false), 3000);
         setTrip((prevTrips) => prevTrips.filter((trip) => trip.id !== obj.id));
       }
     } catch (error) {
@@ -248,7 +276,7 @@ useEffect(() => {
     return date.toISOString().slice(0, 16);
   };
 
-  const handleEdit = (obj) => {    
+  const handleEdit = (obj) => {
     setTripForm({
       bus_id: obj.bus_id,
       route_id: obj.route_id,
@@ -279,7 +307,7 @@ useEffect(() => {
   }
 
   const handleChange = (e) => {
-    setSearch(e.target.value); 
+    setSearch(e.target.value);
   }
   const handlePageChange = (page) => {
     setPage(page); // Update the page state variable to the specified page number
@@ -303,8 +331,52 @@ useEffect(() => {
       }
     });
   };
-  return (
+
+  const handleStatusChange = (id, type) => {
+    setSelectedTripId(id);
     
+    if (type === "RUNNING") {
+      setShowStatusModel(true);
+      setLabel({
+        heading: "Start Trip",
+        message: "Are you sure you want to Start this Trip?",
+        button: "Start",
+      });
+      setSelectedStatus("RUNNING");
+    } else {
+      setShowStatusModel(true);
+      setLabel({
+        heading: "Complete Trip",
+        message: "Are you sure you want to Complete this Trip?",
+        button: "Complete",
+      });
+      setSelectedStatus("COMPLETED");
+    }
+  };
+
+
+  const confirmStatusChange = async () => {
+    const payload = { status: selectedStatus };  
+    try {
+      const response = await ApiService.updateTripStatus(payload, selectedTripId);
+      if (response.success === true) {
+        setToastMessage("Status Update Successfully");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+        getData();
+      } else {
+        alert("Failed to update status");
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      alert("Something went wrong. Please try again.");
+    }
+  
+    setShowStatusModel(false);
+  };
+  
+  return (
+
     showTrip ?
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
@@ -317,8 +389,12 @@ useEffect(() => {
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.bus_id}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setTripForm({ ...tripForm, bus_id: e.target.value })
+                    if (errors.bus_id) {
+                      setErrors({ ...errors, bus_id: "" });
+                    }
+                  }
                   }
                 >
                   <option value="">{t("busNumber")}</option>
@@ -328,6 +404,9 @@ useEffect(() => {
                     </option>
                   ))}
                 </select>
+                {errors.bus_id && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.bus_id}</p>
+                )}
               </div>
 
               <div>
@@ -337,8 +416,12 @@ useEffect(() => {
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.route_id}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setTripForm({ ...tripForm, route_id: e.target.value })
+                    if (errors.route_id) {
+                      setErrors({ ...errors, route_id: "" });
+                    }
+                  }
                   }
                 >
                   <option value="">{t("selectRoute")}</option>
@@ -348,47 +431,66 @@ useEffect(() => {
                     </option>
                   ))}
                 </select>
+                {errors.route_id && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.route_id}</p>
+                )}
               </div>
-
+              {/* Driver Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Driver")}
+                  {t("Driver")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.driver_id}
-                  onChange={(e) =>
-                    setTripForm({ ...tripForm, driver_id: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setTripForm({ ...tripForm, driver_id: e.target.value });
+                    if (errors.driver_id) {
+                      setErrors({ ...errors, driver_id: "" });
+                    }
+                  }}
                 >
                   <option value="">{t("selectDriver")}</option>
-                  {drivers?.map((driver) => (
-                    <option key={driver.id} value={driver.id}>
-                      {driver.name}
-                    </option>
-                  ))}
+                  {Array.isArray(drivers) &&
+                    drivers.map((driver) => (
+                      <option key={driver.id} value={driver.id}>
+                        {driver.name}
+                      </option>
+                    ))}
                 </select>
+                {errors.driver_id && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.driver_id}</p>
+                )}
               </div>
 
+              {/* Conductor Dropdown */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  {t("Conductor")}
+                  {t("Conductor")} *
                 </label>
                 <select
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.conductor_id}
-                  onChange={(e) =>
-                    setTripForm({ ...tripForm, conductor_id: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setTripForm({ ...tripForm, conductor_id: e.target.value });
+                    if (errors.conductor_id) {
+                      setErrors({ ...errors, conductor_id: "" });
+                    }
+                  }}
                 >
                   <option value="">{t("selectConductor")}</option>
-                  {conductors?.map((conductor) => (
-                    <option key={conductor.id} value={conductor.id}>
-                      {conductor.name}
-                    </option>
-                  ))}
+                  {Array.isArray(conductors) &&
+                    conductors.map((conductor) => (
+                      <option key={conductor.id} value={conductor.id}>
+                        {conductor.name}
+                      </option>
+                    ))}
                 </select>
+                {errors.conductor_id && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.conductor_id}</p>
+                )}
               </div>
+
 
 
               <div>
@@ -399,10 +501,14 @@ useEffect(() => {
                   type="datetime-local"
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.start_time}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setTripForm({ ...tripForm, start_time: e.target.value })
                   }
+                  }
                 />
+                {errors.start_time && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.start_time}</p>
+                )}
               </div>
 
               <div>
@@ -413,10 +519,14 @@ useEffect(() => {
                   type="datetime-local"
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={tripForm.end_time}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setTripForm({ ...tripForm, end_time: e.target.value })
                   }
+                  }
                 />
+                {errors.end_time && (
+                  <p className="text-red-500 text-sm mt-1 text-left">{errors.end_time}</p>
+                )}
               </div>
 
 
@@ -465,152 +575,182 @@ useEffect(() => {
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-semibold ml-5">{t("trip")}</h3>
 
-             <div className='flex'>
-                <form className="flex max-w-lg mx-auto mr-6 mt-[19px]">   
-                   <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
-                   onChange={handleChange}
-                />
-         
-                  </form>
-                <button
-                 onClick={() => setShowTrip(true)}
-                 className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700 mr-5 mt-5"
-                 >
-              <Plus className="w-5 h-5" />
-              <span>{t("addTrip")}</span>
-                </button>
-            </div>
+                <div className='flex'>
+                  <form className="flex max-w-lg mx-auto mr-6 mt-[19px]">
+                    <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+                      onChange={handleChange}
+                    />
 
-          </div>
-            <table className="w-full">           
-              <thead className="bg-gray-50">
-                <tr>
+                  </form>
+                  <button
+                    onClick={() => setShowTrip(true)}
+                    className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700 mr-5 mt-5"
+                  >
+                    <Plus className="w-5 h-5" />
+                    <span>{t("addTrip")}</span>
+                  </button>
+                </div>
+
+              </div>
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("bus_id")}
+                      onClick={() => handleSorting("bus_id")}
                     >
                       {("Bus Number")}
                       <SortColumn
-                      sortDescriptor={sortDescriptor}
-                      name="bus_id"
+                        sortDescriptor={sortDescriptor}
+                        name="bus_id"
                       />
-                  </th>
+                    </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("conductor_id")}
+                      onClick={() => handleSorting("conductor_id")}
                     >
                       <div className='flex'>
-                      {("Conductor Name")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="conductor_id"
+                        {("Conductor Name")}
+                        <SortColumn
+                          sortDescriptor={sortDescriptor}
+                          name="conductor_id"
                         />
-                        </div>
-                  </th>
+                      </div>
+                    </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("driver_id")}
+                      onClick={() => handleSorting("driver_id")}
                     >
                       <div className='flex'>
-                      {("Driver Name")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="driver_id"
+                        {("Driver Name")}
+                        <SortColumn
+                          sortDescriptor={sortDescriptor}
+                          name="driver_id"
                         />
-                        </div>
-                  </th>
+                      </div>
+                    </th>
 
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("route_id")}
-                    >  
+                      onClick={() => handleSorting("route_id")}
+                    >
                       <div className='flex'>
-                      {("Route")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="route_id"
+                        {("Route")}
+                        <SortColumn
+                          sortDescriptor={sortDescriptor}
+                          name="route_id"
                         />
                       </div>
-                      
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("Start Time")}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("End Time")}
-                  </th>
 
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("Status")}
-                  </th>
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {("Start Time")}
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {("End Time")}
+                    </th>
 
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {("Action")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {trip?.map((trip) => (
-                  <tr key={trip.id}>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                      {trip.bus_number}
-                    </td>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {("Status")}
+                    </th>
 
-                    <td className="px-6 py-4 whitespace-nowrap text-left">
-                      {trip?.conductor_name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                      {trip?.driver_name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                      {trip?.route_name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                      {trip?.start_time
-                        ? new Date(trip.start_time).toLocaleString("en-IN", {
-                          dateStyle: "medium",
-                          timeStyle: "short",
-                        })
-                        : ""}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-
-                      {trip?.end_time
-                        ? new Date(trip.start_time).toLocaleString("en-IN", {
-                          dateStyle: "medium",
-                          timeStyle: "short",
-                        })
-                        : ""}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
-                      {trip?.status}
-                    </td>
-                    <td>
-                      <div className="flex items-center space-x-2">
-                        <button
-                          className="text-blue-600 hover:text-blue-900"
-                          title={t("edit")}
-                          onClick={() => handleEdit(trip)}
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          className="text-red-600 hover:text-red-900"
-                          title={t("delete")}
-                          onClick={() => handleDelete(trip)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                        <button>
-                          <SquareEqual className="w-4 h-4"
-                          onClick={() => {
-                            setShowTicket(false);
-                            setSelectedTripId(trip.id);
-                            setBusCapacity(trip?.bus_capacity)
-                          }}                      
-                          />
-                        </button>
-                      </div>
-                    </td>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {("Action")}
+                    </th>
                   </tr>
-                ))}
-              </tbody>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {trip && trip.length > 0 ? (
+                    trip.map((trip) => (
+                      <tr key={trip.id}>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip.bus_number}
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-left">
+                          {trip?.conductor_name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip?.driver_name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip?.route_name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip?.start_time
+                            ? new Date(trip.start_time).toLocaleString("en-IN", {
+                              dateStyle: "medium",
+                              timeStyle: "short",
+                            })
+                            : ""}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                          {trip?.end_time
+                            ? new Date(trip.end_time).toLocaleString("en-IN", {
+                              dateStyle: "medium",
+                              timeStyle: "short",
+                            })
+                            : ""}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                        {trip?.status}
+                        </td>
+                        <td>
+                          <div className="flex items-center space-x-2">
+                            <button
+                              className="text-blue-600 hover:text-blue-900"
+                              title={t("edit")}
+                              onClick={() => handleEdit(trip)}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              className="text-red-600 hover:text-red-900"
+                              title={t("delete")}
+                              onClick={() => handleDelete(trip)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                            <button>
+                              <SquareEqual
+                                className="w-4 h-4"
+                                onClick={() => {
+                                  setShowTicket(false);
+                                  setSelectedTripId(trip.id);
+                                  setBusCapacity(trip?.bus_capacity);
+                                }}
+                              />
+                            </button>
+                            <button
+                            
+                            >
+                              {trip.status === "SCHEDULED" && (
+                                <FontAwesomeIcon icon={faPlay} className="w-4 h-4 text-green-600 cursor-pointer hover:text-green-800"
+                                 onClick={()=> handleStatusChange(trip?.id,"RUNNING",)}
+                                /> 
+                              )
+                              }
+                              
+                              {trip?.status === "RUNNING" && (
+                               <FontAwesomeIcon icon={faStop} className="w-4 h-4 text-red-600 cursor-pointer hover:text-red-800"
+                                 onClick={()=> handleStatusChange(trip?.id,"Stop",)}
+                                 />
+                              )
+                              }
+                            
+                              </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="8"
+                        className="px-6 py-4 text-center text-gray-500 font-medium"
+                      >
+                        No Data Found
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+
               </table>
               {conductors && conductors.length > 0 && (
                 <DataPagination
@@ -619,15 +759,31 @@ useEffect(() => {
                   currentPage={page}
                 />
               )}
-              </div>
-          ) : (
-              <div>
-                <TicketSystem
-                  tripId={selectedTripId}
-                  busCapacity={busCapacity}
+              {showToast && (
+                <ToastMessage
+                  setShowToast={setShowToast}
+                  toastMessage={toastMessage}
                 />
-              </div>
-          )}          
+              )
+              }
+              {showStatusModel && (
+                <ConfirmDialog
+                label={label}
+                  confirmColor="bg-green-600 hover:bg-green-700"
+                  onConfirm={confirmStatusChange} 
+                  onCancel={() => setShowStatusModel(false)}
+                />
+              )}
+              
+            </div>
+          ) : (
+            <div>
+              <TicketSystem
+                tripId={selectedTripId}
+                busCapacity={busCapacity}
+              />
+            </div>
+          )}
         </div>
       )
   )

@@ -4,6 +4,7 @@ import ApiService from '../../services/api';
 import TicketView from './TicketView';
 import SortColumn from './SortColumn';
 import DataPagination from './DataPagination';
+import ConfirmDelete from './ConfirmDelete';
 
  // Bus Management Page
 const BusManagementPage = (
@@ -12,18 +13,14 @@ const BusManagementPage = (
     setModalType,
     setShowModal,
     t,
-    routes,
-    conductors,
-    drivers,
     handleEditBus,
     handleDeleteBus,
     setBuses,
-    setRoutes,
-    setDrivers,
-    setConductors
   }
 ) => {
+    // eslint-disable-next-line no-unused-vars
   const [showComponent, setShowComponent] = useState(true)
+    // eslint-disable-next-line no-unused-vars
   const [busId, setBusId] = useState(0)
   const [loading, setLoading] = useState(true); 
 
@@ -35,7 +32,8 @@ const BusManagementPage = (
   }); 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
-
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const getBusData = async () => {
     const body = {
@@ -58,70 +56,6 @@ const BusManagementPage = (
       setLoading(false);
     }
   }
-  
-
-  const getRoutesData = async () => {
-    const body = {
-      search : search,
-      limit: 10,
-      page: page,
-      order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
-    }
-    try {
-      setLoading(true);
-      const response = await ApiService.getRoutes(body);      
-      setRoutes(response?.data?.data)
-    }
-    catch (err) {
-      
-    }
-    finally {
-      setLoading(false);
-    }
-  }
-  
-  const getDriverData = async () => {
-    const body = {
-      search : search,
-      limit: 10,
-      page: page,
-      order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
-    }
-    try {
-      setLoading(true);
-      const response = await ApiService.getDriver(body);      
-      setDrivers(response?.data?.data)
-    }
-    catch (err) {
-      
-    }
-    finally {
-      setLoading(false);
-    }
-  }
-  
-  const getConductorData = async () => {
-    const body = {
-      search : search,
-      limit: 10,
-      page: page,
-      order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
-    }
-    try {
-      setLoading(true);
-      const response = await ApiService.getConductor(body);      
-      setConductors(response?.data?.data)
-    }
-    catch (err) {
-      
-    }
-    finally {
-      setLoading(false);
-    }
-}
 
 
   useEffect(() => {
@@ -129,17 +63,7 @@ const BusManagementPage = (
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setBuses,search,page,sortDescriptor])
 
-  useEffect(() => {
-    getRoutesData()
-    getDriverData()
-    getConductorData()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
 
-  const functionClick = (id) => {
-    setBusId(id)
-    setShowComponent(false)
-  }
 
   const handleChange = (e) => {
     setSearch(e.target.value); 
@@ -168,6 +92,7 @@ const BusManagementPage = (
   const handlePageChange = (page) => {
     setPage(page); // Update the page state variable to the specified page number
   };
+
   return (
       showComponent ? (
       <div className="p-6">
@@ -175,7 +100,7 @@ const BusManagementPage = (
           <h3 className="text-xl font-semibold">{t("busManagement")}</h3>
 
           <div className='flex'>
-            <form class="flex max-w-lg mx-auto mr-6">   
+            <form className="flex max-w-lg mx-auto mr-6">   
               <input type="text" id="voice-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
                onChange={handleChange}
               />
@@ -221,87 +146,64 @@ const BusManagementPage = (
                       onClick={() => handleSorting("bus_number")}
                     >
                       <div className='flex'>
-                      {t("busNumber")}
+                      {t("Bus Number")}
                         <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="bus_number"
                       />
                       </div>
-                  </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("route_id")}
-                    >                      
-                      <div className='flex'>
-                      {t("route")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="route_id"
-                        />
-                      </div>
-                  </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                     onClick={() => handleSorting("driver_id")}
-                    >
-                      <div className='flex'>
-                      {t("driver")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="driver_id"
-                        />
-                      </div>
-
-                  </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    onClick={() => handleSorting("conductor_id")}
-                    >                      
-                      <div className='flex'>
-                      {t("conductor")}
-                      <SortColumn
-                        sortDescriptor={sortDescriptor}
-                        name="conductor_id"
-                        />
-                      </div>
-                  </th>
+                    </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                      onClick={() => handleSorting("capacity")}
                     >
                       <div className='flex'>
-                      {t("capacity")}
+                      {t("Capacity")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="capacity"
                         />
                       </div>
 
-                  </th>
+                    </th>
+                    
+
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                     onClick={() => handleSorting("status")}
-                    >
+                     onClick={() => handleSorting("insurance_expiry")}
+                    >                      
                       <div className='flex'>
-                      {t("status")}
+                      {t("Insurance Expiry")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
-                        name="status"
+                        name="insurance_expiry"
+                        />
+                      </div>
+                    </th>
+                    
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                     onClick={() => handleSorting("permit_expiry")}
+                    >
+                      <div className='flex'>
+                      {t("Permit Expiry")}
+                      <SortColumn
+                        sortDescriptor={sortDescriptor}
+                        name="permit_expiry"
                         />
                       </div>
 
-                      </th>
+                  </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      onClick={() => handleSorting("current_location")}
-                    >
+                    onClick={() => handleSorting("last_maintenance")}
+                    >                      
                       <div className='flex'>
-                      {t("current location")}
+                      {t("Last Maintenance")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
-                        name="current_location"
+                        name="last_maintenance"
                         />
                       </div>
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("Ticket View")}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("actions")}
+                    {t("Actions")}
                   </th>
                 </tr>
                 </thead>
@@ -321,34 +223,17 @@ const BusManagementPage = (
           {bus.bus_number}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          {bus.route_name}
+          {bus.capacity}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          {bus.driver_name}
+        {new Date(bus.insurance_expiry).toLocaleDateString("en-US")}
+
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-        {bus.conductor_name}
+          {new Date(bus.permit_expiry).toLocaleDateString("en-US")}
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">{bus.capacity}</td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <span
-            className={`px-2 py-1 rounded-full text-xs ${
-              bus.status === "running"
-                ? "bg-green-100 text-green-800"
-                : "bg-yellow-100 text-yellow-800"
-            }`}
-          >
-            {t(bus.status)}
-          </span>
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap font-medium">
-          {bus.current_location}
-        </td>
-        <td
-          className="px-6 py-4 whitespace-nowrap font-medium cursor-pointer"
-          onClick={() => functionClick(bus?.id)}
-        >
-          Ticket Details
+          {new Date(bus.last_maintenance).toLocaleDateString("en-US")}
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center space-x-2">
@@ -360,11 +245,10 @@ const BusManagementPage = (
               <Edit className="w-4 h-4" />
             </button>
             <button
-              onClick={() => {
-                if (window.confirm(t("confirmDeleteBus"))) {
-                  handleDeleteBus(bus.id);
-                }
-              }}
+             onClick={() => {
+              setSelectedId(bus.id);
+              setOpen(true);
+            }}
               className="text-red-600 hover:text-red-900"
               title={t("delete")}
             >
@@ -381,9 +265,7 @@ const BusManagementPage = (
       </td>
     </tr>
   )}
-</tbody>
-
-            
+</tbody>     
               </table>
               {buses && buses.length > 0 && (
                   <DataPagination
@@ -391,6 +273,20 @@ const BusManagementPage = (
                     totalPages={totalPages}
                     currentPage={page}
                   />
+              )}
+              
+                {open && (
+                <ConfirmDelete
+                  onConfirm={() => {
+                    handleDeleteBus(selectedId); 
+                    setOpen(false);
+                    setSelectedId(null);
+                  }}
+                  onCancel={() => {
+                    setOpen(false);
+                    setSelectedId(null);
+                  }}
+                />
                 )}
           </div>
         )}

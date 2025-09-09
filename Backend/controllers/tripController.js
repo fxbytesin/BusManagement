@@ -146,7 +146,6 @@ if (conductor_id) {
     return res.status(404).json({ error: 'Conductor not found' });
 }
 
-
     // Check overlapping trips for bus
     const start = new Date(start_time);
     const end = end_time ? new Date(end_time) : null;

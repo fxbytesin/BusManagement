@@ -10,74 +10,77 @@ const { authenticateToken } = require("../middlewares/authMiddleware");
  */
 
 /**
- * @swagger
- * /api/user/list:
- *   post:
- *     summary: Get users by role with pagination and search (auth required)
- *     tags: [Users]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               role:
- *                 type: string
- *                 enum: [driver, conductor]
- *               search:
- *                 type: string
- *               limit:
- *                 type: integer
- *                 default: 10
- *               page:
- *                 type: integer
- *                 default: 1
- *               order:
- *                 type: string
- *                 enum: [ASC, DESC]
- *                 default: ASC
- *               orderColumn:
- *                 type: string
- *                 enum: [created_at, name, email, phone]
- *                 default: created_at
- *     responses:
- *       200:
- *         description: List of users by role
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id: { type: integer }
- *                       name: { type: string }
- *                       phone: { type: string }
- *                       role:
- *                         type: string
- *                         enum: [driver, conductor]
- *                       experience_years: { type: integer }
- *                       address: { type: string }
- *                       emergency_contact: { type: string }
- *                       license_number: { type: string }
- *                       license_expiry:
- *                         type: string
- *                         format: date-time
- *                       active: { type: boolean }
- *                 pagination:
- *                   type: object
- *                   properties:
- *                     total: { type: integer }
- *                     page: { type: integer }
- *                     limit: { type: integer }
- *                     totalPages: { type: integer }
- */
+* @swagger
+* tags:
+*   name: Users
+*   description: User management
+*/
+ 
+/**
+* @swagger
+* /api/user/list:
+*   post:
+*     summary: Get users with pagination and search (auth required)
+*     tags: [Users]
+*     security:
+*       - bearerAuth: []
+*     requestBody:
+*       required: false
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               search:
+*                 type: string
+*                 description: Search by name or phone
+*               limit:
+*                 type: integer
+*                 default: 10
+*               page:
+*                 type: integer
+*                 default: 1
+*               order:
+*                 type: string
+*                 enum: [ASC, DESC]
+*                 default: ASC
+*               orderColumn:
+*                 type: string
+*                 enum: [created_at, name, email, phone]
+*                 default: created_at
+*     responses:
+*       200:
+*         description: List of users
+*         content:
+*           application/json:
+*             schema:
+*               type: object
+*               properties:
+*                 data:
+*                   type: array
+*                   items:
+*                     type: object
+*                     properties:
+*                       id: { type: integer }
+*                       name: { type: string }
+*                       phone: { type: string }
+*                       role: { type: string }
+*                       experience_years: { type: integer }
+*                       address: { type: string }
+*                       emergency_contact: { type: string }
+*                       license_number: { type: string }
+*                       license_expiry:
+*                         type: string
+*                         format: date-time
+*                       active: { type: boolean }
+*                 pagination:
+*                   type: object
+*                   properties:
+*                     total: { type: integer }
+*                     page: { type: integer }
+*                     limit: { type: integer }
+*                     totalPages: { type: integer }
+*/
 router.post('/list', authenticateToken, userController.getUsersByRole);
 
 /**
@@ -219,7 +222,7 @@ router.post('/create', authenticateToken, userController.createUser);
  *       404:
  *         description: User not found
  */
-router.put('/user/:id', authenticateToken, userController.updateUser);
+router.put('/:id', authenticateToken, userController.updateUser);
 
 /**
  * @swagger
@@ -242,6 +245,53 @@ router.put('/user/:id', authenticateToken, userController.updateUser);
  *       404:
  *         description: User not found
  */
-router.delete('/user/:id', authenticateToken, userController.deleteUser);
+router.delete('/:id', authenticateToken, userController.deleteUser);
+
+/**
+ * @swagger
+ * /api/user/drivers/dropdown:
+ *   get:
+ *     summary: Get dropdown list of drivers (id and name)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Array of driver objects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id: { type: integer }
+ *                   name: { type: string }
+ */
+router.get('/drivers/dropdown', authenticateToken, userController.getDriverDropdown);
+
+/**
+ * @swagger
+ * /api/user/conductors/dropdown:
+ *   get:
+ *     summary: Get dropdown list of conductors (id and name)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Array of conductor objects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id: { type: integer }
+ *                   name: { type: string }
+ */
+router.get('/conductors/dropdown', authenticateToken, userController.getConductorDropdown);
+
 
 module.exports = router;

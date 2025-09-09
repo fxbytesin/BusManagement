@@ -1,4 +1,5 @@
 const { PrismaClient } = require('../generated/prisma');
+const { Parser } = require("json2csv");
 const prisma = new PrismaClient();
 
 exports.getAllBuses = async (req, res) => {
@@ -217,3 +218,63 @@ exports.deleteBus=async (req, res) => {
     }
   }
 }
+
+
+// CSV
+exports.exportTickets = async (req, res) => {
+  try {
+    const { bus_id, from, to } = req.body;
+
+    if (!bus_id || !from || !to) {
+      return res.status(400).json({ error: "bus_id, from and to are required" });
+    }
+
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
+
+    const tickets = await prisma.ticket.findMany({
+      where: {
+        bus_id: parseInt(bus_id),
+        journey_date: {
+          gte: fromDate,
+          lte: toDate,
+        },
+      },
+      include: {
+        bus: true,
+      },
+    });
+
+    if (!tickets.length) {
+      return res.status(404).json({ error: "No tickets found for this bus in given range" });
+    }
+
+    const fields = [
+      "id",
+      "ticket_number",
+      "passenger_name",
+      "passenger_phone",
+      "from_stop",
+      "to_stop",
+      "passenger_type",
+      "fare",
+      "issue_time",
+      "journey_date",
+      "status",
+      "seat_no",
+      "payment_mode",
+      "bus.bus_number",
+    ];
+
+    const parser = new Parser({ fields });
+    const csv = parser.parse(tickets);
+
+    res.header("Content-Type", "text/csv");
+    res.attachment(`tickets_bus${bus_id}_${from}_${to}.csv`);
+    res.send(csv);
+
+  } catch (error) {
+    console.error("Error exporting tickets:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

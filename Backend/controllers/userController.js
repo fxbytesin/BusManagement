@@ -2,35 +2,42 @@ const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
 // List users by role with pagination and search
+
 exports.getUsersByRole = async (req, res) => {
   try {
     const {
-      // role,           // 'driver' or 'conductor'
       search = "",
       limit = 10,
       page = 1,
       order = "ASC",
       orderColumn = "created_at"
-    } = req.body;
-
-    if (!['driver', 'conductor'].includes(role)) {
-      return res.status(400).json({ error: 'Invalid role specified' });
-    }
+    } = req.body; // 👉 if you're using GET, change this to req.query
 
     const take = Number(limit);
     const skip = (Number(page) - 1) * take;
-    const sortOrder = order.toUpperCase() === "DESC" ? "desc" : "asc";
+
+    // ✅ Ensure valid sort order
+    const sortOrder = order && order.toUpperCase() === "DESC" ? "desc" : "asc";
+
+    // ✅ Allow only safe columns
     const validColumns = ["created_at", "name", "email", "phone"];
-    const sortColumn = validColumns.includes(orderColumn) ? orderColumn : "created_at";
+    const sortColumn = validColumns.includes(orderColumn)
+      ? orderColumn
+      : "created_at";
 
-    const whereCondition = {
-      role,
-      OR: search ? [
-        { name: { contains: search, mode: 'insensitive' } },
-        { phone: { contains: search, mode: 'insensitive' } }
-      ] : undefined
-    };
+    // ✅ Build search filter (all are String fields in your schema)
+    const whereCondition = search
+      ? {
+          OR: [
+            { name: { contains: search } },
+            { phone: { contains: search } },
+          ]
+        }
+      : {};
 
+    console.log("whereCondition:", JSON.stringify(whereCondition, null, 2));
+
+    // ✅ Fetch users
     const users = await prisma.user.findMany({
       where: whereCondition,
       include: { userExtra: true },
@@ -39,6 +46,7 @@ exports.getUsersByRole = async (req, res) => {
       take
     });
 
+    // ✅ Count total
     const totalCount = await prisma.user.count({ where: whereCondition });
 
     res.json({
@@ -46,7 +54,7 @@ exports.getUsersByRole = async (req, res) => {
       pagination: {
         total: totalCount,
         page: Number(page),
-        limit: take,
+        limit: Number(limit),
         totalPages: Math.ceil(totalCount / take)
       }
     });
@@ -56,10 +64,10 @@ exports.getUsersByRole = async (req, res) => {
   }
 };
 
+
 exports.createUser = async (req, res) => {
   try {
     const currentUserRole = req.user?.role; 
-    console.log(currentUserRole,'currentUserRole')
 
     // Only admin can create users
     if (currentUserRole !== 'admin') {
@@ -222,20 +230,57 @@ exports.updateUser = async (req, res) => {
 };
 
 
-// Delete user 
+// Delete user
 exports.deleteUser = async (req, res) => {
   try {
     const userId = parseInt(req.params.id);
+    console.log(userId, 'userid');
 
     const existingUser = await prisma.user.findUnique({ where: { id: userId } });
+
     if (!existingUser) {
       return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Prevent deletion if user is admin
+    if (existingUser.role === 'admin') {
+      return res.status(403).json({ error: 'Cannot delete user with admin role' });
     }
 
     await prisma.user.delete({ where: { id: userId } });
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
     console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// List driver names and IDs (dropdown)
+exports.getDriverDropdown = async (req, res) => {
+  try {
+    const drivers = await prisma.user.findMany({
+      where: { role: "driver" },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+    res.json(drivers);
+  } catch (error) {
+    console.error('Error fetching drivers:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// List conductor names and IDs (dropdown)
+exports.getConductorDropdown = async (req, res) => {
+  try {
+    const conductors = await prisma.user.findMany({
+      where: { role: "conductor" },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+    res.json(conductors);
+  } catch (error) {
+    console.error('Error fetching conductors:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

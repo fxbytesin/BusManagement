@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useState } from 'react';
 import ApiService from '../services/api';
+import ToastMessage from './pages/ToastMessage';
 
 const LoginVerify = ({
     getNumber,
@@ -8,7 +9,8 @@ const LoginVerify = ({
 }) => {
   const [otp,setOtp] = useState('')
   const [error, setError] = useState('');
-
+  const [toastMessage, setToastMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -24,10 +26,12 @@ const LoginVerify = ({
           otp : otp
       }      
     try {
-      const response = await ApiService.verifyLogin(data);
-      if (response) {
-        alert('Login Verification successful');
-        setIsLogin(false)
+      const response = await ApiService.verifyLogin(data);      
+      if (response?.success === true) {
+        setToastMessage(response?.data?.message);
+        setShowToast(true);
+        setTimeout(() => setIsLogin(false), 1000);
+        setTimeout(() => setShowToast(false), 3000);
       }
     } catch (err) {
       console.error(err);
@@ -68,6 +72,14 @@ const LoginVerify = ({
           </button>
         </form>
       </div>
+
+      {showToast && (
+             <ToastMessage
+             setShowToast={setShowToast}
+             toastMessage={toastMessage}
+           />
+        )
+        }
     </div>
   );
 };

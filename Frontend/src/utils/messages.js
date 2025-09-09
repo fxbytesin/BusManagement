@@ -12,6 +12,7 @@ export const messages = {
     ticketing: "टिकटिंग सिस्टम",
     reports: "रिपोर्ट्स",
     settings: "सेटिंग्स",
+    userManagement: "उपयोगकर्ता प्रबंधन",
 
     // Dashboard Stats
     todayRevenue: "आज की कुल आय",
@@ -25,8 +26,7 @@ export const messages = {
     // Buttons & Actions
     addNewBus: "नई बस जोड़ें",
     addNewRoute: "नया रूट जोड़ें",
-    addNewDriver: "नया ड्राइवर जोड़ें",
-    addNewConductor: "नया कंडक्टर जोड़ें",
+    addNewUser: "नया उपयोगकर्ता जोड़ें",
     edit: "संपादित करें",
     delete: "डिलीट करें",
     save: "सेव करें",
@@ -61,8 +61,7 @@ export const messages = {
     // Empty States
     noBusFound: "कोई बस नहीं मिली",
     noRouteFound: "कोई रूट नहीं मिला",
-    noDriverFound: "कोई ड्राइवर नहीं मिला",
-    noConductorFound: "कोई कंडक्टर नहीं मिला",
+    noUserFound: "कोई उपयोगकर्ता नहीं मिला",
     addFirstBus: "अपनी पहली बस जोड़ने के लिए नीचे दिए गए बटन पर क्लिक करें",
     addFirstRoute: "अपना पहला रूट जोड़ने के लिए नीचे दिए गए बटन पर क्लिक करें",
     addFirstDriver:
@@ -157,7 +156,10 @@ export const messages = {
     addPOSMachine: "पीओएस मशीन जोड़ें",
 
     // parcel
-    parcel: "पार्सल"
+    parcel: "पार्सल",
+
+    // createTicket
+    createTicket: "टिकट बनाएँ"
   },
 
 
@@ -167,8 +169,8 @@ export const messages = {
     dashboard: "Dashboard",
     busManagement: "Bus Management",
     routeManagement: "Route Management",
-    driverManagement: "Driver Management",
-    conductorManagement: "Conductor Management",
+    userManagement: "User Management",
+    user: "User",
     liveTracking: "Live Tracking",
     ticketing: "Ticketing System",
     reports: "Reports",
@@ -186,8 +188,7 @@ export const messages = {
     // Buttons & Actions
     addNewBus: "Add New Bus",
     addNewRoute: "Add New Route",
-    addNewDriver: "Add New Driver",
-    addNewConductor: "Add New Conductor",
+    addNewUser: "Add New User",
     edit: "Edit",
     delete: "Delete",
     save: "Save",
@@ -222,8 +223,7 @@ export const messages = {
     // Empty States
     noBusFound: "No Bus Found",
     noRouteFound: "No Route Found",
-    noDriverFound: "No Driver Found",
-    noConductorFound: "No Conductor Found",
+    noUserFound: "No User Found",
     addFirstBus: "Click the button below to add your first bus",
     addFirstRoute: "Click the button below to add your first route",
     addFirstDriver: "Click the button below to add your first driver",
@@ -267,8 +267,7 @@ export const messages = {
     editBusTitle: "Edit Bus",
     addRouteTitle: "Add New Route",
     editRouteTitle: "Edit Route",
-    addDriverTitle: "Add New Driver",
-    addConductorTitle: "Add New Conductor",
+  
 
     // Validation Messages
     requiredField: "This field is required",
@@ -278,9 +277,12 @@ export const messages = {
     // Additional Form Labels
     selectRoute: "Select Route",
     selectDriver: "Select Driver",
+    selectRole: "Select Role",
     selectConductor: "Select Conductor",
     addStop: "Add Stop",
     removeStop: "Remove Stop",
+    Emergency_Contact: "Emergency Contact",
+    experience_years: "Experience Years",
 
     // Success Messages
     busAdded: "Bus added successfully",
@@ -289,16 +291,20 @@ export const messages = {
     routeUpdated: "Route updated successfully",
     driverAdded: "Driver added successfully",
     conductorAdded: "Conductor added successfully",
+    role: "Role",
+    licenseNumber: "License number",
+    licenseExpiry: "License Expiry",
+
 
     // Dashboard Graph Labels
     Daily: "Daily",
     Weekly: "Weekly",
     Monthly: "Monthly",
     Yearly: "Yearly",
-    ticketsIssued: "ticketsIssued",
-    tripsCompleted: "tripsCompleted",
-    revenueCollected: "revenueCollected",
-    occupancyRate: "occupancyRate",
+    ticketsIssued: "Tickets Booked",
+    tripsCompleted: "Trips Completed",
+    revenueCollected: "Revenue Collected",
+    occupancyRate: "Occupancy Rate",
 
     // Header
     buses: "Buses",
@@ -316,7 +322,10 @@ export const messages = {
     addPOSMachine: "Add POS Machine",
 
     // parcel
-    parcel: "Parcel"
+    parcel: "Parcel",
+
+    // createTicket
+    createTicket: "Create Ticket"
   },
 
 };

@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
 import ApiService from '../services/api';
-import { Link } from 'react-router-dom';
 import LoginVerify from './LoginVerify';
 
 const Login = ({
@@ -9,16 +8,22 @@ const Login = ({
 }) => {
   const [phoneNo, setPhoneNo] = useState('');
   const [error, setError] = useState('');
-  const[verifyLogin,setVerifyLogin] = useState(true)
+  const [verifyLogin,setVerifyLogin] = useState(true)
   const [getNumber, setNumber] = useState('')
+  
   
     const handleLogin = async (e) => {
       // Simple validation
       e.preventDefault()
     if (!phoneNo) {
-      setError('Please fill  all fields.');
+      setError('Please Enter Mobile Number.');
       return;
-    }       
+      }       
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(phoneNo)) {
+        setError("Please enter a valid mobile number.");
+        return;
+      }
         
       const data = {
         phone: `+91 ${phoneNo}`,
@@ -27,11 +32,10 @@ const Login = ({
       try {
         const response = await ApiService.loginData(data);      
         if (response?.success === true) {          
-          alert('Login successful!');
           setVerifyLogin(false)
           setNumber(response?.data?.phone);
         } else {            
-          setError('Invalid email or password.');
+          setError('Invalid Number.');
         }
       } catch (err) {
         // This will catch any unexpected errors outside your API call
@@ -80,11 +84,6 @@ const Login = ({
             Login
           </button>
         </form>
-
-        <p className="text-sm text-center text-gray-600 mt-4">
-          Don’t have an account?{' '}
-          <Link to="/registration" className="text-blue-600 hover:underline">Registration</Link>
-        </p>
       </div>
     </div>
     ) : (

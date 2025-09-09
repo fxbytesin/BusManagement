@@ -3,6 +3,8 @@ import ApiService from '../../services/api';
 import { Loader, Plus, Trash2 } from 'lucide-react';
 import DataPagination from './DataPagination';
 import SortColumn from './SortColumn';
+import ToastMessage from './ToastMessage';
+import ConfirmDelete from './ConfirmDelete';
 
 const PosMachine = ({
     showModalPos,
@@ -22,21 +24,43 @@ const PosMachine = ({
   }); 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(10);
+  const [errors, setErrors] = useState({});
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
     
-    const handleSubmit = async() => {
-    if (!posForm.status || !posForm.serial_no) {
-        alert(("fillAllFields"));
-        return;
-        }
+    const handleSubmit = async(e) => {
+      let newErrors = {};
+
+      if (!posForm.serial_no.trim()) {
+        newErrors.serial_no = "Serial No is required.";
+      } else if (!/^\d+$/.test(posForm.serial_no)) {
+        newErrors.serial_no = "Serial No must contain only numbers.";
+      }
+      
+    
+      if (!posForm.status) {
+        newErrors.status = "Status is required.";
+      }
+    
+      setErrors(newErrors);
+    
+      if (Object.keys(newErrors).length > 0) return;
+      
+      
+      
     const payload = {
       serial_no: posForm.serial_no,
       status: posForm.status,
     };
         const response = await ApiService.addPos(payload)    
-        if (response?.success) {
-          alert("Pos Machine Create Successfully")
-        setPosData([...posData,response.data])
+      if (response?.success) {
+        setPosData([...posData, response.data])
+        setShowToast(true)
+        setToastMessage("Pos Machine Create Successfully")
+        setTimeout(() => setShowToast(false), 3000);
      }
 
     setShowModalPos(false);
@@ -65,21 +89,26 @@ const PosMachine = ({
     useEffect(() => {
           getData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search,page,sortDescriptor])
+    }, [search, page, sortDescriptor])
+    useEffect(() => {
+      if (!showModalPos) {
+      setErrors({})
+    }
+    }, [showModalPos])
+  
     
-    const handleDeletePos = async (id) => {
+  const handleDeletePos = async (id) => {      
         try {
           const response = await ApiService.deletePos(id);
           if (response.success) {
-            alert(response.data.message); // show success message
             // optional: refresh list or remove item from state
             setPosData((prev) => prev.filter((pos) => pos.id !== id));
+            setShowToast(true)
+            setToastMessage(response.data.message)
+            setTimeout(() => setShowToast(false), 3000);
           } else {
-            alert("Failed to delete POS machine");
           }
         } catch (error) {
-          console.error("Error deleting POS:", error);
-          alert("Something went wrong. Please try again.");
         }
   };  
   
@@ -115,10 +144,10 @@ const PosMachine = ({
   return (
     <div>
       {/* Button to open modal */}
-           <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6">
         <h3 className="text-xl font-semibold">{("PosMachine")}</h3>
         
- <div className='flex'>
+      <div className='flex'>
         <form className="flex max-w-lg mx-auto mr-6">   
               <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
                onChange={handleChange}
@@ -147,12 +176,19 @@ const PosMachine = ({
               <input
                 type="text"
                 value={posForm.serial_no}
-                onChange={(e) =>
+                onChange={(e) => {
                   setPosForm({ ...posForm, serial_no: e.target.value })
+                  if (errors.serial_no) {
+                    setErrors({ ...errors, serial_no: "" }); // clear error when typing
+                  }
+                }
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                 placeholder="POS12345678"
               />
+               {errors.serial_no && (
+               <p className="text-red-500 text-sm mt-1  text-left">{errors.serial_no}</p>
+               )}
             </div>
 
             {/* Status */}
@@ -170,6 +206,9 @@ const PosMachine = ({
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </select>
+              {errors.status && (
+    <p className="text-red-500 text-sm mt-1  text-left">{errors.status}</p>
+  )}
             </div>
 
             {/* Actions */}
@@ -255,13 +294,8 @@ const PosMachine = ({
               className="text-red-600 hover:text-red-900"
               title="delete"
               onClick={() => {
-                if (
-                  window.confirm(
-                    "Are you sure you want to delete this POS machine?"
-                  )
-                ) {
-                  handleDeletePos(pos?.id);
-                }
+                setSelectedId(pos.id); // store id of item to delete
+                setOpen(true);
               }}
             >
               <Trash2 className="w-4 h-4" />
@@ -281,15 +315,35 @@ const PosMachine = ({
     </tr>
   )}
 </tbody>
-
         </table>
+        {showToast && (
+             <ToastMessage
+             setShowToast={setShowToast}
+             toastMessage={toastMessage}
+           />
+        )
+        }
         {posData && posData.length > 0 && (
                   <DataPagination
                     onPageChange={handlePageChange}
                     totalPages={totalPages}
                     currentPage={page}
                   />
-                )}
+        )}
+    {open && (
+  <ConfirmDelete
+    onConfirm={() => {
+      handleDeletePos(selectedId); 
+      setOpen(false);
+      setSelectedId(null);
+    }}
+    onCancel={() => {
+      setOpen(false);
+      setSelectedId(null);
+    }}
+  />
+)}
+
 </div>
     </div>
   );
