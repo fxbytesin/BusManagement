@@ -31,7 +31,6 @@ const Reports = ({
   
   
   const getBusData = async () => {
-    setLoader(true)
     const body = {
       search: search,
       limit: 10,
@@ -48,7 +47,6 @@ const Reports = ({
 
     }
     finally {
-      setLoader(false)
     }
   }
 
@@ -65,13 +63,13 @@ const Reports = ({
     let newErrors = {};
   
     if (!formData.bus_id) {
-      newErrors.bus_id = t("busNumRequired");
+      newErrors.bus_id = "busNumRequired";
     }
     if (!formData.start_time) {
-      newErrors.start_time = t("startTimeRequired");
+      newErrors.start_time = "startTimeRequired";
     }
     if (!formData.end_time) {
-      newErrors.end_time = t("endTimeRequired");
+      newErrors.end_time = "endTimeRequired";
     }
      
     setErrors(newErrors);
@@ -119,7 +117,7 @@ const Reports = ({
   useEffect(() => {
     getBusData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+  }, [])
   
     return (
         <div className="p-6">
@@ -146,19 +144,20 @@ const Reports = ({
       className="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
       <option value="">Select type</option>
-      {loader ? (
-    <option disabled>Loading...</option>
-  ) : (
+      {
     buses?.map((bus) => (
       <option key={bus.id} value={bus.id}>
         {bus.bus_number}
       </option>
     ))
-  )}
+  }
                 </select>
                 {errors.bus_id && (
-                  <p className="text-red-500 text-sm mt-1 text-left">{errors.bus_id}</p>
-                )}
+  <p className="text-red-500 text-sm mt-1 text-left">
+    {t(errors.bus_id)}
+  </p>
+)}
+
   </div>
 
   {/* Start Date */}
@@ -174,7 +173,7 @@ const Reports = ({
       className="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                   {errors.start_time && (
-                  <p className="text-red-500 text-sm mt-1 text-left">{errors.start_time}</p>
+                  <p className="text-red-500 text-sm mt-1 text-left">{t(errors.start_time)}</p>
                 )}
   </div>
 
@@ -191,7 +190,7 @@ const Reports = ({
       className="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                     {errors.end_time && (
-                  <p className="text-red-500 text-sm mt-1 text-left">{errors.end_time}</p>
+                  <p className="text-red-500 text-sm mt-1 text-left">{t(errors.end_time)}</p>
                 )}
   </div>
 
