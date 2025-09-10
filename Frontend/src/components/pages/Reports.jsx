@@ -100,6 +100,10 @@ const Reports = ({
         setShowToast(true)
         setToastMessage("File Created Successfully")
         setTimeout(() => setShowToast(false), 3000);
+      } else {        
+        setShowToast(true)
+        setToastMessage(response?.error?.error)
+        setTimeout(() => setShowToast(false), 3000);        
       }
    
     } catch (err) {
