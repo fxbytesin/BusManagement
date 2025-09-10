@@ -149,7 +149,7 @@ const [page, setPage] = useState(1);
     
   return (
     <div className='flex'>
-      <div className='w-full'>
+      <div className='w-full p-[15px]'>
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold mb-6 ml-5 mt-5">{t("ticketing")}</h3>
           <button
@@ -308,11 +308,11 @@ const [page, setPage] = useState(1);
               <tbody className="bg-white divide-y divide-gray-200">
                 {trip.map(trip => (
                   <tr key={trip.id}>
-                    <td>{trip.ticket_number}</td>
-                    <td>{trip.from_stop}</td>
-                    <td>{trip.to_stop}</td>
-                    <td>{trip.status}</td>
-                    <td>{trip.payment_mode}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{trip.ticket_number}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{trip.from_stop}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{trip.to_stop}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{trip.status}</td>
+                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{trip.payment_mode}</td>
                   </tr>
                 ))}
               </tbody>

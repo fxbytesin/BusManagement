@@ -168,6 +168,8 @@ const Trip = ({
 
   const status = [
     "SCHEDULED",
+    "RUNNING",
+    "COMPLETED",
   ]
 
   const handleSubmit = async (e) => {
@@ -237,6 +239,7 @@ const Trip = ({
         // convert datetime-local back to ISO for API
         start_time: new Date(tripForm.start_time).toISOString(),
         end_time: new Date(tripForm.end_time).toISOString(),
+        status: tripForm.status,
       };
 
       const response = await ApiService.updateTrip(payload, editId);
