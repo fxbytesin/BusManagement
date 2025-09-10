@@ -4,35 +4,24 @@ const prisma = new PrismaClient();
 const TICKET_PREFIX = process.env.TICKET_PREFIX || "TKT"; 
 
 async function generateTicketNumber() {
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, "0"); // 01-12
-  const year = String(now.getFullYear()).slice(-2); // last 2 digits
-
-  // Step 1: find last ticket for this month/year
+  // Step 1: find last ticket (highest id)
   const lastTicket = await prisma.ticket.findFirst({
-    where: {
-      ticket_number: {
-        startsWith: `${TICKET_PREFIX}-${month}${year}`, // e.g. "TKT-0925"
-      },
-    },
-    orderBy: { id: "desc" }, // latest inserted
+    orderBy: { id: "desc" }, // latest inserted ticket
   });
 
   // Step 2: extract serial or start from 0
   let serial = 0;
   if (lastTicket) {
-    const lastSerial = parseInt(lastTicket.ticket_number.slice(-3)); // last 3 digits
-    serial = lastSerial;
+    const lastSerial = parseInt(lastTicket.ticket_number.replace(`${TICKET_PREFIX}-`, "")); 
+    serial = isNaN(lastSerial) ? 0 : lastSerial;
   }
 
   // Step 3: increment serial and format new ID
-  const newSerial = String(serial + 1).padStart(3, "0");
-  const newTicketNumber = `${TICKET_PREFIX}-${month}${year}${newSerial}`;
+  const newSerial = String(serial + 1).padStart(4, "0"); // 0001, 0002...
+  const newTicketNumber = `${TICKET_PREFIX}-${newSerial}`;
 
   return newTicketNumber;
 }
-
-
 
 exports.createTicket = async (req, res) => {
   try {
