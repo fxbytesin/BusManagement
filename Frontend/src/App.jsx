@@ -25,6 +25,8 @@ import Parcel from './components/pages/Parcel';
 import UserManagement from "./components/pages/UserManagement";
 
 import ToastMessage from './components/pages/ToastMessage';
+import Reports from './components/pages/Reports';
+
 const BusManagementSoftware = () => {
   // Language State
   const [currentLanguage, setCurrentLanguage] = useState("hi");
@@ -1177,16 +1179,9 @@ if (userForm.role === "driver") {
         );
         case "reports":
           return (
-            <div className="p-6">
-              <h3 className="text-xl font-semibold mb-6">{t("reports")}</h3>
-              <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-                <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  {t("reportsTitle")}
-                </h3>
-                <p className="text-gray-500">{t("reportsComingSoon")}</p>
-              </div>
-            </div>
+            <Reports
+             t={t}
+            />
           );
         
         case "settings":

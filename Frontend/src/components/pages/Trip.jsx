@@ -168,9 +168,6 @@ const Trip = ({
 
   const status = [
     "SCHEDULED",
-    "RUNNING",
-    "COMPLETED",
-    "CANCELLED"
   ]
 
   const handleSubmit = async (e) => {
@@ -202,7 +199,7 @@ const Trip = ({
     // Stop if errors exist
     if (Object.keys(newErrors).length > 0) return;
 
-    if (isPost) {
+    if (isPost) {      
       const payload = {
         bus_id: parseInt(tripForm.bus_id, 10),
         route_id: parseInt(tripForm.route_id, 10),
@@ -606,6 +603,7 @@ const Trip = ({
 
               </div>
               <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+              <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -770,7 +768,8 @@ const Trip = ({
                   )}
                 </tbody>
 
-              </table>
+                  </table>
+                  </div>
               </div>
               {conductors && conductors.length > 0 && (
                 <DataPagination
