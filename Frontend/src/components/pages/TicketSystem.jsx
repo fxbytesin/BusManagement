@@ -13,14 +13,11 @@ const TicketSystem = (
     from_stop: "",
     to_stop: "",
     fare: "",
-    journey_date: "",
     payment_mode: "cash",
     pos_machine_id: "",
     seat_no: "",
-    bus_id: "",
     trip_id : ""
   });
-  const [busData, setBuses] = useState([])
   const [machineData,setMachineData] = useState([]) 
   const [showModal, setShowModal] = useState(false);
   const [trip, setTrip] = useState([])
@@ -52,13 +49,6 @@ const [page, setPage] = useState(1);
     if (!ticketForm.fare) {
       newErrors.fare = t("baseFareRequired");
     }
-    if (!ticketForm.journey_date) {
-      newErrors.journey_date = t("journeyDateRequired");
-    }
-    if (!ticketForm.bus_id) {
-      newErrors.bus_id = t("busNumRequired");
-    }
-
     if (!ticketForm.pos_machine_id) {
       newErrors.pos_machine_id = t("posMachineRequired");
     }
@@ -94,11 +84,9 @@ const [page, setPage] = useState(1);
       from_stop: "",
       to_stop: "",
       fare: "",
-      journey_date: "",
       payment_mode: "cash",
       pos_machine_id: "",
       seat_no: "",
-      bus_id: "",
     })
   };
 
@@ -124,21 +112,6 @@ const [page, setPage] = useState(1);
     }
   }
 
-  const getData = async () => {
-    const body = {
-      search : search,
-      limit: 10,
-      page: page,
-      order: sortDescriptor.direction,
-      orderColumn : sortDescriptor.column
-    }
-      try {
-        const response = await ApiService.getBus(body);      
-        setBuses(response?.data?.data)
-      } catch (err) {
-      }
-    }
-
   useEffect(() => {
     const body = {
       search : search,
@@ -153,10 +126,8 @@ const [page, setPage] = useState(1);
         setMachineData(response?.data?.data)
       } catch (err) {
       }
-    }
-    
+    }  
  
-    getData()
     getMachineData()
     getTrip()
     getBookTrips()
@@ -168,7 +139,6 @@ const [page, setPage] = useState(1);
       from_stop: "",
       to_stop: "",
       fare: "",
-      journey_date: "",
       payment_mode: "cash",
       pos_machine_id: "",
       seat_no: "",
@@ -243,21 +213,6 @@ const [page, setPage] = useState(1);
                   {errors.fare && <p className="text-red-500 text-sm mt-1 text-left">{errors.fare}</p>}
                 </div>
 
-                {/* Journey Date */}
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-1 text-left">{t("journeyDate")} *</label>
-                  <input
-                    type="date"
-                    value={ticketForm.journey_date}
-                    onChange={(e) => {
-                      setTicketForm({ ...ticketForm, journey_date: e.target.value });
-                      if (errors.journey_date) setErrors({ ...errors, journey_date: "" });
-                    }}
-                    className="w-full p-2 border rounded-md"
-                  />
-                  {errors.journey_date && <p className="text-red-500 text-sm mt-1 text-left">{errors.journey_date}</p>}
-                </div>
-
                 {/* Payment Mode */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium mb-1 text-left">{t("paymentMode")} *</label>
@@ -268,23 +223,6 @@ const [page, setPage] = useState(1);
                   >
                     <option value="cash">{t("cash")}</option>
                   </select>
-                </div>
-
-                {/* Bus Number */}
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-1 text-left">{t("busNumber")} *</label>
-                  <select
-                    className="w-full p-2 border rounded-md text-left"
-                    value={ticketForm.bus_id}
-                    onChange={(e) => {
-                      setTicketForm({ ...ticketForm, bus_id: e.target.value });
-                      if (errors.bus_id) setErrors({ ...errors, bus_id: "" });
-                    }}
-                  >
-                    <option value="" disabled>{t("selectBusNumber")}</option>
-                    {busData?.map(item => <option key={item.id} value={item.id}>{item?.bus_number}</option>)}
-                  </select>
-                  {errors.bus_id && <p className="text-red-500 text-sm mt-1 text-left">{errors.bus_id}</p>}
                 </div>
 
                 {/* POS Number */}
