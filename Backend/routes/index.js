@@ -11,4 +11,5 @@ router.use('/tracking',require('./trackingRoutes'))
 router.use('/pos',require('./posRoutes'))
 router.use('/trip',require('./tripRoutes'))
 router.use('/user',require('./userRoutes'))
+router.use('/report',require('./reportRoute'))
 module.exports = router;

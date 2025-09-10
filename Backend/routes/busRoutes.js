@@ -233,8 +233,5 @@ router.put('/:id', authenticateToken, busController.updateBus);
  */
 router.delete('/:id', authenticateToken, busController.deleteBus);
 
-// POST /tickets/export
-router.post("/tickets/export", busController.exportTickets);
-
 module.exports = router;
 
