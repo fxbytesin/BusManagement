@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import ApiService from '../services/api';
 import LoginVerify from './LoginVerify';
+import { Loader } from 'lucide-react';
 
 const Login = ({
     setIsLogin
@@ -10,6 +11,7 @@ const Login = ({
   const [error, setError] = useState('');
   const [verifyLogin,setVerifyLogin] = useState(true)
   const [getNumber, setNumber] = useState('')
+  const [loading, setLoading] = useState(false);
   
   
     const handleLogin = async (e) => {
@@ -30,6 +32,7 @@ const Login = ({
       }
 
       try {
+        setLoading(true);
         const response = await ApiService.loginData(data);      
         if (response?.success === true) {          
           setVerifyLogin(false)
@@ -41,6 +44,9 @@ const Login = ({
         // This will catch any unexpected errors outside your API call
         console.error("Unexpected error during login:", err);
         setError('Something went wrong. Please try again later.');
+      }
+      finally {
+        setLoading(false); 
       }
     };
   
@@ -77,12 +83,17 @@ const Login = ({
           </div>
 
           <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            onClick={handleLogin}
-          >
-            Login
-          </button>
+        type="submit"
+        disabled={loading} // 🔹 Disable when loading
+        className={`w-full text-white py-2 rounded-lg transition-colors flex items-center justify-center 
+          ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}`}
+      >
+        {loading ? (
+           <Loader />
+        ) : (
+          "Login"
+        )}
+      </button>
         </form>
       </div>
     </div>

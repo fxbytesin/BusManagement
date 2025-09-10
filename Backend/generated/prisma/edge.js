@@ -392,7 +392,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/fxbytes/fx-Bytes-BusManangement/BusManagement/Backend/generated/prisma",
+      "value": "/var/www/html/bus-management/BusManagement/Backend/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -406,7 +406,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/fxbytes/fx-Bytes-BusManangement/BusManagement/Backend/prisma/schema.prisma",
+    "sourceFilePath": "/var/www/html/bus-management/BusManagement/Backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

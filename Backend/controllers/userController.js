@@ -12,19 +12,19 @@ exports.getUsersByRole = async (req, res) => {
       order = "ASC",
       orderColumn = "created_at"
     } = req.body; // 👉 if you're using GET, change this to req.query
-
+ 
     const take = Number(limit);
     const skip = (Number(page) - 1) * take;
-
+ 
     // ✅ Ensure valid sort order
     const sortOrder = order && order.toUpperCase() === "DESC" ? "desc" : "asc";
-
+ 
     // ✅ Allow only safe columns
     const validColumns = ["created_at", "name", "email", "phone"];
-    const sortColumn = validColumns.includes(orderColumn)
+    const sortColumn = validColumns.includes(orderColumn) 
       ? orderColumn
       : "created_at";
-
+ 
     // ✅ Build search filter (all are String fields in your schema)
     const whereCondition = search
       ? {
@@ -34,9 +34,9 @@ exports.getUsersByRole = async (req, res) => {
           ]
         }
       : {};
-
+ 
     console.log("whereCondition:", JSON.stringify(whereCondition, null, 2));
-
+ 
     // ✅ Fetch users
     const users = await prisma.user.findMany({
       where: whereCondition,
@@ -45,7 +45,7 @@ exports.getUsersByRole = async (req, res) => {
       skip,
       take
     });
-
+ 
     // ✅ Count total
     const totalCount = await prisma.user.count({ where: whereCondition });
 
@@ -63,8 +63,6 @@ exports.getUsersByRole = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
-
 exports.createUser = async (req, res) => {
   try {
     const currentUserRole = req.user?.role; 

@@ -9,6 +9,7 @@ import ConfirmDelete from './ConfirmDelete';
 const PosMachine = ({
     showModalPos,
     setShowModalPos,
+    t
 }) => {
   const [posForm, setPosForm] = useState({
     serial_no: "",
@@ -35,9 +36,9 @@ const PosMachine = ({
       let newErrors = {};
 
       if (!posForm.serial_no.trim()) {
-        newErrors.serial_no = "Serial No is required.";
+        newErrors.serial_no = t("serialNoRequired");
       } else if (!/^\d+$/.test(posForm.serial_no)) {
-        newErrors.serial_no = "Serial No must contain only numbers.";
+        newErrors.serial_no = t("serialNoNumeric");
       }
       
     
@@ -145,11 +146,11 @@ const PosMachine = ({
     <div>
       {/* Button to open modal */}
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-semibold">{("PosMachine")}</h3>
+        <h3 className="text-xl font-semibold">{t("posMachine")}</h3>
         
       <div className='flex'>
         <form className="flex max-w-lg mx-auto mr-6">   
-              <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Search..."
+              <input type="text" id="voice-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder={t("searchPlaceholder")}
                onChange={handleChange}
               />
        
@@ -159,7 +160,7 @@ const PosMachine = ({
                       className="bg-orange-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-orange-700"
                     >
                       <Plus className="w-5 h-5" />
-                      <span>{("Add POS Machine")}</span>
+                      <span>{t("addPOSMachine")}</span>
                     </button>
                   </div>
             </div>
@@ -167,11 +168,11 @@ const PosMachine = ({
       {showModalPos && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-            <h2 className="text-lg font-semibold mb-4">Add POS Machine</h2>
+            <h2 className="text-lg font-semibold mb-4">{t("addPOSMachine")}</h2>
             {/* Serial Number */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Serial No *
+              {t("serialNo")} *
               </label>
               <input
                 type="text"
@@ -194,7 +195,7 @@ const PosMachine = ({
             {/* Status */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Status *
+              {t("status")} *
               </label>
               <select
                 value={posForm.status}
@@ -203,8 +204,8 @@ const PosMachine = ({
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
               >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="active">{t("active")}</option>
+                <option value="inactive">{t("inactive")}</option>
               </select>
               {errors.status && (
     <p className="text-red-500 text-sm mt-1  text-left">{errors.status}</p>
@@ -220,13 +221,13 @@ const PosMachine = ({
                 }}
                 className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 onClick={handleSubmit}
                 className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
               >
-                Save
+                {t("save")}
               </button>
             </div>
           </div>
@@ -238,22 +239,22 @@ const PosMachine = ({
     {/* Table Head */}
     <thead className="bg-gray-100">
       <tr>
-              <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider"
+              <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider"
                onClick={() => handleSorting("serial_no")}
               >
                 <div className='flex'>
-                    Serial Number
+                {t("serialNo")}
                       <SortColumn
                         sortDescriptor={sortDescriptor}
                         name="serial_no"
                         />
                       </div>
         </th>
-        <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-          Status
+        <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
+        {t("status")}
             </th>
-            <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-          Action
+            <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">
+       {t("actions")}
         </th>
       </tr>
     </thead>
@@ -310,7 +311,7 @@ const PosMachine = ({
         colSpan={3}
         className="px-6 py-4 text-center text-gray-500 italic"
       >
-        No POS machines found
+       {t("noPosMachines")}
       </td>
     </tr>
   )}

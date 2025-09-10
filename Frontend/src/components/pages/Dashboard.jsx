@@ -1,29 +1,47 @@
-// Dashboard Page
 import {
   Bus,
   Users,
   IndianRupee,
   Plus,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ApiService from "../../services/api";
 import DashboardGraphs from "./DashboardGraph";
 
 const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard }) => {
+  // Local state for active & total buses
+  const [activeBuses, setActiveBuses] = useState(0);
+  const [totalBuses, setTotalBuses] = useState(0);
+
+  // 🔹 Fetch Dashboard (revenue, trips, tickets etc.)
+  const fetchDashboardData = async () => {
+    try {
+      const response = await ApiService.getDashboard();
+      setDashboard(response?.data || {});
+    } catch (err) {
+      console.error("Error fetching dashboard:", err);
+    }
+  };
+
+  // 🔹 Fetch Active & Total Buses
+  const fetchBusStats = async () => {
+    try {
+      const response = await ApiService.getActiveBus();
+      setActiveBuses(response?.data?.active_buses_count || 0);
+      setTotalBuses(response?.data?.total_buses || 0);
+    } catch (err) {
+      console.error("Error fetching bus stats:", err);
+    }
+  };
+
+  // 🔹 Run effects on mount
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await ApiService.getDashboard();
-        setDashboard(response?.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getData();
+    fetchDashboardData();
+    fetchBusStats();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 🟢 Today data (daily)
+  // 🔹 Today’s data (daily)
   const todayRevenue = dashboard?.revenue?.daily?.reduce(
     (sum, bus) => sum + Number(bus.revenue || 0),
     0
@@ -34,16 +52,11 @@ const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard 
     0
   );
 
-  const activeBuses = dashboard?.tripsAndTickets?.daily?.filter(
-    (bus) => bus.trips_completed > 0
-  ).length;
-
-  const totalBuses = dashboard?.tripsAndTickets?.daily?.length || 0;
-
   return (
     <div className="p-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {/* Revenue */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
@@ -57,6 +70,7 @@ const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard 
           </div>
         </div>
 
+        {/* Passengers */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
@@ -69,6 +83,7 @@ const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard 
           </div>
         </div>
 
+        {/* Active / Total Buses */}
         <div className="bg-white p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between">
             <div>
@@ -117,15 +132,15 @@ const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard 
               <Plus className="w-5 h-5" />
               <span>{t("addNewUser")}</span>
             </button>
-           
           </div>
         </div>
 
+        {/* Today Bus Status */}
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <h3 className="text-lg font-semibold mb-4">
             {t("todayBusStatus")}
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-3  overflow-y-auto" style={{ maxHeight: '136px' }}>
             {dashboard?.revenue?.daily?.map((bus, idx) => (
               <div
                 key={idx}

@@ -90,17 +90,17 @@ const BusManagementSoftware = () => {
     let newErrors = {};
 
     if (!busForm.bus_number.trim()) {
-      newErrors.bus_number = "Bus Number is required.";
+      newErrors.bus_number = t("busNumRequired");
     }
 
     if (!busForm.insurance_expiry) {
-      newErrors.insurance_expiry = "Insurance Date is required.";
+      newErrors.insurance_expiry = t("insurance_expiry");
     }
     if (!busForm.last_maintenance) {
-      newErrors.last_maintenance = "Maintenance Date is required.";
+      newErrors.last_maintenance = t("last_maintenance");
     }
     if (!busForm.permit_expiry) {
-      newErrors.permit_expiry = "Permit Date is required.";
+      newErrors.permit_expiry = t("permit_expiry");
     }
 
     setErrors(newErrors);
@@ -152,17 +152,17 @@ const BusManagementSoftware = () => {
     let newErrors = {};
 
     if (!busForm.bus_number.trim()) {
-      newErrors.bus_number = "Bus Number is required.";
+      newErrors.bus_number = t("busNumRequired");
     }
 
     if (!busForm.insurance_expiry) {
-      newErrors.insurance_expiry = "Insurance Date is required.";
+      newErrors.insurance_expiry = t("insurance_expiry");
     }
     if (!busForm.last_maintenance) {
-      newErrors.last_maintenance = "Maintenance Date is required.";
+      newErrors.last_maintenance = t("last_maintenance");
     }
     if (!busForm.permit_expiry) {
-      newErrors.permit_expiry = "Permit Date is required.";
+      newErrors.permit_expiry = t("permit_expiry");
     }
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
@@ -222,19 +222,19 @@ const BusManagementSoftware = () => {
     let newErrors = {};
 
     if (!routeForm.name.trim()) {
-      newErrors.name = "Route Name is required.";
+      newErrors.name = t("routeName");
     }
     if (!routeForm.code.trim()) {
-      newErrors.code = "Code is required.";
+      newErrors.code = t("routeCode");
     }
     if (!routeForm.distance.trim()) {
-      newErrors.distance = "Distance is required.";
+      newErrors.distance = t("routeDistance");
     }
     if (!routeForm.base_fare.trim()) {
-      newErrors.base_fare = "Base fare is required.";
+      newErrors.base_fare = t("baseFareRequired");
     }
     if (!routeForm.per_km_rate.trim()) {
-      newErrors.per_km_rate = "Km rate is required.";
+      newErrors.per_km_rate = t("routeKm");
     }
 
     setErrors(newErrors);
@@ -290,19 +290,19 @@ const BusManagementSoftware = () => {
     let newErrors = {};
 
     if (!routeForm.name.trim()) {
-      newErrors.name = "Route Name is required.";
+      newErrors.name = t("routeName");
     }
     if (!routeForm.code.trim()) {
-      newErrors.code = "Code is required.";
+      newErrors.code = t("routeCode");
     }
     if (!routeForm.distance) {
-      newErrors.distance = "Distance is required.";
+      newErrors.distance = t("routeDistance");
     }
     if (!routeForm.base_fare) {
-      newErrors.base_fare = "Base fare is required.";
+      newErrors.base_fare = t("baseFareRequired");
     }
     if (!routeForm.per_km_rate) {
-      newErrors.per_km_rate = "Km rate is required.";
+      newErrors.per_km_rate = t("routeKm");
     }
 
     setErrors(newErrors);
@@ -343,39 +343,53 @@ const BusManagementSoftware = () => {
     }
   };
 
-  const handleDeleteRoute = async(routeId) => {
-    const response = await ApiService.deleteRoutes(routeId)    
-      if (response?.success === true) {
-        setShowToast(true)
-        setToastMessage(response.data.message)
-        setTimeout(() => setShowToast(false), 3000);
-        setRoutes(routes.filter((route) => route.id !== routeId));
-      }
+  const handleDeleteRoute = async (routeId) => {
+    const response = await ApiService.deleteRoutes(routeId)
+    if (response?.success === true) {
+      setShowToast(true)
+      setToastMessage(response.data.message)
+      setTimeout(() => setShowToast(false), 3000);
+      setRoutes(routes.filter((route) => route.id !== routeId));
+    }
   };
 
   // CRUD Operations for Drivers
   const handleAddUser = async () => {
     let newErrors = {};
 
-    if (!userForm.name.trim()) {
-      newErrors.name = t("nameRequired");
-    }
-    if (!userForm.phone.trim()) {
-      newErrors.phone = t("phoneRequired");
-    } else if (!/^\d{10}$/.test(userForm.phone)) {
-      newErrors.phone = t("phoneMustBe10Digits");
-    }
+if (!(userForm.name || "").trim()) {
+  newErrors.name = t("nameRequired");
+}
 
-    // Only required if role = driver
-    if (userForm.role === "driver") {
-      if (!userForm.license_number.trim()) {
-        newErrors.license_number = t("licenseNumberRequired");
-      }
-      if (!userForm.license_expiry) {
-        newErrors.license_expiry = t("licenseExpiryRequired");
-      }
-    }
+if (!userForm.experience_years && userForm.experience_years !== 0) {
+  newErrors.experience_years = t("experienceYearRequired");
+}
 
+if (!(userForm.emergency_contact || "").trim()) {
+  newErrors.emergency_contact = t("emergencyContactRequired");
+}
+
+if (!(userForm.address || "").trim()) {
+  newErrors.address = t("addressRequired");
+}
+
+if (!(userForm.phone || "").trim()) {
+  newErrors.phone = t("phoneRequired");
+}
+
+if (userForm.phone && !/^\d{10}$/.test(userForm.phone)) {
+  newErrors.phone = t("phoneMustBe10Digits");
+}
+
+// Only required if role = driver
+if (userForm.role === "driver") {
+  if (!(userForm.license_number || "").trim()) {
+    newErrors.license_number = t("licenseNumberRequired");
+  }
+  if (!userForm.license_expiry) {
+    newErrors.license_expiry = t("licenseExpiryRequired");
+  }
+}
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
@@ -389,6 +403,7 @@ const BusManagementSoftware = () => {
       setToastMessage("User Added Successfully");
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
+      setErrors({}); 
     }
 
     setUserForm({
@@ -402,65 +417,123 @@ const BusManagementSoftware = () => {
       role: "",
     });
     setShowModal(false);
+    setEditingItem(null);
   };
 
 
   const handleEditUser = (user) => {
-    const d = new Date(user.license_expiry);
-    const license_expiry = d.toISOString().split("T")[0];
-    user.license_expiry = license_expiry
-    setUserForm(user);
-    setEditingItem(user);
+    let license_expiry = "";
+    
+    // Only format if a valid date exists
+    if (user.userExtra?.license_expiry) {
+      const d = new Date(user.userExtra.license_expiry);
+      if (!isNaN(d.getTime())) {
+        license_expiry = d.toISOString().split("T")[0];
+      }
+    }
+  
+    setUserForm({
+      id: user.id || "",
+      name: user.name || "",
+      phone: user.phone || "",
+      role: user.role || "",
+      license_number: user.userExtra?.license_number ?? "",
+      license_expiry,
+      experience_years: user.userExtra?.experience_years?.toString() ?? "",
+      address: user.userExtra?.address ?? "",               
+      emergency_contact: user.userExtra?.emergency_contact ?? "", 
+    });
     setModalType("edit-user");
     setShowModal(true);
   };
-
-
+  
   const handleUpdateUser = async () => {
     let newErrors = {};
-
-    if (!userForm.name.trim()) {
+  
+    if (!(userForm.name || "").trim()) {
       newErrors.name = t("nameRequired");
     }
-    if (!userForm.phone.trim()) {
+    
+    if (!userForm.experience_years && userForm.experience_years !== 0) {
+      newErrors.experience_years = t("experienceYearRequired");
+    }
+    
+    if (!(userForm.emergency_contact || "").trim()) {
+      newErrors.emergency_contact = t("emergencyContactRequired");
+    }
+    
+    if (!(userForm.address || "").trim()) {
+      newErrors.address = t("addressRequired");
+    }
+    
+    if (!(userForm.phone || "").trim()) {
       newErrors.phone = t("phoneRequired");
-    } else if (!/^\d{10}$/.test(userForm.phone)) {
+    }
+    
+    if (userForm.phone && !/^\d{10}$/.test(userForm.phone)) {
       newErrors.phone = t("phoneMustBe10Digits");
     }
-
+    
+    // Only required if role = driver
     if (userForm.role === "driver") {
-      if (!userForm.license_number.trim()) {
+      if (!(userForm.license_number || "").trim()) {
         newErrors.license_number = t("licenseNumberRequired");
       }
       if (!userForm.license_expiry) {
         newErrors.license_expiry = t("licenseExpiryRequired");
       }
     }
-
+  
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
-
+  
+    // Prepare the payload in flat structure (same as create)
     const payload = {
-      ...userForm,
-      experience_years: parseInt(userForm.experience_years, 10) || 0,
-      license_expiry: userForm.license_expiry
-        ? new Date(userForm.license_expiry).toISOString().split("T")[0]
+      id: userForm.id, // Only for update
+      name: userForm.name,
+      phone: userForm.phone,
+      role: userForm.role,
+      license_number: userForm.license_number || "",
+      license_expiry: userForm.license_expiry 
+        ? new Date(userForm.license_expiry).toISOString().split('T')[0]
         : null,
+      experience_years: parseInt(userForm.experience_years, 10) || 0,
+      address: userForm.address || "",
+      emergency_contact: userForm.emergency_contact || "",
     };
-
-    const response = await ApiService.updateUser(payload);
-
-    if (response.success === true) {
-      setUsers(users.map((item) => (item.id === userForm.id ? payload : item)));
-      setToastMessage("User Updated Successfully");
+  
+    try {
+      const response = await ApiService.updateUser(payload);
+  
+      if (response.success === true) {
+        // Use the response data directly to update state
+        setUsers(users.map((user) => 
+          user.id === userForm.id 
+            ? response.data // Use the complete response data
+            : user
+        ));
+        
+        setToastMessage("User Updated Successfully");
+        setShowToast(true);
+        setErrors({});
+        setTimeout(() => setShowToast(false), 3000);
+        
+        // Reset form and close modal
+        setEditingItem(null);
+        setShowModal(false);
+      } else {
+        // Handle API error
+        setToastMessage(response.message || "Failed to update user");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+      }
+    } catch (error) {
+      console.error("Update user error:", error);
+      setToastMessage("Error updating user");
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     }
-
-    setEditingItem(null);
-    setShowModal(false);
   };
-
   const handleDeleteUser = (id) => {
     ApiService.deleteUser(id)
   }
@@ -512,7 +585,7 @@ const BusManagementSoftware = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("Last Maintenance")} *
+                {t("lastMaintenance")} *
               </label>
               <input
                 type="date"
@@ -536,7 +609,7 @@ const BusManagementSoftware = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("Insurance Expiry")} *
+                {t("insuranceExpiry")} *
               </label>
               <input
                 type="date"
@@ -559,7 +632,7 @@ const BusManagementSoftware = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("Permit Expiry")} *
+                {t("permitExpiry")} *
               </label>
               <input
                 type="date"
@@ -683,7 +756,7 @@ const BusManagementSoftware = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("base_fare")} ({t("rupees")}) *
+                {t("baseFare")} ({t("rupees")}) *
               </label>
               <input
                 type="number"
@@ -706,7 +779,7 @@ const BusManagementSoftware = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("per_km_rate")} ({t("rupees")}) *
+                {t("perKmRate")} ({t("rupees")}) *
               </label>
               <input
                 type="number"
@@ -817,7 +890,12 @@ const BusManagementSoftware = () => {
               <input
                 type="text"
                 value={userForm.name}
-                onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
+                onChange={(e) => {
+                  setUserForm({ ...userForm, name: e.target.value });
+                  if (errors.name) {
+                    setErrors({ ...errors, name: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               />
               {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
@@ -831,7 +909,12 @@ const BusManagementSoftware = () => {
               <input
                 type="tel"
                 value={userForm.phone}
-                onChange={(e) => setUserForm({ ...userForm, phone: e.target.value })}
+                onChange={(e) => {
+                  setUserForm({ ...userForm, phone: e.target.value });
+                  if (errors.phone) {
+                    setErrors({ ...errors, phone: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 placeholder={t("phoneNumberPlaceholder")}
               />
@@ -841,52 +924,61 @@ const BusManagementSoftware = () => {
             {/* Emergency Contact */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("Emergency_Contact")}
+                {t("emergencyContact")} *
               </label>
               <input
                 type="text"
                 value={userForm.emergency_contact}
-                onChange={(e) =>
-                  setUserForm({ ...userForm, emergency_contact: e.target.value })
-                }
+                onChange={(e) => {
+                  setUserForm({ ...userForm, emergency_contact: e.target.value  });
+                  if (errors.emergency_contact) {
+                    setErrors({ ...errors, emergency_contact: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 placeholder="9123456789"
               />
+              {errors.emergency_contact && <p className="text-red-500 text-sm">{errors.emergency_contact}</p>}
             </div>
 
             {/* Address */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("Address")}
+                {t("address")} *
               </label>
               <input
                 type="text"
                 value={userForm.address}
-                onChange={(e) =>
-                  setUserForm({ ...userForm, address: e.target.value })
-                }
+                onChange={(e) => {
+                  setUserForm({ ...userForm, address: e.target.value  });
+                  if (errors.address) {
+                    setErrors({ ...errors, address: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 placeholder="Delhi"
               />
+              {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
             </div>
 
             {/* Experience */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("experience_years")}
+                {t("experienceYears")}
               </label>
               <input
                 type="number"
                 value={userForm.experience_years}
-                onChange={(e) =>
-                  setUserForm({
-                    ...userForm,
-                    experience_years: e.target.value,
-                  })
-                }
+                onChange={(e) => {
+                  setUserForm({ ...userForm, experience_years: e.target.value  });
+                  if (errors.experience_years) {
+                    setErrors({ ...errors, experience_years: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 placeholder="5"
               />
+              {errors.experience_years && <p className="text-red-500 text-sm">{errors.experience_years}</p>}
             </div>
 
             {/* Role (Dropdown) */}
@@ -896,7 +988,12 @@ const BusManagementSoftware = () => {
               </label>
               <select
                 value={userForm.role}
-                onChange={(e) => setUserForm({ ...userForm, role: e.target.value })}
+                onChange={(e) => {
+                  setUserForm({ ...userForm, role: e.target.value  });
+                  if (errors.role) {
+                    setErrors({ ...errors, role: "" });
+                  }
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
               >
                 <option value="">{t("selectRole")}</option>
@@ -917,9 +1014,12 @@ const BusManagementSoftware = () => {
                   <input
                     type="text"
                     value={userForm.license_number}
-                    onChange={(e) =>
-                      setUserForm({ ...userForm, license_number: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setUserForm({ ...userForm, license_number: e.target.value  });
+                      if (errors.license_number) {
+                        setErrors({ ...errors, license_number: "" });
+                      }
+                    }}
                     className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                     placeholder={t("licenseNumber")}
                     required={userForm.role === "driver"}
@@ -937,9 +1037,12 @@ const BusManagementSoftware = () => {
                   <input
                     type="date"
                     value={userForm.license_expiry}
-                    onChange={(e) =>
-                      setUserForm({ ...userForm, license_expiry: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setUserForm({ ...userForm, license_expiry: e.target.value  });
+                      if (errors.license_expiry) {
+                        setErrors({ ...errors, license_expiry: "" });
+                      }
+                    }}
                     className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                     required={userForm.role === "driver"}
                   />
@@ -966,17 +1069,18 @@ const BusManagementSoftware = () => {
                     role: "",
                   });
                   setEditingItem(null);
+                  setErrors({});   
                 }}
                 className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 {t("cancel")}
               </button>
-              <button
-                onClick={editingItem ? handleUpdateUser : handleAddUser}
-                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
-              >
-                {t("save")}
-              </button>
+               <button
+          onClick={modalType === "edit-user" ? handleUpdateUser : handleAddUser}
+          className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+        >
+          {t("save")}
+        </button>
             </div>
           </div>
         );
@@ -1071,61 +1175,61 @@ const BusManagementSoftware = () => {
             routes={routes}
           />
         );
-      case "reports":
-        return (
-          <div className="p-6">
-            <h3 className="text-xl font-semibold mb-6">{t("reports")}</h3>
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-              <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                रिपोर्ट्स
-              </h3>
-              <p className="text-gray-500">यह फीचर जल्द ही उपलब्ध होगा</p>
+        case "reports":
+          return (
+            <div className="p-6">
+              <h3 className="text-xl font-semibold mb-6">{t("reports")}</h3>
+              <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+                <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {t("reportsTitle")}
+                </h3>
+                <p className="text-gray-500">{t("reportsComingSoon")}</p>
+              </div>
             </div>
-          </div>
-        );
-      case "settings":
-        return (
-          <div className="p-6">
-            <h3 className="text-xl font-semibold mb-6">{t("settings")}</h3>
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-              <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                सेटिंग्स
-              </h3>
-              <p className="text-gray-500">यह फीचर जल्द ही उपलब्ध होगा</p>
+          );
+        
+        case "settings":
+          return (
+            <div className="p-6">
+              <h3 className="text-xl font-semibold mb-6">{t("settings")}</h3>
+              <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+                <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {t("settingsTitle")}
+                </h3>
+                <p className="text-gray-500">{t("settingsComingSoon")}</p>
+              </div>
             </div>
-          </div>
-        );
+          );
+        
       case "posMachine":
         return (
-            <div className="p-6">
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-              <PosMachine
-                showModalPos={showModalPos}
-                setShowModalPos={setShowModalPos}
-              />
-            </div>
+          <div className="p-6">
+
+            <PosMachine
+              showModalPos={showModalPos}
+              setShowModalPos={setShowModalPos}
+              t={t}
+            />
+
           </div>
         );
       case "trip":
         return (
-          <div className="p-6">
-            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-              <Trip
-                buses={buses}
-                routes={routes}
-                drivers={drivers}
-                conductors={conductors}
-                setDrivers={setDrivers}
-                setConductors={setConductors}
-                t={t}
-                showTrip={showTrip}
-                setShowTrip={setShowTrip}
-              />
-
-            </div>
-          </div>
+          <Trip
+            buses={buses}
+            routes={routes}
+            drivers={drivers}
+            conductors={conductors}
+            setDrivers={setDrivers}
+            setConductors={setConductors}
+            t={t}
+            showTrip={showTrip}
+            setShowTrip={setShowTrip}
+            setBuses={setBuses}
+            setRoutes={setRoutes}
+          />
         );
 
       case "parcel":
@@ -1137,7 +1241,7 @@ const BusManagementSoftware = () => {
               className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700"
             >
               <Plus className="w-5 h-5" />
-              <span>{t("addParcel")}</span>
+              <span>{t("Add Parcel")}</span>
             </button>
           </div>
 
@@ -1218,7 +1322,16 @@ const BusManagementSoftware = () => {
                           per_km_rate: '',
                           active: true,
                         });
-                        setUserForm({ name: '', phone: '', license_number: '', experience_years: '' });
+                        setUserForm({
+                          name: "",
+                          phone: "",
+                          license_number: "",
+                          license_expiry: "",
+                          experience_years: "",
+                          address: "",
+                          emergency_contact: "",
+                          role: "",
+                        });
                         setErrors({});
                       }}
                     >
@@ -1253,13 +1366,13 @@ const BusManagementSoftware = () => {
       </BrowserRouter>
 
       {showToast && (
-             <ToastMessage
-             setShowToast={setShowToast}
-             toastMessage={toastMessage}
-           />
-        )
+        <ToastMessage
+          setShowToast={setShowToast}
+          toastMessage={toastMessage}
+        />
+      )
       }
-      
+
     </>
   );
 };

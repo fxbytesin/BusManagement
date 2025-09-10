@@ -223,25 +223,29 @@ exports.deleteBus=async (req, res) => {
 // CSV
 exports.exportTickets = async (req, res) => {
   try {
-    const { bus_id, from, to } = req.body;
+    const { bus_id, start_time, end_time } = req.body;
 
-    if (!bus_id || !from || !to) {
-      return res.status(400).json({ error: "bus_id, from and to are required" });
+    if (!bus_id || !start_time || !end_time) {
+      return res.status(400).json({ error: "bus_id, start_time and end_time are required" });
     }
 
-    const fromDate = new Date(from);
-    const toDate = new Date(to);
+    const fromDate = new Date(start_time + "T00:00:00.000Z");
+    const toDate = new Date(end_time + "T23:59:59.999Z");
 
+    // Tickets fetch
     const tickets = await prisma.ticket.findMany({
       where: {
         bus_id: parseInt(bus_id),
-        journey_date: {
-          gte: fromDate,
-          lte: toDate,
+        trip: {
+          created_at: {
+            gte: fromDate,
+            lte: toDate,
+          },
         },
       },
       include: {
         bus: true,
+        trip: true,
       },
     });
 
@@ -252,8 +256,6 @@ exports.exportTickets = async (req, res) => {
     const fields = [
       "id",
       "ticket_number",
-      "passenger_name",
-      "passenger_phone",
       "from_stop",
       "to_stop",
       "passenger_type",
@@ -264,13 +266,16 @@ exports.exportTickets = async (req, res) => {
       "seat_no",
       "payment_mode",
       "bus.bus_number",
+      "trip.id",
     ];
 
+    const { Parser } = require("json2csv");
     const parser = new Parser({ fields });
     const csv = parser.parse(tickets);
 
+    // Always return as CSV file (response.csv)
     res.header("Content-Type", "text/csv");
-    res.attachment(`tickets_bus${bus_id}_${from}_${to}.csv`);
+    res.attachment("response.csv");
     res.send(csv);
 
   } catch (error) {
@@ -278,3 +283,5 @@ exports.exportTickets = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
