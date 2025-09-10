@@ -78,11 +78,43 @@ exports.exportTickets = async (req, res) => {
       const tripName = `${t.trip.route.name} - ${tripStart}`;
 
       return {
-        ...t,
+        id: t.id,
+        ticket_number: t.ticket_number,
+        from_stop: t.from_stop,
+        to_stop: t.to_stop,
+        passenger_type: t.passenger_type,
+        fare: t.fare,
         issue_time: issueTime,
         journey_date: journeyDate,
+        status: t.status,
+        seat_no: t.seat_no,
+        payment_mode: t.payment_mode,
+        bus_number: t.bus.bus_number,
         trip_name: tripName,
       };
+    });
+
+    // 👇 Calculate total fare
+    const totalFare = formattedTickets.reduce(
+      (sum, t) => sum + Number(t.fare || 0),
+      0
+    );
+
+    // 👇 Add summary row in CSV
+    formattedTickets.push({
+      id: "",
+      ticket_number: "",
+      from_stop: "",
+      to_stop: "",
+      passenger_type: "TOTAL FARE",
+      fare: totalFare, 
+      issue_time: "",
+      journey_date: "",
+      status: "",
+      seat_no: "",
+      payment_mode: "",
+      bus_number: "",
+      trip_name: "", 
     });
 
     // Fields for CSV
@@ -98,7 +130,7 @@ exports.exportTickets = async (req, res) => {
       { label: "Status", value: "status" },
       { label: "Seat No", value: "seat_no" },
       { label: "Payment Mode", value: "payment_mode" },
-      { label: "Bus Number", value: "bus.bus_number" },
+      { label: "Bus Number", value: "bus_number" },
       { label: "Trip Name", value: "trip_name" },
     ];
 
@@ -106,7 +138,7 @@ exports.exportTickets = async (req, res) => {
     const csv = parser.parse(formattedTickets);
 
     res.header("Content-Type", "text/csv");
-    res.attachment("response.csv");
+    res.attachment("tickets_export.csv");
     res.send(csv);
   } catch (error) {
     console.error("Error exporting tickets:", error);
