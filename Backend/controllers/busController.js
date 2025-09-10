@@ -1,4 +1,5 @@
 const { PrismaClient } = require('../generated/prisma');
+const { Parser } = require("json2csv");
 const prisma = new PrismaClient();
 
 exports.getAllBuses = async (req, res) => {
@@ -217,3 +218,70 @@ exports.deleteBus=async (req, res) => {
     }
   }
 }
+
+
+// CSV
+exports.exportTickets = async (req, res) => {
+  try {
+    const { bus_id, start_time, end_time } = req.body;
+
+    if (!bus_id || !start_time || !end_time) {
+      return res.status(400).json({ error: "bus_id, start_time and end_time are required" });
+    }
+
+    const fromDate = new Date(start_time + "T00:00:00.000Z");
+    const toDate = new Date(end_time + "T23:59:59.999Z");
+
+    // Tickets fetch
+    const tickets = await prisma.ticket.findMany({
+      where: {
+        bus_id: parseInt(bus_id),
+        trip: {
+          created_at: {
+            gte: fromDate,
+            lte: toDate,
+          },
+        },
+      },
+      include: {
+        bus: true,
+        trip: true,
+      },
+    });
+
+    if (!tickets.length) {
+      return res.status(404).json({ error: "No tickets found for this bus in given range" });
+    }
+
+    const fields = [
+      "id",
+      "ticket_number",
+      "from_stop",
+      "to_stop",
+      "passenger_type",
+      "fare",
+      "issue_time",
+      "journey_date",
+      "status",
+      "seat_no",
+      "payment_mode",
+      "bus.bus_number",
+      "trip.id",
+    ];
+
+    const { Parser } = require("json2csv");
+    const parser = new Parser({ fields });
+    const csv = parser.parse(tickets);
+
+    // Always return as CSV file (response.csv)
+    res.header("Content-Type", "text/csv");
+    res.attachment("response.csv");
+    res.send(csv);
+
+  } catch (error) {
+    console.error("Error exporting tickets:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
