@@ -237,12 +237,12 @@ export const messages = {
     ticketNumber: "टिकट नंबर",
     noDataFound: "कोई डेटा नहीं मिला",
 
-    // report and setting 
+    // report and setting
     reportsTitle: "रिपोर्ट्स",
     reportsComingSoon: "यह फीचर जल्द ही उपलब्ध होगा",
     settingsTitle: "सेटिंग्स",
-    settingsComingSoon: "यह फीचर जल्द ही उपलब्ध होगा"
-  
+    settingsComingSoon: "यह फीचर जल्द ही उपलब्ध होगा",
+    downloadReport: "रिपोर्ट डाउनलोड करें",
   },
 
   en: {
@@ -478,10 +478,11 @@ export const messages = {
     ticketNumber: "Ticket Number",
     noDataFound: "No Data Found",
 
-    // report and setting 
+    // report and setting
     reportsTitle: "Reports",
     reportsComingSoon: "Reports coming soon",
     settingsTitle: "Settings",
-    settingsComingSoon: "Settings coming soon"
+    settingsComingSoon: "Settings coming soon",
+    downloadReport: "Download Report",
   },
 };
