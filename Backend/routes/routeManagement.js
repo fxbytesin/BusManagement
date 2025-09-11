@@ -15,7 +15,7 @@ const routeController=require('../controllers/routeController')
  * @swagger
  * /api/routes/list:
  *   post:
- *     summary: Get all routes belonging to authenticated user with search, pagination, and sorting
+ *     summary: Get all routes belonging to the authenticated user with search, pagination, and sorting
  *     tags: [Route]
  *     security:
  *       - bearerAuth: []

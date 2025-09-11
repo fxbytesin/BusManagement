@@ -134,7 +134,8 @@ const UserManagement = ({
           </button>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm border overflow-x-auto ">
+          <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+             <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
@@ -268,7 +269,7 @@ const UserManagement = ({
               </tr>
             )}
           </table>
-
+           </div>
           {users && users.length > 0 && (
             <DataPagination
               onPageChange={handlePageChange}

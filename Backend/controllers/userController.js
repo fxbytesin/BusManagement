@@ -2,6 +2,7 @@ const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
 // List users by role with pagination and search
+
 exports.getUsersByRole = async (req, res) => {
   try {
     const {
@@ -47,7 +48,7 @@ exports.getUsersByRole = async (req, res) => {
  
     // ✅ Count total
     const totalCount = await prisma.user.count({ where: whereCondition });
- 
+
     res.json({
       data: users,
       pagination: {
@@ -65,7 +66,6 @@ exports.getUsersByRole = async (req, res) => {
 exports.createUser = async (req, res) => {
   try {
     const currentUserRole = req.user?.role; 
-    console.log(currentUserRole,'currentUserRole')
 
     // Only admin can create users
     if (currentUserRole !== 'admin') {

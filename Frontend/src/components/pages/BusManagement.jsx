@@ -136,7 +136,8 @@ const BusManagementPage = (
             </button>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-sm border overflow-x-auto">
+            <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+               <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
@@ -271,7 +272,8 @@ const BusManagementPage = (
               </tbody>
 
 
-            </table>
+                </table>
+                </div>
             {buses && buses.length > 0 && (
               <DataPagination
                 onPageChange={handlePageChange}

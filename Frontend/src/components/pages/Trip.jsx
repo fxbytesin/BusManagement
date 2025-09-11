@@ -170,7 +170,6 @@ const Trip = ({
     "SCHEDULED",
     "RUNNING",
     "COMPLETED",
-    "CANCELLED"
   ]
 
   const handleSubmit = async (e) => {
@@ -201,17 +200,18 @@ const Trip = ({
 
     // Stop if errors exist
     if (Object.keys(newErrors).length > 0) return;
-
-    if (isPost) {
+ 
+    if (isPost) {      
       const payload = {
         bus_id: parseInt(tripForm.bus_id, 10),
         route_id: parseInt(tripForm.route_id, 10),
         driver_id: tripForm.driver_id ? parseInt(tripForm.driver_id, 10) : null,
         conductor_id: tripForm.conductor_id ? parseInt(tripForm.conductor_id, 10) : null,
-        start_time: new Date(tripForm.start_time).toISOString(), // convert to UTC ISO
-        end_time: new Date(tripForm.end_time).toISOString(),
+        start_time: tripForm.start_time,  // keep as is
+        end_time: tripForm.end_time, 
         status: tripForm.status,
       };
+      
       try {
         const response = await ApiService.createTrip(payload)
         if (response?.data) {
@@ -224,7 +224,6 @@ const Trip = ({
           setToastMessage(response?.error?.error);
           setShowToast(true)
           setTimeout(() => setShowToast(false), 3000);
-
         }
       } catch (error) {
       }
@@ -238,8 +237,9 @@ const Trip = ({
         driver_id: parseInt(tripForm.driver_id, 10),
         conductor_id: parseInt(tripForm.conductor_id, 10),
         // convert datetime-local back to ISO for API
-        start_time: new Date(tripForm.start_time).toISOString(),
-        end_time: new Date(tripForm.end_time).toISOString(),
+        start_time: tripForm.start_time,  // keep as is
+        end_time: tripForm.end_time, 
+        status: tripForm.status,
       };
 
       const response = await ApiService.updateTrip(payload, editId);
@@ -263,6 +263,7 @@ const Trip = ({
       end_time: "",
     })
     setShowTrip(false)
+    setIsPost(true)
   };
 
   const handleDelete = async (id) => {
@@ -280,24 +281,20 @@ const Trip = ({
   };
 
 
-  const formatDateTimeLocal = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    // toISOString gives full UTC, so we cut seconds & "Z"
-    return date.toISOString().slice(0, 16);
+  const formatForInput = (isoString) => {
+    if (!isoString) return "";
+    const date = new Date(isoString);
+    const offset = date.getTimezoneOffset();
+    const localDate = new Date(date.getTime() - offset * 60 * 1000);
+    return localDate.toISOString().slice(0, 16);
   };
-
-  const handleEdit = (obj) => {
+  
+  const handleEdit = (obj) => {    
     setTripForm({
-      bus_id: obj.bus_id,
-      route_id: obj.route_id,
-      driver_id: obj.driver_id,
-      conductor_id: obj.conductor_id,
-      status: obj.status,
-      start_time: formatDateTimeLocal(obj.start_time),
-      end_time: formatDateTimeLocal(obj.end_time),
-
-    })
+      ...obj,
+      start_time: formatForInput(obj.start_time),
+      end_time: formatForInput(obj.end_time),
+    });
     setIsPost(false)
     setShowTrip(true)
     setEditId(obj?.id)
@@ -605,7 +602,8 @@ const Trip = ({
                 </div>
 
               </div>
-              <div className="bg-white rounded-lg shadow-sm border overflow-x-auto">
+              <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+              <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-50">
                   <tr>
@@ -687,6 +685,7 @@ const Trip = ({
                           {trip?.route_name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
+                        {/* {trip?.start_time} */}
                           {trip?.start_time
                             ? new Date(trip.start_time).toLocaleString("en-IN", {
                               dateStyle: "medium",
@@ -770,7 +769,8 @@ const Trip = ({
                   )}
                 </tbody>
 
-              </table>
+                  </table>
+                  </div>
               </div>
               {conductors && conductors.length > 0 && (
                 <DataPagination

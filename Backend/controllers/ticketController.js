@@ -1,9 +1,26 @@
 const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
-// Utility to generate ticket number
-function generateTicketNumber() {
-  return 'TKT-' + Date.now().toString().slice(-6);
+const TICKET_PREFIX = process.env.TICKET_PREFIX || "TKT"; 
+
+async function generateTicketNumber() {
+  // Step 1: find last ticket (highest id)
+  const lastTicket = await prisma.ticket.findFirst({
+    orderBy: { id: "desc" }, // latest inserted ticket
+  });
+
+  // Step 2: extract serial or start from 0
+  let serial = 0;
+  if (lastTicket) {
+    const lastSerial = parseInt(lastTicket.ticket_number.replace(`${TICKET_PREFIX}-`, "")); 
+    serial = isNaN(lastSerial) ? 0 : lastSerial;
+  }
+
+  // Step 3: increment serial and format new ID
+  const newSerial = String(serial + 1).padStart(4, "0"); // 0001, 0002...
+  const newTicketNumber = `${TICKET_PREFIX}-${newSerial}`;
+
+  return newTicketNumber;
 }
 
 exports.createTicket = async (req, res) => {
@@ -90,7 +107,7 @@ exports.createTicket = async (req, res) => {
       return res.status(400).json({ error: `Invalid payment_mode, must be one of: ${validPaymentModes.join(', ')}` });
     }
 
-    const ticket_number = generateTicketNumber();
+  const ticket_number = await generateTicketNumber();
 
     const newTicket = await prisma.ticket.create({
       data: {
