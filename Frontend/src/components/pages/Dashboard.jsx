@@ -137,35 +137,41 @@ const DashboardPage = ({ setModalType, setShowModal, t, dashboard, setDashboard 
 
         {/* Today Bus Status */}
         <div className="bg-white rounded-lg shadow-sm border p-6">
-          <h3 className="text-lg font-semibold mb-4">
-            {t("todayBusStatus")}
-          </h3>
-          <div className="space-y-3  overflow-y-auto" style={{ maxHeight: '136px' }}>
-            {dashboard?.revenue?.daily?.map((bus, idx) => (
-              <div
-                key={idx}
-                className="flex items-center justify-between py-2 border-b last:border-b-0"
-              >
-                <div>
-                  <p className="font-medium">{bus.bus_number}</p>
-                  <p className="text-sm text-gray-600">
-                    {t("capacity")}: {bus.capacity || "-"} |{" "}
-                    {t("bookedSeats")}: {bus.booked_seats || 0}
-                  </p>
+          <h3 className="text-lg font-semibold mb-4">{t("todayBusStatus")}</h3>
+          <div className="space-y-3 overflow-y-auto" style={{ maxHeight: '136px' }}>
+            {dashboard?.revenue?.daily?.map((bus, idx) => {
+              // Find occupancy info for same bus_id
+              const occupancyInfo = dashboard?.occupancyRate?.daily?.find(
+                (occ) => occ.bus_id === bus.bus_id
+              );
+
+              return (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between py-2 border-b last:border-b-0"
+                >
+                  <div>
+                    <p className="font-medium">{bus.bus_number}</p>
+                    <p className="text-sm text-gray-600">
+                      {t("capacity")}: {occupancyInfo?.capacity || "-"} |{" "}
+                      {t("bookedSeats")}: {occupancyInfo?.booked_seats || 0}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm">
+                      {t("rupees")}
+                      {bus.revenue || 0}
+                    </p>
+                    <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                      {t("occupancy")}: {occupancyInfo?.occupancy_rate || "0"}%
+                    </span>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm">
-                    {t("rupees")}
-                    {bus.revenue || 0}
-                  </p>
-                  <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-                    {t("occupancy")}: {bus.occupancy_rate || "0"}%
-                  </span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
+
       </div>
 
       {/* Graphs Section */}
