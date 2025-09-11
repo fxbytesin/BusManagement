@@ -348,15 +348,15 @@ const [page, setPage] = useState(1);
         )}
 
         {/* Tickets Table */}
-        <div className="bg-white rounded-lg shadow-sm border overflow-hidden w-full">
+        <div className="bg-white rounded-lg shadow-sm border overflow-x-auto ">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("ticketNumber")}</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("fromStop")}</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("toStop")}</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("status")}</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("paymentMode")}</th>
+                <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">{t("ticketNumber")}</th>
+                <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">{t("fromStop")}</th>
+                <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">{t("toStop")}</th>
+                <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">{t("status")}</th>
+                <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">{t("paymentMode")}</th>
               </tr>
             </thead>
 
@@ -370,11 +370,11 @@ const [page, setPage] = useState(1);
               <tbody className="bg-white divide-y divide-gray-200">
                 {trip.map(trip => (
                   <tr key={trip.id}>
-                    <td>{trip.ticket_number}</td>
-                    <td>{trip.from_stop}</td>
-                    <td>{trip.to_stop}</td>
-                    <td>{trip.status}</td>
-                    <td>{trip.payment_mode}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{trip.ticket_number}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{trip.from_stop}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{trip.to_stop}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{trip.status}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{trip.payment_mode}</td>
                   </tr>
                 ))}
               </tbody>
