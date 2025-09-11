@@ -286,15 +286,15 @@ const [page, setPage] = useState(1);
         )}
 
         {/* Tickets Table */}
-        <div className="bg-white rounded-lg shadow-sm border overflow-hidden w-full">
+        <div className="bg-white rounded-lg shadow-sm border overflow-x-auto ">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("ticketNumber")}</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("fromStop")}</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("toStop")}</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("status")}</th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">{t("paymentMode")}</th>
+                <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">{t("ticketNumber")}</th>
+                <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">{t("fromStop")}</th>
+                <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">{t("toStop")}</th>
+                <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">{t("status")}</th>
+                <th className="px-6 py-3 text-left text-x font-bold text-gray-500 uppercase tracking-wider">{t("paymentMode")}</th>
               </tr>
             </thead>
 
