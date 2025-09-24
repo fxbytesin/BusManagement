@@ -1,4 +1,6 @@
 import { BarChart3, Bus, Home, MapPin, Route, Settings, User, Users, X,Box,Package, Navigation } from 'lucide-react';
+import { ContextData } from './Context';
+import { useContext } from 'react';
 
 const NavigationComponent = ({
     currentLanguage,
@@ -9,18 +11,21 @@ const NavigationComponent = ({
     setCurrentPage,
     setCurrentLanguage
 }) => {
-    const navItems = [
-      { id: "dashboard", label: t("dashboard"), icon: Home },
-      { id: "user", label: t("userManagement"), icon: Users },
-      { id: "buses", label: t("busManagement"), icon: Bus },
-      { id: "routes", label: t("routeManagement"), icon: Route },
-      { id: "posMachine", label: t("posMachine"), icon: Box },
-      { id: "trip", label: t("trip"), icon: Navigation },
-      { id: "reports", label: t("reports"), icon: BarChart3 },
-      { id: "live-tracking", label: t("liveTracking"), icon: MapPin },
-      { id: "parcel", label: t("parcel"), icon: Package },
-      { id: "settings", label: t("settings"), icon: Settings },
-    ];
+  const { userType } = useContext(ContextData)  
+  
+  const navItems = [
+    { id: "dashboard", label: t("dashboard"), icon: Home, roles: ["admin"] },
+    { id: "user", label: t("userManagement"), icon: Users, roles: ["admin"] },
+    { id: "buses", label: t("busManagement"), icon: Bus, roles: ["admin"] },
+    { id: "routes", label: t("routeManagement"), icon: Route, roles: ["admin"] },
+    { id: "posMachine", label: t("posMachine"), icon: Box, roles: ["admin"] },
+    { id: "trip", label: t("trip"), icon: Navigation, roles: ["admin", "driver","conductor"] },
+    { id: "reports", label: t("reports"), icon: BarChart3, roles: ["admin"] },
+    { id: "live-tracking", label: t("liveTracking"), icon: MapPin, roles: ["admin", "driver","conductor"] },
+    { id: "parcel", label: t("parcel"), icon: Package, roles: ["admin"] },
+    { id: "settings", label: t("settings"), icon: Settings, roles: ["admin"] },
+  ];
+  
 
     return (
       <div
@@ -36,27 +41,30 @@ const NavigationComponent = ({
         </div>
 
         <nav className="mt-4">
-          {navItems?.map((item) => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setCurrentPage(item.id);
-                  setSidebarOpen(false);
-                }}
-                className={`w-full flex items-center px-4 py-3 text-left hover:bg-indigo-800 ${
-                  currentPage === item.id
-                    ? "bg-indigo-800 border-r-4 border-white"
-                    : ""
-                }`}
-              >
-                <Icon className="w-5 h-5 mr-3" />
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
+  {navItems
+    .filter(item => !item.roles || item.roles.includes(userType?.role))
+    .map((item) => {
+      const Icon = item.icon;
+      return (
+        <button
+          key={item.id}
+          onClick={() => {
+            setCurrentPage(item.id);
+            setSidebarOpen(false);
+          }}
+          className={`w-full flex items-center px-4 py-3 text-left hover:bg-indigo-800 ${
+            currentPage === item.id
+              ? "bg-indigo-800 border-r-4 border-white"
+              : ""
+          }`}
+        >
+          <Icon className="w-5 h-5 mr-3" />
+          {item.label}
+        </button>
+      );
+    })}
+</nav>
+
 
         <div className="absolute bottom-4 left-4 right-4">
           <div className="bg-indigo-800 p-3 rounded-lg">
@@ -67,7 +75,7 @@ const NavigationComponent = ({
                  
                   {
                     currentLanguage === "hi" ? "राजेश कुमार" : "Rajesh Kumar"
-                }
+                  }
                 </div>
                 <div className="text-sm text-indigo-300">{t("busOwner")}</div>
               </div>
