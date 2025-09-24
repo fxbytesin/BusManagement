@@ -220,8 +220,9 @@ const UserManagement = ({
                     </td>
                     {/* Phone */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {user.phone}
+                      {user.phone?.replace(/^\+91/, "")}
                     </td>
+
                     {/* Role */}
                     <td className="px-6 py-4 whitespace-nowrap capitalize">
                       {user.role}

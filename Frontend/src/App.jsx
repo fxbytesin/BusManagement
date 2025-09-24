@@ -396,6 +396,8 @@ if (userForm.role === "driver") {
 
     const response = await ApiService.addUser({
       ...userForm,
+      phone: userForm.phone ? `+91 ${userForm.phone}` : "",
+      emergency_contact: userForm.emergency_contact ? `+91 ${userForm.emergency_contact}` : "",
       experience_years: parseInt(userForm.experience_years, 10) || 0,
     });
 
@@ -431,24 +433,27 @@ if (userForm.role === "driver") {
       if (!isNaN(d.getTime())) {
         license_expiry = d.toISOString().split("T")[0];
       }
-    }
+    }    
   
     setUserForm({
       id: user.id || "",
       name: user.name || "",
-      phone: user.phone || "",
+      phone: user.phone?.replace(/^\+91/, "") || "",
       role: user.role || "",
       license_number: user.userExtra?.license_number ?? "",
       license_expiry,
       experience_years: user.userExtra?.experience_years?.toString() ?? "",
       address: user.userExtra?.address ?? "",               
-      emergency_contact: user.userExtra?.emergency_contact ?? "", 
+      emergency_contact: user.userExtra?.emergency_contact.replace(/^\+91/, "") || "", 
     });
     setModalType("edit-user");
     setShowModal(true);
   };
   
   const handleUpdateUser = async () => {
+     userForm.phone = userForm.phone?.replace(/^\+91/, "").trim() || "";
+    userForm.emergency_contact = userForm.emergency_contact?.replace(/^\+91/, "").trim() || "";    
+
     let newErrors = {};
   
     if (!(userForm.name || "").trim()) {
@@ -492,7 +497,7 @@ if (userForm.role === "driver") {
     const payload = {
       id: userForm.id, // Only for update
       name: userForm.name,
-      phone: userForm.phone,
+      phone: `+91 ${userForm.phone}`,
       role: userForm.role,
       license_number: userForm.license_number || "",
       license_expiry: userForm.license_expiry 
@@ -500,7 +505,7 @@ if (userForm.role === "driver") {
         : null,
       experience_years: parseInt(userForm.experience_years, 10) || 0,
       address: userForm.address || "",
-      emergency_contact: userForm.emergency_contact || "",
+      emergency_contact: `+91 ${userForm.emergency_contact || ""}`,
     };
   
     try {

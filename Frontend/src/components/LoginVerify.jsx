@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useState } from 'react';
+import React, {useContext, useState } from 'react';
 import ApiService from '../services/api';
 import ToastMessage from './pages/ToastMessage';
 import { Loader } from 'lucide-react';
+import { ContextData } from './Context';
 
 const LoginVerify = ({
     getNumber,
@@ -13,7 +14,8 @@ const LoginVerify = ({
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const {setUserType } = useContext(ContextData)
+  
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -31,6 +33,8 @@ const LoginVerify = ({
       setLoading(true)
       const response = await ApiService.verifyLogin(data);      
       if (response?.success === true) {
+        setUserType(response?.data?.user);
+        localStorage.setItem("userType", JSON.stringify(response?.data?.user));
         setToastMessage(response?.data?.message);
         setShowToast(true);
         setTimeout(() => setIsLogin(false), 1000);
