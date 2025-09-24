@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const crypto = require("crypto");
 const twilio = require("twilio");
 
-const JWT_SECRET = process.env.JWT_SECRET || "replace_me";
+const JWT_SECRET = process.env.JWT_SECRET ;
 const OTP_EXPIRY_MINUTES = parseInt(process.env.OTP_EXPIRY_MINUTES || "5", 10);
 
 // --- Setup Twilio client ---

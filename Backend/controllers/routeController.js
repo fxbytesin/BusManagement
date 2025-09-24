@@ -61,7 +61,6 @@ exports.getAllRoutes = async (req, res) => {
   }
 };
 
-
 exports.createRoute=async (req, res) => {
   try {
     const { name, code, distance, base_fare, per_km_rate, stops, active } = req.body;

@@ -11,7 +11,7 @@ exports.getUsersByRole = async (req, res) => {
       page = 1,
       order = "ASC",
       orderColumn = "created_at"
-    } = req.body; // 👉 if you're using GET, change this to req.query
+    } = req.body; //  if you're using GET, change this to req.query
  
     const take = Number(limit);
     const skip = (Number(page) - 1) * take;
@@ -63,6 +63,7 @@ exports.getUsersByRole = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 exports.createUser = async (req, res) => {
   try {
     const currentUserRole = req.user?.role; 
@@ -141,7 +142,6 @@ exports.createUser = async (req, res) => {
   }
 };
 
-
 // Update user and userExtra data
 exports.updateUser = async (req, res) => {
   try {
@@ -175,9 +175,9 @@ exports.updateUser = async (req, res) => {
 
     // Validate phone format and uniqueness if changed
     if (phone && phone !== existingUser.phone) {
-      if (!/^[6-9]\d{9}$/.test(phone)) {
-        return res.status(400).json({ error: 'Invalid phone number format' });
-      }
+      if (!/^(\+91[\s]?)?[6-9]\d{9}$/.test(phone)) {
+  return res.status(400).json({ error: 'Invalid phone number format' });
+}
       const phoneExists = await prisma.user.findUnique({ where: { phone } });
       if (phoneExists && phoneExists.id !== userId) {
         return res.status(400).json({ error: 'Phone number already exists' });
