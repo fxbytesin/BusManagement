@@ -21,7 +21,7 @@ const NavigationComponent = ({
     { id: "posMachine", label: t("posMachine"), icon: Box, roles: ["admin"] },
     { id: "trip", label: t("trip"), icon: Navigation, roles: ["admin", "driver","conductor"] },
     { id: "reports", label: t("reports"), icon: BarChart3, roles: ["admin"] },
-    { id: "live-tracking", label: t("liveTracking"), icon: MapPin, roles: ["admin", "driver","conductor"] },
+    { id: "live-tracking", label: t("liveTracking"), icon: MapPin, roles: ["admin"] },
     { id: "parcel", label: t("parcel"), icon: Package, roles: ["admin"] },
     { id: "settings", label: t("settings"), icon: Settings, roles: ["admin"] },
   ];

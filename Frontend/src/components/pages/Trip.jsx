@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ApiService from '../../services/api';
 import { Edit, Trash2, SquareEqual, Plus,} from 'lucide-react';
 import TicketSystem from './TicketSystem';
@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay,faStop } from '@fortawesome/free-solid-svg-icons';
 import ConfirmDialog from './ConfirmStatus';
 import ConfirmDelete from './ConfirmDelete';
+import { ContextData } from '../Context';
 const Trip = ({
   buses,
   routes,
@@ -59,6 +60,8 @@ const Trip = ({
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
 
+    const { userType } = useContext(ContextData)  
+  
   const getData = async () => {
     const body = {
       search: search,
@@ -592,13 +595,17 @@ const Trip = ({
                     />
 
                   </form>
-                  <button
-                    onClick={() => setShowTrip(true)}
-                    className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700 mr-5 mt-5"
-                  >
-                    <Plus className="w-5 h-5" />
-                    <span>{t("addTrip")}</span>
-                  </button>
+                  {
+                    userType?.role === "admin" && ( 
+                      <button
+                      onClick={() => setShowTrip(true)}
+                      className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700 mr-5 mt-5"
+                    >
+                      <Plus className="w-5 h-5" />
+                      <span>{t("addTrip")}</span>
+                    </button>
+                    )
+                  }
                 </div>
 
               </div>

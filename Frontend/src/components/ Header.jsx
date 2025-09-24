@@ -8,7 +8,7 @@ const Header = ({
   currentPage,
   setIsLogin
 }) => {
-    const {setUserType } = useContext(ContextData)
+    const {setUserType,userType } = useContext(ContextData)
   return (
     <header className="bg-white shadow-sm border-b lg:ml-0">
     <div className="px-4 py-3 flex items-center justify-between">
@@ -18,10 +18,14 @@ const Header = ({
           className="lg:hidden mr-3"
         >
           <Menu className="w-6 h-6" />
-        </button>
-        <h2 className="text-xl font-semibold text-gray-800">
-          {t(currentPage.replace("-", ""))}
-        </h2>
+          </button>
+          {
+            userType?.role === "admin" && (
+              <h2 className="text-xl font-semibold text-gray-800">
+              {t(currentPage.replace("-", ""))}
+            </h2>
+            )
+          }
       </div>
 
       <div className="flex items-center space-x-4">

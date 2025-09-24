@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Settings,
   Plus,
@@ -25,6 +25,7 @@ import UserManagement from "./components/pages/UserManagement";
 
 import ToastMessage from './components/pages/ToastMessage';
 import Reports from './components/pages/Reports';
+import { ContextData } from './components/Context';
 
 const BusManagementSoftware = () => {
   // Language State
@@ -51,6 +52,8 @@ const BusManagementSoftware = () => {
   const [drivers, setDrivers] = useState([]);
   const [conductors, setConductors] = useState([]);
 
+    const { userType } = useContext(ContextData)  
+  
 
   // Form States
   const [busForm, setBusForm] = useState({
@@ -1116,152 +1119,173 @@ if (userForm.role === "driver") {
   };
 
   // Main Render Function
-  const renderCurrentPage = () => {
-    switch (currentPage) {
-      case "dashboard":
-        return <DashboardPage
-          buses={buses}
-          setModalType={setModalType}
-          setShowModal={setShowModal}
-          routes={routes}
-          t={t}
-          dashboard={dashboard}
-          setDashboard={setDashboard}
-        />;
-      case "buses":
-        return <BusManagementPage
-          buses={buses}
-          setModalType={setModalType}
-          setShowModal={setShowModal}
-          routes={routes}
-          t={t}
-          users={users}
-          handleEditBus={handleEditBus}
-          setBuses={setBuses}
-          setUsers={setUsers}
-          setRoutes={setRoutes}
-          setConductors={setConductors}
-          handleDeleteBus={handleDeleteBus}
-        />;
-      case "routes":
-        return <RouteManagement
-          setModalType={setModalType}
-          setShowModal={setShowModal}
-          routes={routes}
-          t={t}
-          handleEditRoute={handleEditRoute}
-          handleDeleteRoute={handleDeleteRoute}
-          setRoutes={setRoutes}
-        />;
-      case "user":
-        return <UserManagement
-          setModalType={setModalType}
-          setShowModal={setShowModal}
-          t={t}
-          users={users}
-          buses={buses}
-          setBuses={setBuses}
-          setUsers={setUsers}
-          handleEditUser={handleEditUser}
-          handleDeleteUser={handleDeleteUser}
-        />;
-      case "live-tracking":
-        return <LiveTracking
-          buses={buses}
-          t={t}
-          routes={routes}
-          liveTracking={liveTracking}
-          setLiveTracking={setLiveTracking}
-        />;
-      case "ticketing":
-        return (
-          <TicketSystem
-            t={t}
+  const renderCurrentPage = () => {    
+    if (userType?.role === "conductor" || userType?.role === "driver") {
+      return <Trip
+      buses={buses}
+      routes={routes}
+      drivers={drivers}
+      conductors={conductors}
+      setDrivers={setDrivers}
+      setConductors={setConductors}
+      t={t}
+      showTrip={showTrip}
+      setShowTrip={setShowTrip}
+      setBuses={setBuses}
+      setRoutes={setRoutes}
+    />
+    }
+
+    else {      
+      switch (currentPage) {
+        case "dashboard":
+          if (userType?.role === "admin") {
+            return <DashboardPage
             buses={buses}
+            setModalType={setModalType}
+            setShowModal={setShowModal}
             routes={routes}
+            t={t}
+            dashboard={dashboard}
+            setDashboard={setDashboard}
           />
-        );
-        case "reports":
+          }
+          return null;
+        case "buses":
+          return <BusManagementPage
+            buses={buses}
+            setModalType={setModalType}
+            setShowModal={setShowModal}
+            routes={routes}
+            t={t}
+            users={users}
+            handleEditBus={handleEditBus}
+            setBuses={setBuses}
+            setUsers={setUsers}
+            setRoutes={setRoutes}
+            setConductors={setConductors}
+            handleDeleteBus={handleDeleteBus}
+          />;
+        case "routes":
+          return <RouteManagement
+            setModalType={setModalType}
+            setShowModal={setShowModal}
+            routes={routes}
+            t={t}
+            handleEditRoute={handleEditRoute}
+            handleDeleteRoute={handleDeleteRoute}
+            setRoutes={setRoutes}
+          />;
+        case "user":
+          return <UserManagement
+            setModalType={setModalType}
+            setShowModal={setShowModal}
+            t={t}
+            users={users}
+            buses={buses}
+            setBuses={setBuses}
+            setUsers={setUsers}
+            handleEditUser={handleEditUser}
+            handleDeleteUser={handleDeleteUser}
+          />;
+        case "live-tracking":
+          return <LiveTracking
+            buses={buses}
+            t={t}
+            routes={routes}
+            liveTracking={liveTracking}
+            setLiveTracking={setLiveTracking}
+          />;
+        case "ticketing":
           return (
-            <Reports
-             t={t}
+            <TicketSystem
+              t={t}
+              buses={buses}
+              routes={routes}
             />
           );
-        
-        case "settings":
+          case "reports":
+            return (
+              <Reports
+               t={t}
+              />
+            );
+          
+          case "settings":
+            return (
+              <div className="p-6">
+                <h3 className="text-xl font-semibold mb-6">{t("settings")}</h3>
+                <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+                  <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    {t("settingsTitle")}
+                  </h3>
+                  <p className="text-gray-500">{t("settingsComingSoon")}</p>
+                </div>
+              </div>
+            );
+          
+        case "posMachine":
           return (
             <div className="p-6">
-              <h3 className="text-xl font-semibold mb-6">{t("settings")}</h3>
-              <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-                <Settings className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  {t("settingsTitle")}
-                </h3>
-                <p className="text-gray-500">{t("settingsComingSoon")}</p>
-              </div>
+  
+              <PosMachine
+                showModalPos={showModalPos}
+                setShowModalPos={setShowModalPos}
+                t={t}
+              />
+  
             </div>
           );
-        
-      case "posMachine":
-        return (
-          <div className="p-6">
-
-            <PosMachine
-              showModalPos={showModalPos}
-              setShowModalPos={setShowModalPos}
-              t={t}
-            />
-
-          </div>
-        );
-      case "trip":
-        return (
-          <Trip
-            buses={buses}
-            routes={routes}
-            drivers={drivers}
-            conductors={conductors}
-            setDrivers={setDrivers}
-            setConductors={setConductors}
-            t={t}
-            showTrip={showTrip}
-            setShowTrip={setShowTrip}
-            setBuses={setBuses}
-            setRoutes={setRoutes}
-          />
-        );
-
-      case "parcel":
-        return (<div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-semibold">{t("parcel")}</h3>
-            <button
-              onClick={() => setShowParcel(true)}
-              className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700"
-            >
-              <Plus className="w-5 h-5" />
-              <span>{t("Add Parcel")}</span>
-            </button>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-            <Parcel
+        case "trip":
+          return (
+            <Trip
               buses={buses}
+              routes={routes}
+              drivers={drivers}
+              conductors={conductors}
+              setDrivers={setDrivers}
+              setConductors={setConductors}
+              t={t}
+              showTrip={showTrip}
+              setShowTrip={setShowTrip}
               setBuses={setBuses}
-              setShowParcel={setShowParcel}
-              showParcel={showParcel}
+              setRoutes={setRoutes}
             />
+          );
+  
+        case "parcel":
+          return (<div className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-semibold">{t("parcel")}</h3>
+              <button
+                onClick={() => setShowParcel(true)}
+                className="bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-purple-700"
+              >
+                <Plus className="w-5 h-5" />
+                <span>{t("Add Parcel")}</span>
+              </button>
+            </div>
+  
+            <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+              <Parcel
+                buses={buses}
+                setBuses={setBuses}
+                setShowParcel={setShowParcel}
+                showParcel={showParcel}
+              />
+            </div>
           </div>
-        </div>
-        );
-      default:
-        return <DashboardPage
-          buses={buses}
-          setModalType={setModalType}
-          setShowModal={setShowModal}
-          routes={routes}
-          t={t}
-        />;
+          );
+        default:
+          return <DashboardPage
+            buses={buses}
+            setModalType={setModalType}
+            setShowModal={setShowModal}
+            routes={routes}
+            t={t}
+          />;
+      }
     }
   };
 
