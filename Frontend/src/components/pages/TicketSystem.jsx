@@ -7,7 +7,9 @@ const TicketSystem = (
   { 
     tripId,
     busCapacity,
-    t
+    t,
+    showTicket,
+    setShowTicket
   }) => {
   const [ticketForm, setTicketForm] = useState({
     from_stop: "",
@@ -152,12 +154,21 @@ const [page, setPage] = useState(1);
       <div className='w-full p-[15px]'>
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold mb-6 ml-5 mt-5">{t("ticketing")}</h3>
+          <div>
+          <button
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 mb-6 mr-5 mt-5"
+              onClick={()=>setShowTicket(true)}
+          >
+           Back
+          </button>
+
           <button
             onClick={() => setShowModal(true)}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 mb-6 mr-5 mt-5"
           >
             {t("createTicket")}
           </button>
+          </div>
         </div>
 
         {showModal && (

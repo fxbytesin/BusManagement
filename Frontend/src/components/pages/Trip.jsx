@@ -111,7 +111,6 @@ const Trip = ({
     }
   }
 
-
   const getRoutesData = async () => {
     const body = {
       search: search,
@@ -384,8 +383,7 @@ const Trip = ({
     }
   
     setShowStatusModel(false);
-  };    
-    
+  };        
   return (
 
     showTrip ?
@@ -681,7 +679,6 @@ const Trip = ({
                         <td className="px-6 py-4 whitespace-nowrap font-medium text-left">
                           {trip.bus_number}
                         </td>
-
                         <td className="px-6 py-4 whitespace-nowrap text-left">
                           {trip?.conductor_name}
                         </td>
@@ -823,6 +820,8 @@ const Trip = ({
                 t={t}
                 tripId={selectedTripId}
                 busCapacity={busCapacity}
+                showTicket={showTicket}
+                setShowTicket={setShowTicket}  
               />
             </div>
           )}

@@ -21,11 +21,10 @@ const NavigationComponent = ({
     { id: "posMachine", label: t("posMachine"), icon: Box, roles: ["admin"] },
     { id: "trip", label: t("trip"), icon: Navigation, roles: ["admin", "driver","conductor"] },
     { id: "reports", label: t("reports"), icon: BarChart3, roles: ["admin"] },
-    { id: "live-tracking", label: t("liveTracking"), icon: MapPin, roles: ["admin"] },
+    { id: "live-tracking", label: t("liveTracking"), icon: MapPin, roles: ["admin","conductor"] },
     { id: "parcel", label: t("parcel"), icon: Package, roles: ["admin"] },
-    { id: "settings", label: t("settings"), icon: Settings, roles: ["admin"] },
-  ];
-  
+    { id: "settings", label: t("settings"), icon: Settings, roles: ["admin","conductor"] },
+  ];  
 
     return (
       <div
@@ -74,10 +73,9 @@ const NavigationComponent = ({
                 <div className="font-medium">
                  
                   {
-                    currentLanguage === "hi" ? "राजेश कुमार" : "Rajesh Kumar"
+                   userType?.role
                   }
                 </div>
-                <div className="text-sm text-indigo-300">{t("busOwner")}</div>
               </div>
             </div>
           </div>
